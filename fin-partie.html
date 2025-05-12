@@ -2,31 +2,25 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fin de la partie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fin de la partie - Murder Party</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="fin-partie">
-  <header>
+<body>
+  <div class="container">
     <h1>Fin de la partie</h1>
-    <p class="slogan">La vérité est révélée...</p>
-  </header>
-
-  <main>
-    <section class="resultats">
-      <p>Le coupable est...</p>
-      <button onclick="voirResultats()">Voir les résultats</button>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Murder Party. Un autre mystère vous attend.</p>
-  </footer>
+    <p>Le mystère a été résolu !</p>
+    <button onclick="nouvellePartie()">Commencer une nouvelle partie</button>
+    <button onclick="retour()">Retour à l'accueil</button>
+  </div>
 
   <script>
-    function voirResultats() {
-      alert("Les résultats sont : L'inspecteur a trouvé le coupable !");
-      window.location.href = "accueil.html";
+    function nouvellePartie() {
+      window.location.href = "choix-personnage.html";
+    }
+
+    function retour() {
+      window.location.href = "index.html";
     }
   </script>
 </body>
