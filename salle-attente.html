@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Salle d'attente - Murder Party</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Salle d’attente</h1>
+    <p>Code de la partie : <strong id="code-salon">XZP9</strong></p>
+
+    <h2>Joueurs présents :</h2>
+    <ul id="liste-joueurs">
+      <!-- La liste des joueurs s’affiche ici dynamiquement -->
+      <li>En attente de joueurs...</li>
+    </ul>
+
+    <button id="demarrer-jeu" disabled>Lancer la partie</button>
+  </div>
+
+  <script>
+    // Exemple simplifié pour afficher des joueurs fictifs
+    const joueurs = ["Alice", "Bob", "Chloé"];
+    const liste = document.getElementById("liste-joueurs");
+    liste.innerHTML = "";
+    joueurs.forEach(nom => {
+      const li = document.createElement("li");
+      li.textContent = nom;
+      liste.appendChild(li);
+    });
+
+    // Activer le bouton si joueurs présents
+    if (joueurs.length >= 3) {
+      document.getElementById("demarrer-jeu").disabled = false;
+    }
+  </script>
+</body>
+</html>
