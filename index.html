@@ -3,26 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Murder Party - Accueil</title>
+  <title>Accueil - Murder Party</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Murder Party</h1>
-    <p class="slogan">Entrez dans l’ombre… Qui sera démasqué ?</p>
+    <h1>Bienvenue dans l'univers de Murder Party</h1>
+    <p class="slogan">L'énigme vous attend, saurez-vous résoudre le mystère ?</p>
   </header>
 
   <main>
-    <section class="accueil">
-      <button id="creerSalon" class="bouton-principal">Créer un salon</button>
-      <p style="margin-top: 20px;">Ou rejoignez un salon existant depuis votre téléphone</p>
+    <section class="options">
+      <button onclick="demarrerPartie()">Démarrer une nouvelle partie</button>
+      <button onclick="rejoindrePartie()">Rejoindre une partie existante</button>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Murder Party. Tous droits réservés.</p>
+    <p>&copy; 2025 Murder Party. Le mystère commence maintenant...</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    function demarrerPartie() {
+      window.location.href = "configuration-partie.html";
+    }
+
+    function rejoindrePartie() {
+      window.location.href = "rejoindre-partie.html";
+    }
+  </script>
 </body>
 </html>
