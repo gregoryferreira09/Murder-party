@@ -1,51 +1,37 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jeu en cours - Murder Party</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partie en cours - Murder Party</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Jeu en cours</h1>
-    <div id="action">
-      <p><strong>Actions des joueurs :</strong></p>
-      <ul id="liste-actions">
-        <!-- Les actions des joueurs seront affichées ici -->
-        <li>Joueur 1 a trouvé un indice</li>
-      </ul>
-    </div>
-
-    <div id="indices">
-      <p><strong>Indices trouvés :</strong></p>
-      <ul id="liste-indices">
-        <!-- Les indices trouvés s'affichent ici -->
-        <li>Indice 1 : Parlez à la victime...</li>
-      </ul>
-    </div>
-
-    <button id="finir-tour">Fin du tour</button>
+    <h1>Partie en cours...</h1>
+    <p>Choisissez une action à réaliser :</p>
+    <button onclick="interroger()">Interroger un joueur</button>
+    <button onclick="examiner()">Examiner la scène du crime</button>
+    <button onclick="faireAccusation()">Faire une accusation</button>
+    <button onclick="finirPartie()">Fin de la partie</button>
   </div>
 
   <script>
-    // Exemple de gestion d'un tour
-    const actions = ["Joueur 1 a trouvé un indice", "Joueur 2 a donné une information"];
-    const indices = ["Parlez à la victime, elle sait quelque chose."];
+    function interroger() {
+      window.location.href = "interroger-joueur.html";
+    }
 
-    const listeActions = document.getElementById("liste-actions");
-    actions.forEach(action => {
-      const li = document.createElement("li");
-      li.textContent = action;
-      listeActions.appendChild(li);
-    });
+    function examiner() {
+      window.location.href = "examiner-scene.html";
+    }
 
-    const listeIndices = document.getElementById("liste-indices");
-    indices.forEach(indice => {
-      const li = document.createElement("li");
-      li.textContent = indice;
-      listeIndices.appendChild(li);
-    });
+    function faireAccusation() {
+      window.location.href = "faire-accusation.html";
+    }
+
+    function finirPartie() {
+      window.location.href = "fin-partie.html";
+    }
   </script>
 </body>
 </html>
