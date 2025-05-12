@@ -3,37 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Interroger un joueur</title>
+  <title>Interroger un Joueur - Murder Party</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="interroger-joueur">
+<body>
   <header>
-    <h1>Interroger un joueur</h1>
-    <p class="slogan">Faites attention à leurs réponses...</p>
+    <h1>Interrogation d'un Joueur</h1>
+    <p>Choisissez votre question à poser au joueur.</p>
   </header>
 
   <main>
     <section class="questions">
-      <p>Qui souhaitez-vous interroger ?</p>
-      <button onclick="choisirJoueur()">Choisir un joueur</button>
-      <p>Votre question : <input type="text" id="question"></p>
-      <button onclick="poserQuestion()">Poser la question</button>
+      <button onclick="poserQuestion('où étiez-vous au moment du crime ?')">Où étiez-vous au moment du crime ?</button>
+      <button onclick="poserQuestion('qui avez-vous vu dans les environs ?')">Qui avez-vous vu dans les environs ?</button>
+      <button onclick="poserQuestion('avez-vous des preuves à fournir ?')">Avez-vous des preuves à fournir ?</button>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Murder Party. Les secrets se révèlent...</p>
+    <p>&copy; 2025 Murder Party</p>
   </footer>
 
   <script>
-    function choisirJoueur() {
-      alert("Choisissez un joueur à interroger.");
-    }
-
-    function poserQuestion() {
-      let question = document.getElementById('question').value;
-      alert("Vous avez posé la question : " + question);
-      window.location.href = "partie-en-cours.html";
+    function poserQuestion(question) {
+      alert("Question posée : " + question);
     }
   </script>
 </body>
