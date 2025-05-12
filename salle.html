@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Salle de jeu - Murder Party</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Salle de jeu</h1>
+    <p class="slogan">En attente des joueurs…</p>
+  </header>
+
+  <main>
+    <section class="salle">
+      <div class="infos-salon">
+        <p><strong>Code du salon :</strong> <span id="codeSalon">ABCD1234</span></p>
+        <p><strong>Nombre de joueurs :</strong> <span id="nbJoueurs">1</span></p>
+        <p><strong>En attente...</strong></p>
+      </div>
+
+      <div class="liste-joueurs">
+        <ul id="joueursConnectés">
+          <li>Vous (hôte)</li>
+        </ul>
+      </div>
+
+      <button id="lancerPartie" class="bouton-principal">Lancer la partie</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party. Tous droits réservés.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
