@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Choisir votre personnage - Murder Party</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Choisir votre personnage</h1>
-    <form id="form-personnage">
-      <div class="personnage">
-        <input type="radio" id="personnage-1" name="personnage" value="personnage-1" />
-        <label for="personnage-1">Personnage 1</label>
+    <h1>Choisissez votre personnage</h1>
+    <div class="personnages">
+      <div class="personnage" id="personnage-1">
+        <img src="img/personnage-1.jpg" alt="Personnage 1" />
+        <p>Personnage 1</p>
+        <button class="choisir-btn">Choisir</button>
       </div>
-      <div class="personnage">
-        <input type="radio" id="personnage-2" name="personnage" value="personnage-2" />
-        <label for="personnage-2">Personnage 2</label>
+      <div class="personnage" id="personnage-2">
+        <img src="img/personnage-2.jpg" alt="Personnage 2" />
+        <p>Personnage 2</p>
+        <button class="choisir-btn">Choisir</button>
       </div>
-      <button type="submit" id="valider">Valider mon choix</button>
-    </form>
+    </div>
+    <button id="valider-personnage" disabled>Valider mon choix</button>
   </div>
 
   <script>
-    document.getElementById("form-personnage").addEventListener("submit", function(event) {
-      event.preventDefault();
-      var personnageChoisi = document.querySelector('input[name="personnage"]:checked').value;
-      alert("Vous avez choisi : " + personnageChoisi);
+    const boutonsChoisir = document.querySelectorAll('.choisir-btn');
+    let personnageChoisi = null;
+
+    boutonsChoisir.forEach(bouton => {
+      bouton.addEventListener('click', () => {
+        personnageChoisi = bouton.parentElement;
+        document.getElementById("valider-personnage").disabled = false;
+      });
     });
   </script>
 </body>
