@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Choisir un personnage</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choisir votre personnage - Murder Party</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="choix-personnage">
-  <header>
+<body>
+  <div class="container">
     <h1>Choisir votre personnage</h1>
-    <p class="slogan">Sélectionnez votre rôle dans l'histoire.</p>
-  </header>
-
-  <main>
-    <section class="personnages">
-      <p>Quel personnage souhaitez-vous incarner ?</p>
-      <button onclick="choisirPersonnage('Détective')">Détective</button>
-      <button onclick="choisirPersonnage('Victime')">Victime</button>
-      <button onclick="choisirPersonnage('Criminel')">Criminel</button>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Murder Party. Le jeu est sur le point de commencer.</p>
-  </footer>
+    <form id="form-personnage">
+      <div class="personnage">
+        <input type="radio" id="personnage-1" name="personnage" value="personnage-1" />
+        <label for="personnage-1">Personnage 1</label>
+      </div>
+      <div class="personnage">
+        <input type="radio" id="personnage-2" name="personnage" value="personnage-2" />
+        <label for="personnage-2">Personnage 2</label>
+      </div>
+      <button type="submit" id="valider">Valider mon choix</button>
+    </form>
+  </div>
 
   <script>
-    function choisirPersonnage(role) {
-      alert("Vous avez choisi le rôle : " + role);
-      window.location.href = "accueil.html";
-    }
+    document.getElementById("form-personnage").addEventListener("submit", function(event) {
+      event.preventDefault();
+      var personnageChoisi = document.querySelector('input[name="personnage"]:checked').value;
+      alert("Vous avez choisi : " + personnageChoisi);
+    });
   </script>
 </body>
 </html>
