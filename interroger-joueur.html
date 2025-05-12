@@ -2,27 +2,29 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Confirmation - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interroger un joueur - Murder Party</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Votre personnage a été choisi !</h1>
-    <p>Vous êtes maintenant prêt pour l'aventure.</p>
-  </header>
-
-  <main>
-    <button onclick="commencerPartie()">Commencer la Partie</button>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Murder Party</p>
-  </footer>
+  <div class="container">
+    <h1>Interroger un joueur</h1>
+    <p>Sélectionnez un joueur à interroger :</p>
+    <select id="joueur-select">
+      <option value="joueur-1">Joueur 1</option>
+      <option value="joueur-2">Joueur 2</option>
+      <option value="joueur-3">Joueur 3</option>
+      <!-- Ajouter plus de joueurs ici -->
+    </select>
+    <button onclick="poserQuestion()">Poser une question</button>
+  </div>
 
   <script>
-    function commencerPartie() {
-      window.location.href = "partie-en-cours.html";
+    function poserQuestion() {
+      const joueur = document.getElementById('joueur-select').value;
+      alert('Vous avez posé une question à ' + joueur);
+      // Redirection vers la page suivante pour poser une question spécifique
+      window.location.href = "reponse-question.html";
     }
   </script>
 </body>
