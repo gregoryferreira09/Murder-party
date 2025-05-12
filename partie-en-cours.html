@@ -1,46 +1,41 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Partie en cours</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Partie en cours - Murder Party</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="partie-en-cours">
+<body>
   <header>
-    <h1>Partie en cours</h1>
-    <p class="slogan">L'enquête se poursuit...</p>
+    <h1>Enquête en cours...</h1>
+    <p>Que la vérité éclate !</p>
   </header>
 
   <main>
     <section class="actions">
-      <p>Que souhaitez-vous faire ?</p>
-      <button onclick="examinerScene()">Examiner la scène</button>
-      <button onclick="interrogerJoueur()">Interroger un joueur</button>
-      <button onclick="accuserJoueur()">Accuser un joueur</button>
-      <button onclick="voter()">Voter pour le coupable</button>
+      <p>Choisissez une action :</p>
+      <button onclick="interroger()">Interroger un joueur</button>
+      <button onclick="examiner()">Examiner la scène du crime</button>
+      <button onclick="faireAccusation()">Faire une accusation</button>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Murder Party. L'énigme se dévoile peu à peu.</p>
+    <p>&copy; 2025 Murder Party. Le mystère continue...</p>
   </footer>
 
   <script>
-    function examinerScene() {
-      window.location.href = "examiner-scene.html";
-    }
-
-    function interrogerJoueur() {
+    function interroger() {
       window.location.href = "interroger-joueur.html";
     }
 
-    function accuserJoueur() {
-      window.location.href = "faire-accusation.html";
+    function examiner() {
+      window.location.href = "examiner-scene.html";
     }
 
-    function voter() {
-      window.location.href = "vote-final.html";
+    function faireAccusation() {
+      window.location.href = "faire-accusation.html";
     }
   </script>
 </body>
