@@ -3,21 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Interroger un Joueur - Murder Party</title>
+  <title>Confirmation - Murder Party</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Interrogation d'un Joueur</h1>
-    <p>Choisissez votre question à poser au joueur.</p>
+    <h1>Votre personnage a été choisi !</h1>
+    <p>Vous êtes maintenant prêt pour l'aventure.</p>
   </header>
 
   <main>
-    <section class="questions">
-      <button onclick="poserQuestion('où étiez-vous au moment du crime ?')">Où étiez-vous au moment du crime ?</button>
-      <button onclick="poserQuestion('qui avez-vous vu dans les environs ?')">Qui avez-vous vu dans les environs ?</button>
-      <button onclick="poserQuestion('avez-vous des preuves à fournir ?')">Avez-vous des preuves à fournir ?</button>
-    </section>
+    <button onclick="commencerPartie()">Commencer la Partie</button>
   </main>
 
   <footer>
@@ -25,8 +21,8 @@
   </footer>
 
   <script>
-    function poserQuestion(question) {
-      alert("Question posée : " + question);
+    function commencerPartie() {
+      window.location.href = "partie-en-cours.html";
     }
   </script>
 </body>
