@@ -2,31 +2,42 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Examen de la Scène du Crime - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examiner la scène du crime</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Examen de la Scène du Crime</h1>
-    <p>Examinez les indices trouvés sur la scène du crime.</p>
-  </header>
-
-  <main>
-    <section class="indices">
-      <button onclick="examinerIndice('coup de couteau dans le dos')">Coup de couteau dans le dos</button>
-      <button onclick="examinerIndice('trace de sang')">Trace de sang</button>
-      <button onclick="examinerIndice('empreintes digitales')">Empreintes digitales</button>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Murder Party</p>
-  </footer>
+  <div class="container">
+    <h1>Examinez la scène du crime</h1>
+    <div class="indices">
+      <p>Choisissez un indice à examiner :</p>
+      <button onclick="afficherIndice('empreinte')">Empreinte digitale</button>
+      <button onclick="afficherIndice('arme')">Arme du crime</button>
+      <button onclick="afficherIndice('lettre')">Lettre trouvée près du corps</button>
+    </div>
+    <p id="indice-detail">Détails de l'indice : <span id="texte-indice"></span></p>
+    <button onclick="retour()">Retour à la partie</button>
+  </div>
 
   <script>
-    function examinerIndice(indice) {
-      alert("Indice examiné : " + indice);
+    function afficherIndice(indice) {
+      var texte;
+      switch (indice) {
+        case 'empreinte':
+          texte = 'Une empreinte digitale est visible sur le meuble à côté du corps.';
+          break;
+        case 'arme':
+          texte = 'L’arme du crime est une dague en argent, posée près du corps.';
+          break;
+        case 'lettre':
+          texte = 'La lettre contient un message codé, difficile à déchiffrer.';
+          break;
+      }
+      document.getElementById('texte-indice').textContent = texte;
+    }
+
+    function retour() {
+      window.location.href = "partie-en-cours.html";
     }
   </script>
 </body>
