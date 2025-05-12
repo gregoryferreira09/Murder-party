@@ -1,41 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Choix du personnage - Murder Party</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Choisir un personnage</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="container">
+<body class="choix-personnage">
+  <header>
     <h1>Choisir votre personnage</h1>
-    <div id="personnages">
-      <div class="personnage" id="personnage-1">
-        <img src="img/personnage-1.jpg" alt="Personnage 1" />
-        <p>Personnage 1</p>
-        <button class="choisir-btn">Choisir</button>
-      </div>
-      <div class="personnage" id="personnage-2">
-        <img src="img/personnage-2.jpg" alt="Personnage 2" />
-        <p>Personnage 2</p>
-        <button class="choisir-btn">Choisir</button>
-      </div>
-      <!-- Ajouter plus de personnages ici -->
-    </div>
-    <button id="valider-personnage" disabled>Valider mon choix</button>
-  </div>
+    <p class="slogan">Sélectionnez votre rôle dans l'histoire.</p>
+  </header>
+
+  <main>
+    <section class="personnages">
+      <p>Quel personnage souhaitez-vous incarner ?</p>
+      <button onclick="choisirPersonnage('Détective')">Détective</button>
+      <button onclick="choisirPersonnage('Victime')">Victime</button>
+      <button onclick="choisirPersonnage('Criminel')">Criminel</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party. Le jeu est sur le point de commencer.</p>
+  </footer>
 
   <script>
-    // Gestion du choix du personnage
-    const boutonsChoisir = document.querySelectorAll('.choisir-btn');
-    let personnageChoisi = null;
-
-    boutonsChoisir.forEach(bouton => {
-      bouton.addEventListener('click', () => {
-        personnageChoisi = bouton.parentElement;
-        document.getElementById("valider-personnage").disabled = false;
-      });
-    });
+    function choisirPersonnage(role) {
+      alert("Vous avez choisi le rôle : " + role);
+      window.location.href = "accueil.html";
+    }
   </script>
 </body>
 </html>
