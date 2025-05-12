@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajouter un indice - Murder Party</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Ajouter un indice à la scène du crime</h1>
+    <p>Quel indice souhaitez-vous ajouter ?</p>
+    <textarea id="indice-text" placeholder="Décrivez l'indice..."></textarea>
+    <button onclick="ajouterIndice()">Ajouter cet indice</button>
+  </div>
+
+  <script>
+    function ajouterIndice() {
+      const indice = document.getElementById('indice-text').value;
+      alert('L\'indice ajouté est : ' + indice);
+      // Redirection vers la scène du crime après ajout
+      window.location.href = "examiner-scene.html";
+    }
+  </script>
+</body>
+</html>
