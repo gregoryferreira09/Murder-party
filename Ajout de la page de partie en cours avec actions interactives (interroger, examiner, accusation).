@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interroger un joueur</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="interroger-joueur">
+  <header>
+    <h1>Interroger un joueur</h1>
+    <p class="slogan">Faites attention à leurs réponses...</p>
+  </header>
+
+  <main>
+    <section class="questions">
+      <p>Qui souhaitez-vous interroger ?</p>
+      <button onclick="choisirJoueur()">Choisir un joueur</button>
+      <p>Votre question : <input type="text" id="question"></p>
+      <button onclick="poserQuestion()">Poser la question</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party. Les secrets se révèlent...</p>
+  </footer>
+
+  <script>
+    function choisirJoueur() {
+      alert("Choisissez un joueur à interroger.");
+    }
+
+    function poserQuestion() {
+      let question = document.getElementById('question').value;
+      alert("Vous avez posé la question : " + question);
+      window.location.href = "partie-en-cours.html";
+    }
+  </script>
+</body>
+</html>
