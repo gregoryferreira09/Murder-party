@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paramétrage de la Partie - Murder Party</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Paramétrage de la Partie</h1>
+    <p>Choisissez les paramètres de votre enquête.</p>
+  </header>
+
+  <main>
+    <form action="demarrer-partie.html" method="GET">
+      <section class="parametres">
+        <label for="nombre-criminels">Nombre de criminels :</label>
+        <select id="nombre-criminels" name="nombre-criminels">
+          <option value="1">1 criminel</option>
+          <option value="2">2 criminels</option>
+          <option value="3">3 criminels</option>
+        </select>
+      </section>
+
+      <section class="parametres">
+        <label for="criminels-fantomes">Les criminels se reconnaissent-ils dès le début ?</label>
+        <select id="criminels-fantomes" name="criminels-fantomes">
+          <option value="non">Non</option>
+          <option value="oui">Oui (Criminels Fantômes)</option>
+        </select>
+      </section>
+
+      <section class="parametres">
+        <label for="duree-partie">Durée de la partie (en jours) :</label>
+        <input type="number" id="duree-partie" name="duree-partie" value="5" min="1" max="7" />
+      </section>
+
+      <button type="submit">Démarrer la Partie</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party</p>
+  </footer>
+</body>
+</html>
