@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Examiner la scène du crime</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="examiner-scene">
+  <header>
+    <h1>Examiner la scène du crime</h1>
+    <p class="slogan">Qu'avez-vous trouvé ?</p>
+  </header>
+
+  <main>
+    <section class="evidence">
+      <p>Vous examinez la scène du crime et trouvez des indices :</p>
+      <ul>
+        <li>Une empreinte de pas.</li>
+        <li>Un objet mystérieux.</li>
+        <li>Un indice de témoin.</li>
+      </ul>
+      <button onclick="retourner()">Retour à la partie en cours</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party. L'enquête progresse...</p>
+  </footer>
+
+  <script>
+    function retourner() {
+      window.location.href = "partie-en-cours.html";
+    }
+  </script>
+</body>
+</html>
