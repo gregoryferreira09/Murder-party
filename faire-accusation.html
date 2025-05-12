@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faire une accusation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="faire-accusation">
+  <header>
+    <h1>Faire une accusation</h1>
+    <p class="slogan">Êtes-vous prêt à accuser quelqu'un ?</p>
+  </header>
+
+  <main>
+    <section class="accusation">
+      <p>Choisissez la personne que vous accusez :</p>
+      <button onclick="choisirAccusé()">Choisir un accusé</button>
+      <p>Votre accusation : <input type="text" id="accusation"></p>
+      <button onclick="faireAccusation()">Faire l'accusation</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party. La vérité se fait jour...</p>
+  </footer>
+
+  <script>
+    function choisirAccusé() {
+      alert("Choisissez un accusé.");
+    }
+
+    function faireAccusation() {
+      let accusation = document.getElementById('accusation').value;
+      alert("Vous avez accusé : " + accusation);
+      window.location.href = "partie-en-cours.html";
+    }
+  </script>
+</body>
+</html>
