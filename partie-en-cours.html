@@ -8,34 +8,39 @@
 </head>
 <body class="partie-en-cours">
   <header>
-    <h1>Enquête en cours...</h1>
-    <p class="slogan">Que la vérité éclate !</p>
+    <h1>Partie en cours</h1>
+    <p class="slogan">L'enquête se poursuit...</p>
   </header>
 
   <main>
     <section class="actions">
-      <p>Choisissez une action à réaliser :</p>
-      <button onclick="interroger()">Interroger un joueur</button>
-      <button onclick="examiner()">Examiner la scène du crime</button>
-      <button onclick="faire-accusation()">Faire une accusation</button>
+      <p>Que souhaitez-vous faire ?</p>
+      <button onclick="examinerScene()">Examiner la scène</button>
+      <button onclick="interrogerJoueur()">Interroger un joueur</button>
+      <button onclick="accuserJoueur()">Accuser un joueur</button>
+      <button onclick="voter()">Voter pour le coupable</button>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Murder Party. Le mystère continue...</p>
+    <p>&copy; 2025 Murder Party. L'énigme se dévoile peu à peu.</p>
   </footer>
 
   <script>
-    function interroger() {
-      window.location.href = "interroger-joueur.html";
-    }
-
-    function examiner() {
+    function examinerScene() {
       window.location.href = "examiner-scene.html";
     }
 
-    function faire-accusation() {
+    function interrogerJoueur() {
+      window.location.href = "interroger-joueur.html";
+    }
+
+    function accuserJoueur() {
       window.location.href = "faire-accusation.html";
+    }
+
+    function voter() {
+      window.location.href = "vote-final.html";
     }
   </script>
 </body>
