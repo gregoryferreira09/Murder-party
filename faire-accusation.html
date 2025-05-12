@@ -2,36 +2,33 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Faire une Accusation - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faire une accusation</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Faire une Accusation</h1>
-    <p>Accusez un joueur de commettre le crime.</p>
-  </header>
-
-  <main>
-    <section class="accusation">
-      <label for="accuse">Choisissez un joueur à accuser :</label>
-      <select id="accuse">
-        <option value="joueur-1">Joueur 1</option>
-        <option value="joueur-2">Joueur 2</option>
-        <option value="joueur-3">Joueur 3</option>
-      </select>
-      <button onclick="faireAccusation()">Accuser</button>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Murder Party</p>
-  </footer>
+  <div class="container">
+    <h1>Faire une accusation</h1>
+    <p>Accusez un joueur d'être le coupable :</p>
+    <select id="accusation">
+      <option value="joueur1">Joueur 1</option>
+      <option value="joueur2">Joueur 2</option>
+      <option value="joueur3">Joueur 3</option>
+    </select>
+    <button onclick="faireAccusation()">Accuser</button>
+    <p id="resultat-accusation"></p>
+    <button onclick="retour()">Retour à la partie</button>
+  </div>
 
   <script>
     function faireAccusation() {
-      var accuse = document.getElementById("accuse").value;
-      alert("Accusation faite contre " + accuse);
+      var joueurAccuse = document.getElementById('accusation').value;
+      var message = 'Vous avez accusé ' + joueurAccuse + '.';
+      document.getElementById('resultat-accusation').textContent = message;
+    }
+
+    function retour() {
+      window.location.href = "partie-en-cours.html";
     }
   </script>
 </body>
