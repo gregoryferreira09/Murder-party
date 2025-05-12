@@ -3,34 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Examiner la scène du crime</title>
+  <title>Examen de la Scène du Crime - Murder Party</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="examiner-scene">
+<body>
   <header>
-    <h1>Examiner la scène du crime</h1>
-    <p class="slogan">Qu'avez-vous trouvé ?</p>
+    <h1>Examen de la Scène du Crime</h1>
+    <p>Examinez les indices trouvés sur la scène du crime.</p>
   </header>
 
   <main>
-    <section class="evidence">
-      <p>Vous examinez la scène du crime et trouvez des indices :</p>
-      <ul>
-        <li>Une empreinte de pas.</li>
-        <li>Un objet mystérieux.</li>
-        <li>Un indice de témoin.</li>
-      </ul>
-      <button onclick="retourner()">Retour à la partie en cours</button>
+    <section class="indices">
+      <button onclick="examinerIndice('coup de couteau dans le dos')">Coup de couteau dans le dos</button>
+      <button onclick="examinerIndice('trace de sang')">Trace de sang</button>
+      <button onclick="examinerIndice('empreintes digitales')">Empreintes digitales</button>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Murder Party. L'enquête progresse...</p>
+    <p>&copy; 2025 Murder Party</p>
   </footer>
 
   <script>
-    function retourner() {
-      window.location.href = "partie-en-cours.html";
+    function examinerIndice(indice) {
+      alert("Indice examiné : " + indice);
     }
   </script>
 </body>
