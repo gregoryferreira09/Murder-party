@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Choisir le mode de jeu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="choisir-mode-jeu">
+  <header>
+    <h1>Choisir votre mode de jeu</h1>
+    <p class="slogan">Sélectionnez la difficulté et les options.</p>
+  </header>
+
+  <main>
+    <section class="modes">
+      <p>Sélectionnez un mode :</p>
+      <button onclick="choisirMode('Classique')">Classique</button>
+      <button onclick="choisirMode('Difficile')">Difficile</button>
+      <button onclick="choisirMode('Poison aléatoire')">Poison aléatoire</button>
+      <button onclick="choisirMode('Chasse au juste coupable')">Chasse au juste coupable</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party. L'aventure commence.</p>
+  </footer>
+
+  <script>
+    function choisirMode(mode) {
+      alert("Vous avez choisi le mode : " + mode);
+      window.location.href = "partie-en-cours.html";
+    }
+  </script>
+</body>
+</html>
