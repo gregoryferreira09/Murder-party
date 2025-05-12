@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le mystère est résolu - Murder Party</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Le mystère est résolu !</h1>
+    <p>Bravo, vous avez résolu l'enquête !</p>
+    <p><strong>Le criminel était le joueur 2 !</strong></p>
+    <button onclick="rejouer()">Rejouer</button>
+    <button onclick="quitter()">Quitter</button>
+  </div>
+
+  <script>
+    function rejouer() {
+      window.location.href = "choix-personnage.html";
+    }
+
+    function quitter() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
