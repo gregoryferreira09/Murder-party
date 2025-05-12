@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Révélation - Murder Party</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      animation: fondu 3s ease-in-out;
+    }
+
+    @keyframes fondu {
+      0% { background-color: black; color: black; }
+      100% { background-color: white; color: black; }
+    }
+
+    .dramatic {
+      font-size: 2em;
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .rejouer {
+      display: block;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      background-color: darkred;
+      color: white;
+      font-size: 1.2rem;
+      border-radius: 12px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🕵️‍♂️ La vérité éclate !</h1>
+
+    <div class="dramatic">
+      <p>Le criminel était...</p>
+      <h2 id="criminel">???</h2>
+    </div>
+
+    <div class="dramatic">
+      <p>Motif ou mission : <span id="motif">...</span></p>
+    </div>
+
+    <div class="dramatic">
+      <p>Enquêteurs justes : <span id="enqueteurs-justes">...</span></p>
+      <p>Enquêteurs trompés : <span id="enqueteurs-faux">...</span></p>
+    </div>
+
+    <a class="rejouer" href="accueil.html">Rejouer une partie</a>
+  </div>
+
+  <script>
+    // Ces données seraient dynamiques dans une vraie partie
+    document.getElementById("criminel").textContent = "Joueur 3";
+    document.getElementById("motif").textContent = "Vengeance personnelle";
+    document.getElementById("enqueteurs-justes").textContent = "Joueur 1, Joueur 2";
+    document.getElementById("enqueteurs-faux").textContent = "Joueur 4";
+  </script>
+</body>
+</html>
