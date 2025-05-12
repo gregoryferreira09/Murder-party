@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Partie en cours</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="partie-en-cours">
+  <header>
+    <h1>Enquête en cours...</h1>
+    <p class="slogan">Que la vérité éclate !</p>
+  </header>
+
+  <main>
+    <section class="actions">
+      <p>Choisissez une action à réaliser :</p>
+      <button onclick="interroger()">Interroger un joueur</button>
+      <button onclick="examiner()">Examiner la scène du crime</button>
+      <button onclick="faire-accusation()">Faire une accusation</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party. Le mystère continue...</p>
+  </footer>
+
+  <script>
+    function interroger() {
+      window.location.href = "interroger-joueur.html";
+    }
+
+    function examiner() {
+      window.location.href = "examiner-scene.html";
+    }
+
+    function faire-accusation() {
+      window.location.href = "faire-accusation.html";
+    }
+  </script>
+</body>
+</html>
