@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accueil - Murder Party</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="accueil">
+  <header>
+    <h1>Bienvenue dans la Murder Party</h1>
+    <p class="slogan">Le mystère commence ici...</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p>Choisissez votre mode de jeu et commencez l'enquête.</p>
+      <button onclick="commencerJeu()">Commencer le jeu</button>
+      <button onclick="voirInstructions()">Voir les instructions</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Murder Party. Prêt à résoudre le crime ?</p>
+  </footer>
+
+  <script>
+    function commencerJeu() {
+      window.location.href = "choisir-mode-jeu.html";
+    }
+
+    function voirInstructions() {
+      alert("Les instructions seront bientôt disponibles.");
+    }
+  </script>
+</body>
+</html>
