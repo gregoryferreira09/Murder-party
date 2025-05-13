@@ -98,6 +98,19 @@
       <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle">
     </div>
 
+    <label for="nombreJoueurs">Nombre de joueurs :</label>
+    <select id="nombreJoueurs" name="nombreJoueurs">
+      <option value="4">4 joueurs</option>
+      <option value="5">5 joueurs</option>
+      <option value="6">6 joueurs</option>
+      <option value="7">7 joueurs</option>
+      <option value="8">8 joueurs</option>
+      <option value="9">9 joueurs</option>
+      <option value="10">10 joueurs</option>
+      <option value="11">11 joueurs</option>
+      <option value="12">12 joueurs</option>
+    </select>
+
     <label for="criminales">Nombre de criminels :</label>
     <select id="criminales" name="criminales">
       <option value="1">1 criminel</option>
@@ -142,9 +155,11 @@
       const criminelFantome = document.getElementById("criminel_fantome").checked;
       const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
       const inactifs = document.getElementById("inactifs").checked;
+      const nombreJoueurs = document.getElementById("nombreJoueurs").value;
 
       // Générer le scénario ici selon les paramètres (en exemple ici)
       let scenarioDetails = `
+        Nombre de joueurs : ${nombreJoueurs}<br>
         Mode de jeu : ${mode}<br>
         Durée de la partie : ${duree} minutes<br>
         Période choisie : ${periode === "autre" ? periodeAutre : periode}<br>
