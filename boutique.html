@@ -2,47 +2,47 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Boutique</title>
+  <title>Paramètres - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header>
-    <h1>🛍️ Boutique</h1>
+    <h1>⚙️ Paramètres</h1>
   </header>
 
   <main>
-    <section>
-      <h2>Pass Illimité</h2>
-      <ul>
-        <li>1 jour - 0,99€</li>
-        <li>7 jours - 2,99€</li>
-        <li>30 jours - 5,99€</li>
-      </ul>
-      <button>Acheter</button>
+    <section class="parametres">
+      <label for="pseudo">Changer de pseudo :</label>
+      <input type="text" id="pseudo" placeholder="Nouveau pseudo">
+
+      <label for="langue">Langue :</label>
+      <select id="langue">
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+      </select>
+
+      <label>
+        <input type="checkbox" checked> Activer les sons
+      </label>
+
+      <label>
+        <input type="checkbox"> Notifications en jeu
+      </label>
+
+      <button>Sauvegarder les paramètres</button>
     </section>
 
-    <section>
-      <h2>Pack "Soirée entre amis"</h2>
-      <p>Déblocage unique pour une session</p>
-      <button>Acheter</button>
-    </section>
-
-    <section>
-      <h2>Pass Maître du Jeu</h2>
-      <p>Débloque la session pour tous les joueurs</p>
-      <button>Acheter</button>
-    </section>
-
-    <section>
-      <h2>Extras</h2>
-      <ul>
-        <li>🎭 Avatars légendaires</li>
-        <li>🔎 Indices premium discrets</li>
-        <li>🧙 Créateur de personnage</li>
-      </ul>
-      <button>Acheter</button>
+    <section class="actions">
+      <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
     </section>
   </main>
+
+  <footer>
+    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
 </body>
 </html>
