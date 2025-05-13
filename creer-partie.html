@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Créer une partie - Ludus Veritae</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #2c1b1b;
+      color: #e4d9c5;
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 3em;
+      margin: 30px 0 10px;
+    }
+
+    form {
+      max-width: 600px;
+      margin: auto;
+      background-color: #1b1b1b;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 1.3em;
+    }
+
+    select, input[type="number"], button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 80%;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background-color: #4eaf7c;
+      color: white;
+    }
+
+    select:hover, input[type="number"]:hover, button:hover {
+      background-color: #3e8f64;
+      cursor: pointer;
+    }
+
+    .return-btn {
+      display: inline-block;
+      margin: 30px auto 0;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .return-btn:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Créer une partie</h1>
+
+  <form>
+    <label for="nombre-joueurs">Nombre de joueurs :</label>
+    <input type="number" id="nombre-joueurs" name="nombre-joueurs" min="4" max="15" required>
+
+    <label for="duree">Durée de la partie :</label>
+    <select id="duree" name="duree">
+      <option value="30">30 minutes</option>
+      <option value="60">60 minutes</option>
+    </select>
+
+    <label for="mode">Mode de jeu :</label>
+    <select id="mode" name="mode">
+      <option value="classique">Classique</option>
+      <option value="poison">Poison aléatoire</option>
+      <option value="juste-coupable">Chasse au juste coupable</option>
+    </select>
+
+    <label for="nombre-criminels">Nombre de criminels :</label>
+    <select id="nombre-criminels" name="nombre-criminels">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="random">Aléatoire</option>
+    </select>
+
+    <label for="criminels-visible">Les criminels se reconnaissent :</label>
+    <select id="criminels-visible" name="criminels-visible">
+      <option value="oui">Oui</option>
+      <option value="non">Non (mode Criminel fantôme)</option>
+    </select>
+
+    <button type="submit">Lancer la partie</button>
+  </form>
+
+  <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
+
+</body>
+</html>
