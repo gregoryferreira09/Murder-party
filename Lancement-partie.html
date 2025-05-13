@@ -65,6 +65,24 @@
 
   <a class="btn" href="partie-en-cours.html">Commencer la partie</a>
   <a class="btn" href="accueil.html">Retour à l'accueil</a>
+<script>
+  const data = JSON.parse(localStorage.getItem("partieData"));
+
+  if (data) {
+    const container = document.getElementById("scenarioContainer");
+    container.innerHTML = `
+      <p><strong>Contexte :</strong> ${data.scenario}</p>
+      <h3 style="margin-top: 30px;">Liste des personnages :</h3>
+      <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+        ${data.personnages.map(p => `
+          <li><strong>${p.nom}</strong> – ${p.description}</li>
+        `).join("")}
+      </ul>
+    `;
+  } else {
+    document.getElementById("scenarioContainer").innerHTML = "Aucune donnée trouvée.";
+  }
+</script>
 
 </body>
 </html>
