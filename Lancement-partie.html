@@ -83,6 +83,21 @@
     document.getElementById("scenarioContainer").innerHTML = "Aucune donnée trouvée.";
   }
 </script>
+<script>
+  const data = JSON.parse(localStorage.getItem("scenarioData"));
+
+  if (data) {
+    document.write("<h1>Scénario : </h1>");
+    document.write("<p>" + data.introduction + "</p>");
+    document.write("<h2>Crime :</h2><p>" + data.crime + "</p>");
+    document.write("<h2>Objectif général :</h2><p>" + data.objectifsGlobal + "</p>");
+    document.write("<h2>Joueurs :</h2>");
+    Object.keys(data.joueurs).forEach(key => {
+      const j = data.joueurs[key];
+      document.write(`<div><strong>${j.nom}</strong> : ${j.role}, ${j.trait}, objectif : ${j.objectifSecret}, criminel : ${j.estCriminel}</div>`);
+    });
+  }
+</script>
 
 </body>
 </html>
