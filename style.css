@@ -1,52 +1,50 @@
-/* style.css */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
 
-/* Définir un fond de page avec une tapisserie émeraude et des motifs */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Cormorant Garamond', serif;
-  background: url('https://www.transparenttextures.com/patterns/emerald-tapestry.png') no-repeat center center fixed;
-  background-size: cover;
+  background-color: #1b3a2b; /* Vert émeraude sombre */
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0,0,0,0.7)),
+    url('https://www.transparenttextures.com/patterns/vintage-wallpaper.png');
+  background-size: repeat;
   color: #f4e4c1;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-  text-align: center;
+  background-attachment: fixed;
 }
 
-/* En-tête avec style victorien */
 header {
   text-align: center;
   background: rgba(0, 0, 0, 0.6);
   width: 100%;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
   font-family: 'Cinzel Decorative', cursive;
-  font-size: 3em;
-  color: #e0c185;
+  font-size: 3.5em;
+  color: #d9c78f;
   margin: 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px #000;
 }
 
-/* Section principale avec boutons centrés */
 main {
   flex: 1;
   width: 100%;
-  max-width: 800px;
-  padding: 40px 20px;
+  max-width: 900px;
+  padding: 50px 20px;
   text-align: center;
-  background: rgba(0, 0, 0, 0.7); /* Légère transparence pour l'arrière-plan */
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  margin: 30px auto;
 }
 
-/* Boutons de navigation */
 .menu-buttons {
   display: flex;
   flex-direction: column;
@@ -55,8 +53,8 @@ main {
 }
 
 button {
-  background: #5c3d2e;
-  border: 2px solid #e0c185;
+  background: #3f2d26;
+  border: 2px solid #d9c78f;
   color: #fdf3df;
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.4em;
@@ -66,18 +64,17 @@ button {
   border-radius: 8px;
   width: 80%;
   max-width: 300px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
 }
 
 button:hover {
-  background-color: #3d2b1f;
+  background-color: #2e1f1a;
   transform: scale(1.05);
-  box-shadow: 0 0 10px #e0c18588;
+  box-shadow: 0 0 12px #d9c78f88;
 }
 
-/* Pied de page avec informations supplémentaires */
 footer {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   width: 100%;
   padding: 15px;
   text-align: center;
@@ -86,7 +83,6 @@ footer {
   margin-top: auto;
 }
 
-/* Lien dans le pied de page */
 a {
   color: #d1c5a3;
   text-decoration: none;
