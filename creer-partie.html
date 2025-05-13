@@ -151,38 +151,68 @@
     function genererScenario() {
       const mode = document.getElementById("mode").value;
       const duree = document.getElementById("duree").value;
-      const periodeSelect = document.getElementById("periode").value;
+      const periode = document.getElementById("periode").value;
       const periodeAutre = document.getElementById("periode_autre").value;
-      const criminels = parseInt(document.getElementById("criminels").value);
+      const criminels = document.getElementById("criminels").value;
       const criminelFantome = document.getElementById("criminel_fantome").checked;
       const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
       const inactifs = document.getElementById("inactifs").checked;
-      const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value);
+      const nombreJoueurs = document.getElementById("nombreJoueurs").value;
 
-      const periode = (periodeSelect === "autre") ? periodeAutre.trim() : periodeSelect;
+      // Créer un scénario dynamique en fonction des choix
+      const scenario = genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs);
 
-      const scenarioData = {
-        introduction: "Bienvenue dans votre murder party.",
-        crime: "Un crime mystérieux s’est produit...",
-        objectifsGlobal: "Résoudre le mystère avant la fin du temps imparti.",
-        parametres: {
-          mode,
-          duree,
-          periode,
-          criminels,
-          criminelFantome,
-          avatarsLegendaires,
-          inactifs,
-          nombreJoueurs
-        },
-        joueurs: [] // À remplir plus tard
-      };
+      // Sauvegarde du scénario généré dans localStorage
+      localStorage.setItem("scenarioData", JSON.stringify(scenario));
 
-      console.log("Données enregistrées :", scenarioData); // Pour vérification
-
-      localStorage.setItem("scenarioData", JSON.stringify(scenarioData));
-
+      // Rediriger vers la page de lancement de la partie
       window.location.href = "lancement-partie.html";
+    }
+
+    function genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
+      // Structure de base du scénario
+      let introduction = `Bienvenue dans votre murder party.`;
+      let crime = `Un crime mystérieux s’est produit...`;
+      let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`;
+
+      // Personnaliser selon la période et mode
+      if (periode === "victorien") {
+        introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`;
+        crime = `Une empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`;
+      }
+
+      // Générer personnages dynamiquement
+      const personnages = [];
+      for (let i = 0; i < nombreJoueurs; i++) {
+        personnages.push(genererPersonnage(i+1, criminels, avatarsLegendaires));
+      }
+
+      return {
+        introduction,
+        crime,
+        objectifGlobal,
+        personnages
+      };
+    }
+
+    function genererPersonnage(index, criminels, avatarsLegendaires) {
+      const roles = ['Detective', 'Médium', 'Servant', 'Noble', 'Docteur', 'Marchand'];
+      const traits = ['Alcoolisé', 'Loyal', 'Méfiant', 'Amoureux', 'Rival'];
+      const nom = `Personnage ${index}`;
+
+      let role = roles[Math.floor(Math.random() * roles.length)];
+      let trait = traits[Math.floor(Math.random() * traits.length)];
+
+      // Attribuer un rôle spécial si c'est un criminel
+      if (index <= criminels) {
+        role = 'Criminel';
+      }
+
+      return {
+        nom,
+        role,
+        trait
+      };
     }
   </script>
 
