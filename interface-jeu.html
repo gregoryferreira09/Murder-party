@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Interface de jeu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+  <header>
+    <h2>Temps restant : 38:12</h2>
+  </header>
+
+  <main>
+    <!-- Navigation entre onglets -->
+    <nav>
+      <button>🧩 Jeu</button>
+      <button>📄 Ma Fiche</button>
+    </nav>
+
+    <!-- Sous-onglets de l'onglet "Jeu" -->
+    <section class="onglet-jeu">
+      <nav>
+        <button>🔴 Vote</button>
+        <button>🔵 Connexion</button>
+        <button>🟡 Indices</button>
+      </nav>
+
+      <section id="zone-interaction">
+        <!-- Vote -->
+        <div class="vote">
+          <div class="joueur">
+            <img src="images/perso1.png" alt="Perso 1">
+            <p>Inspecteur Lenoir</p>
+          </div>
+          <button>Valider mon vote</button>
+        </div>
+
+        <!-- Connexion -->
+        <div class="connexion">
+          <div class="joueur">
+            <img src="images/perso2.png" alt="Perso 2">
+            <p>Mlle Rose</p>
+          </div>
+          <button>Valider la connexion</button>
+        </div>
+
+        <!-- Indices -->
+        <div class="indices">
+          <div class="joueur">
+            <img src="images/perso3.png" alt="Perso 3">
+            <p>Professeur Violet</p>
+            <span class="notif-indice">2</span>
+          </div>
+
+          <!-- Fiche volante -->
+          <div class="fiche-indices">
+            <h3>Professeur Violet</h3>
+            <ul>
+              <li>Vu avec la victime avant sa mort</li>
+              <li>A bu un verre suspect au salon</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+</body>
+</html>
