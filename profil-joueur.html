@@ -4,26 +4,32 @@
   <meta charset="UTF-8">
   <title>Profil - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Lien vers le fichier CSS -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Polices stylées -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <header>
-    <h1>👤 Mon Profil</h1>
+    <h1>Mon Profil</h1>
   </header>
 
   <main>
-    <section class="profil">
-      <img src="images/avatar-par-defaut.png" alt="Avatar" class="avatar">
-      <p><strong>Nom d'utilisateur :</strong> Joueur123</p>
-      <p><strong>Parties jouées :</strong> 12</p>
-      <p><strong>Meurtres résolus :</strong> 5</p>
-      <p><strong>Rôle préféré :</strong> Enquêteur</p>
-      <button>Modifier mon avatar</button>
+    <section class="profil-info">
+      <h2>Nom du joueur : Jean Dupont</h2>
+      <p>Email : jean.dupont@example.com</p>
+      <p>Parties jouées : 15</p>
+      <p>Victoire : 8</p>
+      <p>Échecs : 7</p>
     </section>
 
-    <section class="actions">
-      <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
+    <section class="menu-buttons">
+      <button onclick="window.location.href='creer-salon.html'">🎮 Créer une partie</button>
+      <button onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
+      <button onclick="window.location.href='accueil.html'">🏠 Accueil</button>
+      <button onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
     </section>
   </main>
 
