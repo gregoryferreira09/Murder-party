@@ -6,7 +6,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Ton style inchangé */
+    body {
+      background-color: #1b1b1b;
+      font-family: 'Cormorant Garamond', serif;
+      color: #e0e0e0;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    .form-container {
+      background-color: #2c1b1b;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+      margin: 20px 0;
+    }
+
+    .form-container label {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .form-container select,
+    .form-container input[type="checkbox"],
+    .form-container input[type="text"],
+    .form-container button {
+      font-size: 1em;
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #4eaf7c;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: #4eaf7c;
+    }
+
+    .return-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 20px;
+      border: 1px solid #4eaf7c;
+    }
+
+    .return-btn:hover {
+      background-color: #4eaf7c;
+    }
   </style>
 </head>
 <body>
@@ -14,8 +74,6 @@
   <h1>Créer une Partie</h1>
 
   <div class="form-container">
-    <!-- Tous tes champs de formulaire inchangés -->
-
     <label for="mode">Choisissez le mode de jeu :</label>
     <select id="mode" name="mode">
       <option value="classique">Classique</option>
@@ -85,6 +143,7 @@
   <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
+    // Affiche ou cache le champ "autre période"
     document.getElementById("periode").addEventListener("change", function () {
       document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
     });
@@ -100,30 +159,34 @@
       const inactifs = document.getElementById("inactifs").checked;
       const nombreJoueurs = document.getElementById("nombreJoueurs").value;
 
+      // Créer un scénario dynamique en fonction des choix
       const scenario = genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs);
 
-      // 🔧 Ajout : sauvegarde les paramètres de la partie dans localStorage
-      const parametres = {
-        mode,
-        duree,
-        periode: (periode === "autre") ? periodeAutre : periode,
-        nombreJoueurs,
-        criminels,
-        criminelFantome,
-        avatarsLegendaires,
-        inactifs,
-        scenario
-      };
-      localStorage.setItem("parametresPartie", JSON.stringify(parametres));
+      // Sauvegarde du scénario généré dans localStorage
+      localStorage.setItem("scenarioData", JSON.stringify(scenario));
 
+      // Rediriger vers la page de lancement de la partie
       window.location.href = "lancement-partie.html";
     }
+localStorage.setItem("parametresPartie", JSON.stringify({
+  mode,
+  duree,
+  periode,
+  periodeAutre,
+  criminels,
+  criminelFantome,
+  avatarsLegendaires,
+  inactifs,
+  nombreJoueurs
+}));
 
     function genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
+      // Structure de base du scénario
       let introduction = `Bienvenue dans votre murder party.`;
       let crime = `Un crime mystérieux s’est produit...`;
       let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`;
 
+      // Personnaliser selon la période et mode
       if (periode === "victorien") {
         introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`;
         crime = `Une empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`;
@@ -132,6 +195,7 @@
         crime = `Un crime s'est produit dans cette période complexe... Qui est coupable ?`;
       }
 
+      // Générer personnages dynamiquement
       const personnages = [];
       for (let i = 0; i < nombreJoueurs; i++) {
         personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires));
@@ -153,11 +217,13 @@
       let role = roles[Math.floor(Math.random() * roles.length)];
       let trait = traits[Math.floor(Math.random() * traits.length)];
 
+      // Attribuer un rôle spécial si c'est un criminel
       if (index <= criminels) {
         role = 'Criminel';
       }
 
-      if (avatarsLegendaires && index <= 1) {
+      // Ajouter un avatar légendaire si activé
+      if (avatarsLegendaires && index <= 1) { // Exemple d'un seul avatar légendaire
         role = "Fantôme";
       }
 
@@ -168,5 +234,3 @@
       };
     }
   </script>
-</body>
-</html>
