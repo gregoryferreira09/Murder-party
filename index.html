@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ludus Veritae</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <style>
-    /* Styles globaux */
+    :root {
+      --accueil-bg: #faf6ed; /* couleur exacte de l'accueil */
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    body, html {
+
+    html, body {
       height: 100%;
+      background-color: black;
       font-family: 'Cormorant Garamond', serif;
     }
 
-    /* Page de démarrage */
     .fullscreen {
       width: 100%;
-      height: 100vh;
-      background-color: #1b1b1b; /* Couleur de fond initiale */
+      height: 100%;
+      background-color: black;
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #e0e0e0;
       text-align: center;
-      cursor: pointer;
       position: relative;
-      transition: background-color 1s ease; /* Transition vers la couleur de fond de l'accueil */
+      cursor: pointer;
+      overflow: hidden;
     }
 
     .fullscreen h1 {
       font-family: 'Cinzel Decorative', serif;
       font-size: 4em;
-      margin-bottom: 20px;
     }
 
     .fullscreen i {
@@ -43,49 +46,45 @@
       margin-top: 20px;
     }
 
-    /* Effet de fondue */
-    .fade {
+    .fade-transition {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: inherit; /* Utilise la couleur de fond d'origine pour fondre */
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
+      background-color: black;
+      z-index: 2;
+      pointer-events: none;
+      transition: background-color 1.2s ease;
     }
 
-    /* Lorsque l'utilisateur clique sur l'écran */
-    .fade.show {
-      opacity: 1;
+    .fade-transition.fade-out {
+      background-color: var(--accueil-bg);
     }
   </style>
 </head>
 <body>
 
-  <div class="fullscreen" id="start-screen" onclick="startGame()">
+  <div class="fullscreen" onclick="startTransition()">
     <div>
       <h1>Ludus Veritae</h1>
-      <i class="fas fa-search"></i> <!-- Icône de loupe -->
+      <i class="fas fa-search"></i>
     </div>
-    <div class="fade" id="fade-effect"></div>
+    <div class="fade-transition" id="fadeOverlay"></div>
   </div>
 
   <script>
-    // Fonction qui gère la redirection avec effet de fondu
-    function startGame() {
-      const fadeEffect = document.getElementById('fade-effect');
-      fadeEffect.classList.add('show'); // Ajoute la classe 'show' pour l'effet de fondu
+    function startTransition() {
+      const fade = document.getElementById("fadeOverlay");
+      fade.classList.add("fade-out");
 
-      // Redirige vers la page d'accueil après 1 seconde (durée de l'effet)
-      setTimeout(function() {
-        window.location.href = 'accueil.html';
-      }, 1000);
+      // attendre la fin de la transition avant de rediriger
+      setTimeout(() => {
+        window.location.href = "accueil.html";
+      }, 1200); // doit correspondre à la durée de la transition CSS
     }
   </script>
 
-  <!-- Intégration de l'icône de la loupe (si tu utilises FontAwesome) -->
   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
 </body>
 </html>
