@@ -35,6 +35,23 @@ h1 {
   margin: 0;
 }
 
+/* Section Profil */
+.profil-info {
+  text-align: center;
+  color: #e0c185;
+  margin-bottom: 40px;
+}
+
+.profil-info h2 {
+  font-size: 2.5em;
+  margin: 20px 0;
+}
+
+.profil-info p {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
 /* Contenu principal */
 main {
   flex: 1;
