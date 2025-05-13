@@ -15,23 +15,32 @@
 
   <main>
     <section class="profil-info">
-      <h2>Nom du joueur :</h2>
-      <input type="text" id="nom" value="Jean Dupont">
-      
-      <h2>Email :</h2>
-      <input type="email" id="email" value="jean.dupont@example.com">
-      
-      <h2>Parties jouées :</h2>
-      <input type="number" id="parties-jouees" value="15">
-      
-      <h2>Victoire :</h2>
-      <input type="number" id="victoires" value="8">
-      
-      <h2>Échecs :</h2>
-      <input type="number" id="echecs" value="7">
+      <!-- Avatar affiché et modifiable -->
+      <div class="avatar-section">
+        <h2>Avatar :</h2>
+        <img src="avatar-default.png" id="avatar" alt="Avatar de joueur" width="150" height="150">
+        <button onclick="changerAvatar()">Modifier l'avatar</button>
+      </div>
+
+      <!-- Nom personnalisé en fonction des victoires -->
+      <h2>Nom :</h2>
+      <input type="text" id="nom" value="Jean Dupont" readonly>
+
+      <!-- Statistiques non modifiables -->
+      <h2>Statistiques :</h2>
+      <ul>
+        <li>Parties jouées : <span id="parties-jouees">15</span></li>
+        <li>Parties gagnées : <span id="victoires">8</span></li>
+        <li>Parties perdues : <span id="echecs">7</span></li>
+        <li>Enquêteur : <span id="enqueteur">10</span></li>
+        <li>Meurtrier : <span id="meurtrier">5</span></li>
+      </ul>
+
+      <!-- Affichage du nom basé sur les victoires -->
+      <h2>Classement : <span id="classement"></span></h2>
     </section>
 
-    <!-- Ajout du bouton "Retour" uniquement si l'utilisateur est connecté -->
+    <!-- Ajout du bouton Retour -->
     <section class="menu-buttons">
       <button id="btn-retour" style="display:none;" onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
     </section>
@@ -44,8 +53,35 @@
   </footer>
 
   <script>
+    // Calcul du classement basé sur les victoires
+    function calculerClassement(victoires) {
+      let classement = "";
+      if (victoires <= 5) {
+        classement = "Débutant";
+      } else if (victoires <= 10) {
+        classement = "Champion";
+      } else if (victoires <= 20) {
+        classement = "Vétéran";
+      } else {
+        classement = "Légende";
+      }
+      document.getElementById("classement").innerText = classement;
+    }
+
+    // Modifier l'avatar
+    function changerAvatar() {
+      // Simuler un changement d'avatar (cela pourrait être plus avancé avec une bibliothèque d'avatars personnalisés)
+      let nouveauxAvatars = ['avatar-1.png', 'avatar-2.png', 'avatar-3.png'];
+      let avatarIndex = Math.floor(Math.random() * nouveauxAvatars.length);
+      document.getElementById("avatar").src = nouveauxAvatars[avatarIndex];
+    }
+
+    // Affichage dynamique du nom et classement
+    const victoires = parseInt(document.getElementById("victoires").innerText);
+    calculerClassement(victoires);
+
     // Vérification si l'utilisateur est connecté pour afficher le bouton retour
-    const isLoggedIn = true;  // On peut remplacer cette variable par une vraie vérification côté serveur ou avec un cookie/localStorage
+    const isLoggedIn = true;  // Cela pourrait être modifié avec un vrai contrôle de session
     if (isLoggedIn) {
       document.getElementById('btn-retour').style.display = 'block';  // Afficher le bouton si connecté
     }
