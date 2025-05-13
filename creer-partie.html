@@ -170,21 +170,22 @@
     }
 
     function genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
-      // Structure de base du scénario
       let introduction = `Bienvenue dans votre murder party.`;
       let crime = `Un crime mystérieux s’est produit...`;
       let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`;
 
-      // Personnaliser selon la période et mode
+      // Personnaliser selon la période
       if (periode === "victorien") {
         introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`;
         crime = `Une empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`;
+      } else if (periode === "autre" && periodeAutre) {
+        introduction = `Bienvenue dans la période de ${periodeAutre}, un moment historique où le mystère règne.`;
       }
 
       // Générer personnages dynamiquement
       const personnages = [];
       for (let i = 0; i < nombreJoueurs; i++) {
-        personnages.push(genererPersonnage(i+1, criminels, avatarsLegendaires));
+        personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires));
       }
 
       return {
