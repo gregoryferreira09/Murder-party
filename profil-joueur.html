@@ -15,18 +15,15 @@
 
   <main>
     <section class="profil-info">
-      <!-- Avatar affiché et modifiable -->
       <div class="avatar-section">
         <h2>Avatar :</h2>
         <img src="avatar-default.png" id="avatar" alt="Avatar de joueur" width="150" height="150">
         <button onclick="changerAvatar()">Modifier l'avatar</button>
       </div>
 
-      <!-- Nom personnalisé en fonction des victoires -->
       <h2>Nom :</h2>
       <input type="text" id="nom" value="Jean Dupont" readonly>
 
-      <!-- Statistiques non modifiables -->
       <h2>Statistiques :</h2>
       <ul>
         <li>Parties jouées : <span id="parties-jouees">15</span></li>
@@ -36,18 +33,17 @@
         <li>Meurtrier : <span id="meurtrier">5</span></li>
       </ul>
 
-      <!-- Affichage du nom basé sur les victoires -->
       <h2>Classement : <span id="classement"></span></h2>
     </section>
 
     <!-- Ajout du bouton Retour -->
     <section class="menu-buttons">
-      <button id="btn-retour" style="display:none;" onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
+      <button id="btn-retour" onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
     </section>
   </main>
 
   <footer>
-    <button onclick="window.location.href='paramètres.html'">⚙️ Paramètres</button>
+    <button onclick="window.location.href='parametres.html'">⚙️ Paramètres</button>
     <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
@@ -70,7 +66,6 @@
 
     // Modifier l'avatar
     function changerAvatar() {
-      // Simuler un changement d'avatar (cela pourrait être plus avancé avec une bibliothèque d'avatars personnalisés)
       let nouveauxAvatars = ['avatar-1.png', 'avatar-2.png', 'avatar-3.png'];
       let avatarIndex = Math.floor(Math.random() * nouveauxAvatars.length);
       document.getElementById("avatar").src = nouveauxAvatars[avatarIndex];
@@ -79,12 +74,6 @@
     // Affichage dynamique du nom et classement
     const victoires = parseInt(document.getElementById("victoires").innerText);
     calculerClassement(victoires);
-
-    // Vérification si l'utilisateur est connecté pour afficher le bouton retour
-    const isLoggedIn = true;  // Cela pourrait être modifié avec un vrai contrôle de session
-    if (isLoggedIn) {
-      document.getElementById('btn-retour').style.display = 'block';  // Afficher le bouton si connecté
-    }
   </script>
 
 </body>
