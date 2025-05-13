@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Scénario généré</title>
+  <title>Lancement de la Partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
@@ -70,30 +70,32 @@
   <a class="btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
-    const data = JSON.parse(localStorage.getItem("scenarioData"));
+    const data = JSON.parse(localStorage.getItem("parametresPartie"));
 
     if (data) {
       const container = document.getElementById("scenarioContainer");
       container.innerHTML = `
         <h2>Introduction</h2>
-        <p>${data.introduction}</p>
+        <p>Bienvenue dans votre Murder Party !</p>
 
         <h2>Le crime</h2>
-        <p>${data.crime}</p>
+        <p>Un crime mystérieux s’est produit, et il est maintenant à votre équipe de le résoudre avant la fin du temps imparti.</p>
 
         <h2>Objectif général</h2>
-        <p>${data.objectifsGlobal}</p>
+        <p>Résoudre le mystère avant la fin du temps imparti.</p>
+
+        <h2>Détails du jeu</h2>
+        <p>Mode de jeu : ${data.mode}</p>
+        <p>Durée de la partie : ${data.duree} minutes</p>
+        <p>Période : ${data.periode}</p>
+        <p>Nombre de joueurs : ${data.nombreJoueurs}</p>
+        <p>Nombre de criminels : ${data.criminels}</p>
+        <p>Mode criminels fantômes : ${data.criminelFantome ? "Oui" : "Non"}</p>
+        <p>Avatars légendaires activés : ${data.avatarsLegendaires ? "Oui" : "Non"}</p>
+        <p>Observation des inactifs : ${data.inactifs ? "Activé" : "Non activé"}</p>
 
         <h2>Personnages</h2>
-        <ul>
-          ${Object.values(data.joueurs).map(j => `
-            <li>
-              <strong>${j.nom}</strong> : ${j.role}, ${j.trait}<br>
-              <em>Objectif secret :</em> ${j.objectifSecret}<br>
-              <em>Criminel :</em> ${j.estCriminel ? 'Oui' : 'Non'}
-            </li>
-          `).join('')}
-        </ul>
+        <p>Les personnages seront ajoutés automatiquement en fonction des paramètres du jeu. À vous de découvrir les rôles secrets !</p>
       `;
     } else {
       document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
