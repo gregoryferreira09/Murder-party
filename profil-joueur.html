@@ -2,23 +2,38 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profil du joueur - Murder Party</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Profil</title>
 </head>
 <body>
-  <div class="container">
-    <h1>Profil du joueur</h1>
-    <p><strong>Nom : Joueur 1</strong></p>
-    <p><strong>Rôle : Enquêteur</strong></p>
-    <p><strong>Statut : En cours</strong></p>
-    <button onclick="retourPartie()">Retour à la partie</button>
-  </div>
 
-  <script>
-    function retourPartie() {
-      window.location.href = "partie-en-cours.html";
-    }
-  </script>
+  <header>
+    <h1>Mon profil</h1>
+  </header>
+
+  <main>
+    <form>
+      <label>Nom du joueur :
+        <input type="text" placeholder="Ex: Enquêteur007">
+      </label>
+
+      <label>Choix d’avatar :
+        <select>
+          <option>Avatar 1</option>
+          <option>Avatar 2</option>
+        </select>
+      </label>
+
+      <label>Style de tenue :
+        <select>
+          <option>Classique</option>
+          <option>Victorienne</option>
+          <option>Moderne</option>
+        </select>
+      </label>
+
+      <button type="submit">Sauvegarder</button>
+    </form>
+  </main>
+
 </body>
 </html>
