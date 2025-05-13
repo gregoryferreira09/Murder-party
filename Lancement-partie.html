@@ -52,10 +52,6 @@
       background-color: #e9c78c;
       color: #000000;
     }
-
-    ul {
-      padding-left: 20px;
-    }
   </style>
 </head>
 <body>
@@ -92,10 +88,6 @@
         <p>Nombre de criminels : ${data.criminels}</p>
         <p>Mode criminels fantômes : ${data.criminelFantome ? "Oui" : "Non"}</p>
         <p>Avatars légendaires activés : ${data.avatarsLegendaires ? "Oui" : "Non"}</p>
-        <p>Observation des inactifs : ${data.inactifs ? "Activé" : "Non activé"}</p>
-
-        <h2>Personnages</h2>
-        <p>Les personnages seront ajoutés automatiquement en fonction des paramètres du jeu. À vous de découvrir les rôles secrets !</p>
       `;
     } else {
       document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
