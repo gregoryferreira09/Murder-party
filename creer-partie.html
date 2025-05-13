@@ -151,28 +151,37 @@
     function genererScenario() {
       const mode = document.getElementById("mode").value;
       const duree = document.getElementById("duree").value;
-      const periode = document.getElementById("periode").value;
+      const periodeSelect = document.getElementById("periode").value;
       const periodeAutre = document.getElementById("periode_autre").value;
-      const criminels = document.getElementById("criminels").value;
+      const criminels = parseInt(document.getElementById("criminels").value);
       const criminelFantome = document.getElementById("criminel_fantome").checked;
       const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
       const inactifs = document.getElementById("inactifs").checked;
-      const nombreJoueurs = document.getElementById("nombreJoueurs").value;
+      const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value);
 
-      const data = {
-        mode,
-        duree,
-        periode: (periode === "autre") ? periodeAutre : periode,
-        criminels: parseInt(criminels),
-        criminelFantome,
-        avatarsLegendaires,
-        inactifs,
-        nombreJoueurs: parseInt(nombreJoueurs)
+      const periode = (periodeSelect === "autre") ? periodeAutre.trim() : periodeSelect;
+
+      const scenarioData = {
+        introduction: "Bienvenue dans votre murder party.",
+        crime: "Un crime mystérieux s’est produit...",
+        objectifsGlobal: "Résoudre le mystère avant la fin du temps imparti.",
+        parametres: {
+          mode,
+          duree,
+          periode,
+          criminels,
+          criminelFantome,
+          avatarsLegendaires,
+          inactifs,
+          nombreJoueurs
+        },
+        joueurs: [] // À remplir plus tard
       };
 
-      localStorage.setItem("parametresPartie", JSON.stringify(data));
+      console.log("Données enregistrées :", scenarioData); // Pour vérification
 
-      // Redirige vers la page de génération de scénario
+      localStorage.setItem("scenarioData", JSON.stringify(scenarioData));
+
       window.location.href = "lancement-partie.html";
     }
   </script>
