@@ -176,6 +176,79 @@
 
     }
   </script>
+<script>
+function genererNomPersonnage(index, periode) {
+  const prenoms = ["Élise", "Gustave", "Marguerite", "Théodore", "Isabeau", "Hector", "Victorine", "Léandre", "Clotilde", "Basile"];
+  const noms = {
+    "victorien": ["de Montfort", "Lenoir", "Beaumont", "de la Tour", "Vidal"],
+    "futuriste": ["X-Tek", "Zeron", "Nova", "H-4K", "Androva"],
+    "medieval": ["de Carcassonne", "le Roux", "de l'Épine", "la Tisserande", "le Forgeron"],
+    "renaissance": ["Borgia", "da Firenze", "Medici", "Sforza", "Visconti"]
+  };
+  const suffixe = noms[periode] || noms["victorien"];
+  return prenoms[index % prenoms.length] + " " + suffixe[index % suffixe.length];
+}
+
+function genererScenario(periode, mode, duree) {
+  const intro = {
+    "victorien": `Bienvenue dans l'Angleterre de 1897. Une réception dans un manoir isolé tourne au cauchemar.`,
+    "futuriste": `Année 3147. À bord de la station spatiale Atlas IX, une découverte scientifique a mal tourné.`,
+    "medieval": `Nous sommes en 1231. Le château d'Aurignac abrite un banquet... qui cache un sombre secret.`,
+    "renaissance": `Florence, 1542. Un crime frappe la cour d’un mécène alors que les intrigues artistiques s’intensifient.`
+  };
+  const corps = {
+    "classique": `Un crime a été commis, et l'assassin est parmi vous. Secrets, mensonges, et trahisons rythment la soirée.`,
+    "poison": `Quelqu’un a glissé un poison dans un verre… mais qui ? Le danger rôde à chaque gorgée.`
+  };
+
+  const conclusion = `Vous avez ${duree} minutes pour élucider ce mystère ou l’obscurcir à jamais.`;
+
+  return `${intro[periode] || intro["victorien"]} ${corps[mode] || corps["classique"]} ${conclusion}`;
+}
+
+function genererPersonnages(nb, nbCriminels, periode) {
+  const personnages = [];
+  const roles = Array(nb).fill("Innocent");
+  for (let i = 0; i < nbCriminels; i++) {
+    roles[i] = "Criminel";
+  }
+  roles.sort(() => Math.random() - 0.5); // Mélange des rôles
+
+  for (let i = 0; i < nb; i++) {
+    personnages.push({
+      nom: genererNomPersonnage(i, periode),
+      role: roles[i],
+      description: roles[i] === "Criminel" ? "Semble cacher quelque chose..." : "Un invité comme les autres, du moins en apparence."
+    });
+  }
+
+  return personnages;
+}
+
+document.getElementById("genererScenarioBtn").addEventListener("click", () => {
+  const periode = document.getElementById("periode").value;
+  const mode = document.getElementById("mode").value;
+  const duree = document.getElementById("duree").value;
+  const nbJoueurs = parseInt(document.getElementById("nombreJoueurs").value);
+  const nbCriminels = parseInt(document.getElementById("criminels").value);
+
+  const scenario = genererScenario(periode, mode, duree);
+  const personnages = genererPersonnages(nbJoueurs, nbCriminels, periode);
+
+  const data = {
+    mode,
+    periode,
+    duree,
+    nbJoueurs,
+    nbCriminels,
+    scenario,
+    personnages
+  };
+
+  localStorage.setItem("partieData", JSON.stringify(data));
+  window.location.href = "lancement-partie.html";
+});
+</script>
 
 </body>
 </html>
