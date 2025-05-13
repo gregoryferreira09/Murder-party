@@ -1,184 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Créer une Partie - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      background-color: #1b1b1b;
-      font-family: 'Cormorant Garamond', serif;
-      color: #e0e0e0;
-      text-align: center;
-      padding: 20px;
-    }
-
-    h1 {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
-
-    .form-container {
-      background-color: #2c1b1b;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-      margin: 20px 0;
-    }
-
-    .form-container label {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    .form-container select,
-    .form-container input[type="checkbox"],
-    .form-container input[type="radio"],
-    .form-container input[type="number"],
-    .form-container input[type="text"],
-    .form-container button {
-      font-size: 1em;
-      padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      border-radius: 8px;
-      border: 1px solid #4eaf7c;
-      background-color: #333;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .form-container button:hover {
-      background-color: #4eaf7c;
-    }
-
-    .return-btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #333;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      margin-top: 20px;
-      border: 1px solid #4eaf7c;
-    }
-
-    .return-btn:hover {
-      background-color: #4eaf7c;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>Créer une Partie</h1>
-
-  <div class="scenario" id="scenarioContainer">
-  Chargement du scénario...
-</div>
-
-    <label for="mode">Choisissez le mode de jeu :</label>
-    <select id="mode" name="mode">
-      <option value="classique">Classique</option>
-      <option value="poison">Poison aléatoire</option>
-    </select>
-
-    <label for="duree">Durée de la partie :</label>
-    <select id="duree" name="duree">
-      <option value="30">30 minutes</option>
-      <option value="60">60 minutes</option>
-    </select>
-
-    <label for="periode">Choisissez la période du scénario :</label>
-    <select id="periode" name="periode">
-      <option value="medieval">Moyen-Âge</option>
-      <option value="victorien">Victorien</option>
-      <option value="antiquite">Antiquité</option>
-      <option value="renaissance">Renaissance</option>
-      <option value="contemporain">Contemporain</option>
-      <option value="futuriste">Futuriste</option>
-      <option value="autre">Autre (préciser ci-dessous)</option>
-    </select>
-
-    <div id="autrePeriode" style="display: none;">
-      <label for="periode_autre">Précisez la période :</label>
-      <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle">
-    </div>
-
-    <label for="nombreJoueurs">Nombre de joueurs :</label>
-    <select id="nombreJoueurs" name="nombreJoueurs">
-      <option value="4">4 joueurs</option>
-      <option value="5">5 joueurs</option>
-      <option value="6">6 joueurs</option>
-      <option value="7">7 joueurs</option>
-      <option value="8">8 joueurs</option>
-      <option value="9">9 joueurs</option>
-      <option value="10">10 joueurs</option>
-      <option value="11">11 joueurs</option>
-      <option value="12">12 joueurs</option>
-    </select>
-
-    <label for="criminales">Nombre de criminels :</label>
-    <select id="criminales" name="criminales">
-      <option value="1">1 criminel</option>
-      <option value="2">2 criminels</option>
-      <option value="3">3 criminels</option>
-    </select>
-
-    <label for="criminel_fantome">
-      <input type="checkbox" id="criminel_fantome"> Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie)
-    </label>
-
-    <label for="avatars_legendaires">
-      <input type="checkbox" id="avatars_legendaires"> Activer les avatars légendaires
-    </label>
-
-    <label for="inactifs">
-      <input type="checkbox" id="inactifs"> Activer l'observation des inactifs (notifications après 5 min d'inactivité)
-    </label>
-
-    <button onclick="genererScenario()">Générer le scénario</button>
-  </div>
-
-  <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
-
-  <script>
-    // Affiche ou cache le champ "autre période"
-    document.getElementById("periode").addEventListener("change", function () {
-      document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
-    });
-
-    function genererScenario() {
-      const mode = document.getElementById("mode").value;
-      const duree = document.getElementById("duree").value;
-      const periode = document.getElementById("periode").value;
-      const periodeAutre = document.getElementById("periode_autre").value;
-      const criminels = document.getElementById("criminales").value;
-      const criminelFantome = document.getElementById("criminel_fantome").checked;
-      const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
-      const inactifs = document.getElementById("inactifs").checked;
-      const nombreJoueurs = document.getElementById("nombreJoueurs").value;
-
-      const data = {
-        mode,
-        duree,
-        periode: (periode === "autre") ? periodeAutre : periode,
-        criminels,
-        criminelFantome,
-        avatarsLegendaires,
-        inactifs,
-        nombreJoueurs
-      };
-
-      localStorage.setItem("parametresPartie", JSON.stringify(data));
-
-      // Redirige vers la page de génération de scénario
-      window.location.href = "lancement-partie.html";
-
-    }
-  </script>
 <script>
 function genererNomPersonnage(index, periode) {
   const prenoms = ["Élise", "Gustave", "Marguerite", "Théodore", "Isabeau", "Hector", "Victorine", "Léandre", "Clotilde", "Basile"];
@@ -192,7 +11,7 @@ function genererNomPersonnage(index, periode) {
   return prenoms[index % prenoms.length] + " " + suffixe[index % suffixe.length];
 }
 
-function genererScenario(periode, mode, duree) {
+function creerTexteScenario(periode, mode, duree) {
   const intro = {
     "victorien": `Bienvenue dans l'Angleterre de 1897. Une réception dans un manoir isolé tourne au cauchemar.`,
     "futuriste": `Année 3147. À bord de la station spatiale Atlas IX, une découverte scientifique a mal tourné.`,
@@ -228,30 +47,37 @@ function genererPersonnages(nb, nbCriminels, periode) {
   return personnages;
 }
 
-document.getElementById("genererScenarioBtn").addEventListener("click", () => {
-  const periode = document.getElementById("periode").value;
+// ✅ Fonction utilisée par le bouton
+function genererScenario() {
   const mode = document.getElementById("mode").value;
   const duree = document.getElementById("duree").value;
+  const periode = document.getElementById("periode").value;
+  const periodeAutre = document.getElementById("periode_autre").value;
+  const criminels = parseInt(document.getElementById("criminales").value);
+  const criminelFantome = document.getElementById("criminel_fantome").checked;
+  const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
+  const inactifs = document.getElementById("inactifs").checked;
   const nbJoueurs = parseInt(document.getElementById("nombreJoueurs").value);
-  const nbCriminels = parseInt(document.getElementById("criminels").value);
 
-  const scenario = genererScenario(periode, mode, duree);
-  const personnages = genererPersonnages(nbJoueurs, nbCriminels, periode);
+  const vraiePeriode = (periode === "autre") ? periodeAutre : periode;
+
+  const scenario = creerTexteScenario(vraiePeriode, mode, duree);
+  const personnages = genererPersonnages(nbJoueurs, criminels, vraiePeriode);
 
   const data = {
     mode,
-    periode,
     duree,
+    periode: vraiePeriode,
+    criminels,
+    criminelFantome,
+    avatarsLegendaires,
+    inactifs,
     nbJoueurs,
-    nbCriminels,
     scenario,
     personnages
   };
 
-  localStorage.setItem("partieData", JSON.stringify(data));
+  localStorage.setItem("parametresPartie", JSON.stringify(data));
   window.location.href = "lancement-partie.html";
-});
+}
 </script>
-
-</body>
-</html>
