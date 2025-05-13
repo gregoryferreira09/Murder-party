@@ -66,3 +66,45 @@ function genererScenarioComplet(config) {
 
   return histoire;
 }
+
+// GÉNÉRATION DYNAMIQUE DE L'INTRODUCTION ET DE L'OBJECTIF DES ENQUÊTEURS
+function genererIntroductionEtAccroche(config) {
+  const epoqueData = epoques[config.epoque] || epoques["victorien"];
+  
+  const lieux = ["manoir victorien", "train de luxe", "musée abandonné", "île déserte", "hôtel de luxe"];
+  const victimes = ["comtesse Montgomery", "Henry Dupont", "le conservateur Gervais", "le capitaine du navire", "l'homme d'affaires"];
+  const meurtres = ["poignardée en plein cœur", "poignardé dans le dos", "retrouvé inconscient au pied du tableau volé", "pendu à une corde", "retrouvé mort dans sa suite"];
+  const phrasesAccroche = [
+    "Le meurtrier est toujours parmi vous, tapi dans l’ombre.",
+    "Un assassin rôde, et la vérité est à votre portée.",
+    "Le temps presse, et l'assassin n'attend pas.",
+    "L'île vous cache un secret bien plus sombre que vous ne le pensiez."
+  ];
+
+  // Choisir aléatoirement un lieu, une victime, un meurtre et une phrase d'accroche
+  const lieu = getRandomElement(lieux);
+  const victime = getRandomElement(victimes);
+  const meurtre = getRandomElement(meurtres);
+  const accroche = getRandomElement(phrasesAccroche);
+
+  const introduction = `DANS LE CADRE MAJESTUEUX D’UN ${lieu.toUpperCase()}, UNE SOIRÉE ÉLÉGANTE VIRE AU CAUCHEMAR. ${victime.toUpperCase()}, FIGURE DE LA HAUTE SOCIÉTÉ, A ÉTÉ RETROUVÉE ${meurte.toUpperCase()}. MAIS LES SECRETS SONT-ILS VRAIMENT SI BIEN CACHÉS ? LA VÉRITÉ RESTE ENFOUIE… POUR L’INSTANT.`;
+  const objectif = `${accroche} QUI SAURA PERCER CE SECRET AVANT QU’IL NE SOIT TROP TARD ?`;
+
+  return { introduction, objectif };
+}
+
+// Fonction pour afficher l'introduction et l'objectif
+function afficherScenario() {
+  // Générez un scénario aléatoire
+  const config = { epoque: "victorien", nombreJoueurs: 6, nombreCriminels: 2 }; // à ajuster selon l'interface de ton application
+  const scenario = genererIntroductionEtAccroche(config);
+
+  // Affichage dans le DOM
+  document.getElementById("intro").textContent = scenario.introduction;
+  document.getElementById("objectif").textContent = scenario.objectif;
+}
+
+// Écouteur pour le bouton "Retour" afin de régénérer un scénario
+document.getElementById("btnRetour").addEventListener("click", function() {
+  afficherScenario();
+});
