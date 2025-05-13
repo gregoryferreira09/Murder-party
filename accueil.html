@@ -1,86 +1,34 @@
-/* style.css */
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
+  <!-- Polices stylées -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Cormorant Garamond', serif;
-  background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
-  background-color: #2c1b1b;
-  color: #f4e4c1;
-  background-size: repeat;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  <header>
+    <h1>Murder Party</h1>
+  </header>
 
-header {
-  text-align: center;
-  background: rgba(0, 0, 0, 0.6);
-  width: 100%;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
+  <main>
+    <section class="menu-buttons">
+      <button onclick="window.location.href='creer-salon.html'">🎮 Créer une partie</button>
+      <button onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
+      <button onclick="window.location.href='profil-joueur.html'">👤 Profil</button>
+      <button onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
+    </section>
+  </main>
 
-h1 {
-  font-family: 'Cinzel Decorative', cursive;
-  font-size: 3em;
-  color: #e0c185;
-  margin: 0;
-}
+  <footer>
+    <button onclick="window.location.href='paramètres.html'">⚙️ Paramètres</button>
+    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
-main {
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.menu-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-}
-
-button {
-  background: #5c3d2e;
-  border: 2px solid #e0c185;
-  color: #fdf3df;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4em;
-  padding: 15px 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 300px;
-}
-
-button:hover {
-  background-color: #3d2b1f;
-  transform: scale(1.05);
-  box-shadow: 0 0 10px #e0c18588;
-}
-
-footer {
-  background: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  padding: 15px;
-  text-align: center;
-  font-size: 0.9em;
-  color: #c9b49a;
-  margin-top: auto;
-}
-
-a {
-  color: #d1c5a3;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
+</body>
+</html>
