@@ -1,3 +1,4 @@
+<!-- creer-partie.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -143,7 +144,6 @@
   <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
-    // Affiche ou cache le champ "autre période"
     document.getElementById("periode").addEventListener("change", function () {
       document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
     });
@@ -153,49 +153,44 @@
       const duree = document.getElementById("duree").value;
       const periode = document.getElementById("periode").value;
       const periodeAutre = document.getElementById("periode_autre").value;
-      const criminels = document.getElementById("criminels").value;
+      const criminels = parseInt(document.getElementById("criminels").value);
       const criminelFantome = document.getElementById("criminel_fantome").checked;
       const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
       const inactifs = document.getElementById("inactifs").checked;
-      const nombreJoueurs = document.getElementById("nombreJoueurs").value;
+      const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value);
 
-      // Créer un scénario dynamique en fonction des choix
       const scenario = genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs);
 
-      // Sauvegarde du scénario généré dans localStorage
       localStorage.setItem("scenarioData", JSON.stringify(scenario));
 
-      // Rediriger vers la page de lancement de la partie
+      localStorage.setItem("parametresPartie", JSON.stringify({
+        mode,
+        duree,
+        periode,
+        periodeAutre,
+        criminels,
+        criminelFantome,
+        avatarsLegendaires,
+        inactifs,
+        nombreJoueurs
+      }));
+
       window.location.href = "lancement-partie.html";
     }
-localStorage.setItem("parametresPartie", JSON.stringify({
-  mode,
-  duree,
-  periode,
-  periodeAutre,
-  criminels,
-  criminelFantome,
-  avatarsLegendaires,
-  inactifs,
-  nombreJoueurs
-}));
 
     function genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
-      // Structure de base du scénario
       let introduction = `Bienvenue dans votre murder party.`;
       let crime = `Un crime mystérieux s’est produit...`;
       let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`;
 
-      // Personnaliser selon la période et mode
       if (periode === "victorien") {
         introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`;
-        crime = `Une empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`;
+        crime = `Un empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`;
       } else if (periode === "autre" && periodeAutre !== "") {
         introduction = `Bienvenue dans une époque mystérieuse : ${periodeAutre}.`;
         crime = `Un crime s'est produit dans cette période complexe... Qui est coupable ?`;
       }
 
-      // Générer personnages dynamiquement
       const personnages = [];
       for (let i = 0; i < nombreJoueurs; i++) {
         personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires));
@@ -217,13 +212,11 @@ localStorage.setItem("parametresPartie", JSON.stringify({
       let role = roles[Math.floor(Math.random() * roles.length)];
       let trait = traits[Math.floor(Math.random() * traits.length)];
 
-      // Attribuer un rôle spécial si c'est un criminel
       if (index <= criminels) {
         role = 'Criminel';
       }
 
-      // Ajouter un avatar légendaire si activé
-      if (avatarsLegendaires && index <= 1) { // Exemple d'un seul avatar légendaire
+      if (avatarsLegendaires && index === 1) {
         role = "Fantôme";
       }
 
@@ -233,8 +226,10 @@ localStorage.setItem("parametresPartie", JSON.stringify({
         trait
       };
     }
-    // Efface l'ancien scénario quand on revient sur la page de création
-window.onload = function() {
-  localStorage.removeItem("scenarioData");
-};
+
+    window.onload = function() {
+      localStorage.removeItem("scenarioData");
+    };
   </script>
+</body>
+</html>
