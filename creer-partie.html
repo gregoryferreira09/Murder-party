@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Votre style CSS ici */
+    /* Ton style inchangé */
   </style>
 </head>
 <body>
@@ -14,6 +14,8 @@
   <h1>Créer une Partie</h1>
 
   <div class="form-container">
+    <!-- Tous tes champs de formulaire inchangés -->
+
     <label for="mode">Choisissez le mode de jeu :</label>
     <select id="mode" name="mode">
       <option value="classique">Classique</option>
@@ -83,7 +85,6 @@
   <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
-    // Affiche ou cache le champ "autre période"
     document.getElementById("periode").addEventListener("change", function () {
       document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
     });
@@ -99,29 +100,73 @@
       const inactifs = document.getElementById("inactifs").checked;
       const nombreJoueurs = document.getElementById("nombreJoueurs").value;
 
-      // Créer un scénario dynamique en fonction des choix
-      const scenario = {
+      const scenario = genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs);
+
+      // 🔧 Ajout : sauvegarde les paramètres de la partie dans localStorage
+      const parametres = {
         mode,
         duree,
-        periode,
-        periodeAutre,
+        periode: (periode === "autre") ? periodeAutre : periode,
+        nombreJoueurs,
         criminels,
         criminelFantome,
         avatarsLegendaires,
-        nombreJoueurs,
-        inactifs
+        inactifs,
+        scenario
       };
+      localStorage.setItem("parametresPartie", JSON.stringify(parametres));
 
-      // Sauvegarder les paramètres dans localStorage
-      localStorage.setItem("parametresPartie", JSON.stringify(scenario));
-
-      // Rediriger vers la page de lancement de la partie
       window.location.href = "lancement-partie.html";
     }
+
+    function genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
+      let introduction = `Bienvenue dans votre murder party.`;
+      let crime = `Un crime mystérieux s’est produit...`;
+      let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`;
+
+      if (periode === "victorien") {
+        introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`;
+        crime = `Une empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`;
+      } else if (periode === "autre" && periodeAutre !== "") {
+        introduction = `Bienvenue dans une époque mystérieuse : ${periodeAutre}.`;
+        crime = `Un crime s'est produit dans cette période complexe... Qui est coupable ?`;
+      }
+
+      const personnages = [];
+      for (let i = 0; i < nombreJoueurs; i++) {
+        personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires));
+      }
+
+      return {
+        introduction,
+        crime,
+        objectifGlobal,
+        personnages
+      };
+    }
+
+    function genererPersonnage(index, criminels, avatarsLegendaires) {
+      const roles = ['Detective', 'Médium', 'Servant', 'Noble', 'Docteur', 'Marchand'];
+      const traits = ['Alcoolisé', 'Loyal', 'Méfiant', 'Amoureux', 'Rival'];
+      const nom = `Personnage ${index}`;
+
+      let role = roles[Math.floor(Math.random() * roles.length)];
+      let trait = traits[Math.floor(Math.random() * traits.length)];
+
+      if (index <= criminels) {
+        role = 'Criminel';
+      }
+
+      if (avatarsLegendaires && index <= 1) {
+        role = "Fantôme";
+      }
+
+      return {
+        nom,
+        role,
+        trait
+      };
+    }
   </script>
-
-</body>
-</html>
-
 </body>
 </html>
