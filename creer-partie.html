@@ -36,8 +36,6 @@
 
     .form-container select,
     .form-container input[type="checkbox"],
-    .form-container input[type="radio"],
-    .form-container input[type="number"],
     .form-container input[type="text"],
     .form-container button {
       font-size: 1em;
@@ -117,26 +115,29 @@
       <option value="12">12 joueurs</option>
     </select>
 
-    <label for="criminales">Nombre de criminels :</label>
-    <select id="criminales" name="criminales">
+    <label for="criminels">Nombre de criminels :</label>
+    <select id="criminels" name="criminels">
       <option value="1">1 criminel</option>
       <option value="2">2 criminels</option>
       <option value="3">3 criminels</option>
     </select>
 
-    <label for="criminel_fantome">
-      <input type="checkbox" id="criminel_fantome"> Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie)
+    <label>
+      <input type="checkbox" id="criminel_fantome">
+      Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie)
     </label>
 
-    <label for="avatars_legendaires">
-      <input type="checkbox" id="avatars_legendaires"> Activer les avatars légendaires
+    <label>
+      <input type="checkbox" id="avatars_legendaires">
+      Activer les avatars légendaires
     </label>
 
-    <label for="inactifs">
-      <input type="checkbox" id="inactifs"> Activer l'observation des inactifs (notifications après 5 min d'inactivité)
+    <label>
+      <input type="checkbox" id="inactifs">
+      Activer l'observation des inactifs (notifications après 5 min d'inactivité)
     </label>
 
-  <button onclick="genererScenario()">Générer</button>
+    <button onclick="genererScenario()">Générer</button>
   </div>
 
   <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
@@ -152,7 +153,7 @@
       const duree = document.getElementById("duree").value;
       const periode = document.getElementById("periode").value;
       const periodeAutre = document.getElementById("periode_autre").value;
-      const criminels = document.getElementById("criminales").value;
+      const criminels = document.getElementById("criminels").value;
       const criminelFantome = document.getElementById("criminel_fantome").checked;
       const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
       const inactifs = document.getElementById("inactifs").checked;
@@ -162,11 +163,11 @@
         mode,
         duree,
         periode: (periode === "autre") ? periodeAutre : periode,
-        criminels,
+        criminels: parseInt(criminels),
         criminelFantome,
         avatarsLegendaires,
         inactifs,
-        nombreJoueurs
+        nombreJoueurs: parseInt(nombreJoueurs)
       };
 
       localStorage.setItem("parametresPartie", JSON.stringify(data));
@@ -175,31 +176,6 @@
       window.location.href = "lancement-partie.html";
     }
   </script>
-<script>
-  function genererScenario() {
-    const periode = document.getElementById("periode").value;
-    const mode = document.getElementById("mode").value;
-    const duree = document.getElementById("duree").value;
-    const avatars = document.getElementById("avatars").value;
-    const inactivite = document.getElementById("inactivite").value;
-    const criminels = parseInt(document.getElementById("criminels").value);
-    const nombreJoueurs = 6; // à remplacer plus tard par sélection dynamique
-
-    const config = {
-      epoque: periode,
-      mode: mode,
-      duree: duree,
-      avatars: avatars,
-      inactivite: inactivite,
-      nombreCriminels: criminels,
-      nombreJoueurs: nombreJoueurs
-    };
-
-    const scenario = genererScenarioComplet(config);
-    localStorage.setItem("scenarioData", JSON.stringify(scenario));
-    window.location.href = "lancement-partie.html";
-  }
-</script>
 
 </body>
 </html>
