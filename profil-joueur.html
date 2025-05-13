@@ -5,7 +5,6 @@
   <title>Profil - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       background-color: #f0f0f0;
@@ -15,83 +14,27 @@
       padding: 20px;
     }
 
-    header {
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      font-family: 'Cinzel Decorative', cursive;
-      font-size: 2.5em;
-    }
-
-    .profil-info {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .avatar-section {
-      margin-bottom: 20px;
-    }
-
     .avatar-section img {
       border-radius: 50%;
       margin-bottom: 10px;
     }
 
-    .profil-info input {
-      font-size: 1.2em;
-      margin-bottom: 20px;
-      padding: 10px;
-      width: 80%;
-      max-width: 300px;
-      border: 2px solid #ccc;
-      border-radius: 5px;
-      text-align: center;
+    .profil-info {
+      margin: 20px 0;
     }
 
-    .profil-info ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    .profil-info ul li {
-      margin: 10px 0;
-      font-size: 1.1em;
-    }
-
-    .menu-buttons button {
+    .return-btn {
+      display: inline-block;
+      background-color: #5c3d2e;
+      color: #fff;
       padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1.2em;
-      margin: 10px;
-      transition: background-color 0.3s ease;
-    }
-
-    .menu-buttons button:hover {
-      background-color: #45a049;
-    }
-
-    footer {
-      margin-top: 30px;
-      font-size: 0.9em;
-    }
-
-    footer a {
       text-decoration: none;
-      color: #555;
+      border-radius: 8px;
+      margin-top: 20px;
     }
 
-    footer a:hover {
-      color: #4CAF50;
+    .return-btn:hover {
+      background-color: #3d2b1f;
     }
   </style>
 </head>
@@ -103,68 +46,47 @@
 
   <main>
     <section class="profil-info">
-      <!-- Avatar section -->
       <div class="avatar-section">
         <h2>Avatar :</h2>
-        <img src="avatar-default.png" id="avatar" alt="Avatar de joueur" width="150" height="150">
+        <!-- Assurez-vous que le chemin vers l'image est correct -->
+        <img src="images/avatar-default.png" id="avatar" alt="Avatar de joueur" width="150" height="150">
         <button onclick="changerAvatar()">Modifier l'avatar</button>
       </div>
 
-      <!-- Nom de l'utilisateur -->
-      <h2>Nom :</h2>
-      <input type="text" id="nom" value="Jean Dupont" readonly>
-
-      <!-- Statistiques -->
-      <h2>Statistiques :</h2>
-      <ul>
-        <li>Parties jouées : <span id="parties-jouees">15</span></li>
-        <li>Parties gagnées : <span id="victoires">8</span></li>
-        <li>Parties perdues : <span id="echecs">7</span></li>
-        <li>Enquêteur : <span id="enqueteur">10</span></li>
-        <li>Meurtrier : <span id="meurtrier">5</span></li>
-      </ul>
-
-      <h2>Classement : <span id="classement"></span></h2>
+      <div class="statistiques">
+        <h3>Statistiques de jeu</h3>
+        <p>Nombre de parties jouées : 20</p>
+        <p>Parties gagnées : 5</p>
+        <p>En tant qu'enquêteur : 10</p>
+        <p>En tant que meurtrier : 5</p>
+        <p><strong>Nom de joueur : </strong><span id="nomJoueur">Novice</span></p>
+      </div>
     </section>
 
-    <!-- Bouton retour vers l'accueil -->
-    <section class="menu-buttons">
-      <button id="btn-retour" onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
-    </section>
+    <a href="index.html" class="return-btn">Retour à l'accueil</a>
   </main>
 
-  <footer>
-    <button onclick="window.location.href='parametres.html'">⚙️ Paramètres</button>
-    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
-
   <script>
-    // Calcul du classement basé sur les victoires
-    function calculerClassement(victoires) {
-      let classement = "";
-      if (victoires <= 5) {
-        classement = "Débutant";
-      } else if (victoires <= 10) {
-        classement = "Champion";
-      } else if (victoires <= 20) {
-        classement = "Vétéran";
-      } else {
-        classement = "Légende";
-      }
-      document.getElementById("classement").innerText = classement;
-    }
-
     // Modifier l'avatar
     function changerAvatar() {
       let nouveauxAvatars = ['avatar-1.png', 'avatar-2.png', 'avatar-3.png'];
       let avatarIndex = Math.floor(Math.random() * nouveauxAvatars.length);
-      document.getElementById("avatar").src = nouveauxAvatars[avatarIndex];
+      document.getElementById("avatar").src = 'images/' + nouveauxAvatars[avatarIndex];
     }
 
-    // Affichage dynamique du nom et classement
-    const victoires = parseInt(document.getElementById("victoires").innerText);
-    calculerClassement(victoires);
+    // Fonction pour changer le nom en fonction des victoires
+    let victoires = 5; // À modifier en fonction des victoires du joueur
+    let nomJoueur = document.getElementById("nomJoueur");
+
+    if (victoires >= 1 && victoires <= 5) {
+      nomJoueur.textContent = "Novice";
+    } else if (victoires >= 6 && victoires <= 10) {
+      nomJoueur.textContent = "Aventurier";
+    } else if (victoires >= 11 && victoires <= 20) {
+      nomJoueur.textContent = "Champion";
+    } else {
+      nomJoueur.textContent = "Légende";
+    }
   </script>
 
 </body>
