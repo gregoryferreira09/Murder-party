@@ -1,0 +1,11 @@
+/ton-projet/
+│
+├── index.html
+├── profil-joueur.html
+├── style.css
+├── ...
+└── /images/
+    ├── avatar-default.png
+    ├── avatar-1.png
+    ├── avatar-2.png
+    └── avatar-3.png
