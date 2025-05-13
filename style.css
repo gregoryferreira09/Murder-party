@@ -1,6 +1,7 @@
 /* style.css */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
 
+/* Définir un fond de page avec une tapisserie émeraude et des motifs */
 body {
   margin: 0;
   padding: 0;
@@ -13,8 +14,10 @@ body {
   flex-direction: column;
   align-items: center;
   position: relative;
+  text-align: center;
 }
 
+/* En-tête avec style victorien */
 header {
   text-align: center;
   background: rgba(0, 0, 0, 0.6);
@@ -31,14 +34,19 @@ h1 {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Section principale avec boutons centrés */
 main {
   flex: 1;
   width: 100%;
   max-width: 800px;
   padding: 40px 20px;
   text-align: center;
+  background: rgba(0, 0, 0, 0.7); /* Légère transparence pour l'arrière-plan */
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
+/* Boutons de navigation */
 .menu-buttons {
   display: flex;
   flex-direction: column;
@@ -67,6 +75,7 @@ button:hover {
   box-shadow: 0 0 10px #e0c18588;
 }
 
+/* Pied de page avec informations supplémentaires */
 footer {
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
@@ -77,6 +86,7 @@ footer {
   margin-top: auto;
 }
 
+/* Lien dans le pied de page */
 a {
   color: #d1c5a3;
   text-decoration: none;
