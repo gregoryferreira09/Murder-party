@@ -15,18 +15,25 @@
 
   <main>
     <section class="profil-info">
-      <h2>Nom du joueur : Jean Dupont</h2>
-      <p>Email : jean.dupont@example.com</p>
-      <p>Parties jouées : 15</p>
-      <p>Victoire : 8</p>
-      <p>Échecs : 7</p>
+      <h2>Nom du joueur :</h2>
+      <input type="text" id="nom" value="Jean Dupont">
+      
+      <h2>Email :</h2>
+      <input type="email" id="email" value="jean.dupont@example.com">
+      
+      <h2>Parties jouées :</h2>
+      <input type="number" id="parties-jouees" value="15">
+      
+      <h2>Victoire :</h2>
+      <input type="number" id="victoires" value="8">
+      
+      <h2>Échecs :</h2>
+      <input type="number" id="echecs" value="7">
     </section>
 
+    <!-- Ajout du bouton "Retour" uniquement si l'utilisateur est connecté -->
     <section class="menu-buttons">
-      <button onclick="window.location.href='creer-salon.html'">🎮 Créer une partie</button>
-      <button onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
-      <button onclick="window.location.href='accueil.html'">🏠 Accueil</button>
-      <button onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
+      <button id="btn-retour" style="display:none;" onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
     </section>
   </main>
 
@@ -35,6 +42,14 @@
     <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
+
+  <script>
+    // Vérification si l'utilisateur est connecté pour afficher le bouton retour
+    const isLoggedIn = true;  // On peut remplacer cette variable par une vraie vérification côté serveur ou avec un cookie/localStorage
+    if (isLoggedIn) {
+      document.getElementById('btn-retour').style.display = 'block';  // Afficher le bouton si connecté
+    }
+  </script>
 
 </body>
 </html>
