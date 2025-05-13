@@ -2,35 +2,90 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Accueil - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ludus Veritae</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Styles globaux */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Page de démarrage */
+    .fullscreen {
+      width: 100%;
+      height: 100vh;
+      background-color: #1b1b1b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #e0e0e0;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 1s ease;
+    }
+
+    .fullscreen h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 4em;
+      margin-bottom: 20px;
+    }
+
+    .fullscreen i {
+      font-size: 3em;
+      margin-top: 20px;
+    }
+
+    /* Effet de fondue en noir */
+    .fade {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    /* Lorsque l'utilisateur clique sur l'écran */
+    .fade.show {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Bienvenue dans l'univers de Murder Party</h1>
-    <p class="slogan">L'énigme vous attend, saurez-vous résoudre le mystère ?</p>
-  </header>
 
-  <main>
-    <section class="options">
-      <button onclick="demarrerPartie()">Démarrer une nouvelle partie</button>
-      <button onclick="rejoindrePartie()">Rejoindre une partie existante</button>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Murder Party. Le mystère commence maintenant...</p>
-  </footer>
+  <div class="fullscreen" id="start-screen" onclick="startGame()">
+    <div>
+      <h1>Ludus Veritae</h1>
+      <i class="fas fa-search"></i> <!-- Icône de loupe -->
+    </div>
+    <div class="fade" id="fade-effect"></div>
+  </div>
 
   <script>
-    function demarrerPartie() {
-      window.location.href = "configuration-partie.html";
-    }
+    // Fonction qui gère la redirection avec effet de fondu
+    function startGame() {
+      const fadeEffect = document.getElementById('fade-effect');
+      fadeEffect.classList.add('show'); // Ajoute la classe 'show' pour l'effet de fondu
 
-    function rejoindrePartie() {
-      window.location.href = "rejoindre-partie.html";
+      // Redirige vers la page d'accueil après 1 seconde (durée de l'effet)
+      setTimeout(function() {
+        window.location.href = 'accueil.html';
+      }, 1000);
     }
   </script>
+
+  <!-- Intégration de l'icône de la loupe (si tu utilises FontAwesome) -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 </body>
 </html>
