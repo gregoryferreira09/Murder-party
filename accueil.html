@@ -2,33 +2,30 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accueil - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <header>
-    <h1>Bienvenue dans Murder Party !</h1>
-    <p>Prêt à résoudre le mystère ? Choisissez votre rôle et lancez l'enquête !</p>
+    <h1>Murder Party</h1>
   </header>
 
   <main>
-    <button onclick="demarrerPartie()">Commencer une nouvelle partie</button>
-    <button onclick="voirRegles()">Voir les règles</button>
+    <section class="menu-buttons">
+      <button id="creer-partie">🎮 Créer une partie</button>
+      <button id="rejoindre-partie">👥 Rejoindre une partie</button>
+      <button id="profil">👤 Profil</button>
+      <button id="boutique">🛍️ Boutique</button>
+    </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Murder Party. Le mystère continue...</p>
+    <button id="parametres">⚙️ Paramètres</button>
+    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
-  <script>
-    function demarrerPartie() {
-      window.location.href = "choix-personnage.html";
-    }
-
-    function voirRegles() {
-      window.location.href = "regles.html";
-    }
-  </script>
 </body>
 </html>
