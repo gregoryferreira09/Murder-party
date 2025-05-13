@@ -2,35 +2,67 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Choisir le mode de jeu</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Créer une partie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="choisir-mode-jeu">
+<body>
+
   <header>
-    <h1>Choisir votre mode de jeu</h1>
-    <p class="slogan">Sélectionnez la difficulté et les options.</p>
+    <h1>Configurer la partie</h1>
   </header>
 
   <main>
-    <section class="modes">
-      <p>Sélectionnez un mode :</p>
-      <button onclick="choisirMode('Classique')">Classique</button>
-      <button onclick="choisirMode('Difficile')">Difficile</button>
-      <button onclick="choisirMode('Poison aléatoire')">Poison aléatoire</button>
-      <button onclick="choisirMode('Chasse au juste coupable')">Chasse au juste coupable</button>
-    </section>
+    <form>
+      <label>Nombre de joueurs :
+        <input type="number" min="4" max="15" required>
+      </label>
+
+      <label>Nombre de criminels :
+        <select>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="random">Aléatoire</option>
+        </select>
+      </label>
+
+      <label>Type de scénario :
+        <select>
+          <option value="classique">Classique</option>
+          <option value="empoisonnement">Empoisonnement</option>
+          <option value="disparition">Disparition</option>
+          <option value="complot">Complot</option>
+        </select>
+      </label>
+
+      <label>Époque du scénario :
+        <select>
+          <option value="antiquite">Antiquité</option>
+          <option value="moyen-age">Moyen Âge</option>
+          <option value="victorien">Victorienne</option>
+          <option value="1920">1920</option>
+          <option value="ww2">WW2</option>
+          <option value="contemporain">Contemporain</option>
+          <option value="2150">Futur</option>
+          <option value="post-apo">Post-Apo</option>
+          <option value="random">Aléatoire</option>
+        </select>
+      </label>
+
+      <label>Difficulté :
+        <select>
+          <option value="facile">Facile</option>
+          <option value="normale">Normale</option>
+          <option value="complexe">Complexe</option>
+        </select>
+      </label>
+
+      <label><input type="checkbox"> Activer avatars légendaires</label>
+      <label><input type="checkbox"> Criminel fantôme</label>
+
+      <button type="submit">Lancer la partie</button>
+    </form>
   </main>
 
-  <footer>
-    <p>&copy; 2025 Murder Party. L'aventure commence.</p>
-  </footer>
-
-  <script>
-    function choisirMode(mode) {
-      alert("Vous avez choisi le mode : " + mode);
-      window.location.href = "partie-en-cours.html";
-    }
-  </script>
 </body>
 </html>
