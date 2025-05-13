@@ -6,6 +6,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f0f0;
+      font-family: 'Cormorant Garamond', serif;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+
+    header {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.5em;
+    }
+
+    .profil-info {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .avatar-section {
+      margin-bottom: 20px;
+    }
+
+    .avatar-section img {
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .profil-info input {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .profil-info ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .profil-info ul li {
+      margin: 10px 0;
+      font-size: 1.1em;
+    }
+
+    .menu-buttons button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.2em;
+      margin: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .menu-buttons button:hover {
+      background-color: #45a049;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.9em;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: #555;
+    }
+
+    footer a:hover {
+      color: #4CAF50;
+    }
+  </style>
 </head>
 <body>
 
@@ -15,15 +103,18 @@
 
   <main>
     <section class="profil-info">
+      <!-- Avatar section -->
       <div class="avatar-section">
         <h2>Avatar :</h2>
         <img src="avatar-default.png" id="avatar" alt="Avatar de joueur" width="150" height="150">
         <button onclick="changerAvatar()">Modifier l'avatar</button>
       </div>
 
+      <!-- Nom de l'utilisateur -->
       <h2>Nom :</h2>
       <input type="text" id="nom" value="Jean Dupont" readonly>
 
+      <!-- Statistiques -->
       <h2>Statistiques :</h2>
       <ul>
         <li>Parties jouées : <span id="parties-jouees">15</span></li>
@@ -36,7 +127,7 @@
       <h2>Classement : <span id="classement"></span></h2>
     </section>
 
-    <!-- Ajout du bouton Retour -->
+    <!-- Bouton retour vers l'accueil -->
     <section class="menu-buttons">
       <button id="btn-retour" onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
     </section>
