@@ -34,7 +34,12 @@
       display: block;
     }
 
-    .form-container select, .form-container input[type="checkbox"], .form-container input[type="radio"], .form-container input[type="number"], .form-container button {
+    .form-container select,
+    .form-container input[type="checkbox"],
+    .form-container input[type="radio"],
+    .form-container input[type="number"],
+    .form-container input[type="text"],
+    .form-container button {
       font-size: 1em;
       padding: 10px;
       margin: 10px 0;
@@ -51,16 +56,18 @@
     }
 
     .return-btn {
+      display: inline-block;
       padding: 10px 20px;
       background-color: #333;
       color: white;
       border-radius: 8px;
       text-decoration: none;
       margin-top: 20px;
+      border: 1px solid #4eaf7c;
     }
 
     .return-btn:hover {
-      background-color: #555;
+      background-color: #4eaf7c;
     }
   </style>
 </head>
@@ -87,7 +94,6 @@
       <option value="victorien">Victorien</option>
       <option value="antiquite">Antiquité</option>
       <option value="renaissance">Renaissance</option>
-      <option value="victorien">Victorien</option>
       <option value="contemporain">Contemporain</option>
       <option value="futuriste">Futuriste</option>
       <option value="autre">Autre (préciser ci-dessous)</option>
@@ -136,16 +142,11 @@
   <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
-    // Gérer l'affichage de la période "autre"
-    document.getElementById("periode").addEventListener("change", function() {
-      if (this.value === "autre") {
-        document.getElementById("autrePeriode").style.display = "block";
-      } else {
-        document.getElementById("autrePeriode").style.display = "none";
-      }
+    // Affiche ou cache le champ "autre période"
+    document.getElementById("periode").addEventListener("change", function () {
+      document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
     });
 
-    // Fonction pour générer le scénario
     function genererScenario() {
       const mode = document.getElementById("mode").value;
       const duree = document.getElementById("duree").value;
@@ -157,19 +158,21 @@
       const inactifs = document.getElementById("inactifs").checked;
       const nombreJoueurs = document.getElementById("nombreJoueurs").value;
 
-      // Générer le scénario ici selon les paramètres (en exemple ici)
-      let scenarioDetails = `
-        Nombre de joueurs : ${nombreJoueurs}<br>
-        Mode de jeu : ${mode}<br>
-        Durée de la partie : ${duree} minutes<br>
-        Période choisie : ${periode === "autre" ? periodeAutre : periode}<br>
-        Nombre de criminels : ${criminels}<br>
-        Mode criminels fantômes : ${criminelFantome ? "Oui" : "Non"}<br>
-        Avatars légendaires activés : ${avatarsLegendaires ? "Oui" : "Non"}<br>
-        Observation des inactifs : ${inactifs ? "Oui" : "Non"}<br>
-      `;
-      
-      alert("Scénario généré :\n\n" + scenarioDetails);
+      const data = {
+        mode,
+        duree,
+        periode: (periode === "autre") ? periodeAutre : periode,
+        criminels,
+        criminelFantome,
+        avatarsLegendaires,
+        inactifs,
+        nombreJoueurs
+      };
+
+      localStorage.setItem("parametresPartie", JSON.stringify(data));
+
+      // Redirige vers la page de génération de scénario
+      window.location.href = "scenario.html";
     }
   </script>
 
