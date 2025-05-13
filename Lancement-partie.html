@@ -66,10 +66,11 @@
   <a class="btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
-    const data = JSON.parse(localStorage.getItem("parametresPartie"));
+    const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
 
-    if (data) {
+    if (scenarioData) {
       const container = document.getElementById("scenarioContainer");
+      const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre ? scenarioData.periodeAutre : scenarioData.periode;
       container.innerHTML = `
         <h2>Introduction</h2>
         <p>Bienvenue dans votre Murder Party !</p>
@@ -81,18 +82,20 @@
         <p>Résoudre le mystère avant la fin du temps imparti.</p>
 
         <h2>Détails du jeu</h2>
-        <p>Mode de jeu : ${data.mode}</p>
-        <p>Durée de la partie : ${data.duree} minutes</p>
-        <p>Période : ${data.periode}</p>
-        <p>Nombre de joueurs : ${data.nombreJoueurs}</p>
-        <p>Nombre de criminels : ${data.criminels}</p>
-        <p>Mode criminels fantômes : ${data.criminelFantome ? "Oui" : "Non"}</p>
-        <p>Avatars légendaires activés : ${data.avatarsLegendaires ? "Oui" : "Non"}</p>
+        <p>Mode de jeu : ${scenarioData.mode}</p>
+        <p>Durée de la partie : ${scenarioData.duree} minutes</p>
+        <p>Période : ${periode}</p>
+        <p>Nombre de joueurs : ${scenarioData.nombreJoueurs}</p>
+        <p>Nombre de criminels : ${scenarioData.criminels}</p>
+        <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
+        <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
       `;
     } else {
       document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
     }
   </script>
+
+</body
 
 </body>
 </html>
