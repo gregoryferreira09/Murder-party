@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Scénario généré</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1b1b1b;
+      color: #e0e0e0;
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      color: #e9c78c;
+    }
+    .scenario {
+      background-color: #2c1b1b;
+      border: 2px solid #e9c78c;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      font-size: 1.2em;
+      line-height: 1.6;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>Scénario généré</h1>
+  <div id="contenuScenario" class="scenario">Chargement du scénario...</div>
+
+  <script>
+    const data = JSON.parse(localStorage.getItem("scenarioData"));
+    const conteneur = document.getElementById("contenuScenario");
+
+    if (!data) {
+      conteneur.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
+    } else {
+      let html = `<p><strong>Introduction :</strong> ${data.introduction}</p>`;
+      html += `<p><strong>Crime :</strong> ${data.crime}</p>`;
+      html += `<p><strong>Objectif global :</strong> ${data.objectifsGlobal}</p>`;
+      html += `<h2>Joueurs :</h2>`;
+      html += `<ul>`;
+      Object.values(data.joueurs).forEach(joueur => {
+        html += `<li><strong>${joueur.nom}</strong> — ${joueur.role}, ${joueur.trait}. Objectif : ${joueur.objectifSecret}. Criminel : ${joueur.estCriminel ? "Oui" : "Non"}</li>`;
+      });
+      html += `</ul>`;
+      conteneur.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
