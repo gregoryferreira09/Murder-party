@@ -2,7 +2,9 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Paramètres</title>
+  <title>Paramètres - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -11,26 +13,36 @@
   </header>
 
   <main>
-    <section>
-      <label>Volume musique :
-        <input type="range" min="0" max="100" value="70">
+    <section class="parametres">
+      <label for="pseudo">Changer de pseudo :</label>
+      <input type="text" id="pseudo" placeholder="Nouveau pseudo">
+
+      <label for="langue">Langue :</label>
+      <select id="langue">
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+      </select>
+
+      <label>
+        <input type="checkbox" checked> Activer les sons
       </label>
 
-      <label>Volume effets :
-        <input type="range" min="0" max="100" value="80">
+      <label>
+        <input type="checkbox"> Notifications en jeu
       </label>
 
-      <label>Notifications :
-        <input type="checkbox" checked>
-      </label>
+      <button>Sauvegarder les paramètres</button>
+    </section>
 
-      <label>Mode sombre :
-        <input type="checkbox">
-      </label>
-
-      <button>Sauvegarder</button>
+    <section class="actions">
+      <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
     </section>
   </main>
+
+  <footer>
+    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
 </body>
 </html>
