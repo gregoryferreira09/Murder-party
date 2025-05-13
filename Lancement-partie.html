@@ -31,6 +31,7 @@
       margin: 0 auto 40px;
       font-size: 1.2em;
       line-height: 1.6;
+      text-align: left;
     }
 
     .btn {
@@ -51,53 +52,53 @@
       background-color: #e9c78c;
       color: #000000;
     }
+
+    ul {
+      padding-left: 20px;
+    }
   </style>
 </head>
 <body>
 
   <h1>Scénario généré</h1>
 
-  <div class="scenario">
-    <p>Bienvenue dans l'année 1897. Dans une somptueuse demeure victorienne, des invités triés sur le volet participent à une réception secrète.</p>
-    <p>Mais dans l'ombre, un crime odieux a été commis. Entre secrets de famille, rivalités d'héritage et trahisons anciennes, chacun semble avoir une raison de tuer.</p>
-    <p>Vous avez 60 minutes pour découvrir la vérité… ou la dissimuler à jamais.</p>
+  <div id="scenarioContainer" class="scenario">
+    Chargement du scénario...
   </div>
 
   <a class="btn" href="partie-en-cours.html">Commencer la partie</a>
   <a class="btn" href="accueil.html">Retour à l'accueil</a>
-<script>
-  const data = JSON.parse(localStorage.getItem("partieData"));
 
-  if (data) {
-    const container = document.getElementById("scenarioContainer");
-    container.innerHTML = `
-      <p><strong>Contexte :</strong> ${data.scenario}</p>
-      <h3 style="margin-top: 30px;">Liste des personnages :</h3>
-      <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
-        ${data.personnages.map(p => `
-          <li><strong>${p.nom}</strong> – ${p.description}</li>
-        `).join("")}
-      </ul>
-    `;
-  } else {
-    document.getElementById("scenarioContainer").innerHTML = "Aucune donnée trouvée.";
-  }
-</script>
-<script>
-  const data = JSON.parse(localStorage.getItem("scenarioData"));
+  <script>
+    const data = JSON.parse(localStorage.getItem("scenarioData"));
 
-  if (data) {
-    document.write("<h1>Scénario : </h1>");
-    document.write("<p>" + data.introduction + "</p>");
-    document.write("<h2>Crime :</h2><p>" + data.crime + "</p>");
-    document.write("<h2>Objectif général :</h2><p>" + data.objectifsGlobal + "</p>");
-    document.write("<h2>Joueurs :</h2>");
-    Object.keys(data.joueurs).forEach(key => {
-      const j = data.joueurs[key];
-      document.write(`<div><strong>${j.nom}</strong> : ${j.role}, ${j.trait}, objectif : ${j.objectifSecret}, criminel : ${j.estCriminel}</div>`);
-    });
-  }
-</script>
+    if (data) {
+      const container = document.getElementById("scenarioContainer");
+      container.innerHTML = `
+        <h2>Introduction</h2>
+        <p>${data.introduction}</p>
+
+        <h2>Le crime</h2>
+        <p>${data.crime}</p>
+
+        <h2>Objectif général</h2>
+        <p>${data.objectifsGlobal}</p>
+
+        <h2>Personnages</h2>
+        <ul>
+          ${Object.values(data.joueurs).map(j => `
+            <li>
+              <strong>${j.nom}</strong> : ${j.role}, ${j.trait}<br>
+              <em>Objectif secret :</em> ${j.objectifSecret}<br>
+              <em>Criminel :</em> ${j.estCriminel ? 'Oui' : 'Non'}
+            </li>
+          `).join('')}
+        </ul>
+      `;
+    } else {
+      document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
+    }
+  </script>
 
 </body>
 </html>
