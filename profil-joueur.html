@@ -2,38 +2,36 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Profil</title>
+  <title>Profil - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header>
-    <h1>Mon profil</h1>
+    <h1>👤 Mon Profil</h1>
   </header>
 
   <main>
-    <form>
-      <label>Nom du joueur :
-        <input type="text" placeholder="Ex: Enquêteur007">
-      </label>
+    <section class="profil">
+      <img src="images/avatar-par-defaut.png" alt="Avatar" class="avatar">
+      <p><strong>Nom d'utilisateur :</strong> Joueur123</p>
+      <p><strong>Parties jouées :</strong> 12</p>
+      <p><strong>Meurtres résolus :</strong> 5</p>
+      <p><strong>Rôle préféré :</strong> Enquêteur</p>
+      <button>Modifier mon avatar</button>
+    </section>
 
-      <label>Choix d’avatar :
-        <select>
-          <option>Avatar 1</option>
-          <option>Avatar 2</option>
-        </select>
-      </label>
-
-      <label>Style de tenue :
-        <select>
-          <option>Classique</option>
-          <option>Victorienne</option>
-          <option>Moderne</option>
-        </select>
-      </label>
-
-      <button type="submit">Sauvegarder</button>
-    </form>
+    <section class="actions">
+      <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
+    </section>
   </main>
+
+  <footer>
+    <button onclick="window.location.href='paramètres.html'">⚙️ Paramètres</button>
+    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
 </body>
 </html>
