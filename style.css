@@ -1,49 +1,31 @@
-/* style.css */ 
+/* Importation des polices */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
 
+/* Corps de la page */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Cormorant Garamond', serif;
-  background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+  background-image: url('https://www.transparenttextures.com/patterns/emeraude-pattern.png'), 
+                    url('https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg');
   background-color: #2c1b1b;
   color: #f4e4c1;
-  background-size: repeat;
+  background-size: 100% 100%, cover;
+  background-attachment: fixed;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url('https://www.transparenttextures.com/patterns/emerald-tapestry.png');
-  background-size: cover;
-  position: relative;
-  padding-top: 50px;
+  justify-content: center;
 }
 
-/* Ajout d'effets de chandelier pour l'ambiance */
-@keyframes chandelier {
-  0% { opacity: 0.7; transform: translateY(5px); }
-  50% { opacity: 1; transform: translateY(-5px); }
-  100% { opacity: 0.7; transform: translateY(5px); }
-}
-
-.chandelier {
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  width: 100px;
-  height: 150px;
-  background: url('https://example.com/chandelier.png') no-repeat center center;
-  background-size: contain;
-  animation: chandelier 3s infinite;
-  z-index: -1;
-}
-
+/* En-tête */
 header {
   text-align: center;
   background: rgba(0, 0, 0, 0.6);
   width: 100%;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
@@ -51,9 +33,9 @@ h1 {
   font-size: 3em;
   color: #e0c185;
   margin: 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Contenu principal */
 main {
   flex: 1;
   width: 100%;
@@ -81,7 +63,6 @@ button {
   border-radius: 8px;
   width: 80%;
   max-width: 300px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
@@ -90,6 +71,7 @@ button:hover {
   box-shadow: 0 0 10px #e0c18588;
 }
 
+/* Pied de page */
 footer {
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
@@ -109,6 +91,9 @@ a:hover {
   text-decoration: underline;
 }
 
-#retour-accueil {
-  margin-top: 20px;
+/* Responsive: ajuster les boutons sur petits écrans */
+@media (max-width: 600px) {
+  button {
+    width: 90%;
+  }
 }
