@@ -11,25 +11,39 @@
       background-color: #1b1b1b;
       font-family: 'Cormorant Garamond', serif;
       color: #e0e0e0;
-      text-align: center;
-      padding: 20px;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding-top: 40px;
     }
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 2.8em;
+      font-size: 3em;
       margin-bottom: 30px;
       color: #f0e0d0;
+      text-shadow: 0 0 10px #000000aa;
     }
 
     h2 {
       color: #c0b0a0;
-      font-size: 1.6em;
-      margin-bottom: 10px;
+      font-size: 1.7em;
+      margin-bottom: 15px;
     }
 
-    .avatar-section {
-      margin-bottom: 40px;
+    .avatar-section, .statistiques {
+      background-color: #262626;
+      border-radius: 16px;
+      padding: 30px 40px;
+      margin-bottom: 30px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 15px #00000055;
+      text-align: center;
     }
 
     .avatar-section img {
@@ -42,8 +56,7 @@
     }
 
     .avatar-section button {
-      display: block;
-      margin: 12px auto 0 auto;
+      margin-top: 15px;
       padding: 10px 20px;
       background-color: #4eaf7c;
       color: #fff;
@@ -58,17 +71,6 @@
       background-color: #3e8f64;
     }
 
-    .statistiques {
-      margin-top: 20px;
-      background-color: #262626;
-      border-radius: 12px;
-      padding: 20px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 0 10px #00000033;
-    }
-
     .statistiques p {
       font-size: 1.2em;
       margin: 12px 0;
@@ -77,12 +79,12 @@
 
     .return-btn {
       display: inline-block;
-      margin-top: 40px;
-      padding: 12px 24px;
+      margin: 40px auto 60px;
+      padding: 12px 28px;
       background-color: #4eaf7c;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       text-decoration: none;
       font-size: 1em;
       transition: background-color 0.3s ease;
@@ -90,6 +92,15 @@
 
     .return-btn:hover {
       background-color: #3e8f64;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.2em;
+      }
+      .avatar-section, .statistiques {
+        padding: 20px;
+      }
     }
   </style>
 </head>
@@ -113,7 +124,6 @@
     <p>Grade : <strong id="grade">Aventurier</strong></p>
   </div>
 
-  <!-- Bouton retour avec ton style -->
   <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
