@@ -175,6 +175,31 @@
       window.location.href = "lancement-partie.html";
     }
   </script>
+<script>
+  function genererScenario() {
+    const periode = document.getElementById("periode").value;
+    const mode = document.getElementById("mode").value;
+    const duree = document.getElementById("duree").value;
+    const avatars = document.getElementById("avatars").value;
+    const inactivite = document.getElementById("inactivite").value;
+    const criminels = parseInt(document.getElementById("criminels").value);
+    const nombreJoueurs = 6; // à remplacer plus tard par sélection dynamique
+
+    const config = {
+      epoque: periode,
+      mode: mode,
+      duree: duree,
+      avatars: avatars,
+      inactivite: inactivite,
+      nombreCriminels: criminels,
+      nombreJoueurs: nombreJoueurs
+    };
+
+    const scenario = genererScenarioComplet(config);
+    localStorage.setItem("scenarioData", JSON.stringify(scenario));
+    window.location.href = "lancement-partie.html";
+  }
+</script>
 
 </body>
 </html>
