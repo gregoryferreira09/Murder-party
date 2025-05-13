@@ -106,8 +106,7 @@
       <!-- Avatar section -->
       <div class="avatar-section">
         <h2>Avatar :</h2>
-        <!-- Assurez-vous que le chemin vers l'image est correct -->
-        <img src="images/avatar-default.png" id="avatar" alt="Avatar de joueur" width="150" height="150">
+        <img src="avatar-default.png" id="avatar" alt="Avatar de joueur" width="150" height="150">
         <button onclick="changerAvatar()">Modifier l'avatar</button>
       </div>
 
@@ -160,7 +159,7 @@
     function changerAvatar() {
       let nouveauxAvatars = ['avatar-1.png', 'avatar-2.png', 'avatar-3.png'];
       let avatarIndex = Math.floor(Math.random() * nouveauxAvatars.length);
-      document.getElementById("avatar").src = 'images/' + nouveauxAvatars[avatarIndex];
+      document.getElementById("avatar").src = nouveauxAvatars[avatarIndex];
     }
 
     // Affichage dynamique du nom et classement
