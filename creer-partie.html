@@ -233,4 +233,8 @@ localStorage.setItem("parametresPartie", JSON.stringify({
         trait
       };
     }
+    // Efface l'ancien scénario quand on revient sur la page de création
+window.onload = function() {
+  localStorage.removeItem("scenarioData");
+};
   </script>
