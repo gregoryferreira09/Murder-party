@@ -4,24 +4,32 @@
   <meta charset="UTF-8">
   <title>Profil - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     body {
-      background-color: #1b1b1b;
+      background-color: #2c1b1b;
       font-family: 'Cormorant Garamond', serif;
-      color: #e0e0e0;
+      color: #f0e6e6;
       text-align: center;
-      padding: 20px;
+      padding: 30px 20px;
     }
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 2.5em;
-      margin-bottom: 20px;
+      font-size: 3em;
+      margin-bottom: 30px;
+      color: #e0d0d0;
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      color: #e8c0b0;
+      margin-bottom: 10px;
     }
 
     .avatar-section {
-      margin-bottom: 30px;
+      margin-bottom: 40px;
     }
 
     .avatar-section img {
@@ -29,40 +37,53 @@
       width: 160px;
       height: 160px;
       object-fit: cover;
-      border: 4px solid #4eaf7c;
+      border: 4px solid #d89b72;
+      box-shadow: 0 0 10px #000000aa;
     }
 
     .avatar-section button {
-      display: block;
-      margin: 10px auto;
+      margin-top: 15px;
       padding: 10px 20px;
-      background-color: #4eaf7c;
+      background-color: #a95c38;
       color: #fff;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
     }
 
     .avatar-section button:hover {
-      background-color: #3e8f64;
+      background-color: #7c3f26;
     }
 
     .statistiques {
-      margin-top: 20px;
+      background-color: #3a1f1f;
+      border: 1px solid #5c2e2e;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto 40px auto;
+      box-shadow: 0 0 10px #00000055;
+    }
+
+    .statistiques p {
+      font-size: 1.2em;
+      margin: 10px 0;
     }
 
     .return-btn {
       display: inline-block;
-      margin-top: 30px;
-      padding: 10px 20px;
-      background-color: #333;
-      color: white;
-      border-radius: 8px;
+      padding: 12px 24px;
+      background-color: #663333;
+      color: #fff;
       text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
     }
 
     .return-btn:hover {
-      background-color: #555;
+      background-color: #8b4444;
     }
   </style>
 </head>
@@ -78,44 +99,4 @@
 
   <div class="statistiques">
     <h2>Statistiques</h2>
-    <p>Parties jouées : <strong>20</strong></p>
-    <p>Victoires : <strong>7</strong></p>
-    <p>Enquêteur : <strong>12</strong></p>
-    <p>Meurtrier : <strong>8</strong></p>
-    <p>Grade : <strong id="grade">Aventurier</strong></p>
-  </div>
-
-  <!-- Lien de retour à l'accueil -->
-  <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
-
-  <script>
-    const avatar = document.getElementById("avatar");
-    const avatars = [
-      "avatar-1.png",
-      "avatar-2.png",
-      "avatar-3.png"
-    ];
-    let index = 0;
-
-    function changerAvatar() {
-      index = (index + 1) % avatars.length;
-      avatar.src = "images/" + avatars[index];
-    }
-
-    // Exemple de calcul de grade en fonction des victoires
-    const victoires = 7;
-    const grade = document.getElementById("grade");
-
-    if (victoires <= 5) {
-      grade.textContent = "Novice";
-    } else if (victoires <= 10) {
-      grade.textContent = "Aventurier";
-    } else if (victoires <= 20) {
-      grade.textContent = "Champion";
-    } else {
-      grade.textContent = "Légende";
-    }
-  </script>
-
-</body>
-</html>
+    <p>Parties jouées : <strong>20</
