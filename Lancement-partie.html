@@ -93,6 +93,15 @@
     } else {
       document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
     }
+    <button onclick="recommencer()">Recommencer</button>
+
+<script>
+  function recommencer() {
+    localStorage.removeItem("scenarioData");
+    window.location.href = "creer-partie.html";
+  }
+</script>
+
   </script>
 
 </body
