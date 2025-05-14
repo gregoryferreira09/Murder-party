@@ -72,27 +72,32 @@
       const container = document.getElementById("scenarioContainer");
       const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre ? scenarioData.periodeAutre : scenarioData.periode;
       container.innerHTML = `
-        <h2>Introduction</h2>
-        <p>Bienvenue dans votre Murder Party !</p>
+<script>
+  const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
 
-        <h2>Le crime</h2>
-        <p>Un crime mystérieux s’est produit, et il est maintenant à votre équipe de le résoudre avant la fin du temps imparti.</p>
+  if (scenarioData) {
+    const container = document.getElementById("scenarioContainer");
+    const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre ? scenarioData.periodeAutre : scenarioData.periode;
 
-        <h2>Objectif général</h2>
-        <p>Résoudre le mystère avant la fin du temps imparti.</p>
+    container.innerHTML = `
+      <h2>Introduction</h2>
+      <p>${scenarioData.introduction}</p>
 
-        <h2>Détails du jeu</h2>
-        <p>Mode de jeu : ${scenarioData.mode}</p>
-        <p>Durée de la partie : ${scenarioData.duree} minutes</p>
-        <p>Période : ${periode}</p>
-        <p>Nombre de joueurs : ${scenarioData.nombreJoueurs}</p>
-        <p>Nombre de criminels : ${scenarioData.criminels}</p>
-        <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
-        <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
-      `;
-    } else {
-      document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
-    }
-  </script>
+      <h2>Objectif général</h2>
+      <p>${scenarioData.objectif}</p>
+
+      <h2>Détails du jeu</h2>
+      <p>Mode de jeu : ${scenarioData.mode}</p>
+      <p>Durée de la partie : ${scenarioData.duree} minutes</p>
+      <p>Période : ${periode}</p>
+      <p>Nombre de joueurs : ${scenarioData.nombreJoueurs}</p>
+      <p>Nombre de criminels : ${scenarioData.criminels}</p>
+      <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
+      <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
+    `;
+  } else {
+    document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
+  }
+</script>
 
 </body
