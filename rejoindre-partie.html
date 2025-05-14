@@ -9,30 +9,35 @@
       background-color: #1b1b1b;
       color: #e0e0e0;
       font-family: 'Cormorant Garamond', serif;
-      padding: 40px 20px;
       text-align: center;
+      padding: 40px 20px;
     }
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 2.4em;
       color: #e9c78c;
-      margin-bottom: 30px;
+      font-size: 2.5em;
     }
 
-    input[type="text"] {
-      padding: 12px;
+    .code {
+      font-size: 2em;
+      background-color: #2c1b1b;
+      border: 2px solid #e9c78c;
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      letter-spacing: 4px;
+    }
+
+    .status {
+      margin: 30px auto;
       font-size: 1.2em;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 20px;
-      width: 80%;
-      max-width: 300px;
     }
 
     button {
-      background-color: #000000;
-      color: #ffffff;
+      background-color: #000;
+      color: #fff;
       border: 2px solid #e9c78c;
       border-radius: 8px;
       padding: 12px 24px;
@@ -42,63 +47,71 @@
       transition: all 0.3s ease;
     }
 
-    button:hover {
-      background-color: #e9c78c;
-      color: #000000;
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
-    .message {
-      margin-top: 20px;
-      font-size: 1.1em;
+    button:hover:enabled {
+      background-color: #e9c78c;
+      color: #000;
     }
   </style>
 </head>
-  <audio id="notifSound" src="assets/audio/ding.mp3" preload="auto"></audio>
 <body>
 
   <h1>Rejoindre une Partie</h1>
+  <p>Partagez ce code avec les autres joueurs :</p>
+  <div class="code" id="codeSalon">------</div>
 
-  <input type="text" id="codeSalon" placeholder="Entrez le code du salon" />
-  <br>
-  <button onclick="rejoindreSalon()">Rejoindre</button>
+  <div class="status" id="etatSalon">
+    En attente de joueurs...
+  </div>
 
-  <div class="message" id="message"></div>
+  <button id="rejoindrePartie" disabled>Rejoindre la partie</button>
 
   <script>
-    function rejoindreSalon() {
-      const code = document.getElementById("codeSalon").value.trim();
-      const salonData = JSON.parse(localStorage.getItem("salon"));
+    const salonCode = generateCode(6);
+    const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
+    const totalJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 1;
+    const joueursAttendus = totalJoueurs - 1; // le créateur est déjà dedans
 
-      const messageEl = document.getElementById("message");
+    // Stockage du salon pour simulation locale
+    localStorage.setItem("salonCode", salonCode);
+    localStorage.setItem("joueursConnectes", "1"); // On commence avec 1 joueur (le créateur)
 
-      if (!salonData || salonData.codeSalon !== code) {
-        messageEl.textContent = "❌ Code de salon invalide.";
-        return;
+    document.getElementById("codeSalon").textContent = salonCode;
+
+    // Simule un "serveur" de salon : surveillance
+    setInterval(() => {
+      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "1"); // On commence à 1 pour le créateur
+      const etat = document.getElementById("etatSalon");
+      etat.textContent = `${connectes} / ${totalJoueurs} joueurs connectés`;
+
+      if (connectes >= totalJoueurs) {
+        document.getElementById("rejoindrePartie").disabled = false;
+        etat.textContent = "Tous les joueurs sont connectés ! Vous pouvez rejoindre la partie.";
       }
+    }, 1000);
 
-      if (salonData.joueursConnectes >= salonData.nombreJoueurs) {
-        messageEl.textContent = "❌ Le salon est déjà complet.";
-        return;
+    document.getElementById("rejoindrePartie").addEventListener("click", () => {
+      // Augmente le nombre de joueurs connectés dans le salon
+      let connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
+      connectes++;
+      localStorage.setItem("joueursConnectes", connectes);
+
+      if (connectes >= totalJoueurs) {
+        window.location.href = "choix-personnage.html"; // Redirection vers la page de choix de personnage
       }
+    });
 
-      // Empêche de rejoindre deux fois
-      if (!localStorage.getItem("joueurInscrit_" + code)) {
-        salonData.joueursConnectes++;
-        localStorage.setItem("salon", JSON.stringify(salonData));
-        localStorage.setItem("joueurInscrit_" + code, "true");
-        messageEl.textContent = "✅ Vous avez rejoint la partie.";
-      } else {
-        messageEl.textContent = "ℹ️ Vous êtes déjà connecté à ce salon.";
+    function generateCode(length) {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-
-      // Vérifie si tous les joueurs sont là
-      const checkCompletion = setInterval(() => {
-        const updatedSalon = JSON.parse(localStorage.getItem("salon"));
-        if (updatedSalon && updatedSalon.joueursConnectes >= updatedSalon.nombreJoueurs) {
-          clearInterval(checkCompletion);
-          window.location.href = "choix-personnage.html";
-        }
-      }, 1000);
+      return result;
     }
   </script>
 
