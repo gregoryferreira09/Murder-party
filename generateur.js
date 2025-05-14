@@ -1,138 +1,131 @@
-// ----------------------
-// GENERATEUR COMPLET
-// ----------------------
-
-function getRandomElement(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-// Base de données fictives simplifiées
-const epoques = {
+// Base de données des éléments modifiables par époque
+const baseDeDonnees = {
   "victorien": {
-    intro: "L'ambiance est feutrée, les chandeliers éclairent un vieux manoir anglais...",
-    noms: ["Edgar", "Beatrice", "Harold", "Lydia", "Gerald", "Vivienne"],
-    professions: ["majordome", "baronne", "détective", "cuisinière", "banquier", "exploratrice"]
+    "scenarios": [
+      {
+        "intro": [
+          "Un drame mystérieux se joue dans un manoir isolé, où les invités ont tous un secret.",
+          "Dans un manoir à l'atmosphère lugubre, une sombre affaire de meurtre commence à se dévoiler."
+        ],
+        "objectif": [
+          "Démasquez le meurtrier avant qu'il ne frappe à nouveau.",
+          "Trouvez l'assassin et découvrez pourquoi il a tué la victime."
+        ],
+        "lieu": [
+          "Manoir isolé",
+          "Salle de bal du manoir",
+          "Bibliothèque du manoir",
+          "Jardins secrets du manoir"
+        ],
+        "avatars": [
+          "Maître des Ombres", "Fantôme", "Comédien", "Muet"
+        ],
+        "mode": [
+          "Normal", "Criminels fantômes", "Chasse au juste coupable"
+        ],
+        "nombreCriminels": [
+          1, 2, 3
+        ]
+      },
+      {
+        "intro": [
+          "Une soirée tranquille entre amis tourne au cauchemar lorsqu'un invité est retrouvé mort.",
+          "Un mystérieux assassin a infiltré la haute société et cherche à éliminer ses ennemis."
+        ],
+        "objectif": [
+          "Réunissez des indices pour découvrir qui est le coupable.",
+          "Empêchez le criminel de s'enfuir avant qu'il ne tue à nouveau."
+        ],
+        "lieu": [
+          "Salle à manger",
+          "Salon de thé",
+          "Bureau du maître du manoir"
+        ],
+        "avatars": [
+          "Fantôme", "Maître des Ombres", "Comédien"
+        ],
+        "mode": [
+          "Normal", "Criminels fantômes"
+        ],
+        "nombreCriminels": [
+          1, 2
+        ]
+      }
+    ]
   },
-  "futuriste": {
-    intro: "Dans une station orbitale à la dérive, un crime a été commis...",
-    noms: ["Zara", "Xenon", "Kyra", "Orion", "Nexus", "Luma"],
-    professions: ["technologue", "pilote", "espion", "médecin androïde", "cyber-enquêteur"]
-  }
+  // Ajouter ici d'autres époques et scénarios
 };
 
-// Traits de caractère
-const traits = ["menteur", "loyal", "instable", "calculateur", "timide", "rancunier"];
+// Fonction pour générer un scénario unique basé sur les paramètres de la partie
+function genererScenario(periode, nombreJoueurs, modeDeJeu) {
+  const scenariosDisponibles = baseDeDonnees[periode].scenarios;
 
-// Objectifs spéciaux aléatoires
-const objectifsGeneraux = [
-  "Innocenter un allié.",
-  "Découvrir un indice majeur.",
-  "Accuser un coupable sans preuve.",
-  "Protéger une autre personne en secret.",
-  "Faire diversion pendant une enquête."
-];
+  // Filtrer les scénarios en fonction du nombre de criminels et du mode de jeu
+  const filtres = scenariosDisponibles.filter(scenario => {
+    return (
+      scenario.nombreCriminels.includes(nombreJoueurs) &&
+      scenario.mode.includes(modeDeJeu)
+    );
+  });
 
-// GÉNÉRATION DU SCÉNARIO PRINCIPAL
-function genererScenarioComplet(config) {
-  const epoqueData = epoques[config.epoque] || epoques["victorien"];
-
-  const joueurs = {};
-  const nomsDisponibles = [...epoqueData.noms];
-  const professions = [...epoqueData.professions];
-
-  // Attribution des rôles
-  for (let i = 1; i <= config.nombreJoueurs; i++) {
-    const nom = getRandomElement(nomsDisponibles);
-    nomsDisponibles.splice(nomsDisponibles.indexOf(nom), 1);
-    const role = getRandomElement(professions);
-    const caractere = getRandomElement(traits);
-    const objectif = getRandomElement(objectifsGeneraux);
-
-    joueurs[`joueur${i}`] = {
-      nom: nom,
-      role: role,
-      trait: caractere,
-      objectifSecret: objectif,
-      estCriminel: i <= config.nombreCriminels
-    };
+  // Si aucun scénario ne correspond, renvoyer un message d'erreur
+  if (filtres.length === 0) {
+    return "Aucun scénario disponible pour les paramètres choisis.";
   }
 
-  const histoire = {
-    introduction: epoqueData.intro,
-    crime: "Un meurtre mystérieux a eu lieu durant un événement social.",
-    objectifsGlobal: "Résoudre le crime sans se faire manipuler.",
-    joueurs: joueurs
+  // Sélectionner un scénario aléatoirement parmi les filtrés
+  const scenarioChoisi = filtres[Math.floor(Math.random() * filtres.length)];
+
+  // Retourner le scénario complet
+  return {
+    introduction: scenarioChoisi.intro[Math.floor(Math.random() * scenarioChoisi.intro.length)],
+    objectif: scenarioChoisi.objectif[Math.floor(Math.random() * scenarioChoisi.objectif.length)],
+    lieu: scenarioChoisi.lieu[Math.floor(Math.random() * scenarioChoisi.lieu.length)],
+    avatars: scenarioChoisi.avatars[Math.floor(Math.random() * scenarioChoisi.avatars.length)],
+    mode: modeDeJeu,
+    criminels: scenarioChoisi.nombreCriminels[Math.floor(Math.random() * scenarioChoisi.nombreCriminels.length)],
   };
-
-  return histoire;
 }
 
-// GÉNÉRATION DYNAMIQUE DE L'INTRODUCTION ET DE L'OBJECTIF DES ENQUÊTEURS
-function genererIntroductionEtAccroche(config) {
-  const epoqueData = epoques[config.epoque] || epoques["victorien"];
-  
-  const lieux = ["manoir victorien", "train de luxe", "musée abandonné", "île déserte", "hôtel de luxe"];
-  const victimes = ["comtesse Montgomery", "Henry Dupont", "le conservateur Gervais", "le capitaine du navire", "l'homme d'affaires"];
-  const meurtres = ["poignardée en plein cœur", "poignardé dans le dos", "retrouvé inconscient au pied du tableau volé", "pendu à une corde", "retrouvé mort dans sa suite"];
-  const phrasesAccroche = [
-    "Le meurtrier est toujours parmi vous, tapi dans l’ombre.",
-    "Un assassin rôde, et la vérité est à votre portée.",
-    "Le temps presse, et l'assassin n'attend pas.",
-    "L'île vous cache un secret bien plus sombre que vous ne le pensiez."
-  ];
-
-  // Choisir aléatoirement un lieu, une victime, un meurtre et une phrase d'accroche
-  const lieu = getRandomElement(lieux);
-  const victime = getRandomElement(victimes);
-  const meurtre = getRandomElement(meurtres);
-  const accroche = getRandomElement(phrasesAccroche);
-
-  const introduction = `DANS LE CADRE MAJESTUEUX D’UN ${lieu.toUpperCase()}, UNE SOIRÉE ÉLÉGANTE VIRE AU CAUCHEMAR. ${victime.toUpperCase()}, FIGURE DE LA HAUTE SOCIÉTÉ, A ÉTÉ RETROUVÉE ${meurtre.toUpperCase()}. MAIS LES SECRETS SONT-ILS VRAIMENT SI BIEN CACHÉS ? LA VÉRITÉ RESTE ENFOUIE… POUR L’INSTANT.`;
-  const objectif = `${accroche} QUI SAURA PERCER CE SECRET AVANT QU’IL NE SOIT TROP TARD ?`;
-
-  return { introduction, objectif };
-}
-
-// Variable temporaire pour stocker le scénario avant validation
-let scenarioTemp = null;
-
-// Fonction pour afficher l'introduction et l'objectif
+// Fonction pour afficher le scénario généré dans la page HTML
 function afficherScenario() {
-  const config = { epoque: "victorien", nombreJoueurs: 6, nombreCriminels: 2 }; // à ajuster selon ton app
-  scenarioTemp = genererIntroductionEtAccroche(config);
-  const scenario = scenarioTemp;
+  // Récupérer les paramètres de la partie (ils peuvent être stockés dans des variables ou être passés par l'URL)
+  const periodeSelectionnee = "victorien"; // Exemple, tu peux récupérer cette donnée d'une autre manière
+  const nombreJoueursSelectionne = 4; // À adapter selon la sélection de l'utilisateur
+  const modeSelectionne = "Normal"; // Choisi par l'utilisateur (ou défini par défaut)
 
-  document.getElementById("intro").textContent = scenario.introduction;
-  document.getElementById("objectif").textContent = scenario.objectif;
+  // Générer un scénario
+  const scenario = genererScenario(periodeSelectionnee, nombreJoueursSelectionne, modeSelectionne);
+
+  // Si un scénario a été généré avec succès, afficher les informations
+  if (typeof scenario === "string") {
+    // Si un message d'erreur est retourné, l'afficher
+    document.getElementById('scenarioContainer').innerHTML = `<p>${scenario}</p>`;
+  } else {
+    // Afficher les informations du scénario généré
+    document.getElementById('scenarioContainer').innerHTML = `
+      <h2>Introduction</h2>
+      <p>${scenario.introduction}</p>
+
+      <h2>Objectif du jeu</h2>
+      <p>${scenario.objectif}</p>
+
+      <h2>Lieu</h2>
+      <p>${scenario.lieu}</p>
+
+      <h2>Mode de jeu</h2>
+      <p>${scenario.mode}</p>
+
+      <h2>Nombre de criminels</h2>
+      <p>${scenario.criminels}</p>
+
+      <h2>Avatars légendaires</h2>
+      <ul>
+        <li>${scenario.avatars}</li>
+      </ul>
+    `;
+  }
 }
 
-// Bouton "Retour" avec confirmation de perte
-document.getElementById("btnRetour").addEventListener("click", function() {
-  const confirmation = confirm("Attention, vous allez quitter la création de partie et perdre ce scénario non sauvegardé. Voulez-vous vraiment revenir en arrière ?");
-  if (confirmation) {
-    scenarioTemp = null;
-    window.location.href = "accueil.html"; // à adapter selon ton app
-  }
-});
-
-// Bouton "Lancer la Partie" — sauvegarde définitive
-document.getElementById("btnLancerPartie").addEventListener("click", function () {
-  if (!scenarioTemp) {
-    alert("Aucun scénario n’a été généré !");
-    return;
-  }
-
-  const config = { epoque: "victorien", nombreJoueurs: 6, nombreCriminels: 2 };
-
-  localStorage.setItem("introduction", scenarioTemp.introduction);
-  localStorage.setItem("objectif", scenarioTemp.objectif);
-  localStorage.setItem("mode", "classique");
-  localStorage.setItem("duree", "60");
-  localStorage.setItem("periode", config.epoque);
-  localStorage.setItem("nombreJoueurs", config.nombreJoueurs);
-  localStorage.setItem("criminels", config.nombreCriminels);
-  localStorage.setItem("criminelFantome", false);
-  localStorage.setItem("avatarsLegendaires", true);
-
-  window.location.href = "affichageScenario.html";
-});
+// Appel de la fonction pour afficher le scénario à l'initialisation de la page
+window.onload = afficherScenario;
