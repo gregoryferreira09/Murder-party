@@ -87,24 +87,52 @@ function genererIntroductionEtAccroche(config) {
   const meurtre = getRandomElement(meurtres);
   const accroche = getRandomElement(phrasesAccroche);
 
-  const introduction = `DANS LE CADRE MAJESTUEUX D’UN ${lieu.toUpperCase()}, UNE SOIRÉE ÉLÉGANTE VIRE AU CAUCHEMAR. ${victime.toUpperCase()}, FIGURE DE LA HAUTE SOCIÉTÉ, A ÉTÉ RETROUVÉE ${meurte.toUpperCase()}. MAIS LES SECRETS SONT-ILS VRAIMENT SI BIEN CACHÉS ? LA VÉRITÉ RESTE ENFOUIE… POUR L’INSTANT.`;
+  const introduction = `DANS LE CADRE MAJESTUEUX D’UN ${lieu.toUpperCase()}, UNE SOIRÉE ÉLÉGANTE VIRE AU CAUCHEMAR. ${victime.toUpperCase()}, FIGURE DE LA HAUTE SOCIÉTÉ, A ÉTÉ RETROUVÉE ${meurtre.toUpperCase()}. MAIS LES SECRETS SONT-ILS VRAIMENT SI BIEN CACHÉS ? LA VÉRITÉ RESTE ENFOUIE… POUR L’INSTANT.`;
   const objectif = `${accroche} QUI SAURA PERCER CE SECRET AVANT QU’IL NE SOIT TROP TARD ?`;
 
   return { introduction, objectif };
 }
 
+// Variable temporaire pour stocker le scénario avant validation
+let scenarioTemp = null;
+
 // Fonction pour afficher l'introduction et l'objectif
 function afficherScenario() {
-  // Générez un scénario aléatoire
-  const config = { epoque: "victorien", nombreJoueurs: 6, nombreCriminels: 2 }; // à ajuster selon l'interface de ton application
-  const scenario = genererIntroductionEtAccroche(config);
+  const config = { epoque: "victorien", nombreJoueurs: 6, nombreCriminels: 2 }; // à ajuster selon ton app
+  scenarioTemp = genererIntroductionEtAccroche(config);
+  const scenario = scenarioTemp;
 
-  // Affichage dans le DOM
   document.getElementById("intro").textContent = scenario.introduction;
   document.getElementById("objectif").textContent = scenario.objectif;
 }
 
-// Écouteur pour le bouton "Retour" afin de régénérer un scénario
+// Bouton "Retour" avec confirmation de perte
 document.getElementById("btnRetour").addEventListener("click", function() {
-  afficherScenario();
+  const confirmation = confirm("Attention, vous allez quitter la création de partie et perdre ce scénario non sauvegardé. Voulez-vous vraiment revenir en arrière ?");
+  if (confirmation) {
+    scenarioTemp = null;
+    window.location.href = "accueil.html"; // à adapter selon ton app
+  }
+});
+
+// Bouton "Lancer la Partie" — sauvegarde définitive
+document.getElementById("btnLancerPartie").addEventListener("click", function () {
+  if (!scenarioTemp) {
+    alert("Aucun scénario n’a été généré !");
+    return;
+  }
+
+  const config = { epoque: "victorien", nombreJoueurs: 6, nombreCriminels: 2 };
+
+  localStorage.setItem("introduction", scenarioTemp.introduction);
+  localStorage.setItem("objectif", scenarioTemp.objectif);
+  localStorage.setItem("mode", "classique");
+  localStorage.setItem("duree", "60");
+  localStorage.setItem("periode", config.epoque);
+  localStorage.setItem("nombreJoueurs", config.nombreJoueurs);
+  localStorage.setItem("criminels", config.nombreCriminels);
+  localStorage.setItem("criminelFantome", false);
+  localStorage.setItem("avatarsLegendaires", true);
+
+  window.location.href = "affichageScenario.html";
 });
