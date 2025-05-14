@@ -71,7 +71,7 @@
 
   <br>
   <button onclick="rejoindreSalon()">Valider</button>
-  <button onclick="réinitialiserSalon()">Réinitialiser</button>
+  <button onclick="retourAccueil()">Retour accueil</button>
 
   <div class="message" id="message"></div>
   <div class="compteur" id="compteur"></div>
@@ -139,16 +139,15 @@
       }
     }, 1000);
 
-    // ✅ Fonction ajoutée sans rien retirer du reste
-    function réinitialiserSalon() {
-      localStorage.removeItem("joueursConnectes");
-      Object.keys(localStorage)
-        .filter(key => key.startsWith("joueurRejoint_"))
-        .forEach(key => localStorage.removeItem(key));
-      document.getElementById("message").textContent = "Salon réinitialisé.";
-      document.getElementById("message").style.color = "#87cefa";
-      afficherCompteur();
-      aDejaRejoint = false;
+    // Fonction ajoutée pour le bouton "Retour accueil"
+    function retourAccueil() {
+      if (aDejaRejoint) {
+        let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
+        connectes -= 1;
+        localStorage.setItem("joueursConnectes", connectes.toString());
+        aDejaRejoint = false;
+      }
+      window.location.href = "accueil.html"; // Rediriger vers la page d'accueil (modifie selon ton URL d'accueil)
     }
   </script>
 
