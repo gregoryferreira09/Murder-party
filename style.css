@@ -1,4 +1,4 @@
-/* Importation des polices */
+/* Importation des polices */ 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
 
 /* Corps de la page */
@@ -17,6 +17,18 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+/* Conteneur principal avec style "lancement de partie" */
+.scenario {
+  background-color: #2c1b1b;
+  border: 3px solid #e9c78c;
+  border-radius: 16px;
+  padding: 40px 30px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  max-width: 800px;
+  width: 90%;
+  margin: 40px auto;
 }
 
 /* En-tête */
@@ -65,7 +77,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  align-items: center; /* <- AJOUT POUR CENTRER LES COLONNES */
+  align-items: center;
 }
 
 button {
