@@ -60,6 +60,17 @@
     .compteur {
       color: #87cefa;
     }
+
+    .accueil {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #e9c78c;
+      cursor: pointer;
+    }
+
+    .accueil:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -71,10 +82,11 @@
 
   <br>
   <button onclick="rejoindreSalon()">Valider</button>
-  <button onclick="retourAccueil()">Retour accueil</button>
 
   <div class="message" id="message"></div>
   <div class="compteur" id="compteur"></div>
+
+  <div class="accueil" onclick="retourAccueil()">Accueil</div>
 
   <script>
     let aDejaRejoint = false;
@@ -139,7 +151,7 @@
       }
     }, 1000);
 
-    // Fonction ajoutée pour le bouton "Retour accueil"
+    // Fonction ajoutée pour le lien "Accueil"
     function retourAccueil() {
       if (aDejaRejoint) {
         let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
