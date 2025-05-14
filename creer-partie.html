@@ -156,6 +156,8 @@
 
     localStorage.setItem("scenarioData", JSON.stringify(scenario));
 
+    localStorage.setItem("introduction", scenario.introduction);
+    localStorage.setItem("objectif", scenario.objectif);
     localStorage.setItem("parametresPartie", JSON.stringify({
       mode, duree, periode, periodeAutre, criminels,
       criminelFantome, avatarsLegendaires, inactifs, nombreJoueurs
@@ -247,6 +249,8 @@
 
   window.onload = function() {
     localStorage.removeItem("scenarioData");
+    localStorage.removeItem("introduction");
+    localStorage.removeItem("objectif");
   };
 </script>
 
