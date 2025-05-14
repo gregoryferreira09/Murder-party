@@ -2,51 +2,52 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Interface de jeu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interface de jeu</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <header>
-    <h2>Temps restant : 38:12</h2>
+    <h2>Temps restant : <span id="tempsRestant">38:12</span></h2>
   </header>
 
   <main>
-    <!-- Navigation entre onglets -->
+    <!-- Navigation entre onglets principaux -->
     <nav>
-      <button>🧩 Jeu</button>
-      <button>📄 Ma Fiche</button>
+      <button class="nav-btn" id="btn-jeu">🧩 Jeu</button>
+      <button class="nav-btn" id="btn-fiche">📄 Ma Fiche</button>
     </nav>
 
-    <!-- Sous-onglets de l'onglet "Jeu" -->
-    <section class="onglet-jeu">
-      <nav>
-        <button>🔴 Vote</button>
-        <button>🔵 Connexion</button>
-        <button>🟡 Indices</button>
+    <!-- Section Jeu avec sous-onglets -->
+    <section class="onglet-jeu" id="onglet-jeu">
+      <nav class="sous-onglets">
+        <button class="sous-onglet-btn" id="btn-vote">🔴 Vote</button>
+        <button class="sous-onglet-btn" id="btn-connexion">🔵 Connexion</button>
+        <button class="sous-onglet-btn" id="btn-indices">🟡 Indices</button>
       </nav>
 
       <section id="zone-interaction">
         <!-- Vote -->
-        <div class="vote">
+        <div class="vote" id="vote-section">
           <div class="joueur">
             <img src="images/perso1.png" alt="Perso 1">
             <p>Inspecteur Lenoir</p>
           </div>
-          <button>Valider mon vote</button>
+          <button class="action-btn">Valider mon vote</button>
         </div>
 
         <!-- Connexion -->
-        <div class="connexion">
+        <div class="connexion" id="connexion-section">
           <div class="joueur">
             <img src="images/perso2.png" alt="Perso 2">
             <p>Mlle Rose</p>
           </div>
-          <button>Valider la connexion</button>
+          <button class="action-btn">Valider la connexion</button>
         </div>
 
         <!-- Indices -->
-        <div class="indices">
+        <div class="indices" id="indices-section">
           <div class="joueur">
             <img src="images/perso3.png" alt="Perso 3">
             <p>Professeur Violet</p>
@@ -64,7 +65,22 @@
         </div>
       </section>
     </section>
+
+    <!-- Section Fiche du joueur -->
+    <section class="onglet-fiche" id="onglet-fiche">
+      <h3>Ma Fiche</h3>
+      <div class="fiche-joueur">
+        <p><strong>Nom :</strong> Inspecteur Lenoir</p>
+        <p><strong>Rôle :</strong> Enquêteur</p>
+        <p><strong>Historique :</strong> Découvre des indices en interagissant avec les autres joueurs.</p>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    <p>© 2025 Murder Party</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
