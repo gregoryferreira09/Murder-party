@@ -63,27 +63,23 @@
   </div>
 
   <a class="btn" href="partie-en-cours.html">Commencer la partie</a>
-  <a class="btn" href="creer-partie.html">Retour</a>
+  <a class="btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
-    const introduction = localStorage.getItem("introduction");
-    const objectif = localStorage.getItem("objectif");
-    const scenarioDataJSON = localStorage.getItem("scenarioTemp");
-    const scenarioData = scenarioDataJSON ? JSON.parse(scenarioDataJSON) : null;
-    const periode = localStorage.getItem("periode");
+    const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
 
-    console.log('Introduction récupérée :', introduction);
-    console.log('Objectif récupéré :', objectif);
-    console.log('ScénarioData récupéré :', scenarioData);
-
-    if (introduction && objectif && scenarioData) {
+    if (scenarioData) {
       const container = document.getElementById("scenarioContainer");
+      const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre ? scenarioData.periodeAutre : scenarioData.periode;
       container.innerHTML = `
         <h2>Introduction</h2>
-        <p>${introduction}</p>
+        <p>Bienvenue dans votre Murder Party !</p>
+
+        <h2>Le crime</h2>
+        <p>Un crime mystérieux s’est produit, et il est maintenant à votre équipe de le résoudre avant la fin du temps imparti.</p>
 
         <h2>Objectif général</h2>
-        <p>${objectif}</p>
+        <p>Résoudre le mystère avant la fin du temps imparti.</p>
 
         <h2>Détails du jeu</h2>
         <p>Mode de jeu : ${scenarioData.mode}</p>
@@ -99,5 +95,4 @@
     }
   </script>
 
-</body>
-</html>
+</body
