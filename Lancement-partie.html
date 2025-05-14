@@ -68,6 +68,8 @@
   <script>
 const introduction = localStorage.getItem("introduction");
 const objectif = localStorage.getItem("objectif");
+console.log('Introduction récupérée :', introduction);
+console.log('Objectif récupéré :', objectif);
 
 if (introduction && objectif) {
   const container = document.getElementById("scenarioContainer");
