@@ -66,23 +66,24 @@
   <a class="btn" href="creer-partie.html">Retour</a>
 
   <script>
-const introduction = localStorage.getItem("introduction");
-const objectif = localStorage.getItem("objectif");
-console.log('Introduction récupérée :', introduction);
-console.log('Objectif récupéré :', objectif);
+    const introduction = localStorage.getItem("introduction");
+    const objectif = localStorage.getItem("objectif");
+    const scenarioDataJSON = localStorage.getItem("scenarioTemp");
+    const scenarioData = scenarioDataJSON ? JSON.parse(scenarioDataJSON) : null;
+    const periode = localStorage.getItem("periode");
 
-if (introduction && objectif) {
-  const container = document.getElementById("scenarioContainer");
-  container.innerHTML = `
-    <h2>Introduction</h2>
-    <p>${introduction}</p>
+    console.log('Introduction récupérée :', introduction);
+    console.log('Objectif récupéré :', objectif);
+    console.log('ScénarioData récupéré :', scenarioData);
 
-    <h2>Objectif général</h2>
-    <p>${objectif}</p>
-  `;
-} else {
-  document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
-}
+    if (introduction && objectif && scenarioData) {
+      const container = document.getElementById("scenarioContainer");
+      container.innerHTML = `
+        <h2>Introduction</h2>
+        <p>${introduction}</p>
+
+        <h2>Objectif général</h2>
+        <p>${objectif}</p>
 
         <h2>Détails du jeu</h2>
         <p>Mode de jeu : ${scenarioData.mode}</p>
@@ -98,4 +99,5 @@ if (introduction && objectif) {
     }
   </script>
 
-</body
+</body>
+</html>
