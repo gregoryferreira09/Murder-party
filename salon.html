@@ -91,13 +91,23 @@
       if (connectes >= totalJoueurs) {
         document.getElementById("demarrerPartie").disabled = false;
         etat.textContent = "Tous les joueurs sont connectés ! Vous pouvez démarrer la partie.";
+
+        // Redirection vers la page de choix du personnage lorsque tous sont connectés
+        window.location.href = "choix-personnage.html";
       }
     }, 1000);
 
     document.getElementById("demarrerPartie").addEventListener("click", () => {
-      // On pourrait ajouter ici la liste des joueurs dans localStorage
+      // Redirection vers la page de choix du personnage (si jamais l'utilisateur clique avant tout)
       window.location.href = "choix-personnage.html";
     });
+
+    // Simuler qu'un joueur se connecte après une période (juste pour les tests)
+    setTimeout(() => {
+      let connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
+      connectes++;
+      localStorage.setItem("joueursConnectes", connectes.toString());
+    }, 5000); // Exemple de joueur qui rejoint après 5 secondes
 
     function generateCode(length) {
       const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
