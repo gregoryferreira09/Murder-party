@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Jeu - Murder Party</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Bienvenue dans la Murder Party</h1>
+    </header>
+
+    <main>
+        <section class="personnage">
+            <h2>Votre Personnage</h2>
+            <div class="profil">
+                <h3>Nom : <span id="nomPersonnage">Alice</span></h3>
+                <p><strong>Rôle :</strong> <span id="rolePersonnage">Meurtrier</span></p>
+                <p><strong>Histoire :</strong> Une personne avec un passé mystérieux et des secrets à cacher...</p>
+            </div>
+        </section>
+
+        <section class="indices">
+            <h2>Vos Indices</h2>
+            <ul id="indicesList">
+                <li>Des empreintes sur la scène du crime.</li>
+                <li>Une lettre mystérieuse retrouvée près de la victime.</li>
+            </ul>
+        </section>
+
+        <section class="tableau-de-bord">
+            <h2>Tableau de Bord</h2>
+            <p><strong>État de la Partie :</strong> <span id="etatPartie">En cours...</span></p>
+            <p><strong>Éliminations :</strong> Aucun joueur éliminé pour le moment.</p>
+            <button id="voterBtn">Vote Final</button>
+        </section>
+        
+    </main>
+
+    <footer>
+        <p>© 2025 Murder Party</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
