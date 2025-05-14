@@ -5,25 +5,80 @@
   <title>Rôle et Indices - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Styles généraux */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* Styles pour les sous-onglets */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .tab-button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .tab-button.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    /* Contenu des sous-onglets */
+    .tab-content {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .fiche-personnage img {
+      width: 100px;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
+
   <header>
     <h1>⚖️ Rôle et Indices - Murder Party</h1>
   </header>
 
   <main>
-    <section class="fiche-personnage">
+    <div class="tabs">
+      <button class="tab-button active" onclick="switchTab('fiche')">Fiche Personnage</button>
+      <button class="tab-button" onclick="switchTab('indices')">Indices</button>
+      <button class="tab-button" onclick="switchTab('vote')">Vote</button>
+      <button class="tab-button" onclick="switchTab('connexion')">Connexion avec un autre joueur</button>
+    </div>
+
+    <section id="fiche" class="tab-content active">
       <h2>Votre personnage : <span id="nomPersonnage">Nom du Personnage</span></h2>
       <img src="image-personnage.jpg" alt="Image du Personnage" id="imagePersonnage">
       <p id="histoirePersonnage">Histoire détaillée du personnage ici. Cela peut inclure des informations pertinentes pour le rôle du joueur.</p>
     </section>
 
-    <section class="role-joueur">
-      <h3>Votre rôle :</h3>
-      <p id="roleJoueur">Vous êtes un <span id="roleType">Enquêteur</span> / <span id="roleType">Meurtrier</span></p>
-    </section>
-
-    <section class="indices">
+    <section id="indices" class="tab-content">
       <h3>Vos indices :</h3>
       <ul id="listeIndices">
         <li class="indice" id="indice1">
@@ -37,26 +92,58 @@
       </ul>
     </section>
 
-    <section class="actions">
-      <button onclick="validerRole()">Valider mon rôle</button>
-      <button onclick="voirIndices()">Voir plus d'indices</button>
+    <section id="vote" class="tab-content">
+      <h3>Votez pour le suspect :</h3>
+      <form>
+        <label for="suspect">Choisir un suspect :</label>
+        <select id="suspect">
+          <option value="suspect1">Suspect 1</option>
+          <option value="suspect2">Suspect 2</option>
+          <option value="suspect3">Suspect 3</option>
+        </select>
+        <button type="submit">Voter</button>
+      </form>
     </section>
+
+    <section id="connexion" class="tab-content">
+      <h3>Connexion avec un autre joueur :</h3>
+      <button onclick="connecterJoueur()">Se connecter avec un joueur</button>
+    </section>
+
+    <footer>
+      <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
+      <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+      <a href="mentions-legales.html">Mentions légales</a>
+    </footer>
+
   </main>
 
-  <footer>
-    <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
-    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
-
   <script>
-    // Exemple d'affichage dynamique pour le rôle et les indices
-    function validerRole() {
-      alert("Rôle validé, vous pouvez maintenant commencer la partie !");
+    // Fonction pour changer d'onglet
+    function switchTab(tabName) {
+      // Cacher tous les onglets
+      var contents = document.querySelectorAll('.tab-content');
+      contents.forEach(function(content) {
+        content.classList.remove('active');
+      });
+
+      // Désactiver tous les boutons
+      var buttons = document.querySelectorAll('.tab-button');
+      buttons.forEach(function(button) {
+        button.classList.remove('active');
+      });
+
+      // Afficher le contenu du sous-onglet sélectionné
+      document.getElementById(tabName).classList.add('active');
+
+      // Activer le bouton correspondant
+      var activeButton = document.querySelector(`[onclick="switchTab('${tabName}')"]`);
+      activeButton.classList.add('active');
     }
 
-    function voirIndices() {
-      alert("Afficher les indices supplémentaires.");
+    // Fonction pour simuler la connexion avec un autre joueur
+    function connecterJoueur() {
+      alert("Connexion avec un autre joueur...");
     }
   </script>
 </body>
