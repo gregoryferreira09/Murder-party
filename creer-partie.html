@@ -152,7 +152,7 @@
     const inactifs = document.getElementById("inactifs").checked;
     const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value);
 
-    const scenario = genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs);
+    const scenario = genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs);
 
     localStorage.setItem("scenarioData", JSON.stringify(scenario));
 
@@ -169,7 +169,7 @@
     window.location.href = "lancement-partie.html";
   }
 
-  function genererScenrioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
+  function genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
     let introduction = `Bienvenue dans votre murder party.`;
     let crime = `Un crime mystérieux s’est produit...`;
     let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`;
