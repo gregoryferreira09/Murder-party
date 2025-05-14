@@ -76,11 +76,17 @@
       to { opacity: 1; }
     }
 
-    .fiche-personnage img {
-      width: 150px;
+    .fiche-personnage img, .connexion-joueur img {
+      width: 80px;
       border-radius: 50%;
       border: 3px solid #ffc107;
-      margin-top: 10px;
+      margin: 5px;
+    }
+
+    .connexion-joueur {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .indice {
@@ -101,6 +107,27 @@
 
     .fiabilite.fiable {
       color: #4CAF50;
+    }
+
+    .popup-indices {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background-color: #222;
+      padding: 20px;
+      border: 2px solid #ffc107;
+      border-radius: 10px;
+      z-index: 999;
+      width: 300px;
+    }
+
+    .popup-indices .close {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      color: #fff;
+      cursor: pointer;
     }
 
     select, button[type="submit"], button {
@@ -136,7 +163,6 @@
       text-decoration: underline;
     }
 
-    /* Chrono */
     #chrono {
       font-size: 1.1rem;
       font-weight: bold;
@@ -147,91 +173,92 @@
   </style>
 </head>
 <body>
-
   <header>
     <h1>🕵️ Murder Party - Rôle & Indices</h1>
   </header>
-
   <main>
-    <div id="chrono">Temps restant : <span id="tempsRestant">15:00</span></div>
-
+    <div id="chrono">Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span></div>
     <div class="tabs">
       <button class="tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
       <button class="tab-button" onclick="switchTab('indices')">🧩 Indices</button>
       <button class="tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
       <button class="tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
     </div>
-
     <section id="fiche" class="tab-content active fiche-personnage">
       <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
       <img src="image-personnage.jpg" alt="Image du Personnage">
-      <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble. Vous cachez une vérité... mais est-ce un crime ?</p>
-      <p><strong>Pouvoir :</strong> Vous pouvez interroger deux joueurs à chaque tour. Ils doivent vous dire une vérité ou mentir avec conviction.</p>
+      <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble...</p>
+      <p><strong>Pouvoir :</strong> Interrogez deux joueurs à chaque tour...</p>
     </section>
-
     <section id="indices" class="tab-content">
       <h3>Vos indices :</h3>
-      <div class="indice">
-        <p>🔍 "La victime a été vue en colère après avoir reçu une lettre anonyme."</p>
-        <p><span class="fiabilite fiable">Fiabilité : Haute</span></p>
-      </div>
-      <div class="indice">
-        <p>🔍 "Un joueur dit avoir vu un suspect quitter la pièce. Mais il avait bu."</p>
-        <p><span class="fiabilite suspect">Fiabilité : Incertaine</span></p>
-      </div>
+      <div id="listeIndices"></div>
     </section>
-
     <section id="vote" class="tab-content">
       <h3>Votez pour un suspect :</h3>
       <form id="voteForm">
-        <select id="suspect">
-          <option value="Alaric">Inspecteur Alaric</option>
-          <option value="Violette">Madame Violette</option>
-          <option value="Brume">Docteur Brume</option>
-        </select>
+        <select id="suspect"></select>
         <button type="submit">Voter</button>
       </form>
       <div id="voteResult" style="margin-top: 10px;"></div>
     </section>
-
     <section id="connexion" class="tab-content">
       <h3>Connexion entre joueurs :</h3>
-      <button onclick="connecterJoueur()">Tenter une connexion secrète</button>
+      <div class="connexion-joueur" id="joueursList"></div>
+      <button onclick="validerConnexion()">Valider la connexion</button>
     </section>
-
     <footer>
       <button onclick="window.location.href='accueil.html'">🏠 Accueil</button><br>
       <p>© 2025 Murder Party. Tous droits réservés. <a href="mentions-legales.html">Mentions légales</a></p>
     </footer>
   </main>
-
   <script>
+    const joueurs = [
+      { nom: 'Violette', image: 'violette.jpg', indices: ["A été vue avec la victime peu avant le crime.", "Semblait nerveuse lors du dîner."] },
+      { nom: 'Brume', image: 'brume.jpg', indices: ["Possède une clé suspecte.", "A disparu 10 minutes pendant la soirée."] }
+    ];
+    let connexionsRestantes = 5;
+    let joueurSelectionne = null;
+
     function switchTab(tabName) {
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-
       document.getElementById(tabName).classList.add('active');
       document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
     }
 
-    function connecterJoueur() {
-      const infos = [
-        "Vous apprenez que Violette a menti à un autre joueur.",
-        "Le joueur connecté possède un indice capital.",
-        "Votre connexion vous fait douter de vos certitudes."
-      ];
-      alert(infos[Math.floor(Math.random() * infos.length)]);
+    function initialiserJoueurs() {
+      const select = document.getElementById('suspect');
+      const joueursDiv = document.getElementById('joueursList');
+      joueurs.forEach(j => {
+        select.innerHTML += `<option value="${j.nom}">${j.nom}</option>`;
+        const div = document.createElement('div');
+        div.innerHTML = `<img src="${j.image}" alt="${j.nom}"><br>${j.nom}`;
+        div.onclick = () => joueurSelectionne = j;
+        joueursDiv.appendChild(div);
+      });
+    }
+
+    function validerConnexion() {
+      if (!joueurSelectionne || connexionsRestantes <= 0) return alert("Connexion impossible.");
+      connexionsRestantes--;
+      document.getElementById("connexionRestantes").textContent = connexionsRestantes;
+
+      const indice = joueurSelectionne.indices[Math.floor(Math.random() * joueurSelectionne.indices.length)];
+      const indiceDiv = document.createElement('div');
+      indiceDiv.className = 'indice';
+      indiceDiv.innerHTML = `<p>🔍 "${indice}"</p><p><span class="fiabilite fiable">Fiabilité : Haute</span></p>`;
+      document.getElementById('listeIndices').appendChild(indiceDiv);
     }
 
     document.getElementById('voteForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const suspect = document.getElementById('suspect').value;
-      const zone = document.getElementById('voteResult');
-      zone.innerHTML = `<p>🕯️ Votre vote pour <strong>${suspect}</strong> a été scellé... Attendez le verdict.</p>`;
+      document.getElementById('voteResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${suspect}</strong> a été scellé...</p>`;
     });
 
-    // Chrono 15 minutes
-    let secondes = 15 * 60;
+    // Chrono (30 min = 1800 sec)
+    let secondes = 1800;
     function updateChrono() {
       const minutes = Math.floor(secondes / 60);
       const sec = secondes % 60;
@@ -239,6 +266,8 @@
       if (secondes > 0) secondes--;
     }
     setInterval(updateChrono, 1000);
+
+    initialiserJoueurs();
   </script>
 </body>
 </html>
