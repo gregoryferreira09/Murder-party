@@ -1,113 +1,68 @@
-// Base de données des éléments modifiables par époque
+// Base de données simplifiée avec un seul scénario adaptable
 const baseDeDonnees = {
   "victorien": {
-    "scenarios": [
-      {
-        "intro": [
-          "Un drame mystérieux se joue dans un manoir isolé, où les invités ont tous un secret.",
-          "Dans un manoir à l'atmosphère lugubre, une sombre affaire de meurtre commence à se dévoiler."
-        ],
-        "objectif": [
-          "Démasquez le meurtrier avant qu'il ne frappe à nouveau.",
-          "Trouvez l'assassin et découvrez pourquoi il a tué la victime."
-        ],
-        "lieu": [
-          "Manoir isolé",
-          "Salle de bal du manoir",
-          "Bibliothèque du manoir",
-          "Jardins secrets du manoir"
-        ],
-        "avatars": [
-          "Maître des Ombres", "Fantôme", "Comédien", "Muet"
-        ],
-        "mode": [
-          "Normal", "Criminels fantômes", "Chasse au juste coupable"
-        ],
-        "nombreCriminels": [
-          1, 2, 3
-        ]
-      },
-      {
-        "intro": [
-          "Une soirée tranquille entre amis tourne au cauchemar lorsqu'un invité est retrouvé mort.",
-          "Un mystérieux assassin a infiltré la haute société et cherche à éliminer ses ennemis."
-        ],
-        "objectif": [
-          "Réunissez des indices pour découvrir qui est le coupable.",
-          "Empêchez le criminel de s'enfuir avant qu'il ne tue à nouveau."
-        ],
-        "lieu": [
-          "Salle à manger",
-          "Salon de thé",
-          "Bureau du maître du manoir"
-        ],
-        "avatars": [
-          "Fantôme", "Maître des Ombres", "Comédien"
-        ],
-        "mode": [
-          "Normal", "Criminels fantômes"
-        ],
-        "nombreCriminels": [
-          1, 2
-        ]
-      }
-    ]
-  },
-  // Ajouter ici d'autres époques et scénarios
+    "intro": "Un drame mystérieux se joue dans un manoir isolé, où les invités ont tous un secret.",
+    "objectif": "Démasquez le ou les meurtriers avant qu'ils ne frappent à nouveau.",
+    "lieux": [
+      "Salle de bal du manoir",
+      "Bibliothèque poussiéreuse",
+      "Jardins brumeux",
+      "Bureau du maître"
+    ],
+    "avatars": [
+      "Maître des Ombres", "Fantôme", "Comédien", "Muet"
+    ],
+    "modes": [
+      "Normal", "Criminels fantômes", "Chasse au juste coupable"
+    ],
+    "criminelsPossibles": [1, 2, 3]
+  }
 };
 
-// Fonction pour générer un scénario unique basé sur les paramètres de la partie
-function genererScenario(periode, nombreJoueurs, modeDeJeu) {
-  const scenariosDisponibles = baseDeDonnees[periode].scenarios;
+// Fonction pour générer un scénario basé sur les paramètres choisis
+function genererScenario(periode, nombreJoueurs, modeDeJeu, nbCriminels) {
+  const data = baseDeDonnees[periode];
 
-  // Filtrer les scénarios en fonction du nombre de criminels et du mode de jeu
-  const filtres = scenariosDisponibles.filter(scenario => {
-    return (
-      scenario.nombreCriminels.includes(nombreJoueurs) &&
-      scenario.mode.includes(modeDeJeu)
-    );
-  });
-
-  // Si aucun scénario ne correspond, renvoyer un message d'erreur
-  if (filtres.length === 0) {
-    return "Aucun scénario disponible pour les paramètres choisis.";
+  // Validation
+  if (!data.modes.includes(modeDeJeu)) {
+    return "Ce mode de jeu n'est pas disponible pour cette époque.";
+  }
+  if (!data.criminelsPossibles.includes(nbCriminels)) {
+    return "Nombre de criminels non autorisé pour cette époque.";
   }
 
-  // Sélectionner un scénario aléatoirement parmi les filtrés
-  const scenarioChoisi = filtres[Math.floor(Math.random() * filtres.length)];
+  // Génération aléatoire mais basée sur la structure
+  const lieuChoisi = data.lieux[Math.floor(Math.random() * data.lieux.length)];
+  const avatarsChoisis = data.avatars.slice(0, Math.min(nombreJoueurs, data.avatars.length));
 
-  // Retourner le scénario complet
   return {
-    introduction: scenarioChoisi.intro[Math.floor(Math.random() * scenarioChoisi.intro.length)],
-    objectif: scenarioChoisi.objectif[Math.floor(Math.random() * scenarioChoisi.objectif.length)],
-    lieu: scenarioChoisi.lieu[Math.floor(Math.random() * scenarioChoisi.lieu.length)],
-    avatars: scenarioChoisi.avatars[Math.floor(Math.random() * scenarioChoisi.avatars.length)],
+    introduction: data.intro,
+    objectif: data.objectif,
+    lieu: lieuChoisi,
     mode: modeDeJeu,
-    criminels: scenarioChoisi.nombreCriminels[Math.floor(Math.random() * scenarioChoisi.nombreCriminels.length)],
+    criminels: nbCriminels,
+    avatars: avatarsChoisis
   };
 }
 
-// Fonction pour afficher le scénario généré dans la page HTML
+// Fonction d’affichage dans l’interface HTML
 function afficherScenario() {
-  // Récupérer les paramètres de la partie (ils peuvent être stockés dans des variables ou être passés par l'URL)
-  const periodeSelectionnee = "victorien"; // Exemple, tu peux récupérer cette donnée d'une autre manière
-  const nombreJoueursSelectionne = 4; // À adapter selon la sélection de l'utilisateur
-  const modeSelectionne = "Normal"; // Choisi par l'utilisateur (ou défini par défaut)
+  // Exemple de paramètres récupérés depuis les sélections (à lier plus tard à ton UI)
+  const periodeSelectionnee = "victorien";
+  const nombreJoueursSelectionne = 5;
+  const modeSelectionne = "Criminels fantômes";
+  const nbCriminels = 2;
 
-  // Générer un scénario
-  const scenario = genererScenario(periodeSelectionnee, nombreJoueursSelectionne, modeSelectionne);
+  const scenario = genererScenario(periodeSelectionnee, nombreJoueursSelectionne, modeSelectionne, nbCriminels);
 
-  // Si un scénario a été généré avec succès, afficher les informations
   if (typeof scenario === "string") {
-    // Si un message d'erreur est retourné, l'afficher
     document.getElementById('scenarioContainer').innerHTML = `<p>${scenario}</p>`;
   } else {
-    // Afficher les informations du scénario généré
     document.getElementById('scenarioContainer').innerHTML = `
       <h2>Introduction</h2>
       <p>${scenario.introduction}</p>
 
-      <h2>Objectif du jeu</h2>
+      <h2>Objectif</h2>
       <p>${scenario.objectif}</p>
 
       <h2>Lieu</h2>
@@ -119,13 +74,12 @@ function afficherScenario() {
       <h2>Nombre de criminels</h2>
       <p>${scenario.criminels}</p>
 
-      <h2>Avatars légendaires</h2>
+      <h2>Avatars légendaires disponibles</h2>
       <ul>
-        <li>${scenario.avatars}</li>
+        ${scenario.avatars.map(a => `<li>${a}</li>`).join("")}
       </ul>
     `;
   }
 }
 
-// Appel de la fonction pour afficher le scénario à l'initialisation de la page
 window.onload = afficherScenario;
