@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <title>Rejoindre une partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
     body {
       background-color: #1b1b1b;
@@ -17,8 +16,9 @@
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
+      font-size: 2.8em;
+      margin-bottom: 30px;
       color: #e9c78c;
-      font-size: 2.5em;
     }
 
     input {
@@ -33,23 +33,23 @@
       text-align: center;
     }
 
-    button {
-      background-color: #000;
-      color: #fff;
+    .btn {
+      background-color: #000000;
+      color: #ffffff;
       border: 2px solid #e9c78c;
       border-radius: 8px;
       padding: 12px 24px;
       font-size: 1.1em;
       cursor: pointer;
+      margin: 10px 0;
+      text-decoration: none;
       font-family: 'Cinzel Decorative', serif;
       transition: all 0.3s ease;
-      margin-top: 20px;
-      margin-bottom: 10px; /* Ajouté pour espacer les boutons */
     }
 
-    button:hover {
+    .btn:hover {
       background-color: #e9c78c;
-      color: #000;
+      color: #000000;
     }
 
     .message, .compteur {
@@ -70,9 +70,8 @@
   <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" />
 
   <br>
-  <button onclick="rejoindreSalon()">Valider</button>
-  <br>
-  <button onclick="retourAccueil()">Retour</button>
+  <button class="btn" onclick="rejoindreSalon()">Valider</button>
+  <button class="btn" onclick="retourAccueil()">Retour</button>
 
   <div class="message" id="message"></div>
   <div class="compteur" id="compteur"></div>
