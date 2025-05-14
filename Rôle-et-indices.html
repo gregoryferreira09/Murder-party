@@ -4,104 +4,95 @@
   <meta charset="UTF-8">
   <title>Rôle et Indices - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
   <style>
-    /* Styles généraux */
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
+      font-family: 'Cinzel', serif;
+      background-color: #111;
+      color: #eee;
       margin: 0;
       padding: 0;
     }
 
     header {
       text-align: center;
-      margin: 20px 0;
-      color: #333;
+      padding: 20px 0;
+      background-color: #1a1a1a;
+      border-bottom: 2px solid #333;
     }
 
-    footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.8rem;
-      color: #888;
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #ffc107;
     }
 
-    footer a {
-      color: #333;
-      text-decoration: none;
+    main {
+      padding: 20px;
     }
 
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* Styles pour les sous-onglets */
     .tabs {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      overflow: hidden;
+      margin-bottom: 20px;
     }
 
     .tab-button {
       padding: 12px 20px;
-      margin: 0;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
+      margin: 0 5px;
+      background-color: #222;
+      border: 1px solid #555;
+      color: #ccc;
       cursor: pointer;
       font-weight: bold;
-      transition: background-color 0.3s ease;
+      transition: 0.3s ease;
+      border-radius: 8px 8px 0 0;
     }
 
     .tab-button:hover {
-      background-color: #e0e0e0;
+      background-color: #333;
     }
 
     .tab-button.active {
-      background-color: #4CAF50;
-      color: white;
-      border-bottom: none;
+      background-color: #ffc107;
+      color: #111;
     }
 
-    /* Contenu des sous-onglets */
     .tab-content {
       display: none;
-      margin-top: 20px;
       padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 0 0 12px 12px;
+      animation: fadeIn 0.3s ease;
     }
 
     .tab-content.active {
       display: block;
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     .fiche-personnage img {
       width: 150px;
-      height: auto;
       border-radius: 50%;
-      margin: 10px 0;
+      border: 3px solid #ffc107;
+      margin-top: 10px;
     }
 
     .indice {
-      background-color: #fafafa;
+      background-color: #222;
+      border-left: 5px solid #ffc107;
       padding: 10px;
-      margin-bottom: 10px;
+      margin: 10px 0;
       border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .indice p {
-      margin: 5px 0;
     }
 
     .fiabilite {
       font-weight: bold;
-      color: #ff9800;
     }
 
     .fiabilite.suspect {
@@ -112,120 +103,142 @@
       color: #4CAF50;
     }
 
-    button[type="submit"] {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
+    select, button[type="submit"], button {
+      background-color: #ffc107;
+      color: #111;
+      padding: 10px 15px;
       border: none;
-      cursor: pointer;
+      margin-top: 10px;
       border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
-    button[type="submit"]:hover {
-      background-color: #45a049;
+    button:hover {
+      background-color: #e0a800;
     }
 
-    /* Ajout d'une transition douce pour les boutons */
-    .tab-button, button[type="submit"] {
-      transition: background-color 0.3s ease;
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      background-color: #111;
+      border-top: 1px solid #333;
+    }
+
+    footer a {
+      color: #888;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Chrono */
+    #chrono {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-align: center;
+      color: #4CAF50;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>⚖️ Rôle et Indices - Murder Party</h1>
+    <h1>🕵️ Murder Party - Rôle & Indices</h1>
   </header>
 
   <main>
+    <div id="chrono">Temps restant : <span id="tempsRestant">15:00</span></div>
+
     <div class="tabs">
-      <button class="tab-button active" onclick="switchTab('fiche')">Fiche Personnage</button>
-      <button class="tab-button" onclick="switchTab('indices')">Indices</button>
-      <button class="tab-button" onclick="switchTab('vote')">Vote</button>
-      <button class="tab-button" onclick="switchTab('connexion')">Connexion avec un autre joueur</button>
+      <button class="tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
+      <button class="tab-button" onclick="switchTab('indices')">🧩 Indices</button>
+      <button class="tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
+      <button class="tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
     </div>
 
-    <section id="fiche" class="tab-content active">
-      <h2>Votre personnage : <span id="nomPersonnage">Nom du Personnage</span></h2>
-      <img src="image-personnage.jpg" alt="Image du Personnage" id="imagePersonnage">
-      <p id="histoirePersonnage">Histoire détaillée du personnage ici. Cela peut inclure des informations pertinentes pour le rôle du joueur.</p>
+    <section id="fiche" class="tab-content active fiche-personnage">
+      <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
+      <img src="image-personnage.jpg" alt="Image du Personnage">
+      <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble. Vous cachez une vérité... mais est-ce un crime ?</p>
+      <p><strong>Pouvoir :</strong> Vous pouvez interroger deux joueurs à chaque tour. Ils doivent vous dire une vérité ou mentir avec conviction.</p>
     </section>
 
     <section id="indices" class="tab-content">
       <h3>Vos indices :</h3>
-      <ul id="listeIndices">
-        <li class="indice" id="indice1">
-          <p>Indice 1: <span id="indiceDescription">Description de l'indice...</span></p>
-          <p><strong>Fiabilité:</strong> <span class="fiabilite fiable">Fiable</span></p>
-        </li>
-        <li class="indice" id="indice2">
-          <p>Indice 2: <span id="indiceDescription">Description de l'indice...</span></p>
-          <p><strong>Fiabilité:</strong> <span class="fiabilite suspect">Suspect</span></p>
-        </li>
-      </ul>
+      <div class="indice">
+        <p>🔍 "La victime a été vue en colère après avoir reçu une lettre anonyme."</p>
+        <p><span class="fiabilite fiable">Fiabilité : Haute</span></p>
+      </div>
+      <div class="indice">
+        <p>🔍 "Un joueur dit avoir vu un suspect quitter la pièce. Mais il avait bu."</p>
+        <p><span class="fiabilite suspect">Fiabilité : Incertaine</span></p>
+      </div>
     </section>
 
     <section id="vote" class="tab-content">
-      <h3>Votez pour le suspect :</h3>
+      <h3>Votez pour un suspect :</h3>
       <form id="voteForm">
-        <label for="suspect">Choisir un suspect :</label>
         <select id="suspect">
-          <option value="suspect1">Suspect 1</option>
-          <option value="suspect2">Suspect 2</option>
-          <option value="suspect3">Suspect 3</option>
+          <option value="Alaric">Inspecteur Alaric</option>
+          <option value="Violette">Madame Violette</option>
+          <option value="Brume">Docteur Brume</option>
         </select>
         <button type="submit">Voter</button>
       </form>
+      <div id="voteResult" style="margin-top: 10px;"></div>
     </section>
 
     <section id="connexion" class="tab-content">
-      <h3>Connexion avec un autre joueur :</h3>
-      <button onclick="connecterJoueur()">Se connecter avec un joueur</button>
+      <h3>Connexion entre joueurs :</h3>
+      <button onclick="connecterJoueur()">Tenter une connexion secrète</button>
     </section>
 
     <footer>
-      <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
-      <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
-      <a href="mentions-legales.html">Mentions légales</a>
+      <button onclick="window.location.href='accueil.html'">🏠 Accueil</button><br>
+      <p>© 2025 Murder Party. Tous droits réservés. <a href="mentions-legales.html">Mentions légales</a></p>
     </footer>
-
   </main>
 
   <script>
-    // Fonction pour changer d'onglet
     function switchTab(tabName) {
-      // Cacher tous les onglets
-      var contents = document.querySelectorAll('.tab-content');
-      contents.forEach(function(content) {
-        content.classList.remove('active');
-      });
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
 
-      // Désactiver tous les boutons
-      var buttons = document.querySelectorAll('.tab-button');
-      buttons.forEach(function(button) {
-        button.classList.remove('active');
-      });
-
-      // Afficher le contenu du sous-onglet sélectionné
       document.getElementById(tabName).classList.add('active');
-
-      // Activer le bouton correspondant
-      var activeButton = document.querySelector(`[onclick="switchTab('${tabName}')"]`);
-      activeButton.classList.add('active');
+      document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
     }
 
-    // Fonction pour simuler la connexion avec un autre joueur
     function connecterJoueur() {
-      alert("Connexion avec un autre joueur...");
+      const infos = [
+        "Vous apprenez que Violette a menti à un autre joueur.",
+        "Le joueur connecté possède un indice capital.",
+        "Votre connexion vous fait douter de vos certitudes."
+      ];
+      alert(infos[Math.floor(Math.random() * infos.length)]);
     }
 
-    // Fonction pour valider le formulaire de vote
     document.getElementById('voteForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      var suspect = document.getElementById('suspect').value;
-      alert('Vous avez voté pour ' + suspect);
+      const suspect = document.getElementById('suspect').value;
+      const zone = document.getElementById('voteResult');
+      zone.innerHTML = `<p>🕯️ Votre vote pour <strong>${suspect}</strong> a été scellé... Attendez le verdict.</p>`;
     });
+
+    // Chrono 15 minutes
+    let secondes = 15 * 60;
+    function updateChrono() {
+      const minutes = Math.floor(secondes / 60);
+      const sec = secondes % 60;
+      document.getElementById("tempsRestant").textContent = `${minutes}:${sec < 10 ? '0' : ''}${sec}`;
+      if (secondes > 0) secondes--;
+    }
+    setInterval(updateChrono, 1000);
   </script>
 </body>
 </html>
