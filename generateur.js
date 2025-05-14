@@ -20,7 +20,7 @@ const baseDeDonnees = {
 };
 
 // Fonction pour générer un scénario basé sur les paramètres choisis
-function genererScenario(periode, nombreJoueurs, modeDeJeu, nbCriminels) {
+function genererScenario(periode, nombreJoueurs, modeDeJeu, duree, nbCriminels, criminelFantome = false, avatarsLegendaires = false, periodeAutre = "") {
   const data = baseDeDonnees[periode];
 
   // Validation
@@ -31,18 +31,26 @@ function genererScenario(periode, nombreJoueurs, modeDeJeu, nbCriminels) {
     return "Nombre de criminels non autorisé pour cette époque.";
   }
 
-  // Génération aléatoire mais basée sur la structure
   const lieuChoisi = data.lieux[Math.floor(Math.random() * data.lieux.length)];
   const avatarsChoisis = data.avatars.slice(0, Math.min(nombreJoueurs, data.avatars.length));
 
-  return {
+  const scenario = {
     introduction: data.intro,
     objectif: data.objectif,
-    lieu: lieuChoisi,
     mode: modeDeJeu,
+    duree: duree,
+    periode: periode,
+    periodeAutre: periodeAutre,
+    nombreJoueurs: nombreJoueurs,
     criminels: nbCriminels,
+    criminelFantome: criminelFantome,
+    avatarsLegendaires: avatarsLegendaires,
+    lieu: lieuChoisi,
     avatars: avatarsChoisis
   };
+
+  localStorage.setItem("parametresPartie", JSON.stringify(scenario));
+  window.location.href = "lancement-partie.html";
 }
 
 // Fonction d’affichage dans l’interface HTML
