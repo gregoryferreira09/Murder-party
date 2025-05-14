@@ -66,20 +66,21 @@
   <a class="btn" href="creer-partie.html">Retour</a>
 
   <script>
-    const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+const introduction = localStorage.getItem("introduction");
+const objectif = localStorage.getItem("objectif");
 
-    if (scenarioData) {
-      const container = document.getElementById("scenarioContainer");
-      const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre ? scenarioData.periodeAutre : scenarioData.periode;
-      container.innerHTML = `
-        <h2>Introduction</h2>
-        <p>Bienvenue dans votre Murder Party !</p>
+if (introduction && objectif) {
+  const container = document.getElementById("scenarioContainer");
+  container.innerHTML = `
+    <h2>Introduction</h2>
+    <p>${introduction}</p>
 
-        <h2>Le crime</h2>
-        <p>Un crime mystérieux s’est produit, et il est maintenant à votre équipe de le résoudre avant la fin du temps imparti.</p>
-
-        <h2>Objectif général</h2>
-        <p>Résoudre le mystère avant la fin du temps imparti.</p>
+    <h2>Objectif général</h2>
+    <p>${objectif}</p>
+  `;
+} else {
+  document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
+}
 
         <h2>Détails du jeu</h2>
         <p>Mode de jeu : ${scenarioData.mode}</p>
