@@ -51,9 +51,13 @@
       color: #000;
     }
 
-    .message {
+    .message, .compteur {
       margin-top: 20px;
-      font-size: 1.1em;
+      font-size: 1.2em;
+    }
+
+    .compteur {
+      color: #87cefa;
     }
   </style>
 </head>
@@ -68,9 +72,14 @@
   <button onclick="rejoindreSalon()">Valider</button>
 
   <div class="message" id="message"></div>
+  <div class="compteur" id="compteur"></div>
 
   <script>
+    let aDejaRejoint = false;
+
     function rejoindreSalon() {
+      if (aDejaRejoint) return;
+
       const codeEntre = document.getElementById("codeInput").value.trim().toUpperCase();
       const codeSalon = localStorage.getItem("salonCode");
       const messageDiv = document.getElementById("message");
@@ -86,23 +95,46 @@
         let maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
 
         if (connectes >= maxJoueurs - 1) {
-          messageDiv.textContent = "Le salon est complet.";
+          messageDiv.textContent = "Le salon est déjà complet.";
           messageDiv.style.color = "#ffa500";
           return;
         }
 
         connectes += 1;
         localStorage.setItem("joueursConnectes", connectes.toString());
+        localStorage.setItem("joueurRejoint_" + Date.now(), "oui"); // pour éviter que le même joueur se reconnecte
+        aDejaRejoint = true;
 
-        messageDiv.textContent = "Connexion réussie ! En attente du début de la partie...";
+        messageDiv.textContent = "Connexion réussie !";
         messageDiv.style.color = "#90ee90";
 
-        // Ici, on peut rediriger ou désactiver les boutons si nécessaire
+        afficherCompteur();
+
       } else {
         messageDiv.textContent = "Code invalide. Vérifiez et réessayez.";
         messageDiv.style.color = "#ff6b6b";
       }
     }
+
+    function afficherCompteur() {
+      const compteurDiv = document.getElementById("compteur");
+      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
+      const maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
+      compteurDiv.textContent = `${connectes} joueur(s) sur ${maxJoueurs} connectés`;
+    }
+
+    // Vérification régulière toutes les secondes
+    setInterval(() => {
+      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
+      const maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
+
+      afficherCompteur();
+
+      // Quand tous les joueurs sont connectés, rediriger tout le monde
+      if (connectes >= maxJoueurs - 1) {
+        window.location.href = "choix-personnage.html";
+      }
+    }, 1000);
   </script>
 
 </body>
