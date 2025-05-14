@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Rôle et Indices - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>⚖️ Rôle et Indices - Murder Party</h1>
+  </header>
+
+  <main>
+    <section class="fiche-personnage">
+      <h2>Votre personnage : <span id="nomPersonnage">Nom du Personnage</span></h2>
+      <img src="image-personnage.jpg" alt="Image du Personnage" id="imagePersonnage">
+      <p id="histoirePersonnage">Histoire détaillée du personnage ici. Cela peut inclure des informations pertinentes pour le rôle du joueur.</p>
+    </section>
+
+    <section class="role-joueur">
+      <h3>Votre rôle :</h3>
+      <p id="roleJoueur">Vous êtes un <span id="roleType">Enquêteur</span> / <span id="roleType">Meurtrier</span></p>
+    </section>
+
+    <section class="indices">
+      <h3>Vos indices :</h3>
+      <ul id="listeIndices">
+        <li class="indice" id="indice1">
+          <p>Indice 1: <span id="indiceDescription">Description de l'indice...</span></p>
+          <p><strong>Fiabilité:</strong> <span class="fiabilite">Fiable</span></p>
+        </li>
+        <li class="indice" id="indice2">
+          <p>Indice 2: <span id="indiceDescription">Description de l'indice...</span></p>
+          <p><strong>Fiabilité:</strong> <span class="fiabilite">Suspect</span></p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="actions">
+      <button onclick="validerRole()">Valider mon rôle</button>
+      <button onclick="voirIndices()">Voir plus d'indices</button>
+    </section>
+  </main>
+
+  <footer>
+    <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
+    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
+
+  <script>
+    // Exemple d'affichage dynamique pour le rôle et les indices
+    function validerRole() {
+      alert("Rôle validé, vous pouvez maintenant commencer la partie !");
+    }
+
+    function voirIndices() {
+      alert("Afficher les indices supplémentaires.");
+    }
+  </script>
+</body>
+</html>
