@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Rejoindre une partie - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1b1b1b;
+      color: #e0e0e0;
+      font-family: 'Cormorant Garamond', serif;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      color: #e9c78c;
+      font-size: 2.5em;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 1.2em;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      background-color: #2c2c2c;
+      color: #fff;
+      margin: 20px 0;
+      width: 220px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #000;
+      color: #fff;
+      border: 2px solid #e9c78c;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1.1em;
+      cursor: pointer;
+      font-family: 'Cinzel Decorative', serif;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #e9c78c;
+      color: #000;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔑 Rejoindre une partie</h1>
+
+  <p>Entrez le code de salon reçu :</p>
+  <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" />
+
+  <br>
+  <button onclick="rejoindreSalon()">Valider</button>
+
+  <div class="message" id="message"></div>
+
+  <script>
+    function rejoindreSalon() {
+      const codeEntre = document.getElementById("codeInput").value.trim().toUpperCase();
+      const codeSalon = localStorage.getItem("salonCode");
+      const messageDiv = document.getElementById("message");
+
+      if (!codeSalon) {
+        messageDiv.textContent = "Aucun salon actif trouvé. Demandez au créateur de la partie de créer un salon.";
+        messageDiv.style.color = "#ff6b6b";
+        return;
+      }
+
+      if (codeEntre === codeSalon) {
+        let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
+        let maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
+
+        if (connectes >= maxJoueurs - 1) {
+          messageDiv.textContent = "Le salon est complet.";
+          messageDiv.style.color = "#ffa500";
+          return;
+        }
+
+        connectes += 1;
+        localStorage.setItem("joueursConnectes", connectes.toString());
+
+        messageDiv.textContent = "Connexion réussie ! En attente du début de la partie...";
+        messageDiv.style.color = "#90ee90";
+
+        // Ici, on peut rediriger ou désactiver les boutons si nécessaire
+      } else {
+        messageDiv.textContent = "Code invalide. Vérifiez et réessayez.";
+        messageDiv.style.color = "#ff6b6b";
+      }
+    }
+  </script>
+
+</body>
+</html>
