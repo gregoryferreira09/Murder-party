@@ -152,3 +152,15 @@ a:hover {
   height: 20px;
   transform: scale(1.3);
 }
+
+/* Ajout d'effets pour la partie boutons et interactions */
+button:focus, button:active {
+  outline: none;
+  background-color: #3d2b1f;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Ajout de transitions douces pour les interactions */
+* {
+  transition: all 0.3s ease;
+}
