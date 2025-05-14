@@ -82,8 +82,10 @@
     <button id="valider-choix" disabled>Valider mon personnage</button>
   </main>
 
+  <!-- Fichier JS contenant les données des personnages -->
+  <script src="personnages.js"></script>
+
   <script>
-    // Fonction pour afficher les personnages en fonction du nombre de joueurs
     function afficherPersonnages() {
       const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
       if (!scenarioData) {
@@ -93,18 +95,11 @@
 
       const nombreJoueurs = scenarioData.nombreJoueurs;
       const galeriePersonnages = document.getElementById("galeriePersonnages");
-      const personnages = [];
 
-      // Créer une liste de personnages (ici, tu peux personnaliser cette liste avec les images et noms des personnages)
-      for (let i = 1; i <= nombreJoueurs; i++) {
-        personnages.push({
-          id: i,
-          nom: `Personnage ${i}`,
-          image: `images/perso${i}.png` // Assure-toi que les images existent
-        });
-      }
+      // Récupère les n premiers personnages de la liste
+      const personnages = listeDesPersonnages.slice(0, nombreJoueurs);
 
-      // Affichage dynamique des personnages
+      // Affichage dynamique
       galeriePersonnages.innerHTML = personnages.map(perso => `
         <div class="carte-personnage" data-id="${perso.id}">
           <img src="${perso.image}" alt="${perso.nom}">
@@ -112,30 +107,30 @@
         </div>
       `).join("");
 
-      // Ajouter un gestionnaire d'événements pour sélectionner un personnage
-      const cartesPersonnages = document.querySelectorAll(".carte-personnage");
-      cartesPersonnages.forEach(carte => {
+      // Gestion de la sélection
+      const cartes = document.querySelectorAll(".carte-personnage");
+      cartes.forEach(carte => {
         carte.addEventListener("click", () => {
-          cartesPersonnages.forEach(card => card.style.border = "2px solid #e9c78c"); // réinitialiser la bordure
-          carte.style.border = "2px solid #f44336"; // bordure rouge sur le personnage sélectionné
-          localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id")); // Sauvegarde l'ID du personnage
-          document.getElementById("valider-choix").disabled = false; // Active le bouton de validation
+          cartes.forEach(card => card.style.border = "2px solid #e9c78c");
+          carte.style.border = "2px solid #f44336";
+          localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
+          document.getElementById("valider-choix").disabled = false;
         });
       });
     }
 
-    // Fonction de validation du choix
     document.getElementById("valider-choix").addEventListener("click", () => {
       const personnageId = localStorage.getItem("personnageSelectionne");
       if (personnageId) {
-        // Redirige vers la page suivante ou exécute d'autres actions
-        window.location.href = "Rôle-et-indices.html"; // Remplacer par la page suivante
+        window.location.href = "Rôle-et-indices.html";
       }
     });
 
-    // Charger les personnages au démarrage
     window.onload = afficherPersonnages;
   </script>
+
+</body>
+</html>
 
 </body>
 </html>
