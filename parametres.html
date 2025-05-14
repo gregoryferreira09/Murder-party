@@ -5,42 +5,46 @@
   <title>Paramètres - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="param-option">
-  <label for="toggleSound">Activer les sons (notifications)</label>
-  <input type="checkbox" id="toggleSound">
-</div>
 
   <header>
     <h1>⚙️ Paramètres</h1>
   </header>
 
   <main>
-    <section class="parametres">
-      <label for="pseudo">Changer de pseudo :</label>
-      <input type="text" id="pseudo" placeholder="Nouveau pseudo">
+    <div class="scenario">
+      <section class="parametres">
+        <div class="param-option">
+          <label for="toggleSound">Activer les sons (notifications)</label>
+          <input type="checkbox" id="toggleSound">
+        </div>
 
-      <label for="langue">Langue :</label>
-      <select id="langue">
-        <option value="fr">Français</option>
-        <option value="en">English</option>
-      </select>
+        <label for="pseudo">Changer de pseudo :</label>
+        <input type="text" id="pseudo" placeholder="Nouveau pseudo">
 
-      <label>
-        <input type="checkbox" checked> Activer les sons
-      </label>
+        <label for="langue">Langue :</label>
+        <select id="langue">
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+        </select>
 
-      <label>
-        <input type="checkbox"> Notifications en jeu
-      </label>
+        <label>
+          <input type="checkbox" checked> Activer les sons
+        </label>
 
-      <button>Sauvegarder les paramètres</button>
-    </section>
+        <label>
+          <input type="checkbox"> Notifications en jeu
+        </label>
 
-    <section class="actions">
-      <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
-    </section>
+        <button>Sauvegarder les paramètres</button>
+      </section>
+
+      <section class="actions">
+        <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
+      </section>
+    </div>
   </main>
 
   <footer>
