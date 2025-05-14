@@ -116,25 +116,27 @@
       }
     }
 
-    function afficherCompteur() {
-      const compteurDiv = document.getElementById("compteur");
-      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
-      const maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
-      compteurDiv.textContent = `${connectes} joueur(s) sur ${maxJoueurs} connectés`;
-    }
+function afficherCompteur() {
+  const compteurDiv = document.getElementById("compteur");
+  const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
+  const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
+  const maxJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 6;
+  compteurDiv.textContent = `${connectes} joueur(s) sur ${maxJoueurs} connectés`;
+}
 
-    // Vérification régulière toutes les secondes
-    setInterval(() => {
-      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
-      const maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
+// Vérification régulière toutes les secondes
+setInterval(() => {
+  const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
+  const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
+  const maxJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 6;
 
-      afficherCompteur();
+  afficherCompteur();
 
-      // Quand tous les joueurs sont connectés, rediriger tout le monde
-      if (connectes >= maxJoueurs - 1) {
-        window.location.href = "choix-personnage.html";
-      }
-    }, 1000);
+  // Quand tous les joueurs sont connectés, rediriger tout le monde
+  if (connectes >= maxJoueurs - 1) {
+    window.location.href = "choix-personnage.html";
+  }
+}, 1000);
   </script>
 
 </body>
