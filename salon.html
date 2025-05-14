@@ -78,17 +78,17 @@
 
     // Stockage du salon pour simulation locale
     localStorage.setItem("salonCode", salonCode);
-    localStorage.setItem("joueursConnectes", "0");
+    localStorage.setItem("joueursConnectes", "1"); // Le créateur est comptabilisé comme connecté dès le départ
 
     document.getElementById("codeSalon").textContent = salonCode;
 
     // Simule un "serveur" de salon : surveillance
     setInterval(() => {
-      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
+      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
       const etat = document.getElementById("etatSalon");
-      etat.textContent = `${connectes} / ${joueursAttendus} joueurs connectés`;
+      etat.textContent = `${connectes} / ${totalJoueurs} joueurs connectés`;
 
-      if (connectes >= joueursAttendus) {
+      if (connectes >= totalJoueurs) {
         document.getElementById("demarrerPartie").disabled = false;
         etat.textContent = "Tous les joueurs sont connectés ! Vous pouvez démarrer la partie.";
       }
