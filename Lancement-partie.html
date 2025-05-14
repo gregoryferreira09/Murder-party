@@ -1,90 +1,98 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lancement de la Partie</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Lancement de la Partie - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1b1b1b;
+      color: #e0e0e0;
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      color: #e9c78c;
+    }
+
+    .scenario {
+      background-color: #2c1b1b;
+      border: 2px solid #e9c78c;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      font-size: 1.2em;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .btn {
+      background-color: #000000;
+      color: #ffffff;
+      border: 2px solid #e9c78c;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1.1em;
+      cursor: pointer;
+      margin: 10px;
+      text-decoration: none;
+      font-family: 'Cinzel Decorative', serif;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #e9c78c;
+      color: #000000;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Informations de la Partie</h1>
+  <h1>Scénario généré</h1>
 
-    <div id="scenarioContainer">
-        <!-- Les informations de la partie seront affichées ici -->
-    </div>
+  <div id="scenarioContainer" class="scenario">
+    Chargement du scénario...
+  </div>
 
-    <br>
-    <button onclick="demarrerPartie()">Démarrer la Partie</button>
+  <a class="btn" href="partie-en-cours.html">Commencer la partie</a>
+  <a class="btn" href="creer-partie.html">Retour à l'accueil</a>
 
-    <script>
-        // Fonction pour récupérer les paramètres du scénario depuis le localStorage et les afficher
-        function afficherScenario() {
-            const scenarioJson = localStorage.getItem("parametresPartie");
-            if (!scenarioJson) {
-                document.getElementById('scenarioContainer').innerHTML = "<p>Aucune partie en cours.</p>";
-                return;
-            }
+  <script>
+    const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
 
-            const scenario = JSON.parse(scenarioJson);
+    if (scenarioData) {
+      const container = document.getElementById("scenarioContainer");
+      const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre ? scenarioData.periodeAutre : scenarioData.periode;
+      container.innerHTML = `
+        <h2>Introduction</h2>
+        <p>Bienvenue dans votre Murder Party !</p>
 
-            // Affichage des informations du scénario
-            document.getElementById('scenarioContainer').innerHTML = `
-                <h2>Introduction</h2>
-                <p>${scenario.introduction}</p>
+        <h2>Le crime</h2>
+        <p>Un crime mystérieux s’est produit, et il est maintenant à votre équipe de le résoudre avant la fin du temps imparti.</p>
 
-                <h2>Objectif</h2>
-                <p>${scenario.objectif}</p>
+        <h2>Objectif général</h2>
+        <p>Résoudre le mystère avant la fin du temps imparti.</p>
 
-                <h2>Lieu choisi</h2>
-                <p>${scenario.lieu}</p>
+        <h2>Détails du jeu</h2>
+        <p>Mode de jeu : ${scenarioData.mode}</p>
+        <p>Durée de la partie : ${scenarioData.duree} minutes</p>
+        <p>Période : ${periode}</p>
+        <p>Nombre de joueurs : ${scenarioData.nombreJoueurs}</p>
+        <p>Nombre de criminels : ${scenarioData.criminels}</p>
+        <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
+        <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
+      `;
+    } else {
+      document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
+    }
+  </script>
 
-                <h2>Mode de jeu</h2>
-                <p>${scenario.mode}</p>
-
-                <h2>Durée</h2>
-                <p>${scenario.duree} minutes</p>
-
-                <h2>Nombre de joueurs</h2>
-                <p>${scenario.nombreJoueurs}</p>
-
-                <h2>Nombre de criminels</h2>
-                <p>${scenario.criminels}</p>
-
-                <h2>Criminels fantômes</h2>
-                <p>${scenario.criminelFantome ? "Oui" : "Non"}</p>
-
-                <h2>Avatars légendaires disponibles</h2>
-                <ul>
-                    ${scenario.avatars.map(avatar => `<li>${avatar}</li>`).join("")}
-                </ul>
-            `;
-        }
-
-        // Appel de la fonction au chargement de la page
-        window.onload = afficherScenario;
-
-        // Fonction pour démarrer la partie
-        function demarrerPartie() {
-            // Ici tu peux ajouter la logique pour démarrer la partie, rediriger vers une page de jeu, etc.
-            alert("La partie commence !");
-
-            // Exemple de redirection (remplacer par la vraie page de jeu)
-            window.location.href = "jeu.html";  // Remplace "jeu.html" par le nom réel de la page de jeu
-        }
-    </script>
-
-</body>
-</html>
+</body
