@@ -16,7 +16,7 @@
   <meta name="description" content="Ludus Veritae - Entrez dans le mystère de la Murder Party">
   <meta name="theme-color" content="#2c1b1b">
 
-  <!-- Préchargement d’image pour accélérer la transition -->
+  <!-- Préchargement d’image -->
   <link rel="preload" href="../SRC/HTML/background.jpg" as="image">
 
   <!-- Font Awesome -->
@@ -41,6 +41,7 @@
       color: #e0e0e0;
       cursor: pointer;
       position: relative;
+      padding: 0 5vw;
     }
 
     .fullscreen:focus {
@@ -59,7 +60,7 @@
       font-family: 'Cinzel Decorative', serif;
       font-size: 4em;
       margin: 0;
-      color: #e0c185; /* Jaune doré */
+      color: #e0c185;
       transition: color 1s ease, transform 0.8s ease;
       transform: scale(0.95);
       animation: zoomIn 1s ease-out forwards;
@@ -109,8 +110,45 @@
     .fade-text {
       color: #2c1b1b !important;
     }
-  </style>
 
+    /* -------------------------
+       ✅ Responsive Mobile
+    --------------------------*/
+    @media (max-width: 768px) {
+      .fullscreen h1 {
+        font-size: 2.8em;
+      }
+
+      .fullscreen i {
+        font-size: 2em;
+        margin-top: 15px;
+      }
+
+      .instruction {
+        font-size: 1em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .fullscreen h1 {
+        font-size: 2.2em;
+      }
+
+      .fullscreen i {
+        font-size: 1.5em;
+        margin-top: 10px;
+      }
+
+      .instruction {
+        font-size: 0.95em;
+        margin-top: 15px;
+      }
+
+      .fullscreen {
+        padding: 0 4vw;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -129,9 +167,8 @@
       content.classList.add('fade-text');
 
       setTimeout(() => {
-        const fadeOut = document.getElementById('fadeOut');
-        fadeOut.classList.add('active');
-      }, 1000);
+        document.getElementById('fadeOut').classList.add('active');
+      }, 500); // plus rapide
 
       setTimeout(() => {
         window.location.href = '../SRC/HTML/accueil.html';
