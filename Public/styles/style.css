@@ -1,279 +1,523 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Interface de jeu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    /* Corps de la page */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Cormorant Garamond', serif;
-      background-image: url('https://www.transparenttextures.com/patterns/emeraude-pattern.png'), url('https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg');
-      background-color: #1b1b1b;
-      color: #f4e4c1;
-      background-size: 100% 100%, cover;
-      background-attachment: fixed;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
+<!DOCTYPE html> 
 
-    /* En-tête */
-    header {
-      text-align: center;
-      background: rgba(0, 0, 0, 0.6);
-      width: 100%;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
+<html lang="fr"> 
 
-    h1 {
-      font-family: 'Cinzel Decorative', cursive;
-      font-size: 3em;
-      color: #e0c185;
-      margin: 0;
-    }
+<head> 
 
-    /* Contenu principal */
-    main {
-      flex: 1;
-      width: 100%;
-      max-width: 800px;
-      padding: 40px 20px;
-      text-align: center;
-    }
+  <meta charset="UTF-8"> 
 
-    .menu-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-    }
+  <title>Interface de jeu</title> 
 
-    button {
-      background: #2c1b1b;
-      border: 2px solid #e9c78c;
-      color: #fdf3df;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4em;
-      padding: 15px 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-radius: 8px;
-      width: 80%;
-      max-width: 300px;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-    button:hover {
-      background-color: #3d2b1f;
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #e0c18588;
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet"> 
 
-    /* Onglets et sous-onglets */
-    nav button {
-      background-color: #3d2b1f;
-      color: #e0c185;
-      padding: 15px;
-      border: none;
-      font-size: 1.2em;
-      margin: 5px;
-      cursor: pointer;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-    }
+  <style> 
 
-    nav button:hover {
-      background-color: #e0c185;
-      color: #2c1b1b;
-    }
+    /* Corps de la page */ 
 
-    /* Conteneur pour les sections de jeu */
-    .onglet-jeu, .fiche-indices {
-      display: none;
-      margin-top: 20px;
-    }
+    body { 
 
-    .onglet-jeu.active, .fiche-indices.active {
-      display: block;
-    }
+      margin: 0; 
 
-    /* Partie de jeu avec les indices */
-    .indices, .connexion, .vote {
-      margin-top: 20px;
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
+      padding: 0; 
 
-    .joueur {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
+      font-family: 'Cormorant Garamond', serif; 
 
-    .joueur img {
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      margin-right: 15px;
-    }
+      background-image: url('https://www.transparenttextures.com/patterns/emeraude-pattern.png'), url('https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg'); 
 
-    .notif-indice {
-      background-color: red;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 50%;
-      font-weight: bold;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
+      background-color: #1b1b1b; 
 
-    .fiche-indices {
-      display: none;
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #2c1b1b;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
+      color: #f4e4c1; 
 
-    .fiche-indices h3 {
-      font-size: 1.8em;
-      color: #e0c185;
-      margin-bottom: 10px;
-    }
+      background-size: 100% 100%, cover; 
 
-    .fiche-indices ul {
-      color: #f4e4c1;
-      list-style-type: none;
-      padding: 0;
-    }
+      background-attachment: fixed; 
 
-    .fiche-indices li {
-      font-size: 1.2em;
-    }
+      min-height: 100vh; 
 
-    /* Pied de page */
-    footer {
-      background: rgba(0, 0, 0, 0.5);
-      width: 100%;
-      padding: 15px;
-      text-align: center;
-      font-size: 0.9em;
-      color: #c9b49a;
-      margin-top: auto;
-    }
+      display: flex; 
 
-    a {
-      color: #d1c5a3;
-      text-decoration: none;
-    }
+      flex-direction: column; 
 
-    a:hover {
-      text-decoration: underline;
-    }
+      align-items: center; 
 
-    /* Responsive */
-    @media (max-width: 600px) {
-      button {
-        width: 90%;
-      }
+      justify-content: flex-start; 
 
-      .menu-buttons {
-        gap: 10px;
-      }
-    }
-  </style>
-</head>
-<body>
+    } 
 
-  <header>
-    <h1>Jeu Mystère</h1>
-    <p>Temps restant : 38:12</p>
-  </header>
+ 
+    /* En-tête */ 
 
-  <main>
-    <!-- Navigation entre onglets -->
-    <nav>
-      <button onclick="toggleOnglet('jeu')">🧩 Jeu</button>
-      <button onclick="toggleOnglet('fiche')">📄 Ma Fiche</button>
-    </nav>
+    header { 
 
-    <!-- Contenu du jeu -->
-    <section class="onglet-jeu active">
-      <nav>
-        <button onclick="toggleSection('vote')">🔴 Vote</button>
-        <button onclick="toggleSection('connexion')">🔵 Connexion</button>
-        <button onclick="toggleSection('indices')">🟡 Indices</button>
-      </nav>
+      text-align: center; 
 
-      <section id="vote" class="vote">
-        <div class="joueur">
-          <img src="images/perso1.png" alt="Perso 1">
-          <p>Inspecteur Lenoir</p>
-        </div>
-        <button>Valider mon vote</button>
-      </section>
+      background: rgba(0, 0, 0, 0.6); 
 
-      <section id="connexion" class="connexion">
-        <div class="joueur">
-          <img src="images/perso2.png" alt="Perso 2">
-          <p>Mlle Rose</p>
-        </div>
-        <button>Valider la connexion</button>
-      </section>
+      width: 100%; 
 
-      <section id="indices" class="indices">
-        <div class="joueur">
-          <img src="images/perso3.png" alt="Perso 3">
-          <p>Professeur Violet</p>
-          <span class="notif-indice">2</span>
-        </div>
-        <div class="fiche-indices">
-          <h3>Professeur Violet</h3>
-          <ul>
-            <li>Vu avec la victime avant sa mort</li>
-            <li>A bu un verre suspect au salon</li>
-          </ul>
-        </div>
-      </section>
-    </section>
+      padding: 20px; 
 
-    <!-- Fiche utilisateur -->
-    <section class="fiche-indices">
-      <h3>Ma Fiche</h3>
-      <p>Informations personnelles et indices recueillis ici.</p>
-    </section>
-  </main>
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
 
-  <footer>
-    <p>© 2025 Jeu Mystère | Tous droits réservés</p>
-  </footer>
+    } 
 
-  <script>
-    function toggleOnglet(onglet) {
-      document.querySelector('.onglet-jeu').classList.remove('active');
-      document.querySelector('.fiche-indices').classList.remove('active');
-      if (onglet === 'jeu') {
-        document.querySelector('.onglet-jeu').classList.add('active');
-      } else {
-        document.querySelector('.fiche-indices').classList.add('active');
-      }
-    }
+ 
+    h1 { 
 
-    function toggleSection(section) {
-      const sectionElement = document.getElementById(section);
-      sectionElement.classList.toggle('active');
-    }
-  </script>
+      font-family: 'Cinzel Decorative', cursive; 
 
-</body>
+      font-size: 3em; 
+
+      color: #e0c185; 
+
+      margin: 0; 
+
+    } 
+
+ 
+    /* Contenu principal */ 
+
+    main { 
+
+      flex: 1; 
+
+      width: 100%; 
+
+      max-width: 800px; 
+
+      padding: 40px 20px; 
+
+      text-align: center; 
+
+    } 
+
+ 
+    .menu-buttons { 
+
+      display: flex; 
+
+      flex-direction: column; 
+
+      gap: 20px; 
+
+      align-items: center; 
+
+    } 
+
+ 
+    button { 
+
+      background: #2c1b1b; 
+
+      border: 2px solid #e9c78c; 
+
+      color: #fdf3df; 
+
+      font-family: 'Cormorant Garamond', serif; 
+
+      font-size: 1.4em; 
+
+      padding: 15px 30px; 
+
+      cursor: pointer; 
+
+      transition: all 0.3s ease; 
+
+      border-radius: 8px; 
+
+      width: 80%; 
+
+      max-width: 300px; 
+
+    } 
+
+ 
+    button:hover { 
+
+      background-color: #3d2b1f; 
+
+      transform: scale(1.05); 
+
+      box-shadow: 0 0 10px #e0c18588; 
+
+    } 
+
+ 
+    /* Onglets et sous-onglets */ 
+
+    nav button { 
+
+      background-color: #3d2b1f; 
+
+      color: #e0c185; 
+
+      padding: 15px; 
+
+      border: none; 
+
+      font-size: 1.2em; 
+
+      margin: 5px; 
+
+      cursor: pointer; 
+
+      border-radius: 10px; 
+
+      transition: all 0.3s ease; 
+
+    } 
+
+ 
+    nav button:hover { 
+
+      background-color: #e0c185; 
+
+      color: #2c1b1b; 
+
+    } 
+
+ 
+    /* Conteneur pour les sections de jeu */ 
+
+    .onglet-jeu, .fiche-indices { 
+
+      display: none; 
+
+      margin-top: 20px; 
+
+    } 
+
+ 
+    .onglet-jeu.active, .fiche-indices.active { 
+
+      display: block; 
+
+    } 
+
+ 
+    /* Partie de jeu avec les indices */ 
+
+    .indices, .connexion, .vote { 
+
+      margin-top: 20px; 
+
+      padding: 20px; 
+
+      background-color: rgba(0, 0, 0, 0.6); 
+
+      border-radius: 12px; 
+
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); 
+
+    } 
+
+ 
+    .joueur { 
+
+      display: flex; 
+
+      align-items: center; 
+
+      margin-bottom: 10px; 
+
+    } 
+
+ 
+    .joueur img { 
+
+      border-radius: 50%; 
+
+      width: 50px; 
+
+      height: 50px; 
+
+      margin-right: 15px; 
+
+    } 
+
+ 
+    .notif-indice { 
+
+      background-color: red; 
+
+      color: white; 
+
+      padding: 5px 10px; 
+
+      border-radius: 50%; 
+
+      font-weight: bold; 
+
+      position: absolute; 
+
+      top: 10px; 
+
+      right: 10px; 
+
+    } 
+
+ 
+    .fiche-indices { 
+
+      display: none; 
+
+      margin-top: 20px; 
+
+      padding: 20px; 
+
+      background-color: #2c1b1b; 
+
+      border-radius: 10px; 
+
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+
+    } 
+
+ 
+    .fiche-indices h3 { 
+
+      font-size: 1.8em; 
+
+      color: #e0c185; 
+
+      margin-bottom: 10px; 
+
+    } 
+
+ 
+    .fiche-indices ul { 
+
+      color: #f4e4c1; 
+
+      list-style-type: none; 
+
+      padding: 0; 
+
+    } 
+
+ 
+    .fiche-indices li { 
+
+      font-size: 1.2em; 
+
+    } 
+
+ 
+    /* Pied de page */ 
+
+    footer { 
+
+      background: rgba(0, 0, 0, 0.5); 
+
+      width: 100%; 
+
+      padding: 15px; 
+
+      text-align: center; 
+
+      font-size: 0.9em; 
+
+      color: #c9b49a; 
+
+      margin-top: auto; 
+
+    } 
+
+ 
+    a { 
+
+      color: #d1c5a3; 
+
+      text-decoration: none; 
+
+    } 
+
+ 
+    a:hover { 
+
+      text-decoration: underline; 
+
+    } 
+
+ 
+    /* Responsive */ 
+
+    @media (max-width: 600px) { 
+
+      button { 
+
+        width: 90%; 
+
+      } 
+
+ 
+      .menu-buttons { 
+
+        gap: 10px; 
+
+      } 
+
+    } 
+
+  </style> 
+
+</head> 
+
+<body> 
+
+ 
+  <header> 
+
+    <h1>Jeu Mystère</h1> 
+
+    <p>Temps restant : 38:12</p> 
+
+  </header> 
+
+ 
+  <main> 
+
+    <!-- Navigation entre onglets --> 
+
+    <nav> 
+
+      <button onclick="toggleOnglet('jeu')">🧩 Jeu</button> 
+
+      <button onclick="toggleOnglet('fiche')">📄 Ma Fiche</button> 
+
+    </nav> 
+
+ 
+    <!-- Contenu du jeu --> 
+
+    <section class="onglet-jeu active"> 
+
+      <nav> 
+
+        <button onclick="toggleSection('vote')">🔴 Vote</button> 
+
+        <button onclick="toggleSection('connexion')">🔵 Connexion</button> 
+
+        <button onclick="toggleSection('indices')">🟡 Indices</button> 
+
+      </nav> 
+
+ 
+      <section id="vote" class="vote"> 
+
+        <div class="joueur"> 
+
+          <img src="images/perso1.png" alt="Perso 1"> 
+
+          <p>Inspecteur Lenoir</p> 
+
+        </div> 
+
+        <button>Valider mon vote</button> 
+
+      </section> 
+
+ 
+      <section id="connexion" class="connexion"> 
+
+        <div class="joueur"> 
+
+          <img src="images/perso2.png" alt="Perso 2"> 
+
+          <p>Mlle Rose</p> 
+
+        </div> 
+
+        <button>Valider la connexion</button> 
+
+      </section> 
+
+ 
+      <section id="indices" class="indices"> 
+
+        <div class="joueur"> 
+
+          <img src="images/perso3.png" alt="Perso 3"> 
+
+          <p>Professeur Violet</p> 
+
+          <span class="notif-indice">2</span> 
+
+        </div> 
+
+        <div class="fiche-indices"> 
+
+          <h3>Professeur Violet</h3> 
+
+          <ul> 
+
+            <li>Vu avec la victime avant sa mort</li> 
+
+            <li>A bu un verre suspect au salon</li> 
+
+          </ul> 
+
+        </div> 
+
+      </section> 
+
+    </section> 
+
+    <!-- Fiche utilisateur --> 
+
+    <section class="fiche-indices"> 
+
+      <h3>Ma Fiche</h3> 
+
+      <p>Informations personnelles et indices recueillis ici.</p> 
+
+    </section> 
+
+  </main> 
+
+  <footer> 
+
+    <p>© 2025 Jeu Mystère | Tous droits réservés</p> 
+
+  </footer> 
+
+  <script> 
+
+    function toggleOnglet(onglet) { 
+
+      document.querySelector('.onglet-jeu').classList.remove('active'); 
+
+      document.querySelector('.fiche-indices').classList.remove('active'); 
+
+      if (onglet === 'jeu') { 
+
+        document.querySelector('.onglet-jeu').classList.add('active'); 
+
+      } else { 
+
+        document.querySelector('.fiche-indices').classList.add('active'); 
+
+      } 
+
+    } 
+
+    function toggleSection(section) { 
+
+      const sectionElement = document.getElementById(section); 
+
+      document.querySelectorAll('.vote, .connexion, .indices').forEach(s => s.style.display = 'none'); 
+
+      if (sectionElement) { 
+
+        sectionElement.style.display = 'block'; 
+
+      } 
+
+    } 
+
+  </script> 
+
+</body> 
 </html>
