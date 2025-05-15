@@ -156,7 +156,6 @@
     const scenario = genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs);
 
     localStorage.setItem("scenarioData", JSON.stringify(scenario));
-
     localStorage.setItem("introduction", scenario.introduction);
     localStorage.setItem("objectif", scenario.objectif);
     localStorage.setItem("parametresPartie", JSON.stringify({
@@ -188,7 +187,7 @@
       personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires));
     }
 
-    return { introduction, crime, objectifGlobal, personnages };
+    return { introduction, crime, objectif: objectifGlobal, personnages };
   }
 
   function genererPersonnage(index, criminels, avatarsLegendaires) {
@@ -215,7 +214,6 @@
     localStorage.removeItem("introduction");
     localStorage.removeItem("objectif");
 
-    // 🔗 Socket.io : récupérer le code de salon dans l'URL
     const params = new URLSearchParams(window.location.search);
     const salonCode = params.get("code");
 
