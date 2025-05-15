@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <title>Accueil - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    /* Corps de la page */
     body {
       margin: 0;
       padding: 0;
@@ -24,7 +25,6 @@
       text-align: center;
     }
 
-    /* En-tête */
     header {
       text-align: center;
       background: rgba(0, 0, 0, 0.6);
@@ -40,7 +40,6 @@
       margin: 0;
     }
 
-    /* Contenu principal */
     main {
       flex: 1;
       width: 100%;
@@ -86,7 +85,6 @@
       box-shadow: 0 0 10px #e0c18588;
     }
 
-    /* Pied de page */
     footer {
       background: rgba(0, 0, 0, 0.5);
       width: 100%;
@@ -106,7 +104,6 @@
       text-decoration: underline;
     }
 
-    /* Responsive */
     @media (max-width: 600px) {
       button {
         width: 90%;
@@ -118,6 +115,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <header>
@@ -127,10 +125,7 @@
   <main>
     <div class="scenario">
       <section class="menu-buttons">
-        <!-- MODIFIÉ ICI : bouton déclenche Socket.io -->
-        <button id="btn-creer-salon">🎮 Créer une partie</button>
-        <p id="code-salon" style="margin-top: 10px;"></p>
-
+        <button onclick="window.location.href='creer-partie.html'">🎮 Créer une partie</button>
         <button onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
         <button onclick="window.location.href='profil-joueur.html'">👤 Profil</button>
         <button onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
@@ -144,8 +139,6 @@
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
-  <!-- AJOUTÉ ICI : scripts Socket.io -->
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="js/client.js"></script>
 </body>
+
 </html>
