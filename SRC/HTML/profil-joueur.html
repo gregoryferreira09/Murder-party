@@ -59,8 +59,15 @@
       border: 0;
     }
 
-    .feedback-message.error {
+    .feedback-message.error,
+    .feedback-message.erreur {
       color: #c00;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    .feedback-message.succes {
+      color: green;
       font-weight: bold;
       margin-top: 0.5rem;
     }
@@ -89,9 +96,17 @@
         aria-haspopup="dialog"
         aria-controls="modal"
         onclick="ouvrirModal()"
-        onerror="this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';"
+        onerror="this.onerror=null; this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';"
       />
-      <button type="button" onclick="ouvrirModal()" aria-haspopup="dialog" aria-controls="modal">Changer d'avatar</button>
+      <button
+        type="button"
+        onclick="ouvrirModal()"
+        aria-haspopup="dialog"
+        aria-controls="modal"
+        aria-label="Ouvrir la sélection d'avatar"
+      >
+        Changer d'avatar
+      </button>
     </section>
 
     <!-- Section Pseudo -->
@@ -142,9 +157,10 @@
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
+      aria-describedby="avatar-list"
       tabindex="-1"
     >
-      <div class="modal-content" role="document" tabindex="-1">
+      <div class="modal-content" role="document">
         <button
           type="button"
           class="close-btn"
