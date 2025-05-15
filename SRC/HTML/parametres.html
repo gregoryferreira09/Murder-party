@@ -18,12 +18,10 @@
   <main>
     <div class="scenario">
       <section class="parametres">
-        <div class="param-option">
-          <label>
-            <input type="checkbox" id="toggleSound" />
-            Activer les sons (notifications)
-          </label>
-        </div>
+        <label class="param-option">
+          <input type="checkbox" id="toggleSound" />
+          Activer les sons (notifications)
+        </label>
 
         <label for="pseudo">Changer de pseudo :</label>
         <input type="text" id="pseudo" placeholder="Nouveau pseudo" />
@@ -34,16 +32,16 @@
           <option value="en">English</option>
         </select>
 
-        <label>
-          <input type="checkbox" />
+        <label class="param-option">
+          <input type="checkbox" id="toggleNotifications" />
           Notifications en jeu
         </label>
 
-        <button>Sauvegarder les paramètres</button>
+        <button class="btn-primary">Sauvegarder les paramètres</button>
       </section>
 
       <section class="actions">
-        <button onclick="window.location.href='accueil.html'">Retour</button>
+        <button class="btn-secondary" onclick="window.location.href='accueil.html'">Retour</button>
       </section>
     </div>
   </main>
