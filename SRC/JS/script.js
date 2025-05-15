@@ -3,12 +3,26 @@
 const getStats = () => {
   const statsJson = localStorage.getItem("stats");
   if (!statsJson) {
-    return { victoires: 0, defaites: 0, partiesJouees: 0 };
+    return {
+      victoires: 0,
+      defaites: 0,
+      partiesJouees: 0,
+      enquetreur: 0,
+      criminel: 0,
+      recordDuree: 0 // en secondes
+    };
   }
   try {
     return JSON.parse(statsJson);
   } catch {
-    return { victoires: 0, defaites: 0, partiesJouees: 0 };
+    return {
+      victoires: 0,
+      defaites: 0,
+      partiesJouees: 0,
+      enquetreur: 0,
+      criminel: 0,
+      recordDuree: 0
+    };
   }
 };
 
@@ -16,17 +30,23 @@ const saveStats = (stats) => {
   localStorage.setItem("stats", JSON.stringify(stats));
 };
 
-const ajouterVictoire = () => {
+const ajouterVictoire = (role, dureeSec = 0) => {
   const stats = getStats();
   stats.victoires++;
   stats.partiesJouees++;
+  if (role === "enqueteur") stats.enquetreur++;
+  else if (role === "criminel") stats.criminel++;
+  if (dureeSec > stats.recordDuree) stats.recordDuree = dureeSec;
   saveStats(stats);
 };
 
-const ajouterDefaite = () => {
+const ajouterDefaite = (role, dureeSec = 0) => {
   const stats = getStats();
   stats.defaites++;
   stats.partiesJouees++;
+  if (role === "enqueteur") stats.enquetreur++;
+  else if (role === "criminel") stats.criminel++;
+  if (dureeSec > stats.recordDuree) stats.recordDuree = dureeSec;
   saveStats(stats);
 };
 
@@ -54,7 +74,7 @@ const afficherListeAvatars = (avatars, selectedAvatar, avatarList, onSelect) => 
   avatarList.innerHTML = "";
   avatars.forEach(file => {
     const img = document.createElement("img");
-    img.src = `images/${file}`;
+    img.src = `/Public/images/${file}`;
     img.alt = `Avatar ${file.split('-')[1].split('.')[0]}`;
     img.className = "avatar-option";
     if (selectedAvatar === file) img.classList.add("selected");
@@ -73,28 +93,31 @@ const initialiserProfil = () => {
   const avatar = document.getElementById("avatar");
   const modal = document.getElementById("modal");
   const avatarList = document.getElementById("avatar-list");
-  const pseudoInput = document.getElementById("pseudoInput");
-  const pseudoValiderBtn = document.getElementById("validerPseudo");
-  const validerAvatarBtn = document.getElementById("validerAvatar");
+  const pseudoInput = document.getElementById("pseudo-input"); // correction id ici
+  const pseudoValiderBtn = document.getElementById("btn-save-pseudo"); // correction id ici
+  const validerAvatarBtn = document.getElementById("btn-valider-avatar");
 
-  const grade = document.getElementById("grade");
-  const victoiresElem = document.getElementById("victoires");
-  const defaitesElem = document.getElementById("defaites");
-  const partiesElem = document.getElementById("partiesJouees");
+  const gradeElem = document.getElementById("grade");
 
-  const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png"];
+  // Elements stats
+  // Met à jour les <strong> dans la section statistiques dans l’ordre :
+  // Parties jouées, Parties gagnées, Enquêteur, Criminel, Record durée
+  const statElems = document.querySelectorAll(".statistiques p strong");
+
+  const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png", "avatar-4.png"];
   let selectedAvatar = localStorage.getItem("avatar") || avatars[0];
 
-  // Affichage avatar sauvegardé
-  if (avatar) avatar.src = `images/${selectedAvatar}`;
+  if (avatar) avatar.src = `/Public/images/${selectedAvatar}`;
 
   // Ouvrir modale avatars
   const ouvrirModal = () => {
     if (!avatarList || !modal) return;
     afficherListeAvatars(avatars, selectedAvatar, avatarList, (file) => {
       selectedAvatar = file;
+      validerAvatarBtn.disabled = false;
     });
     modal.style.display = "flex";
+    modal.focus();
   };
 
   // Fermer modale avatars
@@ -105,10 +128,11 @@ const initialiserProfil = () => {
   };
 
   if (validerAvatarBtn) {
+    validerAvatarBtn.disabled = true;
     validerAvatarBtn.addEventListener("click", () => {
-      if (avatar) avatar.src = `images/${selectedAvatar}`;
+      if (avatar) avatar.src = `/Public/images/${selectedAvatar}`;
       localStorage.setItem("avatar", selectedAvatar);
-      if (modal) modal.style.display = "none";
+      modal.style.display = "none";
     });
   }
 
@@ -118,6 +142,9 @@ const initialiserProfil = () => {
 
   if (modal) {
     modal.addEventListener("click", fermerModal);
+    modal.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") fermerModal();
+    });
   }
 
   // Chargement pseudo
@@ -140,20 +167,36 @@ const initialiserProfil = () => {
 
   // Chargement des stats dynamiques
   const stats = getStats();
-  if (victoiresElem) victoiresElem.textContent = stats.victoires;
-  if (defaitesElem) defaitesElem.textContent = stats.defaites;
-  if (partiesElem) partiesElem.textContent = stats.partiesJouees;
 
-  // Grade selon victoires
-  if (grade) {
+  // Update DOM stats dans l’ordre
+  if (statElems.length >= 5) {
+    statElems[0].textContent = stats.partiesJouees;
+    statElems[1].textContent = stats.victoires;
+    statElems[2].textContent = stats.enquetreur;
+    statElems[3].textContent = stats.criminel;
+    // Convertir record durée en min sec
+    const min = Math.floor(stats.recordDuree / 60);
+    const sec = stats.recordDuree % 60;
+    statElems[4].textContent = `${min} min ${sec}s`;
+  }
+
+  // Calcul du grade selon victoires
+  if (gradeElem) {
     const grades = [
       { seuil: 20, label: "Légende" },
       { seuil: 10, label: "Champion" },
       { seuil: 5, label: "Aventurier" },
       { seuil: 0, label: "Novice" }
     ];
-    const gradeTrouve = grades.find(g => stats.victoires > g.seuil) || grades[grades.length -1];
-    grade.textContent = gradeTrouve.label;
+    // Trouver le grade avec le seuil <= victoires
+    let gradeTrouve = "Novice";
+    for (const g of grades) {
+      if (stats.victoires >= g.seuil) {
+        gradeTrouve = g.label;
+        break;
+      }
+    }
+    gradeElem.textContent = gradeTrouve;
   }
 };
 
