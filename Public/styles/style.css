@@ -1,16 +1,13 @@
-/* ====== POLICES ====== */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
+/* style.css */
 
-/* ====== RÉINITIALISATION & BASE ====== */
-* {
-  box-sizing: border-box;
-}
+/* Polices chargées via Google Fonts dans le HTML */
 
+/* Reset et base */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Cormorant Garamond', serif;
-  background-color: #000000; /* fond noir uni */
+  background-color: #000; /* fond noir uni */
   color: #f4e4c1;
   min-height: 100vh;
   display: flex;
@@ -20,15 +17,26 @@ body {
   text-align: center;
 }
 
-/* ====== HEADER ====== */
+/* Bandeau doré autour du contenu principal */
+.bandeau-dore {
+  background: linear-gradient(145deg, #2c1b1b, #1f1313);
+  border: 2px solid #e9c78c;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 900px;
+  margin: 40px auto;
+  box-shadow: 0 0 15px rgba(233, 199, 140, 0.2);
+  text-align: center;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+/* Header */
 header {
   background: rgba(0, 0, 0, 0.6);
   width: 100%;
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 h1 {
@@ -38,35 +46,46 @@ h1 {
   margin: 0;
 }
 
-/* ====== BANDEAU DORÉ ====== */
-.bandeau-dore {
-  background: linear-gradient(145deg, #2c1b1b, #1f1313);
-  border: 2px solid #e9c78c;
-  border-radius: 16px;
-  padding: 30px 40px;
-  max-width: 900px;
-  width: 100%;
-  margin: 40px auto;
-  box-shadow: 0 0 15px rgba(233, 199, 140, 0.25);
-  text-align: left;
-  font-size: 1.2em;
-  line-height: 1.6;
-  transition: all 0.3s ease-in-out;
-}
-
-/* ====== MAIN ====== */
+/* Main */
 main {
   flex: 1;
   width: 100%;
   max-width: 900px;
-  padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-/* ====== BOUTONS ====== */
+/* Scénario et menu boutons */
+.scenario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  animation: fadeUp 1s ease-out forwards;
+}
+
+/* Animation fade up */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Boutons */
 button {
   background: #2c1b1b;
   border: 2px solid #e9c78c;
@@ -79,16 +98,12 @@ button {
   border-radius: 8px;
   width: 90%;
   max-width: 350px;
-  text-align: center;
-  user-select: none;
 }
 
-button:hover,
-button:focus-visible {
+button:hover {
   background-color: #3d2b1f;
   transform: scale(1.05);
-  box-shadow: 0 0 10px #e0c185cc;
-  outline: none;
+  box-shadow: 0 0 10px #e0c18588;
 }
 
 button:focus {
@@ -96,20 +111,7 @@ button:focus {
   outline-offset: 4px;
 }
 
-/* ====== LIENS ====== */
-a {
-  color: #d1c5a3;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-a:hover,
-a:focus {
-  text-decoration: underline;
-  color: #e9c78c;
-}
-
-/* ====== FOOTER ====== */
+/* Footer */
 footer {
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
@@ -120,49 +122,32 @@ footer {
   margin-top: auto;
 }
 
-/* ====== ANIMATION D’APPARITION ====== */
-.menu-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  animation: fadeUp 1s ease-out forwards;
+a {
+  color: #d1c5a3;
+  text-decoration: none;
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+a:hover {
+  text-decoration: underline;
 }
 
-/* ====== RESPONSIVE (mobiles) ====== */
+/* Responsive mobile */
 @media (max-width: 600px) {
-  .menu-buttons {
-    padding: 10px;
-    gap: 10px;
-  }
-
   button {
+    width: 90%;
     padding: 15px 20px;
     font-size: 1.2em;
-    width: 90%;
   }
 
-  .bandeau-dore {
-    padding: 20px 15px;
-    font-size: 1em;
+  .menu-buttons {
+    gap: 10px;
   }
 }
 
-/* ====== MODE SOMBRE AUTOMATIQUE ====== */
+/* Mode sombre automatique */
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #000000;
+    background-color: #121212;
     color: #f4e4c1;
   }
 
