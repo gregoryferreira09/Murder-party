@@ -1,136 +1,311 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Choix du personnage</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1b1b1b;
-      color: #e0e0e0;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
+<!DOCTYPE html> 
 
-    h1 {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 2.8em;
-      margin-bottom: 30px;
-      color: #e9c78c;
-    }
+<html lang="fr"> 
 
-    .galerie-personnages {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
+<head> 
 
-    .carte-personnage {
-      background-color: #2c1b1b;
-      border: 2px solid #e9c78c;
-      border-radius: 12px;
-      width: 200px;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
+  <meta charset="UTF-8"> 
 
-    .carte-personnage img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
+  <title>Rejoindre une partie - Murder Party</title> 
 
-    .carte-personnage:hover {
-      transform: scale(1.05);
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-    #valider-choix {
-      background-color: #000000;
-      color: #ffffff;
-      border: 2px solid #e9c78c;
-      border-radius: 8px;
-      padding: 12px 24px;
-      font-size: 1.1em;
-      cursor: pointer;
-      margin-top: 20px;
-      font-family: 'Cinzel Decorative', serif;
-      transition: all 0.3s ease;
-    }
+  <link rel="stylesheet" href="style.css"> 
 
-    #valider-choix:hover {
-      background-color: #e9c78c;
-      color: #000000;
-    }
-  </style>
-</head>
-<body>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet"> 
 
-  <header>
-    <h1>Choisissez votre personnage</h1>
-  </header>
+  <style> 
 
-  <main>
-    <section class="galerie-personnages" id="galeriePersonnages">
-      <!-- Les personnages seront ajoutés dynamiquement ici -->
-    </section>
+    body { 
 
-    <button id="valider-choix" disabled>Valider mon personnage</button>
-  </main>
+      background-color: #2c1b1b; 
 
-  <!-- Fichier JS contenant les données des personnages -->
-  <script src="personnages.js"></script>
+      color: #e0e0e0; 
 
-  <script>
-    function afficherPersonnages() {
-      const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-      if (!scenarioData) {
-        alert("Aucune donnée de scénario trouvée.");
-        return;
-      }
+      font-family: 'Cormorant Garamond', serif; 
 
-      const nombreJoueurs = scenarioData.nombreJoueurs;
-      const galeriePersonnages = document.getElementById("galeriePersonnages");
+      text-align: center; 
 
-      // Récupère les n premiers personnages de la liste
-      const personnages = listeDesPersonnages.slice(0, nombreJoueurs);
+      padding: 40px 20px; 
 
-      // Affichage dynamique
-      galeriePersonnages.innerHTML = personnages.map(perso => `
-        <div class="carte-personnage" data-id="${perso.id}">
-          <img src="${perso.image}" alt="${perso.nom}">
-          <p>${perso.nom}</p>
-        </div>
-      `).join("");
+    } 
 
-      // Gestion de la sélection
-      const cartes = document.querySelectorAll(".carte-personnage");
-      cartes.forEach(carte => {
-        carte.addEventListener("click", () => {
-          cartes.forEach(card => card.style.border = "2px solid #e9c78c");
-          carte.style.border = "2px solid #f44336";
-          localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
-          document.getElementById("valider-choix").disabled = false;
-        });
-      });
-    }
+ 
 
-    document.getElementById("valider-choix").addEventListener("click", () => {
-      const personnageId = localStorage.getItem("personnageSelectionne");
-      if (personnageId) {
-        window.location.href = "Rôle-et-indices.html";
-      }
-    });
+    h1 { 
 
-    window.onload = afficherPersonnages;
-  </script>
+      font-family: 'Cinzel Decorative', serif; 
 
-</body>
-</html>
+      color: #e9c78c; 
 
-</body>
-</html>
+      font-size: 2.5em; 
+
+    } 
+
+ 
+
+    input { 
+
+      padding: 12px; 
+
+      font-size: 1.2em; 
+
+      border-radius: 8px; 
+
+      border: 1px solid #e0e0e0; 
+
+      background-color: #2c2c2c; 
+
+      color: #fff; 
+
+      margin: 20px 0; 
+
+      width: 220px; 
+
+      text-align: center; 
+
+    } 
+
+ 
+
+    button { 
+
+      background-color: #000; 
+
+      color: #fff; 
+
+      border: 2px solid #e9c78c; 
+
+      border-radius: 8px; 
+
+      padding: 12px 24px; 
+
+      font-size: 1.1em; 
+
+      cursor: pointer; 
+
+      font-family: 'Cinzel Decorative', serif; 
+
+      transition: all 0.3s ease; 
+
+      margin-top: 20px; 
+
+      margin-bottom: 10px; /* Ajouté pour espacer les boutons */ 
+
+    } 
+
+ 
+
+    button:hover { 
+
+      background-color: #e9c78c; 
+
+      color: #000; 
+
+    } 
+
+ 
+
+    .message, .compteur { 
+
+      margin-top: 20px; 
+
+      font-size: 1.2em; 
+
+    } 
+
+ 
+
+    .compteur { 
+
+      color: #87cefa; 
+
+    } 
+
+  </style> 
+
+</head> 
+
+<body> 
+
+ 
+
+  <h1>🔑 Rejoindre une partie</h1> 
+
+ 
+
+  <p>Entrez le code de salon reçu :</p> 
+
+  <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" /> 
+
+ 
+
+  <br> 
+
+  <button onclick="rejoindreSalon()">Valider</button> 
+
+  <br> 
+
+  <button onclick="retourAccueil()">Retour</button> 
+
+ 
+
+  <div class="message" id="message"></div> 
+
+  <div class="compteur" id="compteur"></div> 
+
+ 
+
+  <script> 
+
+    let aDejaRejoint = false; 
+
+ 
+
+    function rejoindreSalon() { 
+
+      if (aDejaRejoint) return; 
+
+ 
+
+      const codeEntre = document.getElementById("codeInput").value.trim().toUpperCase(); 
+
+      const codeSalon = localStorage.getItem("salonCode"); 
+
+      const messageDiv = document.getElementById("message"); 
+
+ 
+
+      if (!codeSalon) { 
+
+        messageDiv.textContent = "Aucun salon actif trouvé. Demandez au créateur de la partie de créer un salon."; 
+
+        messageDiv.style.color = "#ff6b6b"; 
+
+        return; 
+
+      } 
+
+ 
+
+      if (codeEntre === codeSalon) { 
+
+        let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0"); 
+
+        let maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6"); 
+
+ 
+
+        if (connectes >= maxJoueurs - 1) { 
+
+          messageDiv.textContent = "Le salon est déjà complet."; 
+
+          messageDiv.style.color = "#ffa500"; 
+
+          return; 
+
+        } 
+
+ 
+
+        connectes += 1; 
+
+        localStorage.setItem("joueursConnectes", connectes.toString()); 
+
+        localStorage.setItem("joueurRejoint_" + Date.now(), "oui"); 
+
+        aDejaRejoint = true; 
+
+ 
+
+        messageDiv.textContent = "Connexion réussie !"; 
+
+        messageDiv.style.color = "#90ee90"; 
+
+ 
+
+        afficherCompteur(); 
+
+ 
+
+      } else { 
+
+        messageDiv.textContent = "Code invalide. Vérifiez et réessayez."; 
+
+        messageDiv.style.color = "#ff6b6b"; 
+
+      } 
+
+    } 
+
+ 
+
+    function afficherCompteur() { 
+
+      const compteurDiv = document.getElementById("compteur"); 
+
+      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0"); 
+
+      const parametres = JSON.parse(localStorage.getItem("parametresPartie")); 
+
+      const maxJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 6; 
+
+      compteurDiv.textContent = `${connectes} joueur(s) sur ${maxJoueurs} connectés`; 
+
+    } 
+
+ 
+
+    // Vérification régulière toutes les secondes 
+
+    setInterval(() => { 
+
+      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0"); 
+
+      const parametres = JSON.parse(localStorage.getItem("parametresPartie")); 
+
+      const maxJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 6; 
+
+ 
+
+      afficherCompteur(); 
+
+ 
+
+      if (connectes >= maxJoueurs - 1) { 
+
+        window.location.href = "choix-personnage.html"; 
+
+      } 
+
+    }, 1000); 
+
+ 
+
+    // Fonction ajoutée pour le bouton "Retour" 
+
+    function retourAccueil() { 
+
+      if (aDejaRejoint) { 
+
+        let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0"); 
+
+        connectes -= 1; 
+
+        localStorage.setItem("joueursConnectes", connectes.toString()); 
+
+        aDejaRejoint = false; 
+
+      } 
+
+      window.location.href = "accueil.html"; // Rediriger vers la page d'accueil (modifie selon ton URL d'accueil) 
+
+    } 
+
+  </script> 
+
+ 
+
+</body> 
+
+</html> 
