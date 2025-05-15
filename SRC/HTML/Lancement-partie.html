@@ -2,40 +2,50 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Lancement de la Partie - Murder Party</title>
+  <title>Scénario de la Partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+
   <style>
     body {
+      margin: 0;
+      padding: 40px 20px;
       background-color: #1b1b1b;
       color: #e0e0e0;
       font-family: 'Cormorant Garamond', serif;
-      margin: 0;
-      padding: 40px 20px;
       text-align: center;
     }
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 2.8em;
-      margin-bottom: 30px;
+      font-size: 3em;
       color: #e9c78c;
+      margin-bottom: 20px;
     }
 
-    .scenario {
-      background-color: #2c1b1b;
+    .scenario-container {
+      background: linear-gradient(145deg, #2c1b1b, #1f1313);
       border: 2px solid #e9c78c;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 30px;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto 40px;
+      box-shadow: 0 0 15px rgba(233, 199, 140, 0.2);
+      text-align: left;
       font-size: 1.2em;
       line-height: 1.6;
-      text-align: left;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .scenario-container h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.6em;
+      color: #e9c78c;
+      margin-top: 20px;
     }
 
     .btn {
-      background-color: #000000;
+      background-color: transparent;
       color: #ffffff;
       border: 2px solid #e9c78c;
       border-radius: 8px;
@@ -46,19 +56,31 @@
       text-decoration: none;
       font-family: 'Cinzel Decorative', serif;
       transition: all 0.3s ease;
+      display: inline-block;
     }
 
     .btn:hover {
       background-color: #e9c78c;
       color: #000000;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scenario-container {
+      animation: fadeIn 0.8s ease forwards;
     }
   </style>
 </head>
+
 <body>
 
   <h1>Scénario généré</h1>
 
-  <div id="scenarioContainer" class="scenario">
+  <div id="scenarioContainer" class="scenario-container">
     Chargement du scénario...
   </div>
 
@@ -71,28 +93,32 @@
     if (scenarioData) {
       const container = document.getElementById("scenarioContainer");
       const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre ? scenarioData.periodeAutre : scenarioData.periode;
+
       container.innerHTML = `
         <h2>Introduction</h2>
-        <p>Bienvenue dans votre Murder Party !</p>
+        <p>Bienvenue dans votre Murder Party ! Un crime mystérieux s’est produit... et il est désormais entre vos mains de découvrir la vérité.</p>
 
-        <h2>Le crime</h2>
-        <p>Un crime mystérieux s’est produit, et il est maintenant à votre équipe de le résoudre avant la fin du temps imparti.</p>
+        <h2>Le Crime</h2>
+        <p>Dans une époque tourmentée, une victime a été retrouvée sans vie. Chacun de vous a un rôle à jouer pour percer le mystère.</p>
 
-        <h2>Objectif général</h2>
-        <p>Résoudre le mystère avant la fin du temps imparti.</p>
+        <h2>Objectif Général</h2>
+        <p>Résolvez l'énigme avant la fin du temps imparti... ou laissez les criminels s’échapper dans l’ombre.</p>
 
-        <h2>Détails du jeu</h2>
-        <p>Mode de jeu : ${scenarioData.mode}</p>
-        <p>Durée de la partie : ${scenarioData.duree} minutes</p>
-        <p>Période : ${periode}</p>
-        <p>Nombre de joueurs : ${scenarioData.nombreJoueurs}</p>
-        <p>Nombre de criminels : ${scenarioData.criminels}</p>
-        <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
-        <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
+        <h2>Détails de la Partie</h2>
+        <ul>
+          <li><strong>Mode de jeu :</strong> ${scenarioData.mode}</li>
+          <li><strong>Durée :</strong> ${scenarioData.duree} minutes</li>
+          <li><strong>Période :</strong> ${periode}</li>
+          <li><strong>Nombre de joueurs :</strong> ${scenarioData.nombreJoueurs}</li>
+          <li><strong>Nombre de criminels :</strong> ${scenarioData.criminels}</li>
+          <li><strong>Mode criminels fantômes :</strong> ${scenarioData.criminelFantome ? "Oui" : "Non"}</li>
+          <li><strong>Avatars légendaires activés :</strong> ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</li>
+        </ul>
       `;
     } else {
-      document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée.";
+      document.getElementById("scenarioContainer").innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
     }
   </script>
 
-</body
+</body>
+</html>
