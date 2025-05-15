@@ -2,172 +2,23 @@
 <html lang="fr">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Accueil - Murder Party</title>
 
-  <!-- ✅ Optimisation mobile + encoche -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <!-- Optimisation mobile + encoche -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Bienvenue dans Murder Party, un jeu de mystère et d’enquête à vivre entre amis. Créez, rejoignez, et résolvez le crime." />
 
-  <meta name="description" content="Bienvenue dans Murder Party, un jeu de mystère et d’enquête à vivre entre amis. Créez, rejoignez, et résolvez le crime.">
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/848/848043.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/848/848043.png" type="image/png" />
 
-  <!-- ✅ Préchargement image de fond -->
-  <link rel="preload" href="https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg" as="image">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Cormorant Garamond', serif;
-      background-color: #000; /* fond noir uni */
-      color: #f4e4c1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      text-align: center;
-    }
+  <!-- Lien vers le fichier CSS -->
+  <link rel="stylesheet" href="style.css" />
 
-    /* Nouveau bandeau doré autour du contenu principal */
-    .bandeau-dore {
-      background: linear-gradient(145deg, #2c1b1b, #1f1313);
-      border: 2px solid #e9c78c;
-      border-radius: 16px;
-      padding: 30px;
-      max-width: 900px;
-      margin: 40px auto;
-      box-shadow: 0 0 15px rgba(233, 199, 140, 0.2);
-      text-align: center;
-      width: 90%;
-      box-sizing: border-box;
-    }
-
-    header {
-      background: rgba(0, 0, 0, 0.6);
-      width: 100%;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-
-    h1 {
-      font-family: 'Cinzel Decorative', cursive;
-      font-size: 3em;
-      color: #e0c185;
-      margin: 0;
-    }
-
-    main {
-      flex: 1;
-      width: 100%;
-      max-width: 900px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .scenario {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .menu-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      animation: fadeUp 1s ease-out forwards;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    button {
-      background: #2c1b1b;
-      border: 2px solid #e9c78c;
-      color: #fdf3df;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4em;
-      padding: 20px 40px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 350px;
-    }
-
-    button:hover {
-      background-color: #3d2b1f;
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #e0c18588;
-    }
-
-    button:focus {
-      outline: 2px solid #e0c185;
-      outline-offset: 4px;
-    }
-
-    footer {
-      background: rgba(0, 0, 0, 0.5);
-      width: 100%;
-      padding: 15px;
-      text-align: center;
-      font-size: 0.9em;
-      color: #c9b49a;
-      margin-top: auto;
-    }
-
-    a {
-      color: #d1c5a3;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* ✅ Amélioration mobile */
-    @media (max-width: 600px) {
-      button {
-        width: 90%;
-        padding: 15px 20px;
-        font-size: 1.2em;
-      }
-
-      .menu-buttons {
-        gap: 10px;
-      }
-    }
-
-    /* ✅ Mode sombre automatique (si activé côté utilisateur) */
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #121212;
-        color: #f4e4c1;
-      }
-
-      button {
-        background: #1a1a1a;
-        color: #fdf3df;
-      }
-
-      footer {
-        background-color: #1a1a1a;
-      }
-    }
-  </style>
+  <!-- Préchargement image de fond (optionnel si tu utilises une image) -->
+  <link rel="preload" href="https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg" as="image" />
 
   <script>
     if ('serviceWorker' in navigator) {
@@ -178,7 +29,6 @@
       });
     }
   </script>
-
 </head>
 
 <body>
@@ -206,7 +56,7 @@
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
-  <!-- ✅ Ajout vibration au clic -->
+  <!-- Ajout vibration au clic -->
   <script>
     const buttons = document.querySelectorAll('button');
     buttons.forEach(btn => {
