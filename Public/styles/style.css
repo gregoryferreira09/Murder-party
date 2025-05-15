@@ -343,7 +343,7 @@ a:hover {
 
 /* ===== Fenêtre flottante avatar ===== */
 #modal {
-  display: none;
+  display: none; /* <-- garder uniquement celle-ci */
   position: fixed;
   z-index: 9999;
   left: 0;
@@ -351,10 +351,11 @@ a:hover {
   width: 100vw;
   height: 100vh;
   background-color: rgba(20, 20, 20, 0.85);
-  display: flex;
+  /* display: flex; <-- supprimer cette ligne */
   justify-content: center;
   align-items: center;
 }
+
 
 .modal-content {
   background-color: #1a1a1a;
