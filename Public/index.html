@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#e0c185">
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -152,6 +150,17 @@
       }
     }
   </style>
+
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker enregistré:', reg.scope))
+      .catch(err => console.error('Erreur Service Worker:', err));
+    });
+  }
+</script>
+
 </head>
 <body>
 
