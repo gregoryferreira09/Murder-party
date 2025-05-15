@@ -1,4 +1,37 @@
-// Fonction pour créer un salon
+// --- GESTION DES STATS UTILISATEUR --- //
+
+const getStats = () => {
+  const statsJson = localStorage.getItem("stats");
+  if (!statsJson) {
+    return { victoires: 0, defaites: 0, partiesJouees: 0 };
+  }
+  try {
+    return JSON.parse(statsJson);
+  } catch {
+    return { victoires: 0, defaites: 0, partiesJouees: 0 };
+  }
+};
+
+const saveStats = (stats) => {
+  localStorage.setItem("stats", JSON.stringify(stats));
+};
+
+const ajouterVictoire = () => {
+  const stats = getStats();
+  stats.victoires++;
+  stats.partiesJouees++;
+  saveStats(stats);
+};
+
+const ajouterDefaite = () => {
+  const stats = getStats();
+  stats.defaites++;
+  stats.partiesJouees++;
+  saveStats(stats);
+};
+
+// --- CRÉATION DE SALON --- //
+
 const creerSalon = () => {
   const nomSalon = prompt("Nom du salon :");
   if (nomSalon && nomSalon.trim().length > 0) {
@@ -8,7 +41,6 @@ const creerSalon = () => {
   }
 };
 
-// Initialisation de la page d'accueil
 const initialiserAccueil = () => {
   const boutonCreer = document.getElementById("creerSalon");
   if (boutonCreer) {
@@ -16,13 +48,14 @@ const initialiserAccueil = () => {
   }
 };
 
-// Création de la liste d'avatars dans la modale
+// --- AVATARS --- //
+
 const afficherListeAvatars = (avatars, selectedAvatar, avatarList, onSelect) => {
   avatarList.innerHTML = "";
   avatars.forEach(file => {
     const img = document.createElement("img");
     img.src = `images/${file}`;
-    img.alt = `Avatar ${file.split('-')[1].split('.')[0]}`; // Description plus précise
+    img.alt = `Avatar ${file.split('-')[1].split('.')[0]}`;
     img.className = "avatar-option";
     if (selectedAvatar === file) img.classList.add("selected");
     img.addEventListener("click", () => {
@@ -34,7 +67,8 @@ const afficherListeAvatars = (avatars, selectedAvatar, avatarList, onSelect) => 
   });
 };
 
-// Initialisation du profil utilisateur
+// --- PROFIL UTILISATEUR --- //
+
 const initialiserProfil = () => {
   const avatar = document.getElementById("avatar");
   const modal = document.getElementById("modal");
@@ -42,7 +76,11 @@ const initialiserProfil = () => {
   const pseudoInput = document.getElementById("pseudoInput");
   const pseudoValiderBtn = document.getElementById("validerPseudo");
   const validerAvatarBtn = document.getElementById("validerAvatar");
+
   const grade = document.getElementById("grade");
+  const victoiresElem = document.getElementById("victoires");
+  const defaitesElem = document.getElementById("defaites");
+  const partiesElem = document.getElementById("partiesJouees");
 
   const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png"];
   let selectedAvatar = localStorage.getItem("avatar") || avatars[0];
@@ -59,14 +97,13 @@ const initialiserProfil = () => {
     modal.style.display = "flex";
   };
 
-  // Fermer modale avatars au clic en dehors du contenu
+  // Fermer modale avatars
   const fermerModal = (event) => {
     if (!event || event.target === modal) {
       modal.style.display = "none";
     }
   };
 
-  // Valider avatar sélectionné
   if (validerAvatarBtn) {
     validerAvatarBtn.addEventListener("click", () => {
       if (avatar) avatar.src = `images/${selectedAvatar}`;
@@ -75,23 +112,20 @@ const initialiserProfil = () => {
     });
   }
 
-  // Lier ouverture modale à clic avatar (si avatar existe)
   if (avatar) {
     avatar.addEventListener("click", ouvrirModal);
   }
 
-  // Fermer modale au clic sur fond
   if (modal) {
     modal.addEventListener("click", fermerModal);
   }
 
-  // Chargement pseudo sauvegardé
+  // Chargement pseudo
   if (pseudoInput) {
     const savedPseudo = localStorage.getItem("pseudo");
     if (savedPseudo) pseudoInput.value = savedPseudo;
   }
 
-  // Valider pseudo avec contrôle simple
   if (pseudoInput && pseudoValiderBtn) {
     pseudoValiderBtn.addEventListener("click", () => {
       const pseudo = pseudoInput.value.trim();
@@ -104,8 +138,13 @@ const initialiserProfil = () => {
     });
   }
 
-  // Mise à jour dynamique du grade selon victoires
-  const victoires = 7; // À remplacer par une vraie valeur dynamique
+  // Chargement des stats dynamiques
+  const stats = getStats();
+  if (victoiresElem) victoiresElem.textContent = stats.victoires;
+  if (defaitesElem) defaitesElem.textContent = stats.defaites;
+  if (partiesElem) partiesElem.textContent = stats.partiesJouees;
+
+  // Grade selon victoires
   if (grade) {
     const grades = [
       { seuil: 20, label: "Légende" },
@@ -113,13 +152,13 @@ const initialiserProfil = () => {
       { seuil: 5, label: "Aventurier" },
       { seuil: 0, label: "Novice" }
     ];
-
-    const gradeTrouve = grades.find(g => victoires > g.seuil) || grades[grades.length -1];
+    const gradeTrouve = grades.find(g => stats.victoires > g.seuil) || grades[grades.length -1];
     grade.textContent = gradeTrouve.label;
   }
 };
 
-// Initialisation globale
+// --- INIT GLOBALE --- //
+
 document.addEventListener("DOMContentLoaded", () => {
   initialiserAccueil();
   initialiserProfil();
