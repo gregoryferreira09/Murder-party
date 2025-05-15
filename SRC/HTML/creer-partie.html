@@ -104,10 +104,10 @@
       <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle">
     </div>
 
-    <label for="nombreJoueurs">Nombre de joueurs :</label>
+    <<label for="nombreJoueurs">Nombre de joueurs :</label>
     <select id="nombreJoueurs" name="nombreJoueurs">
-      ${[...Array(12).keys()].map(i => `<option value="${i + 1}">${i + 1} joueur${i ? 's' : ''}</option>`).join('')}
-    </select>
+      ${[...Array(15).keys()].map(i => `<option value="${i + 1}">${i + 1} joueur${i + 1 > 1 ? 's' : ''}</option>`).join('')}
+     </select>
 
     <label for="criminels">Nombre de criminels :</label>
     <select id="criminels" name="criminels">
