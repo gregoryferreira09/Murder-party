@@ -62,14 +62,13 @@
       box-shadow: 0 0 10px #00000088;
       cursor: pointer;
       outline: none;
-      transition: none !important;
       user-select: none;
+      transition: box-shadow 0.3s ease;
     }
     #avatar:focus,
     #avatar:active {
       outline: none;
-      transform: none !important;
-      box-shadow: none !important;
+      box-shadow: 0 0 20px #e0c185;
     }
 
     /* Boutons dorés épurés */
@@ -136,7 +135,7 @@
 
     /* MODAL STYLE */
     .modal {
-      display: none; /* cachée par défaut */
+      display: none;
       position: fixed;
       z-index: 1000;
       left: 0; top: 0;
@@ -144,53 +143,163 @@
       background-color: rgba(0,0,0,0.7);
       align-items: center;
       justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .modal.show {
+      display: flex;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .modal-content {
       background-color: #3a1f1f;
       border-radius: 16px;
-      padding: 20px;
+      padding: 25px 25px 15px;
       width: 90%;
-      max-width: 400px;
+      max-width: 420px;
       box-shadow: 0 0 25px #e0c185aa;
       text-align: center;
       border: 1px solid #e0c185;
+      position: relative;
+      outline: none;
     }
 
     .modal-content h3 {
       margin-top: 0;
       color: #e8c0b0;
       font-family: 'Cinzel Decorative', serif;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      user-select: none;
+    }
+
+    .avatar-list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 25px;
     }
 
     .avatar-option {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      margin: 10px;
       cursor: pointer;
       border: 3px solid transparent;
       object-fit: cover;
-      transition: border-color 0.3s ease;
-      display: inline-block;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+      position: relative;
+      flex-shrink: 0;
+      outline: none;
     }
-
     .avatar-option:hover,
     .avatar-option.selected {
       border-color: #e0c185;
+      box-shadow: 0 0 10px 3px #e0c185cc;
+    }
+
+    .avatar-option span {
+      margin-top: 6px;
+      font-size: 0.8em;
+      color: #f0e6e6;
+      font-family: 'Cormorant Garamond', serif;
+      user-select: none;
+    }
+
+    .modal-preview {
+      margin-bottom: 20px;
+      font-size: 0.9em;
+      color: #f0e6e6;
+      user-select: none;
+    }
+    .modal-preview img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #e0c185;
+      box-shadow: 0 0 15px #e0c185cc;
+      object-fit: cover;
+      display: block;
+      margin: 10px auto 0;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    .modal-buttons button {
+      flex: 1;
+      max-width: 140px;
+      font-weight: 600;
+      user-select: none;
     }
 
     .close-btn {
       background-color: transparent;
       border: none;
-      font-size: 1.5em;
+      font-size: 1.7em;
       color: #e0c185;
       cursor: pointer;
-      float: right;
-      margin-top: -10px;
-      margin-right: -10px;
+      position: absolute;
+      top: 12px;
+      right: 15px;
       font-weight: bold;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+    .close-btn:hover {
+      color: #c9a44a;
+    }
+
+    /* Confirmation message */
+    #confirmation-msg {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #3a1f1f;
+      border: 1px solid #e0c185;
+      padding: 12px 22px;
+      border-radius: 12px;
+      color: #e0c185;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      box-shadow: 0 0 15px #e0c185bb;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      user-select: none;
+      z-index: 2000;
+    }
+    #confirmation-msg.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Avatar option keyboard focus */
+    .avatar-option:focus {
+      outline: 2px solid #e0c185;
+      outline-offset: 2px;
+    }
+
+    /* Mobile avatar options size */
+    @media (max-width: 480px) {
+      .avatar-option {
+        width: 70px;
+        height: 70px;
+      }
+      .modal-preview img {
+        width: 80px;
+        height: 80px;
+      }
     }
   </style>
 </head>
@@ -200,11 +309,11 @@
 
   <div class="avatar-section">
     <h2>Mon Avatar</h2>
-    <img id="avatar" src="/Public/images/avatar-1.png" alt="Avatar" tabindex="0" onclick="ouvrirModal()" />
-    <button onclick="ouvrirModal()">Changer d'avatar</button>
+    <img id="avatar" src="/Public/images/avatar-1.png" alt="Avatar" tabindex="0" aria-label="Avatar actuel. Cliquer pour changer" />
+    <button id="btn-open-modal" aria-haspopup="dialog" aria-controls="modal">Changer d'avatar</button>
   </div>
 
-  <div class="statistiques">
+  <div class="statistiques" role="region" aria-label="Statistiques du joueur">
     <h2>Statistiques</h2>
     <p>Parties jouées : <strong>20</strong></p>
     <p>Parties gagnées : <strong>7</strong></p>
@@ -217,68 +326,231 @@
   <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
 
   <!-- MODAL -->
-  <div id="modal" class="modal" onclick="fermerModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <button class="close-btn" onclick="fermerModal()">×</button>
-      <h3>Choisissez votre avatar</h3>
-      <div id="avatar-list">
-        <!-- Les avatars seront insérés ici par JS -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+    <div class="modal-content" tabindex="0">
+      <button class="close-btn" aria-label="Fermer la fenêtre" id="btn-close-modal">×</button>
+      <h3 id="modal-title">Choisissez votre avatar</h3>
+
+      <div class="modal-preview" aria-live="polite" aria-atomic="true" aria-relevant="additions removals">
+        <div>Prévisualisation :</div>
+        <img id="preview-avatar" src="" alt="Prévisualisation avatar sélectionné" />
+      </div>
+
+      <div id="avatar-list" class="avatar-list" role="listbox" tabindex="0" aria-label="Liste des avatars disponibles">
+        <!-- Avatars insérés par JS -->
+      </div>
+
+      <div class="modal-buttons">
+        <button id="btn-validate" disabled>Valider</button>
+        <button id="btn-cancel">Annuler</button>
       </div>
     </div>
   </div>
 
+  <!-- Confirmation message -->
+  <div id="confirmation-msg" role="alert" aria-live="assertive" aria-atomic="true">Avatar modifié avec succès !</div>
+
   <script>
-    const avatar = document.getElementById("avatar");
-    const modal = document.getElementById("modal");
-    const avatarList = document.getElementById("avatar-list");
+    (() => {
+      const avatars = [
+        {src: '/Public/images/avatar-1.png', label: 'Avatar 1'},
+        {src: '/Public/images/avatar-2.png', label: 'Avatar 2'},
+        {src: '/Public/images/avatar-3.png', label: 'Avatar 3'},
+        {src: '/Public/images/avatar-4.png', label: 'Avatar 4'},
+        {src: '/Public/images/avatar-5.png', label: 'Avatar 5'},
+        {src: '/Public/images/avatar-6.png', label: 'Avatar 6'}
+      ];
 
-    // Liste des avatars disponibles (sans chemin complet)
-    const avatars = [
-      "avatar-1.png",
-      "avatar-2.png",
-      "avatar-3.png"
-    ];
+      const avatarMain = document.getElementById('avatar');
+      const btnOpenModal = document.getElementById('btn-open-modal');
+      const modal = document.getElementById('modal');
+      const modalContent = modal.querySelector('.modal-content');
+      const btnCloseModal = document.getElementById('btn-close-modal');
+      const avatarList = document.getElementById('avatar-list');
+      const previewAvatar = document.getElementById('preview-avatar');
+      const btnValidate = document.getElementById('btn-validate');
+      const btnCancel = document.getElementById('btn-cancel');
+      const confirmationMsg = document.getElementById('confirmation-msg');
 
-    // Ouvrir la fenêtre modale
-    function ouvrirModal() {
-      // Vider la liste actuelle
-      avatarList.innerHTML = "";
-      avatars.forEach((file, i) => {
-        const img = document.createElement("img");
-        img.src = "/images/" + file;
-        img.alt = "Avatar " + (i + 1);
-        img.className = "avatar-option";
-        // Sélection visuelle si avatar courant
-        if (avatar.src.includes(file)) img.classList.add("selected");
-        img.onclick = () => {
-          avatar.src = img.src;
-          fermerModal();
-        };
-        avatarList.appendChild(img);
-      });
-      modal.style.display = "flex";
-    }
+      let selectedIndex = -1;
+      let lastFocusedElement = null;
 
-    // Fermer la fenêtre modale
-    function fermerModal(event) {
-      if (!event || event.target === modal) {
-        modal.style.display = "none";
+      // Fonction fallback image en cas d'erreur
+      function handleImageError(e) {
+        e.target.src = 'https://via.placeholder.com/80?text=?';
       }
-    }
 
-    // Mise à jour dynamique du grade
-    const victoires = 7;
-    const grade = document.getElementById("grade");
+      // Générer la liste des avatars dans la modale
+      function populateAvatarList() {
+        avatarList.innerHTML = '';
+        avatars.forEach((avatar, index) => {
+          const img = document.createElement('img');
+          img.src = avatar.src;
+          img.alt = avatar.label;
+          img.classList.add('avatar-option');
+          img.setAttribute('role', 'option');
+          img.setAttribute('tabindex', '-1');
+          img.setAttribute('data-index', index);
+          img.addEventListener('error', handleImageError);
 
-    if (victoires <= 5) {
-      grade.textContent = "Novice";
-    } else if (victoires <= 10) {
-      grade.textContent = "Aventurier";
-    } else if (victoires <= 20) {
-      grade.textContent = "Champion";
-    } else {
-      grade.textContent = "Légende";
-    }
+          const label = document.createElement('span');
+          label.textContent = avatar.label;
+
+          const container = document.createElement('div');
+          container.style.display = 'flex';
+          container.style.flexDirection = 'column';
+          container.style.alignItems = 'center';
+          container.style.userSelect = 'none';
+
+          container.appendChild(img);
+          container.appendChild(label);
+
+          // Click sélection
+          container.addEventListener('click', () => {
+            setSelectedAvatar(index);
+            img.focus();
+          });
+
+          // Keyboard selection
+          container.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setSelectedAvatar(index);
+              img.focus();
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              let nextIndex = (index + 1) % avatars.length;
+              avatarList.children[nextIndex].querySelector('img').focus();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              let prevIndex = (index - 1 + avatars.length) % avatars.length;
+              avatarList.children[prevIndex].querySelector('img').focus();
+            }
+          });
+
+          avatarList.appendChild(container);
+        });
+      }
+
+      // Met à jour la sélection visuelle + prévisualisation + bouton valider activé
+      function setSelectedAvatar(index) {
+        selectedIndex = index;
+        const options = avatarList.querySelectorAll('.avatar-option');
+        options.forEach((opt, i) => {
+          if (i === index) {
+            opt.classList.add('selected');
+            opt.setAttribute('aria-selected', 'true');
+          } else {
+            opt.classList.remove('selected');
+            opt.removeAttribute('aria-selected');
+          }
+        });
+        previewAvatar.src = avatars[index].src;
+        previewAvatar.alt = 'Prévisualisation ' + avatars[index].label;
+        btnValidate.disabled = false;
+      }
+
+      // Ouvre la modale avec animation et gestion focus
+      function openModal() {
+        lastFocusedElement = document.activeElement;
+        modal.classList.add('show');
+        // Timeout pour animation opacity + focus sur première option
+        setTimeout(() => {
+          populateAvatarList();
+          // On sélectionne l’avatar actuel si possible
+          const currentSrc = avatarMain.src || avatarMain.getAttribute('src');
+          const foundIndex = avatars.findIndex(a => currentSrc.endsWith(a.src));
+          setSelectedAvatar(foundIndex >= 0 ? foundIndex : 0);
+
+          // Focus sur avatar sélectionné
+          const selectedOption = avatarList.querySelector('.avatar-option.selected');
+          if (selectedOption) selectedOption.focus();
+          else avatarList.querySelector('.avatar-option').focus();
+
+          // Prévisualisation déjà faite par setSelectedAvatar
+        }, 50);
+      }
+
+      // Ferme la modale avec animation et restauration focus
+      function closeModal() {
+        modal.classList.remove('show');
+        btnValidate.disabled = true;
+        previewAvatar.src = '';
+        previewAvatar.alt = '';
+        selectedIndex = -1;
+        // Retour focus sur bouton qui a ouvert la modale
+        if (lastFocusedElement) lastFocusedElement.focus();
+      }
+
+      // Valide la sélection, met à jour l’avatar principal et ferme la modale
+      function validateSelection() {
+        if (selectedIndex < 0) return;
+        const chosenAvatar = avatars[selectedIndex];
+        avatarMain.src = chosenAvatar.src;
+        avatarMain.alt = chosenAvatar.label;
+        closeModal();
+        showConfirmation();
+      }
+
+      // Affiche un message de confirmation quelques secondes
+      function showConfirmation() {
+        confirmationMsg.classList.add('show');
+        setTimeout(() => {
+          confirmationMsg.classList.remove('show');
+        }, 3000);
+      }
+
+      // Évènements
+
+      // Ouvrir modale au clic ou touche entrée sur gros avatar ou bouton
+      btnOpenModal.addEventListener('click', openModal);
+      avatarMain.addEventListener('click', openModal);
+      avatarMain.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal();
+        }
+      });
+
+      // Fermer modale au clic sur croix ou bouton annuler
+      btnCloseModal.addEventListener('click', closeModal);
+      btnCancel.addEventListener('click', closeModal);
+
+      // Valider avatar choisi
+      btnValidate.addEventListener('click', validateSelection);
+
+      // Fermer modale avec Escape
+      window.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+          e.preventDefault();
+          closeModal();
+        }
+      });
+
+      // Trap focus dans la modale
+      modal.addEventListener('keydown', e => {
+        if (e.key === 'Tab') {
+          const focusableElements = modal.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
+          const focusArray = Array.prototype.slice.call(focusableElements);
+          const firstElem = focusArray[0];
+          const lastElem = focusArray[focusArray.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === firstElem) {
+              e.preventDefault();
+              lastElem.focus();
+            }
+          } else {
+            if (document.activeElement === lastElem) {
+              e.preventDefault();
+              firstElem.focus();
+            }
+          }
+        }
+      });
+    })();
   </script>
 
 </body>
