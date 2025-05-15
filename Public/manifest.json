@@ -1,0 +1,16 @@
+/Murder-party
+│
+├── README.md
+├── package.json
+├── manifest.json      ← Ici
+├── index.html
+├── service-worker.js
+├── style.css
+├── /icons
+│    ├── icon-192.png
+│    └── icon-512.png
+├── /SRC
+│    ├── /HTML
+│    │    └── accueil.html
+│    └── ...
+└── ...
