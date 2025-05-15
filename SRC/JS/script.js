@@ -1,99 +1,427 @@
-// Fonction pour créer un salon
-function creerSalon() {
-  const nomSalon = prompt("Nom du salon :");
-  if (nomSalon) {
-    alert("Salon '" + nomSalon + "' créé !");
-    // Rediriger vers la salle (plus tard)
-    window.location.href = "salle.html?nom=" + encodeURIComponent(nomSalon);
+/* style.css */
+
+/* Polices chargées via Google Fonts dans le HTML */
+
+/* Reset et base */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Cormorant Garamond', serif;
+  background-color: #000; /* fond noir uni */
+  color: #f4e4c1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+/* Bandeau doré autour du contenu principal */
+.bandeau-dore {
+  background: linear-gradient(145deg, #2c1b1b, #1f1313);
+  border: 2px solid #e9c78c;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 900px;
+  margin: 40px auto;
+  box-shadow: 0 0 15px rgba(233, 199, 140, 0.2);
+  text-align: center;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+/* Header */
+header {
+  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 3em;
+  color: #e0c185;
+  margin: 0;
+}
+
+/* Main */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Scénario et menu boutons */
+.scenario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  animation: fadeUp 1s ease-out forwards;
+}
+
+/* Animation fade up */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-// Initialisation de la page d'accueil
-function initialiserAccueil() {
-  const boutonCreer = document.getElementById("creerSalon");
-  if (boutonCreer) {
-    boutonCreer.addEventListener("click", creerSalon);
+/* Boutons */
+button {
+  background: #2c1b1b;
+  border: 2px solid #e9c78c;
+  color: #fdf3df;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4em;
+  padding: 20px 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 350px;
+}
+
+button:hover {
+  background-color: #3d2b1f;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #e0c18588;
+}
+
+button:focus {
+  outline: 2px solid #e0c185;
+  outline-offset: 4px;
+}
+
+/* Footer */
+footer {
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  padding: 15px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #c9b49a;
+  margin-top: auto;
+}
+
+a {
+  color: #d1c5a3;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive mobile */
+@media (max-width: 600px) {
+  button {
+    width: 90%;
+    padding: 15px 20px;
+    font-size: 1.2em;
+  }
+
+  .menu-buttons {
+    gap: 10px;
   }
 }
 
-// Initialisation du profil
-function initialiserProfil() {
-  const avatar = document.getElementById("avatar");
-  const modal = document.getElementById("modal");
-  const avatarList = document.getElementById("avatar-list");
-  const pseudoInput = document.getElementById("pseudoInput");
-  const pseudoValiderBtn = document.getElementById("validerPseudo");
-
-  const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png"];
-  let selectedAvatar = localStorage.getItem("avatar") || avatars[0];
-
-  // Affichage de l'avatar sauvegardé
-  if (avatar) avatar.src = "images/" + selectedAvatar;
-
-  // Ouverture de la modale d’avatars
-  window.ouvrirModal = function () {
-    avatarList.innerHTML = "";
-    avatars.forEach(file => {
-      const img = document.createElement("img");
-      img.src = "images/" + file;
-      img.alt = "Avatar";
-      img.className = "avatar-option";
-      if (selectedAvatar.includes(file)) img.classList.add("selected");
-      img.onclick = () => {
-        document.querySelectorAll(".avatar-option").forEach(a => a.classList.remove("selected"));
-        img.classList.add("selected");
-        selectedAvatar = file;
-      };
-      avatarList.appendChild(img);
-    });
-    modal.style.display = "flex";
-  };
-
-  // Fermeture modale
-  window.fermerModal = function (event) {
-    if (!event || event.target === modal) {
-      modal.style.display = "none";
-    }
-  };
-
-  // Validation de l’avatar sélectionné
-  const validerAvatarBtn = document.getElementById("validerAvatar");
-  if (validerAvatarBtn) {
-    validerAvatarBtn.addEventListener("click", () => {
-      if (avatar) avatar.src = "images/" + selectedAvatar;
-      localStorage.setItem("avatar", selectedAvatar);
-      modal.style.display = "none";
-    });
+/* Mode sombre automatique */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #f4e4c1;
   }
 
-  // Sauvegarde du pseudo
-  if (pseudoInput && pseudoValiderBtn) {
-    // Remplir le champ si déjà sauvegardé
-    const savedPseudo = localStorage.getItem("pseudo");
-    if (savedPseudo) pseudoInput.value = savedPseudo;
-
-    pseudoValiderBtn.addEventListener("click", () => {
-      const pseudo = pseudoInput.value.trim();
-      if (pseudo.length > 0) {
-        localStorage.setItem("pseudo", pseudo);
-        alert("Pseudo enregistré !");
-      }
-    });
+  button {
+    background: #1a1a1a;
+    color: #fdf3df;
   }
 
-  // Mise à jour dynamique du grade
-  const victoires = 7;
-  const grade = document.getElementById("grade");
-  if (grade) {
-    if (victoires <= 5) grade.textContent = "Novice";
-    else if (victoires <= 10) grade.textContent = "Aventurier";
-    else if (victoires <= 20) grade.textContent = "Champion";
-    else grade.textContent = "Légende";
+  footer {
+    background-color: #1a1a1a;
   }
 }
 
-// Appel global à DOMContentLoaded
-document.addEventListener("DOMContentLoaded", function () {
-  initialiserAccueil();
-  initialiserProfil();
-});
+/* ===== STYLES SPÉCIFIQUES À paramètres.html ===== */
+.parametres {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.parametres label {
+  margin-top: 10px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.parametres input[type="text"],
+.parametres select {
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #c2a97c;
+  background-color: #1a1a1a;
+  color: #f4e4c1;
+}
+
+.param-option {
+  margin-bottom: 20px;
+}
+
+.parametres button {
+  margin-top: 30px;
+  align-self: center;
+  max-width: 300px;
+}
+
+/* Section actions */
+.actions {
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* ===== Pseudo & Profil ===== */
+
+/* Container global de la page profil joueur */
+.profil-container {
+  background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+  border: 2px solid #e0c185;
+  border-radius: 16px;
+  padding: 30px 40px;
+  margin: 40px auto;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 0 20px rgba(224, 193, 133, 0.15);
+  animation: fadeUp 0.8s ease-out;
+  text-align: center;
+  color: #f4e4c1;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Avatar Section */
+.avatar-section {
+  margin-bottom: 40px;
+}
+
+.avatar-section img#avatar {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #e0c185;
+  box-shadow: 0 0 15px rgba(224, 193, 133, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.avatar-section img#avatar:hover,
+.avatar-section img#avatar:focus {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px #e0c185cc;
+  outline: none;
+}
+
+/* Pseudo Section */
+.pseudo-section {
+  margin-bottom: 40px;
+}
+
+.pseudo-section input {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1.5px solid #e0c185;
+  background-color: #121212;
+  color: #f4e4c1;
+  font-size: 1.3em;
+  text-align: center;
+  width: 280px;
+  max-width: 90%;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.pseudo-section input:focus {
+  outline: none;
+  border-color: #f4e4c1;
+  box-shadow: 0 0 15px #e0c185bb;
+}
+
+/* Statistiques */
+.statistiques p {
+  background-color: #1a1a1a;
+  border-left: 5px solid #e0c185;
+  padding: 12px 20px;
+  margin: 14px auto;
+  max-width: 420px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(224, 193, 133, 0.12);
+  font-size: 1.1em;
+  text-align: left;
+  line-height: 1.4;
+}
+
+/* Grade spécial dans statistiques */
+.statistiques p strong#grade {
+  color: #e0c185;
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
+/* Boutons dans profil (ex: valider pseudo, changer avatar) */
+.pseudo-section button,
+.avatar-section button {
+  background: #2c1b1b;
+  border: 2px solid #e9c78c;
+  color: #fdf3df;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4em;
+  padding: 15px 35px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  max-width: 220px;
+  margin-top: 15px;
+}
+
+.pseudo-section button:hover,
+.avatar-section button:hover {
+  background-color: #3d2b1f;
+  transform: scale(1.07);
+  box-shadow: 0 0 12px #e0c185aa;
+}
+
+.pseudo-section button:focus,
+.avatar-section button:focus {
+  outline: 2px solid #e0c185;
+  outline-offset: 5px;
+}
+
+/* Retour à l'accueil */
+.return-btn {
+  display: inline-block;
+  margin: 40px auto 20px auto;
+  padding: 14px 28px;
+  border: 2px solid #e0c185;
+  background-color: #2c1b1b;
+  color: #f4e4c1;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.25em;
+  transition: all 0.3s ease;
+  max-width: 280px;
+}
+
+.return-btn:hover,
+.return-btn:focus {
+  background-color: #3d2b1f;
+  box-shadow: 0 0 15px #e0c185cc;
+  outline: none;
+}
+
+/* ===== Fenêtre flottante avatar ===== */
+#modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(20, 20, 20, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #1a1a1a;
+  padding: 30px 35px;
+  border-radius: 14px;
+  border: 2.5px solid #e0c185;
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(224, 193, 133, 0.5);
+  font-family: 'Cormorant Garamond', serif;
+}
+
+#avatar-list {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 28px 0;
+  flex-wrap: wrap;
+}
+
+.avatar-option {
+  width: 80px;
+  height: 80px;
+  border: 2.5px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  object-fit: cover;
+}
+
+.avatar-option:hover {
+  transform: scale(1.1);
+  border-color: #e0c185bb;
+  box-shadow: 0 0 12px #e0c185bb;
+}
+
+.avatar-option.selected {
+  border-color: #e0c185;
+  box-shadow: 0 0 18px #e0c185dd;
+}
+
+/* Responsive avatar */
+@media (max-width: 600px) {
+  .avatar-option {
+    width: 60px;
+    height: 60px;
+  }
+  .pseudo-section input {
+    width: 90%;
+  }
+  .statistiques p {
+    max-width: 90%;
+  }
+  .avatar-section img#avatar {
+    width: 100px;
+    height: 100px;
+  }
+  .pseudo-section button,
+  .avatar-section button {
+    font-size: 1.2em;
+    max-width: 90%;
+  }
+  .return-btn {
+    font-size: 1.1em;
+    max-width: 90%;
+  }
+}
+
+/* Fin du fichier */
