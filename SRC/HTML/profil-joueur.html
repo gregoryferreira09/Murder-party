@@ -4,58 +4,73 @@
   <meta charset="UTF-8" />
   <title>Profil - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Préchargement des polices Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap"
     rel="stylesheet"
   />
+
   <link rel="stylesheet" href="../../Public/styles/style.css" />
 </head>
 <body>
 
-  <main class="profil-container"><!-- Ajout de la classe ici -->
+  <header role="banner">
+    <h1 class="visually-hidden">Murder Party - Profil du joueur</h1>
+  </header>
+
+  <main class="profil-container">
 
     <h1>Mon Profil</h1>
 
-    <div class="avatar-section">
-      <h2>Mon Avatar</h2>
+    <!-- Section Avatar -->
+    <section class="avatar-section" aria-labelledby="avatar-heading">
+      <h2 id="avatar-heading">Mon Avatar</h2>
       <img
         id="avatar"
         src="/Public/images/avatar-1.png"
-        alt="Avatar"
+        alt="Avatar actuel"
         tabindex="0"
         role="button"
         aria-pressed="false"
         onclick="ouvrirModal()"
+        onerror="this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';"
       />
       <button type="button" onclick="ouvrirModal()">Changer d'avatar</button>
-    </div>
+    </section>
 
-    <div class="pseudo-section">
-      <h2>Mon Pseudo</h2>
+    <!-- Section Pseudo -->
+    <section class="pseudo-section" aria-labelledby="pseudo-heading">
+      <h2 id="pseudo-heading">Mon Pseudo</h2>
+      <label for="pseudo-input" class="visually-hidden">Saisir votre pseudo</label>
       <input
         id="pseudo-input"
         type="text"
         maxlength="20"
         aria-label="Saisir votre pseudo"
         aria-describedby="pseudo-feedback"
+        placeholder="Votre pseudo ici"
       />
       <button type="button" id="btn-save-pseudo">Valider</button>
       <div id="pseudo-feedback" role="alert" aria-live="polite"></div>
-    </div>
+    </section>
 
-    <div class="statistiques">
-      <h2>Statistiques</h2>
+    <!-- Section Statistiques -->
+    <section class="statistiques" aria-labelledby="stats-heading">
+      <h2 id="stats-heading">Statistiques</h2>
       <p>Parties jouées : <strong>20</strong></p>
       <p>Parties gagnées : <strong>7</strong></p>
       <p>→ En tant qu’enquêteur : <strong>4</strong></p>
       <p>→ En tant que criminel : <strong>3</strong></p>
       <p>Record de durée d’une victoire : <strong>18 min 42s</strong></p>
       <p>Grade : <strong id="grade">Aventurier</strong></p>
-    </div>
+    </section>
 
     <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
 
-    <!-- MODALE -->
+    <!-- Modale Avatar -->
     <div
       id="modal"
       class="modal"
@@ -71,7 +86,7 @@
           aria-label="Fermer la fenêtre"
           onclick="fermerModal()"
         >
-          ×
+          <span aria-hidden="true">×</span>
         </button>
         <h3 id="modal-title">Choisissez votre avatar</h3>
         <div
@@ -86,6 +101,17 @@
 
   </main>
 
+  <footer role="contentinfo">
+    <p>&copy; 2025 Murder Party. Tous droits réservés.</p>
+  </footer>
+
   <script src="../../SRC/JS/script.js"></script>
+
+  <noscript>
+    <div style="color: #e0c185; text-align: center; margin-top: 20px;">
+      JavaScript est désactivé. Certaines fonctionnalités du site peuvent ne pas fonctionner.
+    </div>
+  </noscript>
+
 </body>
 </html>
