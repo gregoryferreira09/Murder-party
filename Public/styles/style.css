@@ -342,20 +342,28 @@ a:hover {
 }
 
 /* ===== Fenêtre flottante avatar ===== */
-#modal {
-  display: none; /* <-- garder uniquement celle-ci */
+.modal {
   position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(20, 20, 20, 0.85);
-  /* display: flex; <-- supprimer cette ligne */
-  justify-content: center;
-  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* largeur et hauteur souhaitées */
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 400px; /* ou la largeur que tu veux */
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  z-index: 1000; /* pour être au-dessus */
+  overflow-y: auto;
+  display: none; /* par défaut caché, affiché en JS */
 }
 
+/* Lorsque la modale est ouverte, on ajoute une classe "active" par exemple */
+.modal.active {
+  display: block;
+}
 
 .modal-content {
   background-color: #1a1a1a;
