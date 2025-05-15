@@ -3,6 +3,7 @@
 <head>
 
   <meta charset="UTF-8">
+  <link rel="manifest" href="/manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ludus Veritae</title>
 
@@ -83,12 +84,12 @@
     }
 
     @keyframes fadeIn {
-      to { opacity: 1.5; }
+      to { opacity: 1; }
     }
 
     @keyframes zoomIn {
       from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1.5); opacity: 1; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .fade-out {
@@ -112,9 +113,7 @@
       color: #2c1b1b !important;
     }
 
-    /* -------------------------
-       ✅ Responsive Mobile
-    --------------------------*/
+    /* Responsive Mobile */
     @media (max-width: 768px) {
       .fullscreen h1 {
         font-size: 2.8em;
@@ -152,14 +151,14 @@
   </style>
 
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('Service Worker enregistré:', reg.scope))
-      .catch(err => console.error('Erreur Service Worker:', err));
-    });
-  }
-</script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker enregistré:', reg.scope))
+        .catch(err => console.error('Erreur Service Worker:', err));
+      });
+    }
+  </script>
 
 </head>
 <body>
@@ -180,7 +179,7 @@
 
       setTimeout(() => {
         document.getElementById('fadeOut').classList.add('active');
-      }, 500); // plus rapide
+      }, 500);
 
       setTimeout(() => {
         window.location.href = '../SRC/HTML/accueil.html';
