@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <title>Profil - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- ✅ Chemin corrigé vers la feuille de style -->
+  <link rel="stylesheet" href="/Public/styles/style.css" />
+
+  <!-- Polices Google -->
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap"
     rel="stylesheet"
@@ -15,13 +19,21 @@
 
   <div class="avatar-section">
     <h2>Mon Avatar</h2>
-    <img id="avatar" src="/Public/images/avatar-1.png" alt="Avatar" tabindex="0" onclick="ouvrirModal()" />
+    <img
+      id="avatar"
+      src="/Public/images/avatar-1.png"
+      alt="Avatar"
+      tabindex="0"
+      onclick="ouvrirModal()" />
     <button onclick="ouvrirModal()">Changer d'avatar</button>
   </div>
 
   <div class="pseudo-section">
     <h2>Mon Pseudo</h2>
-    <input type="text" id="pseudo-input" placeholder="Entrez votre pseudo..." />
+    <input
+      type="text"
+      id="pseudo-input"
+      placeholder="Entrez votre pseudo..." />
     <button onclick="validerPseudo()">Valider</button>
   </div>
 
@@ -47,6 +59,7 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- ✅ Chemin corrigé vers le fichier JS -->
+  <script src="/SRC/JS/script.js"></script>
 </body>
 </html>
