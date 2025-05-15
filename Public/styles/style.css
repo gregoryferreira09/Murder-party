@@ -203,3 +203,83 @@ a:hover {
   text-align: center;
   margin-top: 30px;
 }
+/* ===== Pseudo & Profil ===== */
+.profil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin: 30px 0;
+}
+
+#pseudoInput {
+  padding: 8px 12px;
+  font-size: 1.1rem;
+  width: 250px;
+  max-width: 80%;
+  border-radius: 6px;
+  border: 1px solid #c2a97c;
+  background-color: #1a1a1a;
+  color: #f4e4c1;
+  text-align: center;
+}
+
+/* ===== Fenêtre flottante avatar ===== */
+#modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(20, 20, 20, 0.85);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #1a1a1a;
+  padding: 25px 30px;
+  border-radius: 12px;
+  border: 2px solid #e0c185;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(224, 193, 133, 0.4);
+}
+
+#avatar-list {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.avatar-option {
+  width: 80px;
+  height: 80px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, border 0.3s ease;
+}
+
+.avatar-option:hover {
+  transform: scale(1.05);
+  border-color: #e0c18588;
+}
+
+.avatar-option.selected {
+  border-color: #e0c185;
+  box-shadow: 0 0 10px #e0c18588;
+}
+
+/* Responsive avatar */
+@media (max-width: 600px) {
+  .avatar-option {
+    width: 60px;
+    height: 60px;
+  }
+}
