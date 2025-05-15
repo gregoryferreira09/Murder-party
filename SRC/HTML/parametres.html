@@ -1,85 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Paramètres - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    main {
-      padding: 30px 20px;
-    }
-
-    .scenario {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .parametres {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 40px;
-    }
-
-    .parametres label {
-      margin-top: 10px;
-      font-weight: 600;
-    }
-
-    .parametres input[type="text"],
-    .parametres select {
-      padding: 10px;
-      font-size: 1rem;
-    }
-
-    .param-option {
-      margin-bottom: 20px;
-    }
-
-    .actions {
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    button {
-      padding: 12px 24px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #222;
-      color: white;
-      cursor: pointer;
-    }
-
-    /* Center the "Sauvegarder les paramètres" button */
-    .parametres button {
-      margin-top: 30px;
-      align-self: center;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 60px;
-      font-size: 0.9rem;
-    }
-
-    footer a {
-      display: block;
-      margin-top: 5px;
-    }
-
-    /* Style for "Retour à l'accueil" button (same as the other button) */
-    .actions button {
-      background-color: #1b1b1b;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Lien vers style principal -->
+  <link rel="stylesheet" href="../../Public/styles/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -91,12 +19,14 @@
     <div class="scenario">
       <section class="parametres">
         <div class="param-option">
-          <label for="toggleSound">Activer les sons (notifications)</label>
-          <input type="checkbox" id="toggleSound">
+          <label>
+            <input type="checkbox" id="toggleSound" />
+            Activer les sons (notifications)
+          </label>
         </div>
 
         <label for="pseudo">Changer de pseudo :</label>
-        <input type="text" id="pseudo" placeholder="Nouveau pseudo">
+        <input type="text" id="pseudo" placeholder="Nouveau pseudo" />
 
         <label for="langue">Langue :</label>
         <select id="langue">
@@ -105,11 +35,8 @@
         </select>
 
         <label>
-          <input type="checkbox" checked> Activer les sons
-        </label>
-
-        <label>
-          <input type="checkbox"> Notifications en jeu
+          <input type="checkbox" />
+          Notifications en jeu
         </label>
 
         <button>Sauvegarder les paramètres</button>
