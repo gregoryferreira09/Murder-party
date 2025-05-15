@@ -20,18 +20,28 @@
       margin: 0;
       padding: 0;
       font-family: 'Cormorant Garamond', serif;
-      background-image: url('https://www.transparenttextures.com/patterns/emeraude-pattern.png'),
-                        url('https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg');
-      background-color: #1b1b1b;
+      background-color: #000; /* fond noir uni */
       color: #f4e4c1;
-      background-size: 100% 100%, cover;
-      background-attachment: fixed;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       text-align: center;
+    }
+
+    /* Nouveau bandeau doré autour du contenu principal */
+    .bandeau-dore {
+      background: linear-gradient(145deg, #2c1b1b, #1f1313);
+      border: 2px solid #e9c78c;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 900px;
+      margin: 40px auto;
+      box-shadow: 0 0 15px rgba(233, 199, 140, 0.2);
+      text-align: center;
+      width: 90%;
+      box-sizing: border-box;
     }
 
     header {
@@ -51,8 +61,7 @@
     main {
       flex: 1;
       width: 100%;
-      max-width: 800px;
-      padding: 40px 20px;
+      max-width: 900px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -161,14 +170,14 @@
   </style>
 
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('Service Worker enregistré:', reg.scope))
-      .catch(err => console.error('Erreur Service Worker:', err));
-    });
-  }
-</script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('Service Worker enregistré:', reg.scope))
+          .catch(err => console.error('Erreur Service Worker:', err));
+      });
+    }
+  </script>
 
 </head>
 
@@ -179,14 +188,16 @@
   </header>
 
   <main>
-    <div class="scenario">
-      <section class="menu-buttons">
-        <button onclick="window.location.href='creer-partie.html'" aria-label="Créer une partie">🎮 Créer une partie</button>
-        <button onclick="window.location.href='rejoindre-partie.html'" aria-label="Rejoindre une partie">👥 Rejoindre une partie</button>
-        <button onclick="window.location.href='profil-joueur.html'" aria-label="Voir le profil">👤 Profil</button>
-        <button onclick="window.location.href='boutique.html'" aria-label="Accéder à la boutique">🛍️ Boutique</button>
-        <button onclick="window.location.href='parametres.html'" aria-label="Paramètres du jeu">⚙️ Paramètres</button>
-      </section>
+    <div class="bandeau-dore">
+      <div class="scenario">
+        <section class="menu-buttons">
+          <button onclick="window.location.href='creer-partie.html'" aria-label="Créer une partie">🎮 Créer une partie</button>
+          <button onclick="window.location.href='rejoindre-partie.html'" aria-label="Rejoindre une partie">👥 Rejoindre une partie</button>
+          <button onclick="window.location.href='profil-joueur.html'" aria-label="Voir le profil">👤 Profil</button>
+          <button onclick="window.location.href='boutique.html'" aria-label="Accéder à la boutique">🛍️ Boutique</button>
+          <button onclick="window.location.href='parametres.html'" aria-label="Paramètres du jeu">⚙️ Paramètres</button>
+        </section>
+      </div>
     </div>
   </main>
 
