@@ -72,12 +72,12 @@
       color: #fdf3df;
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.4em;
-      padding: 20px 40px; /* Augmenté pour élargir le bouton */
+      padding: 20px 40px;
       cursor: pointer;
       transition: all 0.3s ease;
       border-radius: 8px;
-      width: 90%; /* Elargit les boutons */
-      max-width: 350px; /* Limite la largeur pour les très grands écrans */
+      width: 90%;
+      max-width: 350px;
     }
 
     button:hover {
@@ -127,7 +127,10 @@
   <main>
     <div class="scenario">
       <section class="menu-buttons">
-        <button onclick="window.location.href='creer-partie.html'">🎮 Créer une partie</button>
+        <!-- MODIFIÉ ICI : bouton déclenche Socket.io -->
+        <button id="btn-creer-salon">🎮 Créer une partie</button>
+        <p id="code-salon" style="margin-top: 10px;"></p>
+
         <button onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
         <button onclick="window.location.href='profil-joueur.html'">👤 Profil</button>
         <button onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
@@ -141,5 +144,8 @@
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
+  <!-- AJOUTÉ ICI : scripts Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/client.js"></script>
 </body>
 </html>
