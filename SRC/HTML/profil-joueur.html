@@ -12,71 +12,79 @@
 </head>
 <body>
 
-  <h1>Mon Profil</h1>
+  <main><!-- Ajout du rôle de contenu principal -->
 
-  <div class="avatar-section">
-    <h2>Mon Avatar</h2>
-    <img
-      id="avatar"
-      src="/Public/images/avatar-1.png"
-      alt="Avatar"
-      tabindex="0"
-      onclick="ouvrirModal()"
-    />
-    <button onclick="ouvrirModal()">Changer d'avatar</button>
-  </div>
+    <h1>Mon Profil</h1>
 
-  <div class="pseudo-section">
-    <h2>Mon Pseudo</h2>
-    <input
-      id="pseudo-input"
-      type="text"
-      maxlength="20"
-      aria-label="Saisir votre pseudo"
-    />
-    <button id="btn-save-pseudo" aria-live="polite">Valider</button>
-    <div id="pseudo-feedback" role="alert" aria-live="polite"></div>
-  </div>
-
-  <div class="statistiques">
-    <h2>Statistiques</h2>
-    <p>Parties jouées : <strong>20</strong></p>
-    <p>Parties gagnées : <strong>7</strong></p>
-    <p>→ En tant qu’enquêteur : <strong>4</strong></p>
-    <p>→ En tant que criminel : <strong>3</strong></p>
-    <p>Record de durée d’une victoire : <strong>18 min 42s</strong></p>
-    <p>Grade : <strong id="grade">Aventurier</strong></p>
-  </div>
-
-  <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
-
-  <!-- MODALE -->
-  <div
-    id="modal"
-    class="modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modal-title"
-    tabindex="-1"
-  >
-    <div class="modal-content" role="document">
-      <button
-        class="close-btn"
-        aria-label="Fermer la fenêtre"
-        onclick="fermerModal()"
-      >
-        ×
-      </button>
-      <h3 id="modal-title">Choisissez votre avatar</h3>
-      <div
-        id="avatar-list"
-        role="list"
-        aria-label="Liste des avatars disponibles"
-      ></div>
-      <button id="btn-valider-avatar" disabled>Valider</button>
-      <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
+    <div class="avatar-section">
+      <h2>Mon Avatar</h2>
+      <img
+        id="avatar"
+        src="/Public/images/avatar-1.png"
+        alt="Avatar"
+        tabindex="0"
+        role="button"            <!-- Ajout rôle bouton -->
+        aria-pressed="false"     <!-- Etat accessible (peut être géré en JS) -->
+        onclick="ouvrirModal()"
+      />
+      <button type="button" onclick="ouvrirModal()">Changer d'avatar</button> <!-- type button ajouté -->
     </div>
-  </div>
+
+    <div class="pseudo-section">
+      <h2>Mon Pseudo</h2>
+      <input
+        id="pseudo-input"
+        type="text"
+        maxlength="20"
+        aria-label="Saisir votre pseudo"
+        aria-describedby="pseudo-feedback" <!-- Lien avec message de feedback -->
+      />
+      <button type="button" id="btn-save-pseudo">Valider</button> <!-- type button ajouté, aria-live retiré -->
+      <div id="pseudo-feedback" role="alert" aria-live="polite"></div>
+    </div>
+
+    <div class="statistiques">
+      <h2>Statistiques</h2>
+      <p>Parties jouées : <strong>20</strong></p>
+      <p>Parties gagnées : <strong>7</strong></p>
+      <p>→ En tant qu’enquêteur : <strong>4</strong></p>
+      <p>→ En tant que criminel : <strong>3</strong></p>
+      <p>Record de durée d’une victoire : <strong>18 min 42s</strong></p>
+      <p>Grade : <strong id="grade">Aventurier</strong></p>
+    </div>
+
+    <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a> <!-- Ajout title -->
+
+    <!-- MODALE -->
+    <div
+      id="modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      tabindex="-1"
+    >
+      <div class="modal-content" role="document">
+        <button
+          type="button"
+          class="close-btn"
+          aria-label="Fermer la fenêtre"
+          onclick="fermerModal()"
+        >
+          ×
+        </button>
+        <h3 id="modal-title">Choisissez votre avatar</h3>
+        <div
+          id="avatar-list"
+          role="list"
+          aria-label="Liste des avatars disponibles"
+        ></div>
+        <button type="button" id="btn-valider-avatar" disabled>Valider</button>
+        <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
+      </div>
+    </div>
+
+  </main>
 
   <script src="../../SRC/JS/script.js"></script>
 </body>
