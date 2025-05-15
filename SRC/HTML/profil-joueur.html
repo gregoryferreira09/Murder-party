@@ -11,7 +11,7 @@
   <style>
     /* Fond noir global */
     body {
-      background-color: #000000; /* noir pur */
+      background-color: #000000;
       font-family: 'Cormorant Garamond', serif;
       color: #f0e6e6;
       margin: 0;
@@ -49,10 +49,10 @@
       max-width: 500px;
       box-shadow: 0 0 15px #00000055;
       text-align: center;
-      border: 1px solid #e0c185; /* bordure dorée */
+      border: 1px solid #e0c185;
     }
 
-    /* Avatar : suppression effet focus/cercle et styles */
+    /* Avatar styles */
     #avatar {
       border-radius: 50%;
       width: 160px;
@@ -133,6 +133,65 @@
         height: 120px;
       }
     }
+
+    /* MODAL STYLE */
+    .modal {
+      display: none; /* cachée par défaut */
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: #3a1f1f;
+      border-radius: 16px;
+      padding: 20px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 25px #e0c185aa;
+      text-align: center;
+      border: 1px solid #e0c185;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+      color: #e8c0b0;
+      font-family: 'Cinzel Decorative', serif;
+      margin-bottom: 20px;
+    }
+
+    .avatar-option {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 10px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      object-fit: cover;
+      transition: border-color 0.3s ease;
+      display: inline-block;
+    }
+
+    .avatar-option:hover,
+    .avatar-option.selected {
+      border-color: #e0c185;
+    }
+
+    .close-btn {
+      background-color: transparent;
+      border: none;
+      font-size: 1.5em;
+      color: #e0c185;
+      cursor: pointer;
+      float: right;
+      margin-top: -10px;
+      margin-right: -10px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -141,8 +200,8 @@
 
   <div class="avatar-section">
     <h2>Mon Avatar</h2>
-    <img id="avatar" src="images/avatar-1.png" alt="Avatar" tabindex="0" onclick="changerAvatar()" />
-    <button onclick="changerAvatar()">Changer d'avatar</button>
+    <img id="avatar" src="/images/avatar-1.png" alt="Avatar" tabindex="0" onclick="ouvrirModal()" />
+    <button onclick="ouvrirModal()">Changer d'avatar</button>
   </div>
 
   <div class="statistiques">
@@ -157,18 +216,54 @@
 
   <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
 
+  <!-- MODAL -->
+  <div id="modal" class="modal" onclick="fermerModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="fermerModal()">×</button>
+      <h3>Choisissez votre avatar</h3>
+      <div id="avatar-list">
+        <!-- Les avatars seront insérés ici par JS -->
+      </div>
+    </div>
+  </div>
+
   <script>
     const avatar = document.getElementById("avatar");
+    const modal = document.getElementById("modal");
+    const avatarList = document.getElementById("avatar-list");
+
+    // Liste des avatars disponibles (sans chemin complet)
     const avatars = [
       "avatar-1.png",
       "avatar-2.png",
       "avatar-3.png"
     ];
-    let index = 0;
 
-    function changerAvatar() {
-      index = (index + 1) % avatars.length;
-      avatar.src = "images/" + avatars[index];
+    // Ouvrir la fenêtre modale
+    function ouvrirModal() {
+      // Vider la liste actuelle
+      avatarList.innerHTML = "";
+      avatars.forEach((file, i) => {
+        const img = document.createElement("img");
+        img.src = "/images/" + file;
+        img.alt = "Avatar " + (i + 1);
+        img.className = "avatar-option";
+        // Sélection visuelle si avatar courant
+        if (avatar.src.includes(file)) img.classList.add("selected");
+        img.onclick = () => {
+          avatar.src = img.src;
+          fermerModal();
+        };
+        avatarList.appendChild(img);
+      });
+      modal.style.display = "flex";
+    }
+
+    // Fermer la fenêtre modale
+    function fermerModal(event) {
+      if (!event || event.target === modal) {
+        modal.style.display = "none";
+      }
     }
 
     // Mise à jour dynamique du grade
