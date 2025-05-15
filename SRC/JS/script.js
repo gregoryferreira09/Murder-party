@@ -1,3 +1,6 @@
+// --- CONSTANTES --- //
+const IMAGE_PATH = "/Public/images/";
+
 // --- GESTION DES STATS UTILISATEUR --- //
 
 const getStats = () => {
@@ -74,18 +77,32 @@ const afficherListeAvatars = (avatars, selectedAvatar, avatarList, onSelect) => 
   avatarList.innerHTML = "";
   avatars.forEach(file => {
     const img = document.createElement("img");
-    img.src = `/Public/images/${file}`;
+    img.src = `${IMAGE_PATH}${file}`;
     img.alt = `Avatar ${file.split('-')[1].split('.')[0]}`;
     img.className = "avatar-option";
     if (selectedAvatar === file) img.classList.add("selected");
+    img.tabIndex = 0; // rendre clavier accessible
     img.addEventListener("click", () => {
       avatarList.querySelectorAll(".avatar-option").forEach(a => a.classList.remove("selected"));
       img.classList.add("selected");
       onSelect(file);
     });
+    img.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        img.click();
+      }
+    });
     avatarList.appendChild(img);
   });
 };
+
+// --- HELPER FORMATTEUR DUREE --- //
+const formatDuree = (seconds) => {
+  const min = Math.floor(seconds / 60);
+  const sec = seconds % 60;
+  return `${min} min ${sec}s`;
+}
 
 // --- PROFIL UTILISATEUR --- //
 
@@ -93,30 +110,39 @@ const initialiserProfil = () => {
   const avatar = document.getElementById("avatar");
   const modal = document.getElementById("modal");
   const avatarList = document.getElementById("avatar-list");
-  const pseudoInput = document.getElementById("pseudo-input"); // correction id ici
-  const pseudoValiderBtn = document.getElementById("btn-save-pseudo"); // correction id ici
+  const pseudoInput = document.getElementById("pseudo-input");
+  const pseudoValiderBtn = document.getElementById("btn-save-pseudo");
   const validerAvatarBtn = document.getElementById("btn-valider-avatar");
 
   const gradeElem = document.getElementById("grade");
 
-  // Elements stats
-  // Met à jour les <strong> dans la section statistiques dans l’ordre :
-  // Parties jouées, Parties gagnées, Enquêteur, Criminel, Record durée
   const statElems = document.querySelectorAll(".statistiques p strong");
 
   const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png", "avatar-4.png"];
   let selectedAvatar = localStorage.getItem("avatar") || avatars[0];
 
-  if (avatar) avatar.src = `/Public/images/${selectedAvatar}`;
+  if (avatar) avatar.src = `${IMAGE_PATH}${selectedAvatar}`;
+
+  const afficherMessage = (message, type = "info", cibleId = "pseudo-feedback") => {
+    const cible = document.getElementById(cibleId);
+    if (!cible) return;
+    cible.textContent = message;
+    cible.className = `feedback-message ${type}`;
+    setTimeout(() => {
+      cible.textContent = "";
+      cible.className = "";
+    }, 5000);
+  };
 
   // Ouvrir modale avatars
   const ouvrirModal = () => {
     if (!avatarList || !modal) return;
     afficherListeAvatars(avatars, selectedAvatar, avatarList, (file) => {
       selectedAvatar = file;
-      validerAvatarBtn.disabled = false;
+      if (validerAvatarBtn) validerAvatarBtn.disabled = false;
     });
     modal.style.display = "flex";
+    modal.setAttribute("aria-hidden", "false");
     modal.focus();
   };
 
@@ -124,15 +150,18 @@ const initialiserProfil = () => {
   const fermerModal = (event) => {
     if (!event || event.target === modal) {
       modal.style.display = "none";
+      modal.setAttribute("aria-hidden", "true");
     }
   };
 
   if (validerAvatarBtn) {
     validerAvatarBtn.disabled = true;
     validerAvatarBtn.addEventListener("click", () => {
-      if (avatar) avatar.src = `/Public/images/${selectedAvatar}`;
+      if (avatar) avatar.src = `${IMAGE_PATH}${selectedAvatar}`;
       localStorage.setItem("avatar", selectedAvatar);
       modal.style.display = "none";
+      modal.setAttribute("aria-hidden", "true");
+      afficherMessage("Avatar enregistré avec succès.", "succes", "avatar-feedback");
     });
   }
 
@@ -157,30 +186,27 @@ const initialiserProfil = () => {
     pseudoValiderBtn.addEventListener("click", () => {
       const pseudo = pseudoInput.value.trim();
       if (!pseudo) {
-        alert("Le pseudo ne peut pas être vide.");
+        afficherMessage("Le pseudo ne peut pas être vide.", "erreur");
+        pseudoInput.focus();
         return;
       }
       localStorage.setItem("pseudo", pseudo);
-      alert("Pseudo enregistré !");
+      afficherMessage("Pseudo enregistré !", "succes");
     });
   }
 
   // Chargement des stats dynamiques
   const stats = getStats();
 
-  // Update DOM stats dans l’ordre
   if (statElems.length >= 5) {
-    statElems[0].textContent = stats.partiesJouees;
-    statElems[1].textContent = stats.victoires;
-    statElems[2].textContent = stats.enquetreur;
-    statElems[3].textContent = stats.criminel;
-    // Convertir record durée en min sec
-    const min = Math.floor(stats.recordDuree / 60);
-    const sec = stats.recordDuree % 60;
-    statElems[4].textContent = `${min} min ${sec}s`;
+    statElems[0].textContent = stats.partiesJouees || 0;
+    statElems[1].textContent = stats.victoires || 0;
+    statElems[2].textContent = stats.enquetreur || 0;
+    statElems[3].textContent = stats.criminel || 0;
+    statElems[4].textContent = formatDuree(stats.recordDuree || 0);
   }
 
-  // Calcul du grade selon victoires
+  // Calcul du grade selon victoires (choisir le plus haut seuil atteint)
   if (gradeElem) {
     const grades = [
       { seuil: 20, label: "Légende" },
@@ -188,12 +214,10 @@ const initialiserProfil = () => {
       { seuil: 5, label: "Aventurier" },
       { seuil: 0, label: "Novice" }
     ];
-    // Trouver le grade avec le seuil <= victoires
     let gradeTrouve = "Novice";
     for (const g of grades) {
-      if (stats.victoires >= g.seuil) {
+      if (stats.victoires >= g.seuil && g.seuil >= (grades.find(gr => gr.label === gradeTrouve)?.seuil || 0)) {
         gradeTrouve = g.label;
-        break;
       }
     }
     gradeElem.textContent = gradeTrouve;
