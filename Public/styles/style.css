@@ -1,16 +1,16 @@
 /* ====== POLICES ====== */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
 
-/* ====== STYLES GÉNÉRAUX ====== */
+/* ====== RÉINITIALISATION & BASE ====== */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: 'Cormorant Garamond', serif;
-  background-image: url('https://www.transparenttextures.com/patterns/emeraude-pattern.png'),
-                    url('https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg');
-  background-color: #1b1b1b;
-  background-size: 100% 100%, cover;
-  background-attachment: fixed;
+  background-color: #000000; /* fond noir uni */
   color: #f4e4c1;
   min-height: 100vh;
   display: flex;
@@ -26,6 +26,9 @@ header {
   width: 100%;
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 h1 {
@@ -35,16 +38,86 @@ h1 {
   margin: 0;
 }
 
+/* ====== BANDEAU DORÉ ====== */
+.bandeau-dore {
+  background: linear-gradient(145deg, #2c1b1b, #1f1313);
+  border: 2px solid #e9c78c;
+  border-radius: 16px;
+  padding: 30px 40px;
+  max-width: 900px;
+  width: 100%;
+  margin: 40px auto;
+  box-shadow: 0 0 15px rgba(233, 199, 140, 0.25);
+  text-align: left;
+  font-size: 1.2em;
+  line-height: 1.6;
+  transition: all 0.3s ease-in-out;
+}
+
 /* ====== MAIN ====== */
 main {
   flex: 1;
   width: 100%;
-  max-width: 800px;
-  padding: 40px 20px;
+  max-width: 900px;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+/* ====== BOUTONS ====== */
+button {
+  background: #2c1b1b;
+  border: 2px solid #e9c78c;
+  color: #fdf3df;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4em;
+  padding: 20px 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 350px;
+  text-align: center;
+  user-select: none;
+}
+
+button:hover,
+button:focus-visible {
+  background-color: #3d2b1f;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #e0c185cc;
+  outline: none;
+}
+
+button:focus {
+  outline: 2px solid #e0c185;
+  outline-offset: 4px;
+}
+
+/* ====== LIENS ====== */
+a {
+  color: #d1c5a3;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+  color: #e9c78c;
+}
+
+/* ====== FOOTER ====== */
+footer {
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  padding: 15px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #c9b49a;
+  margin-top: auto;
 }
 
 /* ====== ANIMATION D’APPARITION ====== */
@@ -67,53 +140,6 @@ main {
   }
 }
 
-/* ====== BOUTONS ====== */
-button {
-  background: #2c1b1b;
-  border: 2px solid #e9c78c;
-  color: #fdf3df;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4em;
-  padding: 20px 40px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 350px;
-}
-
-button:hover {
-  background-color: #3d2b1f;
-  transform: scale(1.05);
-  box-shadow: 0 0 10px #e0c18588;
-}
-
-button:focus {
-  outline: 2px solid #e0c185;
-  outline-offset: 4px;
-}
-
-/* ====== LIENS ====== */
-a {
-  color: #d1c5a3;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* ====== FOOTER ====== */
-footer {
-  background: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  padding: 15px;
-  text-align: center;
-  font-size: 0.9em;
-  color: #c9b49a;
-  margin-top: auto;
-}
-
 /* ====== RESPONSIVE (mobiles) ====== */
 @media (max-width: 600px) {
   .menu-buttons {
@@ -125,5 +151,27 @@ footer {
     padding: 15px 20px;
     font-size: 1.2em;
     width: 90%;
+  }
+
+  .bandeau-dore {
+    padding: 20px 15px;
+    font-size: 1em;
+  }
+}
+
+/* ====== MODE SOMBRE AUTOMATIQUE ====== */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #000000;
+    color: #f4e4c1;
+  }
+
+  button {
+    background: #1a1a1a;
+    color: #fdf3df;
+  }
+
+  footer {
+    background-color: #1a1a1a;
   }
 }
