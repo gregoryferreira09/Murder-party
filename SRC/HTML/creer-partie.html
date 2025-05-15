@@ -1,199 +1,523 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Créer une Partie - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<!DOCTYPE html> 
 
-  <style>
-    body {
-      background-color: #1b1b1b;
-      font-family: 'Cormorant Garamond', serif;
-      color: #e0e0e0;
-      text-align: center;
-      padding: 20px;
-    }
+<html lang="fr"> 
 
-    h1 {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
+<head> 
 
-    .form-container {
-      background-color: #2c1b1b;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-      margin: 20px 0;
-      border: 2px solid #e9c78c;
-    }
+  <meta charset="UTF-8"> 
 
-    .form-container label {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-      display: block;
-    }
+  <title>Créer une Partie - Murder Party</title> 
 
-    .form-container select,
-    .form-container input[type="checkbox"],
-    .form-container input[type="text"],
-    .form-container button {
-      font-size: 1em;
-      padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      border-radius: 8px;
-      border: 1px solid #4eaf7c;
-      background-color: #333;
-      color: #fff;
-      cursor: pointer;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-    .form-container button:hover {
-      background-color: #4eaf7c;
-    }
+  <link rel="stylesheet" href="style.css"> 
 
-    .return-btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #333;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      margin-top: 20px;
-      border: 1px solid #4eaf7c;
-    }
+  <style> 
 
-    .return-btn:hover {
-      background-color: #4eaf7c;
-    }
-  </style>
-</head>
-<body>
+    body { 
 
-  <h1>Créer une Partie</h1>
+      background-color: #1b1b1b; 
 
-  <div class="form-container">
-    <label for="mode">Choisissez le mode de jeu :</label>
-    <select id="mode" name="mode">
-      <option value="classique">Classique</option>
-      <option value="poison">Poison</option>
-    </select>
+      font-family: 'Cormorant Garamond', serif; 
 
-    <label for="duree">Durée de la partie :</label>
-    <select id="duree" name="duree">
-      <option value="30">30 minutes</option>
-      <option value="60">60 minutes</option>
-    </select>
+      color: #e0e0e0; 
 
-    <label for="periode">Choisissez la période du scénario :</label>
-    <select id="periode" name="periode">
-      <option value="medieval">Moyen-Âge</option>
-      <option value="victorien">Victorien</option>
-      <option value="antiquite">Antiquité</option>
-      <option value="renaissance">Renaissance</option>
-      <option value="contemporain">Contemporain</option>
-      <option value="futuriste">Futuriste</option>
-      <option value="autre">Autre (préciser ci-dessous)</option>
-    </select>
+      text-align: center; 
 
-    <div id="autrePeriode" style="display: none;">
-      <label for="periode_autre">Précisez la période :</label>
-      <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle">
-    </div>
+      padding: 20px; 
 
-    <<label for="nombreJoueurs">Nombre de joueurs :</label>
-    <select id="nombreJoueurs" name="nombreJoueurs">
-      ${[...Array(15).keys()].map(i => `<option value="${i + 1}">${i + 1} joueur${i + 1 > 1 ? 's' : ''}</option>`).join('')}
-     </select>
+    } 
 
-    <label for="criminels">Nombre de criminels :</label>
-    <select id="criminels" name="criminels">
-      <option value="1">1 criminel</option>
-      <option value="2">2 criminels</option>
-      <option value="3">3 criminels</option>
-    </select>
+    h1 { 
 
-    <label><input type="checkbox" id="criminel_fantome"> Mode criminels fantômes</label>
-    <label><input type="checkbox" id="avatars_legendaires"> Activer les avatars légendaires</label>
-    <label><input type="checkbox" id="inactifs"> Activer l'observation des inactifs</label>
+      font-family: 'Cinzel Decorative', serif; 
 
-    <button onclick="genererScenario()">Générer</button>
-  </div>
+      font-size: 2.5em; 
 
-  <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
+      margin-bottom: 20px; 
 
-  <script>
-    document.getElementById("periode").addEventListener("change", function () {
-      document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
-    });
+    } 
 
-    function genererScenario() {
-      const mode = document.getElementById("mode").value;
-      const duree = document.getElementById("duree").value;
-      const periode = document.getElementById("periode").value;
-      const periodeAutre = document.getElementById("periode_autre").value;
-      const criminels = parseInt(document.getElementById("criminels").value);
-      const criminelFantome = document.getElementById("criminel_fantome").checked;
-      const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
-      const inactifs = document.getElementById("inactifs").checked;
-      const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value);
+    .form-container { 
 
-      const scenario = genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs);
+      background-color: #2c1b1b; 
 
-      localStorage.setItem("scenarioData", JSON.stringify(scenario));
-      localStorage.setItem("introduction", scenario.introduction);
-      localStorage.setItem("objectif", scenario.objectifGlobal);
-      localStorage.setItem("parametresPartie", JSON.stringify({ mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, inactifs, nombreJoueurs }));
+      padding: 30px; 
 
-      console.log('Introduction générée :', scenario.introduction);
-      console.log('Objectif généré :', scenario.objectifGlobal);
-      console.log('Données complètes générées :', scenario);
-      window.location.href = "lancement-partie.html";
-    }
+      border-radius: 10px; 
 
-    function genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
-      let introduction = `Bienvenue dans votre murder party.`;
-      let crime = `Un crime mystérieux s’est produit...`;
-      let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); 
 
-      if (periode === "victorien") {
-        introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`;
-        crime = `Un empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`;
-      } else if (periode === "autre" && periodeAutre !== "") {
-        introduction = `Bienvenue dans une époque mystérieuse : ${periodeAutre}.`;
-        crime = `Un crime s'est produit dans cette période complexe... Qui est coupable ?`;
-      }
+      margin: 20px 0; 
 
-      const personnages = [];
-      for (let i = 0; i < nombreJoueurs; i++) {
-        personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires));
-      }
+      border: 2px solid #e9c78c; /* Applique la même bordure que sur la partie de lancement */ 
 
-      return { introduction, crime, objectifGlobal, personnages };
-    }
+    } 
 
-    function genererPersonnage(index, criminels, avatarsLegendaires) {
-      const roles = ['Détective', 'Médium', 'Serviteur', 'Noble', 'Médecin', 'Marchand'];
-      const traits = ['Alcoolisé', 'Loyal', 'Méfiant', 'Amoureux', 'Rival'];
-      const nom = `Personnage ${index}`;
+    .form-container label { 
 
-      let role = roles[Math.floor(Math.random() * roles.length)];
-      let trait = traits[Math.floor(Math.random() * traits.length)];
+      font-size: 1.2em; 
 
-      if (index <= criminels) {
-        role = 'Criminel';
-      }
+      margin-bottom: 10px; 
 
-      if (avatarsLegendaires && index === 1) {
-        role = "Fantôme";
-        trait = "Invisible";
-      }
+      display: block; 
 
-      return { nom, role, trait };
-    }
-  </script>
-</body>
-</html>
+    } 
+
+    .form-container select, 
+
+    .form-container input[type="checkbox"], 
+
+    .form-container input[type="text"], 
+
+    .form-container button { 
+
+      font-size: 1em; 
+
+      padding: 10px; 
+
+      margin: 10px 0; 
+
+      width: 100%; 
+
+      border-radius: 8px; 
+
+      border: 1px solid #4eaf7c; 
+
+      background-color: #333; 
+
+      color: #fff; 
+
+      cursor: pointer; 
+
+    } 
+
+    .form-container button:hover { 
+
+      background-color: #4eaf7c; 
+
+    } 
+
+    .return-btn { 
+
+      display: inline-block; 
+
+      padding: 10px 20px; 
+
+      background-color: #333; 
+
+      color: white; 
+
+      border-radius: 8px; 
+
+      text-decoration: none; 
+
+      margin-top: 20px; 
+
+      border: 1px solid #4eaf7c; 
+
+    } 
+
+    .return-btn:hover { 
+
+      background-color: #4eaf7c; 
+
+    } 
+
+  </style> 
+
+</head> 
+
+<body> 
+
+ 
+
+<h1>Créer une Partie</h1> 
+
+ 
+
+<div class="form-container"> 
+
+  <label for="mode">Choisissez le mode de jeu :</label> 
+
+  <select id="mode" name="mode"> 
+
+    <option value="classique">Classique</option> 
+
+    <option value="poison">Poison</option> 
+
+  </select> 
+
+ 
+
+  <label for="duree">Durée de la partie :</label> 
+
+  <select id="duree" name="duree"> 
+
+    <option value="30">30 minutes</option> 
+
+    <option value="60">60 minutes</option> 
+
+  </select> 
+
+ 
+
+  <label for="periode">Choisissez la période du scénario :</label> 
+
+  <select id="periode" name="periode"> 
+
+    <option value="medieval">Moyen-Âge</option> 
+
+    <option value="victorien">Victorien</option> 
+
+    <option value="antiquite">Antiquité</option> 
+
+    <option value="renaissance">Renaissance</option> 
+
+    <option value="contemporain">Contemporain</option> 
+
+    <option value="futuriste">Futuriste</option> 
+
+    <option value="autre">Autre (préciser ci-dessous)</option> 
+
+  </select> 
+
+ 
+
+  <div id="autrePeriode" style="display: none;"> 
+
+    <label for="periode_autre">Précisez la période :</label> 
+
+    <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle"> 
+
+  </div> 
+
+ 
+
+  <label for="nombreJoueurs">Nombre de joueurs :</label> 
+
+  <select id="nombreJoueurs" name="nombreJoueurs"> 
+
+    <option value="1">1 joueur</option> 
+
+    <option value="4">4 joueurs</option> 
+
+    <option value="5">5 joueurs</option> 
+
+    <option value="6">6 joueurs</option> 
+
+    <option value="7">7 joueurs</option> 
+
+    <option value="8">8 joueurs</option> 
+
+    <option value="9">9 joueurs</option> 
+
+    <option value="10">10 joueurs</option> 
+
+    <option value="11">11 joueurs</option> 
+
+    <option value="12">12 joueurs</option> 
+
+  </select> 
+
+ 
+
+  <label for="criminels">Nombre de criminels :</label> 
+
+  <select id="criminels" name="criminels"> 
+
+    <option value="1">1 criminel</option> 
+
+    <option value="2">2 criminels</option> 
+
+    <option value="3">3 criminels</option> 
+
+  </select> 
+
+ 
+
+  <label> 
+
+    <input type="checkbox" id="criminel_fantome"> 
+
+    Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie) 
+
+  </label> 
+
+ 
+
+  <label> 
+
+    <input type="checkbox" id="avatars_legendaires"> 
+
+    Activer les avatars légendaires 
+
+  </label> 
+
+ 
+
+  <label> 
+
+    <input type="checkbox" id="inactifs"> 
+
+    Activer l'observation des inactifs (notifications après 5 min d'inactivité) 
+
+  </label> 
+
+ 
+
+  <button onclick="genererScenario()">Générer</button> 
+
+</div> 
+
+ 
+
+<a class="return-btn" href="accueil.html">Retour à l'accueil</a> 
+
+ 
+
+<script> 
+
+  document.getElementById("periode").addEventListener("change", function () { 
+
+    document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none"; 
+
+  }); 
+
+ 
+
+  function genererScenario() { 
+
+    const mode = document.getElementById("mode").value; 
+
+    const duree = document.getElementById("duree").value; 
+
+    const periode = document.getElementById("periode").value; 
+
+    const periodeAutre = document.getElementById("periode_autre").value; 
+
+    const criminels = parseInt(document.getElementById("criminels").value); 
+
+    const criminelFantome = document.getElementById("criminel_fantome").checked; 
+
+    const avatarsLegendaires = document.getElementById("avatars_legendaires").checked; 
+
+    const inactifs = document.getElementById("inactifs").checked; 
+
+    const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value); 
+
+ 
+
+    const scenario = genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs); 
+
+ 
+
+    localStorage.setItem("scenarioData", JSON.stringify(scenario)); 
+
+ 
+
+    localStorage.setItem("introduction", scenario.introduction); 
+
+    localStorage.setItem("objectif", scenario.objectif); 
+
+    localStorage.setItem("parametresPartie", JSON.stringify({ 
+
+      mode, duree, periode, periodeAutre, criminels, 
+
+      criminelFantome, avatarsLegendaires, inactifs, nombreJoueurs 
+
+    })); 
+
+ 
+
+    console.log('Introduction générée :', scenario.introduction); 
+
+    console.log('Objectif généré :', scenario.objectif); 
+
+    console.log('Données complètes générées :', scenario); 
+
+    window.location.href = "lancement-partie.html"; 
+
+  } 
+
+ 
+
+  function genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) { 
+
+    let introduction = `Bienvenue dans votre murder party.`; 
+
+    let crime = `Un crime mystérieux s’est produit...`; 
+
+    let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`; 
+
+ 
+
+    if (periode === "victorien") { 
+
+      introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`; 
+
+      crime = `Un empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`; 
+
+    } else if (periode === "autre" && periodeAutre !== "") { 
+
+      introduction = `Bienvenue dans une époque mystérieuse : ${periodeAutre}.`; 
+
+      crime = `Un crime s'est produit dans cette période complexe... Qui est coupable ?`; 
+
+    } 
+
+ 
+
+    const personnages = []; 
+
+    for (let i = 0; i < nombreJoueurs; i++) { 
+
+      personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires)); 
+
+    } 
+
+ 
+
+    return { introduction, crime, objectifGlobal, personnages }; 
+
+  } 
+
+ 
+
+  function genererPersonnage(index, criminels, avatarsLegendaires) { 
+
+    const roles = ['Detective', 'Médium', 'Servant', 'Noble', 'Docteur', 'Marchand']; 
+
+    const traits = ['Alcoolisé', 'Loyal', 'Méfiant', 'Amoureux', 'Rival']; 
+
+    const nom = `Personnage ${index}`; 
+
+ 
+
+    let role = roles[Math.floor(Math.random() * roles.length)]; 
+
+    let trait = traits[Math.floor(Math.random() * traits.length)]; 
+
+ 
+
+    if (index <= criminels) { 
+
+      role = 'Criminel'; 
+
+    } 
+
+ 
+
+    if (avatarsLegendaires && index === 1) { 
+
+      role = "Fantôme"; 
+
+    } 
+
+ 
+
+    return { nom, role, trait }; 
+
+  } 
+
+ 
+
+  function genererScenarioComplet(nombreJoueurs, criminels, periode, periodeAutre = "") { 
+
+    const lieux = { 
+
+      victorien: ["Bibliothèque", "Salle de bal", "Cuisine", "Jardin"], 
+
+      medieval: ["Donjon", "Grande salle", "Écurie", "Chapelle"], 
+
+      antiquite: ["Forum", "Thermes", "Atrium", "Temple"], 
+
+      contemporain: ["Salon", "Garage", "Toit", "Bureau"], 
+
+      futuriste: ["Base orbitale", "Salle de contrôle", "Laboratoire", "Hangar"], 
+
+      renaissance: ["Atelier", "Salle d'armes", "Salle du trône", "Cour"], 
+
+      autre: ["Lieu mystérieux"] 
+
+    }; 
+
+ 
+
+    const selectedLieux = lieux[periode] || lieux["autre"]; 
+
+ 
+
+    const noms = ["Camille", "Alex", "Julien", "Marie", "Victor", "Chloé", "Luc", "Emma", "Nina", "Mathieu", "Claire", "Jules"]; 
+
+    const roles = ["Détective", "Médecin", "Noble", "Domestique", "Artiste", "Alchimiste"]; 
+
+    const traits = ["Alcoolisé", "Loyal", "Méfiant", "Amoureux", "Rival"]; 
+
+    const taches = ["Préparait le repas", "Écrivait une lettre", "Nettoyait la pièce", "Était en prière", "Soignait un malade"]; 
+
+ 
+
+    const criminelsIndexes = []; 
+
+    while (criminelsIndexes.length < criminels) { 
+
+      const rand = Math.floor(Math.random() * nombreJoueurs); 
+
+      if (!criminelsIndexes.includes(rand)) criminelsIndexes.push(rand); 
+
+    } 
+
+ 
+
+    const personnages = []; 
+
+    for (let i = 0; i < nombreJoueurs; i++) { 
+
+      const nom = noms[i % noms.length]; 
+
+      const role = criminelsIndexes.includes(i) ? "Criminel" : roles[i % roles.length]; 
+
+      const trait = traits[i % traits.length]; 
+
+      const tache = taches[i % taches.length]; 
+
+      const lieu = selectedLieux[i % selectedLieux.length]; 
+
+      personnages.push({ nom, role, trait, tache, lieu }); 
+
+    } 
+
+ 
+
+    const introduction = `Un crime a eu lieu dans l'univers ${periodeAutre || periode}.`; 
+
+    const crime = `Quelqu'un a été retrouvé sans vie dans la ${selectedLieux[0]}.`; 
+
+    const objectifGlobal = "Découvrez qui est le coupable avant la fin de la partie."; 
+
+ 
+
+    return { introduction, crime, objectifGlobal, personnages }; 
+
+  } 
+
+ 
+
+  window.onload = function() { 
+
+    localStorage.removeItem("scenarioData"); 
+
+    localStorage.removeItem("introduction"); 
+
+    localStorage.removeItem("objectif"); 
+
+  }; 
+
+</script> 
+
+ 
+
+</body> 
+
+</html> 
