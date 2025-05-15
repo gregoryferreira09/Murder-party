@@ -12,7 +12,7 @@
 </head>
 <body>
 
-  <main><!-- Ajout du rôle de contenu principal -->
+  <main class="profil-container"><!-- Ajout de la classe ici -->
 
     <h1>Mon Profil</h1>
 
@@ -23,11 +23,11 @@
         src="/Public/images/avatar-1.png"
         alt="Avatar"
         tabindex="0"
-        role="button"            <!-- Ajout rôle bouton -->
-        aria-pressed="false"     <!-- Etat accessible (peut être géré en JS) -->
+        role="button"
+        aria-pressed="false"
         onclick="ouvrirModal()"
       />
-      <button type="button" onclick="ouvrirModal()">Changer d'avatar</button> <!-- type button ajouté -->
+      <button type="button" onclick="ouvrirModal()">Changer d'avatar</button>
     </div>
 
     <div class="pseudo-section">
@@ -37,9 +37,9 @@
         type="text"
         maxlength="20"
         aria-label="Saisir votre pseudo"
-        aria-describedby="pseudo-feedback" <!-- Lien avec message de feedback -->
+        aria-describedby="pseudo-feedback"
       />
-      <button type="button" id="btn-save-pseudo">Valider</button> <!-- type button ajouté, aria-live retiré -->
+      <button type="button" id="btn-save-pseudo">Valider</button>
       <div id="pseudo-feedback" role="alert" aria-live="polite"></div>
     </div>
 
@@ -53,7 +53,7 @@
       <p>Grade : <strong id="grade">Aventurier</strong></p>
     </div>
 
-    <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a> <!-- Ajout title -->
+    <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
 
     <!-- MODALE -->
     <div
