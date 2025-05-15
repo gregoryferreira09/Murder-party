@@ -3,355 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <title>Profil - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap"
     rel="stylesheet"
   />
   <style>
-    /* Variables thème */
-    :root {
-      --bg-color-light: #f9f5f0;
-      --text-color-light: #3a1f1f;
-      --bg-color-dark: #2c1b1b;
-      --text-color-dark: #f0e6e6;
-      --primary-color: #d89b72;
-      --btn-bg-light: #a95c38;
-      --btn-bg-dark: #663333;
-      --btn-bg-hover-light: #7c3f26;
-      --btn-bg-hover-dark: #8b4444;
-      --toast-bg: #e9c78c;
-      --toast-text: #2c1b1b;
-    }
-
-    /* Mode clair */
-    body.light {
-      background-color: var(--bg-color-light);
-      color: var(--text-color-light);
-    }
-
-    /* Mode sombre (défaut) */
-    body.dark {
-      background-color: var(--bg-color-dark);
-      color: var(--text-color-dark);
-    }
-
+    /* Fond noir global */
     body {
+      background-color: #000000; /* noir pur */
       font-family: 'Cormorant Garamond', serif;
+      color: #f0e6e6;
       margin: 0;
-      padding: 40px 20px 80px;
-      min-height: 100vh;
+      padding: 40px 0 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
     }
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
       font-size: 3em;
       margin-bottom: 30px;
+      color: #e0d0d0;
       letter-spacing: 2px;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+      text-shadow: 0 0 10px #000000aa;
     }
 
     h2 {
-      color: var(--primary-color);
+      color: #e8c0b0;
       font-size: 1.7em;
       margin-bottom: 15px;
     }
 
-    .container {
-      background-color: inherit;
+    /* Cadres dorés sur fond marron */
+    .avatar-section,
+    .statistiques {
+      background-color: #3a1f1f;
       border-radius: 16px;
       padding: 30px 40px;
       margin-bottom: 30px;
-      width: 100%;
+      width: 90%;
       max-width: 500px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 0 15px #00000055;
       text-align: center;
-      border: 1px solid var(--primary-color);
-      box-sizing: border-box;
-      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+      border: 1px solid #e0c185; /* bordure dorée */
     }
 
-    body.light .container {
-      box-shadow: 0 0 15px #bfa874cc;
-    }
-
-    /* Avatar */
-    .avatar-section img {
+    /* Avatar : suppression effet focus/cercle et styles */
+    #avatar {
       border-radius: 50%;
       width: 160px;
       height: 160px;
       object-fit: cover;
-      border: 4px solid var(--primary-color);
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.53);
-      transition: transform 0.3s ease;
+      border: 4px solid #d89b72;
+      box-shadow: 0 0 10px #00000088;
       cursor: pointer;
-    }
-    .avatar-section img:hover,
-    .avatar-section img:focus {
-      transform: scale(1.05);
       outline: none;
+      transition: none !important;
+      user-select: none;
+    }
+    #avatar:focus,
+    #avatar:active {
+      outline: none;
+      transform: none !important;
+      box-shadow: none !important;
     }
 
+    /* Boutons dorés épurés */
+    button,
+    .return-btn {
+      background-color: #e0c185;
+      color: #3a1f1f;
+      border: 2px solid #a67c00;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 0 10px #e0c18555;
+      user-select: none;
+    }
+    button:hover,
+    .return-btn:hover {
+      background-color: #c9a44a;
+      color: #2c1b1b;
+      box-shadow: 0 0 20px #e0c185bb;
+    }
+
+    /* Bouton changer avatar marge */
     .avatar-section button {
       margin-top: 15px;
-      padding: 10px 20px;
-      background-color: var(--btn-bg-dark);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.3s ease;
-    }
-    body.light .avatar-section button {
-      background-color: var(--btn-bg-light);
-      color: var(--text-color-light);
-    }
-    .avatar-section button:hover,
-    .avatar-section button:focus {
-      background-color: var(--btn-bg-hover-dark);
-      outline: none;
-    }
-    body.light .avatar-section button:hover,
-    body.light .avatar-section button:focus {
-      background-color: var(--btn-bg-hover-light);
-      outline: none;
     }
 
-    /* Form */
-    label {
-      display: block;
-      font-weight: 600;
-      margin: 20px 0 6px 0;
-      text-align: left;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    input[type='text'],
-    select {
-      width: 100%;
-      max-width: 400px;
-      padding: 10px;
-      font-size: 1.1em;
-      border: 2px solid var(--primary-color);
-      border-radius: 8px;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
-    }
-
-    input[type='text']:focus,
-    select:focus {
-      border-color: var(--btn-bg-dark);
-      outline: none;
-    }
-    body.light input[type='text']:focus,
-    body.light select:focus {
-      border-color: var(--btn-bg-light);
-    }
-
-    /* Checkbox */
-    .checkbox-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-      margin: 15px auto 30px;
-      max-width: 400px;
-      cursor: pointer;
-      user-select: none;
-      text-align: left;
-    }
-
-    input[type='checkbox'] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-    }
-
-    /* Buttons */
-    .btn-primary,
-    .btn-secondary,
-    #toggleThemeBtn {
-      padding: 12px 28px;
-      font-size: 1.1em;
-      border-radius: 10px;
-      cursor: pointer;
-      border: none;
-      transition: background-color 0.3s ease;
-      margin: 10px 5px;
-      user-select: none;
-      font-family: 'Cormorant Garamond', serif;
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-primary {
-      background-color: var(--btn-bg-dark);
-      color: white;
-      border: 2px solid var(--primary-color);
-    }
-    body.light .btn-primary {
-      background-color: var(--btn-bg-light);
-      color: var(--text-color-light);
-      border: 2px solid var(--primary-color);
-    }
-    .btn-primary:hover,
-    .btn-primary:focus {
-      background-color: var(--btn-bg-hover-dark);
-      outline: none;
-    }
-    body.light .btn-primary:hover,
-    body.light .btn-primary:focus {
-      background-color: var(--btn-bg-hover-light);
-      outline: none;
-    }
-
-    .btn-secondary {
-      background-color: transparent;
-      color: var(--primary-color);
-      border: 2px solid var(--primary-color);
-    }
-    .btn-secondary:hover,
-    .btn-secondary:focus {
-      background-color: var(--primary-color);
-      color: var(--bg-color-dark);
-      outline: none;
-    }
-    body.light .btn-secondary:hover,
-    body.light .btn-secondary:focus {
-      color: var(--bg-color-light);
-    }
-
-    /* Retour */
-    .return-btn {
-      margin-top: 40px;
-      display: inline-block;
-      text-decoration: none;
-      padding: 12px 28px;
-      border-radius: 10px;
-      border: 2px solid var(--primary-color);
-      font-size: 1em;
-      font-family: 'Cormorant Garamond', serif;
-      cursor: pointer;
-      background-color: transparent;
-      color: inherit;
-      transition: background-color 0.3s ease;
-    }
-    .return-btn:hover,
-    .return-btn:focus {
-      background-color: var(--primary-color);
-      color: var(--bg-color-dark);
-      outline: none;
-    }
-    body.light .return-btn:hover,
-    body.light .return-btn:focus {
-      color: var(--bg-color-light);
-    }
-
-    /* Statistiques */
+    /* Statistiques textes */
     .statistiques p {
       font-size: 1.2em;
       margin: 12px 0;
-      color: inherit;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
+      color: #f0e6e6;
     }
 
-    /* Graphique simple */
-    .chart {
-      max-width: 400px;
-      margin: 10px auto 30px;
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      align-items: flex-end;
-      height: 120px;
-    }
-    .bar {
-      width: 40px;
-      background-color: var(--primary-color);
-      border-radius: 6px 6px 0 0;
-      box-shadow: 0 0 5px rgba(216, 155, 114, 0.7);
-      transition: background-color 0.3s ease;
-      cursor: default;
-      position: relative;
-    }
-    .bar:hover,
-    .bar:focus {
-      background-color: #b07e51;
-      outline: none;
-    }
-    .bar span {
-      position: absolute;
-      top: -24px;
-      width: 100%;
-      font-size: 0.9em;
-      color: var(--primary-color);
-      font-weight: 700;
-      text-shadow: 0 0 3px rgba(0,0,0,0.8);
-      user-select: none;
-    }
-
-    /* Toast notification */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--toast-bg);
-      color: var(--toast-text);
-      padding: 12px 24px;
+    /* Retour accueil */
+    .return-btn {
+      margin: 40px auto 60px;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(233, 199, 140, 0.8);
-      font-weight: 600;
-      font-family: 'Cormorant Garamond', serif;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-      z-index: 9999;
-      user-select: none;
-    }
-    .toast.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* Theme toggle */
-    #toggleThemeBtn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 1em;
-      padding: 10px 18px;
-      background-color: var(--btn-bg-dark);
-      color: white;
-      border-radius: 10px;
-      border: 2px solid var(--primary-color);
-      user-select: none;
-      transition: background-color 0.3s ease;
-      z-index: 10000;
-    }
-    body.light #toggleThemeBtn {
-      background-color: var(--btn-bg-light);
-      color: var(--text-color-light);
-    }
-    #toggleThemeBtn:hover,
-    #toggleThemeBtn:focus {
-      background-color: var(--btn-bg-hover-dark);
-      outline: none;
-    }
-    body.light #toggleThemeBtn:hover,
-    body.light #toggleThemeBtn:focus {
-      background-color: var(--btn-bg-hover-light);
-      outline: none;
     }
 
     /* Responsive */
@@ -359,377 +119,72 @@
       h1 {
         font-size: 2.2em;
       }
-      .container {
-        padding: 20px 25px;
+      .avatar-section,
+      .statistiques {
+        padding: 20px;
       }
-      .avatar-section img {
-        width: 130px;
-        height: 130px;
-      }
-      .btn-primary,
-      .btn-secondary,
-      #toggleThemeBtn {
-        font-size: 1em;
+      button,
+      .return-btn {
         padding: 10px 20px;
+        font-size: 1em;
       }
-      .chart {
-        height: 90px;
-      }
-      .bar {
-        width: 30px;
+      #avatar {
+        width: 120px;
+        height: 120px;
       }
     }
   </style>
 </head>
 <body>
-  <button id="toggleThemeBtn" aria-label="Changer le thème" title="Changer le thème">🌙 / ☀️</button>
 
   <h1>Mon Profil</h1>
 
-  <section class="container avatar-section" aria-label="Section avatar">
+  <div class="avatar-section">
     <h2>Mon Avatar</h2>
-    <img
-      id="avatar"
-      src="images/avatar-default.png"
-      alt="Avatar du joueur"
-      tabindex="0"
-      role="button"
-      aria-describedby="avatar-instruction"
-    />
-    <div id="avatar-instruction" class="sr-only">Cliquez ou appuyez pour changer l'avatar</div>
-    <button class="btn-primary" id="changerAvatarBtn">Changer d'avatar</button>
-  </section>
+    <img id="avatar" src="images/avatar-1.png" alt="Avatar" tabindex="0" onclick="changerAvatar()" />
+    <button onclick="changerAvatar()">Changer d'avatar</button>
+  </div>
 
-  <section class="container" aria-label="Section pseudo et sauvegarde">
-    <label for="pseudoInput">Mon pseudo</label>
-    <input
-      type="text"
-      id="pseudoInput"
-      maxlength="20"
-      autocomplete="off"
-      placeholder="Entrez votre pseudo"
-      aria-describedby="pseudoHelp"
-      required
-    />
-    <div id="pseudoHelp" class="sr-only">Pseudo limité à 20 caractères, sans caractères spéciaux</div>
-
-    <button class="btn-primary" id="sauvegarderBtn" disabled>Sauvegarder</button>
-    <button class="btn-secondary" id="exportBtn">Exporter profil</button>
-    <button class="btn-secondary" id="importBtn">Importer profil</button>
-    <input type="file" id="importFile" accept=".json" style="display:none" aria-hidden="true" />
-  </section>
-
-  <section class="container statistiques" aria-label="Section statistiques">
+  <div class="statistiques">
     <h2>Statistiques</h2>
-    <p>Parties jouées : <strong id="statPartiesJouees">0</strong></p>
-    <p>Parties gagnées : <strong id="statPartiesGagnees">0</strong></p>
-    <p>→ En tant qu’enquêteur : <strong id="statEnqueteur">0</strong></p>
-    <p>→ En tant que criminel : <strong id="statCriminel">0</strong></p>
-    <p>Record de durée d’une victoire : <strong id="statRecordDuree">0 min 0s</strong></p>
-    <p>Grade : <strong id="grade">Novice</strong></p>
+    <p>Parties jouées : <strong>20</strong></p>
+    <p>Parties gagnées : <strong>7</strong></p>
+    <p>→ En tant qu’enquêteur : <strong>4</strong></p>
+    <p>→ En tant que criminel : <strong>3</strong></p>
+    <p>Record de durée d’une victoire : <strong>18 min 42s</strong></p>
+    <p>Grade : <strong id="grade">Aventurier</strong></p>
+  </div>
 
-    <div class="chart" aria-label="Graphique des statistiques">
-      <div class="bar" tabindex="0" aria-label="Parties jouées" style="height: 0%">
-        <span id="labelPJ">0</span>
-      </div>
-      <div class="bar" tabindex="0" aria-label="Parties gagnées" style="height: 0%">
-        <span id="labelPG">0</span>
-      </div>
-      <div class="bar" tabindex="0" aria-label="Enquêteur" style="height: 0%">
-        <span id="labelEnqueteur">0</span>
-      </div>
-      <div class="bar" tabindex="0" aria-label="Criminel" style="height: 0%">
-        <span id="labelCriminel">0</span>
-      </div>
-    </div>
-  </section>
-
-  <a class="return-btn" href="accueil.html" role="button" tabindex="0">Retour à l'accueil</a>
-
-  <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+  <a class="return-btn" href="accueil.html">Retour à l'accueil</a>
 
   <script>
-    (() => {
-      const avatar = document.getElementById("avatar");
-      const changerAvatarBtn = document.getElementById("changerAvatarBtn");
-      const pseudoInput = document.getElementById("pseudoInput");
-      const sauvegarderBtn = document.getElementById("sauvegarderBtn");
-      const exportBtn = document.getElementById("exportBtn");
-      const importBtn = document.getElementById("importBtn");
-      const importFile = document.getElementById("importFile");
-      const toast = document.getElementById("toast");
-      const gradeEl = document.getElementById("grade");
+    const avatar = document.getElementById("avatar");
+    const avatars = [
+      "avatar-1.png",
+      "avatar-2.png",
+      "avatar-3.png"
+    ];
+    let index = 0;
 
-      // Statistiques éléments
-      const statPartiesJouees = document.getElementById("statPartiesJouees");
-      const statPartiesGagnees = document.getElementById("statPartiesGagnees");
-      const statEnqueteur = document.getElementById("statEnqueteur");
-      const statCriminel = document.getElementById("statCriminel");
-      const statRecordDuree = document.getElementById("statRecordDuree");
-
-      // Graph bars and labels
-      const bars = {
-        partiesJouees: document.querySelectorAll(".bar")[0],
-        partiesGagnees: document.querySelectorAll(".bar")[1],
-        enqueteur: document.querySelectorAll(".bar")[2],
-        criminel: document.querySelectorAll(".bar")[3],
-      };
-      const labels = {
-        partiesJouees: document.getElementById("labelPJ"),
-        partiesGagnees: document.getElementById("labelPG"),
-        enqueteur: document.getElementById("labelEnqueteur"),
-        criminel: document.getElementById("labelCriminel"),
-      };
-
-      const avatars = [
-        "avatar-default.png",
-        "avatar-1.png",
-        "avatar-2.png",
-        "avatar-3.png",
-      ];
-      let avatarIndex = 0;
-
-      // Data profil initiale
-      let profil = {
-        pseudo: "",
-        avatar: avatars[0],
-        stats: {
-          partiesJouees: 20,
-          partiesGagnees: 7,
-          enqueteur: 4,
-          criminel: 3,
-          recordDureeSec: 1122, // 18min42s
-        },
-      };
-
-      let isDirty = false; // modif non sauvegardée ?
-
-      // Toast notification
-      function showToast(message) {
-        toast.textContent = message;
-        toast.classList.add("show");
-        setTimeout(() => {
-          toast.classList.remove("show");
-        }, 3000);
-      }
-
-      // Convert secondes en mm:ss
-      function formatDuree(sec) {
-        const m = Math.floor(sec / 60);
-        const s = sec % 60;
-        return `${m} min ${s < 10 ? "0" : ""}${s}s`;
-      }
-
-      // Mise à jour du grade
-      function updateGrade(victoires) {
-        if (victoires <= 5) {
-          return "Novice";
-        } else if (victoires <= 10) {
-          return "Aventurier";
-        } else if (victoires <= 20) {
-          return "Champion";
-        } else {
-          return "Légende";
-        }
-      }
-
-      // Mise à jour de l'affichage des stats et graphique
-      function updateStatsUI() {
-        const s = profil.stats;
-        statPartiesJouees.textContent = s.partiesJouees;
-        statPartiesGagnees.textContent = s.partiesGagnees;
-        statEnqueteur.textContent = s.enqueteur;
-        statCriminel.textContent = s.criminel;
-        statRecordDuree.textContent = formatDuree(s.recordDureeSec);
-        gradeEl.textContent = updateGrade(s.partiesGagnees);
-
-        // Graph hauteur % (max = parties jouées)
-        const maxVal = Math.max(s.partiesJouees, 1);
-        bars.partiesJouees.style.height = `${(s.partiesJouees / maxVal) * 100}%`;
-        bars.partiesGagnees.style.height = `${(s.partiesGagnees / maxVal) * 100}%`;
-        bars.enqueteur.style.height = `${(s.enqueteur / maxVal) * 100}%`;
-        bars.criminel.style.height = `${(s.criminel / maxVal) * 100}%`;
-
-        labels.partiesJouees.textContent = s.partiesJouees;
-        labels.partiesGagnees.textContent = s.partiesGagnees;
-        labels.enqueteur.textContent = s.enqueteur;
-        labels.criminel.textContent = s.criminel;
-      }
-
-      // Chargement données locale
-      function loadProfil() {
-        const data = localStorage.getItem("murderProfil");
-        if (data) {
-          try {
-            profil = JSON.parse(data);
-            avatarIndex = avatars.indexOf(profil.avatar);
-            if (avatarIndex === -1) avatarIndex = 0;
-          } catch {
-            // fallback au profil par défaut
-          }
-        }
-      }
-
-      // Sauvegarde données locale
-      function saveProfil() {
-        localStorage.setItem("murderProfil", JSON.stringify(profil));
-        isDirty = false;
-        sauvegarderBtn.disabled = true;
-        showToast("Profil sauvegardé !");
-      }
-
-      // Validation pseudo (alphanum + espace, 2-20 chars)
-      function validatePseudo(p) {
-        const regex = /^[a-zA-Z0-9\s\-_'éèàê]{2,20}$/;
-        return regex.test(p);
-      }
-
-      // Activation bouton sauvegarder
-      function checkModifs() {
-        const valid = validatePseudo(pseudoInput.value.trim());
-        sauvegarderBtn.disabled = !valid || !isDirty;
-      }
-
-      // Change avatar index + update
-      function changerAvatar() {
-        avatarIndex = (avatarIndex + 1) % avatars.length;
-        profil.avatar = avatars[avatarIndex];
-        avatar.src = `images/${profil.avatar}`;
-        avatar.alt = `Avatar du joueur (${avatarIndex + 1})`;
-        isDirty = true;
-        checkModifs();
-      }
-
-      // Theme toggle
-      const toggleThemeBtn = document.getElementById("toggleThemeBtn");
-      function applyTheme(theme) {
-        if (theme === "light") {
-          document.body.classList.add("light");
-          document.body.classList.remove("dark");
-          toggleThemeBtn.textContent = "🌙 / ☀️";
-        } else {
-          document.body.classList.add("dark");
-          document.body.classList.remove("light");
-          toggleThemeBtn.textContent = "🌙 / ☀️";
-        }
-        localStorage.setItem("murderTheme", theme);
-      }
-      toggleThemeBtn.addEventListener("click", () => {
-        const current = document.body.classList.contains("light") ? "light" : "dark";
-        const next = current === "light" ? "dark" : "light";
-        applyTheme(next);
-      });
-
-      // Import / Export JSON
-      exportBtn.addEventListener("click", () => {
-        const blob = new Blob([JSON.stringify(profil, null, 2)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "profil-murder.json";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        showToast("Profil exporté !");
-      });
-
-      importBtn.addEventListener("click", () => {
-        importFile.value = "";
-        importFile.click();
-      });
-
-      importFile.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          try {
-            const imported = JSON.parse(event.target.result);
-            if (
-              imported.pseudo !== undefined &&
-              imported.avatar !== undefined &&
-              imported.stats !== undefined
-            ) {
-              profil = imported;
-              avatarIndex = avatars.indexOf(profil.avatar);
-              if (avatarIndex === -1) avatarIndex = 0;
-              avatar.src = `images/${profil.avatar}`;
-              avatar.alt = `Avatar du joueur (${avatarIndex + 1})`;
-              pseudoInput.value = profil.pseudo;
-              updateStatsUI();
-              isDirty = false;
-              sauvegarderBtn.disabled = true;
-              showToast("Profil importé avec succès !");
-            } else {
-              showToast("Fichier JSON invalide.");
-            }
-          } catch {
-            showToast("Erreur lors de la lecture du fichier.");
-          }
-        };
-        reader.readAsText(file);
-      });
-
-      // Gestion pseudo input
-      pseudoInput.addEventListener("input", () => {
-        isDirty = true;
-        checkModifs();
-      });
-
-      // Sauvegarder bouton
-      sauvegarderBtn.addEventListener("click", () => {
-        profil.pseudo = pseudoInput.value.trim();
-        saveProfil();
-      });
-
-      // Avatar click aussi change avatar
-      avatar.addEventListener("click", changerAvatar);
-      avatar.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          changerAvatar();
-        }
-      });
-
-      changerAvatarBtn.addEventListener("click", changerAvatar);
-
-      // Confirmation avant quitter si modif non sauvegardées
-      window.addEventListener("beforeunload", (e) => {
-        if (isDirty) {
-          e.preventDefault();
-          e.returnValue = "";
-        }
-      });
-
-      // Initialisation
-      function init() {
-        loadProfil();
-        avatar.src = `images/${profil.avatar}`;
-        avatar.alt = `Avatar du joueur`;
-        pseudoInput.value = profil.pseudo;
-        updateStatsUI();
-        isDirty = false;
-        sauvegarderBtn.disabled = true;
-
-        // Appliquer thème sauvegardé ou défaut
-        const savedTheme = localStorage.getItem("murderTheme") || "dark";
-        applyTheme(savedTheme);
-      }
-      init();
-    })();
-  </script>
-  <style>
-    .sr-only {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      padding: 0 !important;
-      margin: -1px !important;
-      overflow: hidden !important;
-      clip: rect(0,0,0,0) !important;
-      border: 0 !important;
+    function changerAvatar() {
+      index = (index + 1) % avatars.length;
+      avatar.src = "images/" + avatars[index];
     }
-  </style>
+
+    // Mise à jour dynamique du grade
+    const victoires = 7;
+    const grade = document.getElementById("grade");
+
+    if (victoires <= 5) {
+      grade.textContent = "Novice";
+    } else if (victoires <= 10) {
+      grade.textContent = "Aventurier";
+    } else if (victoires <= 20) {
+      grade.textContent = "Champion";
+    } else {
+      grade.textContent = "Légende";
+    }
+  </script>
+
 </body>
 </html>
