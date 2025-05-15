@@ -24,7 +24,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
       margin: 20px 0;
-      border: 2px solid #e9c78c; /* Applique la même bordure que sur la partie de lancement */
+      border: 2px solid #e9c78c;
     }
     .form-container label {
       font-size: 1.2em;
@@ -210,53 +210,38 @@
     return { nom, role, trait };
   }
 
-  function genererScenarioComplet(nombreJoueurs, criminels, periode, periodeAutre = "") {
-    const lieux = {
-      victorien: ["Bibliothèque", "Salle de bal", "Cuisine", "Jardin"],
-      medieval: ["Donjon", "Grande salle", "Écurie", "Chapelle"],
-      antiquite: ["Forum", "Thermes", "Atrium", "Temple"],
-      contemporain: ["Salon", "Garage", "Toit", "Bureau"],
-      futuriste: ["Base orbitale", "Salle de contrôle", "Laboratoire", "Hangar"],
-      renaissance: ["Atelier", "Salle d'armes", "Salle du trône", "Cour"],
-      autre: ["Lieu mystérieux"]
-    };
-
-    const selectedLieux = lieux[periode] || lieux["autre"];
-
-    const noms = ["Camille", "Alex", "Julien", "Marie", "Victor", "Chloé", "Luc", "Emma", "Nina", "Mathieu", "Claire", "Jules"];
-    const roles = ["Détective", "Médecin", "Noble", "Domestique", "Artiste", "Alchimiste"];
-    const traits = ["Alcoolisé", "Loyal", "Méfiant", "Amoureux", "Rival"];
-    const taches = ["Préparait le repas", "Écrivait une lettre", "Nettoyait la pièce", "Était en prière", "Soignait un malade"];
-
-    const criminelsIndexes = [];
-    while (criminelsIndexes.length < criminels) {
-      const rand = Math.floor(Math.random() * nombreJoueurs);
-      if (!criminelsIndexes.includes(rand)) criminelsIndexes.push(rand);
-    }
-
-    const personnages = [];
-    for (let i = 0; i < nombreJoueurs; i++) {
-      const nom = noms[i % noms.length];
-      const role = criminelsIndexes.includes(i) ? "Criminel" : roles[i % roles.length];
-      const trait = traits[i % traits.length];
-      const tache = taches[i % taches.length];
-      const lieu = selectedLieux[i % selectedLieux.length];
-      personnages.push({ nom, role, trait, tache, lieu });
-    }
-
-    const introduction = `Un crime a eu lieu dans l'univers ${periodeAutre || periode}.`;
-    const crime = `Quelqu'un a été retrouvé sans vie dans la ${selectedLieux[0]}.`;
-    const objectifGlobal = "Découvrez qui est le coupable avant la fin de la partie.";
-
-    return { introduction, crime, objectifGlobal, personnages };
-  }
-
-  window.onload = function() {
+  window.onload = function () {
     localStorage.removeItem("scenarioData");
     localStorage.removeItem("introduction");
     localStorage.removeItem("objectif");
+
+    // 🔗 Socket.io : récupérer le code de salon dans l'URL
+    const params = new URLSearchParams(window.location.search);
+    const salonCode = params.get("code");
+
+    if (salonCode) {
+      const socket = io();
+
+      socket.on("connect", () => {
+        console.log("🧠 Connecté avec ID Socket :", socket.id);
+        socket.emit("rejoindreSalon", salonCode);
+      });
+
+      socket.on("confirmationSalon", (code) => {
+        console.log("✅ Rejoint le salon :", code);
+      });
+
+      socket.on("salonInexistant", () => {
+        alert("❌ Ce salon n'existe pas.");
+        window.location.href = "accueil.html";
+      });
+    } else {
+      alert("❌ Code de salon manquant.");
+      window.location.href = "accueil.html";
+    }
   };
 </script>
 
+<script src="/socket.io/socket.io.js"></script>
 </body>
 </html>
