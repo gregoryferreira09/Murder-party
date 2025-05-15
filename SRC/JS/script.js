@@ -222,6 +222,61 @@ const initialiserProfil = () => {
     }
     gradeElem.textContent = gradeTrouve;
   }
+
+  // --- AJOUT : Affichage du pourcentage de victoires ---
+  const statsSection = document.querySelector(".statistiques");
+  if (statsSection) {
+    const pourcentage = stats.partiesJouees > 0
+      ? Math.round((stats.victoires / stats.partiesJouees) * 100)
+      : 0;
+    const pPourcentage = document.createElement("p");
+    pPourcentage.innerHTML = `Taux de victoire : <strong>${pourcentage}%</strong>`;
+    statsSection.appendChild(pPourcentage);
+  }
+
+  // --- AJOUT : Badge Expert si 15 victoires ou plus ---
+  const badgesUl = document.querySelector(".badges-section ul");
+  if (badgesUl && stats.victoires >= 15) {
+    const newBadge = document.createElement("li");
+    const img = document.createElement("img");
+    img.src = "/Public/images/badges/expert.png";
+    img.alt = "Badge Expert";
+    newBadge.appendChild(img);
+    badgesUl.appendChild(newBadge);
+  }
+
+  // --- AJOUT : Boutons réinitialisation ---
+  // Crée les boutons et insère-les dans la section statistiques
+  if (statsSection) {
+    const resetStatsBtn = document.createElement("button");
+    resetStatsBtn.id = "reset-stats-btn";
+    resetStatsBtn.textContent = "Réinitialiser les statistiques";
+    resetStatsBtn.style.marginRight = "10px";
+
+    const resetProfilBtn = document.createElement("button");
+    resetProfilBtn.id = "reset-profil-btn";
+    resetProfilBtn.textContent = "Réinitialiser tout le profil";
+
+    statsSection.appendChild(resetStatsBtn);
+    statsSection.appendChild(resetProfilBtn);
+
+    // Gestion événements
+    resetStatsBtn.addEventListener("click", () => {
+      if (confirm("Êtes-vous sûr de vouloir réinitialiser les statistiques ?")) {
+        localStorage.removeItem("stats");
+        location.reload();
+      }
+    });
+
+    resetProfilBtn.addEventListener("click", () => {
+      if (confirm("Cette action réinitialisera le pseudo, l’avatar et les statistiques. Continuer ?")) {
+        localStorage.removeItem("stats");
+        localStorage.removeItem("pseudo");
+        localStorage.removeItem("avatar");
+        location.reload();
+      }
+    });
+  }
 };
 
 // --- INIT GLOBALE --- //
