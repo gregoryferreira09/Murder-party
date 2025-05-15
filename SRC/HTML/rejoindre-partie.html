@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <title>Rejoindre une partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Liens vers polices et styles -->
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     body {
       background-color: #2c1b1b;
@@ -44,7 +47,7 @@
       font-family: 'Cinzel Decorative', serif;
       transition: all 0.3s ease;
       margin-top: 20px;
-      margin-bottom: 10px; /* Ajouté pour espacer les boutons */
+      margin-bottom: 10px;
     }
 
     button:hover {
@@ -62,13 +65,13 @@
     }
   </style>
 </head>
+
 <body>
 
   <h1>🔑 Rejoindre une partie</h1>
-
   <p>Entrez le code de salon reçu :</p>
-  <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" />
 
+  <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" />
   <br>
   <button onclick="rejoindreSalon()">Valider</button>
   <br>
@@ -80,6 +83,7 @@
   <script>
     let aDejaRejoint = false;
 
+    // Fonction pour rejoindre un salon
     function rejoindreSalon() {
       if (aDejaRejoint) return;
 
@@ -87,12 +91,14 @@
       const codeSalon = localStorage.getItem("salonCode");
       const messageDiv = document.getElementById("message");
 
+      // Aucun salon actif
       if (!codeSalon) {
         messageDiv.textContent = "Aucun salon actif trouvé. Demandez au créateur de la partie de créer un salon.";
         messageDiv.style.color = "#ff6b6b";
         return;
       }
 
+      // Code correct
       if (codeEntre === codeSalon) {
         let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
         let maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
@@ -114,20 +120,23 @@
         afficherCompteur();
 
       } else {
+        // Code incorrect
         messageDiv.textContent = "Code invalide. Vérifiez et réessayez.";
         messageDiv.style.color = "#ff6b6b";
       }
     }
 
+    // Affichage du compteur de joueurs
     function afficherCompteur() {
       const compteurDiv = document.getElementById("compteur");
       const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
       const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
       const maxJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 6;
+
       compteurDiv.textContent = `${connectes} joueur(s) sur ${maxJoueurs} connectés`;
     }
 
-    // Vérification régulière toutes les secondes
+    // Mise à jour régulière du compteur et redirection si complet
     setInterval(() => {
       const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
       const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
@@ -140,7 +149,7 @@
       }
     }, 1000);
 
-    // Fonction ajoutée pour le bouton "Retour"
+    // Bouton retour vers accueil
     function retourAccueil() {
       if (aDejaRejoint) {
         let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
@@ -148,7 +157,7 @@
         localStorage.setItem("joueursConnectes", connectes.toString());
         aDejaRejoint = false;
       }
-      window.location.href = "accueil.html"; // Rediriger vers la page d'accueil (modifie selon ton URL d'accueil)
+      window.location.href = "accueil.html";
     }
   </script>
 
