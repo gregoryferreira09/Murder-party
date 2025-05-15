@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Accueil</title>
-
-  <!-- ✅ Lien vers le fichier CSS externe -->
+  <!-- Lien vers le fichier CSS externe -->
   <link rel="stylesheet" href="../../Public/styles/style.css">
 
-  <!-- ✅ CSS interne éventuel (facultatif) -->
   <style>
+    /* Quelques styles basiques pour l'affichage */
     #modal {
       display: none;
       position: fixed;
@@ -50,6 +49,34 @@
   </style>
 </head>
 <body>
-  <!-- contenu -->
+
+  <h1>Bienvenue !</h1>
+
+  <button id="creerSalon">Créer un salon</button>
+
+  <div id="profil">
+    <h2>Profil</h2>
+    <img id="avatar" src="images/avatar-1.png" alt="Votre avatar" />
+    <br>
+    <input id="pseudoInput" type="text" placeholder="Entrez votre pseudo" />
+    <button id="validerPseudo">Valider Pseudo</button>
+
+    <p>Victoires : <span id="victoires">0</span></p>
+    <p>Défaites : <span id="defaites">0</span></p>
+    <p>Parties jouées : <span id="partiesJouees">0</span></p>
+    <p>Niveau : <span id="grade">Novice</span></p>
+  </div>
+
+  <!-- Modale Avatar -->
+  <div id="modal">
+    <div id="avatar-list">
+      <!-- Avatars injectés dynamiquement -->
+    </div>
+    <button id="validerAvatar">Valider l'avatar</button>
+  </div>
+
+  <!-- Ton script JS -->
+  <script src="script.js"></script>
+
 </body>
 </html>
