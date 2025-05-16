@@ -38,11 +38,14 @@ header {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-h1 {
+h1, h2, h3, h4, h5, h6 {
   font-family: 'Cinzel Decorative', cursive;
-  font-size: 3em;
   color: #e0c185;
-  margin: 0;
+  margin-bottom: 0.6em;
+}
+
+label, input, select, textarea, button {
+  font-family: 'Cormorant Garamond', serif;
 }
 
 /* Main */
