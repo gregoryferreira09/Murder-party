@@ -286,34 +286,6 @@ const avatarsDisponibles = [
   '/Public/images/avatar-4.png'
 ];
 
-// Ouvre la modale
-function ouvrirModal() {
-  avatarList.innerHTML = ''; // Vider avant de remplir
-
-  avatarsDisponibles.forEach((src, index) => {
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = `Avatar ${index + 1}`;
-    img.tabIndex = 0;
-    img.role = 'option';
-    img.classList.add('avatar-option');
-
-    img.onclick = () => {
-      // Supprimer les sélections précédentes
-      avatarList.querySelectorAll('img').forEach(i => i.classList.remove('selected'));
-      img.classList.add('selected');
-      selectedAvatar = src;
-      btnValider.disabled = false;
-      avatarFeedback.textContent = '';
-    };
-
-    avatarList.appendChild(img);
-  });
-
-  modal.style.display = 'block';
-  modal.focus();
-}
-
 // Ferme la modale
 function fermerModal() {
   modal.style.display = 'none';
