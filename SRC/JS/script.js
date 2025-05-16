@@ -305,3 +305,4 @@ btnValider.addEventListener('click', () => {
 });
 
 };
+window.addEventListener('DOMContentLoaded', initialiserProfil);
