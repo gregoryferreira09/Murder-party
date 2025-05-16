@@ -3,7 +3,9 @@
 // Récupère l'objet profil complet depuis localStorage ou crée un profil vide
 export function getProfil() {
   try {
-    return JSON.parse(localStorage.getItem("profil")) || {};
+    const stored = localStorage.getItem("profil");
+    if (!stored) return {};
+    return JSON.parse(stored);
   } catch (e) {
     console.warn("Erreur lors de la lecture du profil localStorage", e);
     return {};
@@ -23,10 +25,9 @@ export function saveProfil(profil) {
 export function applyUserSettings() {
   const profil = getProfil();
 
-  // Appliquer la langue (pour l'instant sur l'attribut lang du html)
+  // Appliquer la langue (sur l'attribut lang du html)
   if (profil.langue === "en") {
     document.documentElement.lang = "en";
-    // TODO: Ajouter ici la logique i18n si besoin (traduction dynamique)
   } else {
     document.documentElement.lang = "fr";
   }
@@ -41,10 +42,9 @@ export function applyUserSettings() {
       });
     };
   } else {
-    // Fonction vide si sons désactivés
     window.playSound = () => {};
   }
 
   // Flag global pour activer les notifications internes dans l'app
-  window.notificationsEnabled = !!profil.notificationsEnabled;
+  window.notificationsEnabled = Boolean(profil.notificationsEnabled);
 }
