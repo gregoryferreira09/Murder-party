@@ -354,6 +354,28 @@ a:hover {
   align-items: center; /* pour centrer horizontalement */
 }
 
+.gold-btn {
+  display: inline-block;
+  margin: 40px auto 20px auto;
+  padding: 14px 28px;
+  border: 2px solid #e0c185;
+  background-color: #2c1b1b;
+  color: #f4e4c1;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.25em;
+  transition: all 0.3s ease;
+  max-width: 280px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #e0c18544;
+}
+.gold-btn:hover,
+.gold-btn:focus {
+  background-color: #3d2b1f;
+  box-shadow: 0 0 15px #e0c185cc;
+  outline: none;
+}
+
 /* ===== Fenêtre flottante avatar ===== */
 .modal {
   position: fixed;
