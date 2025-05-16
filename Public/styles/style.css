@@ -222,6 +222,9 @@ a:hover {
 
 .avatar-section {
   margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .avatar-section img#avatar {
@@ -233,6 +236,7 @@ a:hover {
   box-shadow: 0 0 15px rgba(224, 193, 133, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  margin: 1rem 0; /* Centrage vertical */
 }
 
 .avatar-section img#avatar:hover,
@@ -240,6 +244,8 @@ a:hover {
   transform: scale(1.1);
   box-shadow: 0 0 25px #e0c185cc;
   outline: none;
+}
+
 }
 
 .pseudo-section {
