@@ -1,6 +1,4 @@
-/* Polices chargées via Google Fonts dans le HTML */
 
-/* Reset et base */
 body {
   margin: 0;
   padding: 0;
@@ -14,6 +12,19 @@ body {
   justify-content: flex-start;
   text-align: center;
   scroll-behavior: smooth;
+}
+
+header h1 {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2.5em; /* adapte selon le rendu souhaité */
+  background: #181818; /* noir profond, adapte selon le CSS de l'accueil */
+  color: #FFD700; /* couleur dorée, adapte selon l'accueil */
+  padding: 20px 0;
+  text-align: center;
+  margin: 0;
+  letter-spacing: 1px;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 /* Bandeau doré autour du contenu principal */
