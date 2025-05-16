@@ -71,6 +71,22 @@
       font-weight: bold;
       margin-top: 0.5rem;
     }
+
+    .options-stats {
+      margin-top: 1rem;
+    }
+
+    .options-stats button {
+      margin-right: 1rem;
+    }
+
+    .historique-section {
+      margin-top: 2rem;
+    }
+
+    .historique-section ul {
+      padding-left: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -129,12 +145,28 @@
     <!-- Section Statistiques -->
     <section class="statistiques" aria-labelledby="stats-heading">
       <h2 id="stats-heading">Statistiques</h2>
-      <p>Parties jouées : <strong>20</strong></p>
-      <p>Parties gagnées : <strong>7</strong></p>
-      <p>→ En tant qu’enquêteur : <strong>4</strong></p>
-      <p>→ En tant que criminel : <strong>3</strong></p>
-      <p>Record de durée d’une victoire : <strong>18 min 42s</strong></p>
+      <p>Parties jouées : <strong id="stat-parties">20</strong></p>
+      <p>Parties gagnées : <strong id="stat-victoires">7</strong></p>
+      <p>→ En tant qu’enquêteur : <strong id="stat-enqueteur">4</strong></p>
+      <p>→ En tant que criminel : <strong id="stat-criminel">3</strong></p>
+      <p>Record de durée d’une victoire : <strong id="stat-record">18 min 42s</strong></p>
       <p>Grade : <strong id="grade">Aventurier</strong></p>
+
+      <div class="options-stats">
+        <button type="button" onclick="resetStats()">Réinitialiser mes stats</button>
+        <button type="button" onclick="exportStats()">Exporter mes stats</button>
+        <button type="button" onclick="importStats()">Importer des stats</button>
+      </div>
+    </section>
+
+    <!-- Section Historique des parties -->
+    <section class="historique-section" aria-labelledby="historique-heading">
+      <h2 id="historique-heading">Historique des dernières parties</h2>
+      <ul id="historique-liste">
+        <!-- Exemples d’entrées -->
+        <li>🗓️ 14/05 — Enquêteur — Victoire — 12 min</li>
+        <li>🗓️ 13/05 — Criminel — Défaite — 8 min</li>
+      </ul>
     </section>
 
     <!-- Section Badges -->
@@ -144,43 +176,39 @@
         <li><img src="/Public/images/badges/detective.png" alt="Badge Détective" /></li>
         <li><img src="/Public/images/badges/furtif.png" alt="Badge Furtif" /></li>
         <li><img src="/Public/images/badges/veteran.png" alt="Badge Vétéran" /></li>
-        <!-- Ajouter d'autres badges selon les succès -->
       </ul>
     </section>
 
     <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
 
     <!-- Modale Avatar -->
-<div
-  id="modal"
-  class="modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modal-title"
-  aria-describedby="avatar-list"
-  tabindex="-1"
->
-  <div class="modal-content" role="document">
-    <h3 id="modal-title">Choisissez votre avatar</h3>
-
-    <!-- Liste des avatars -->
     <div
-      id="avatar-list"
-      class="avatar-list"
-      role="list"
-      aria-label="Liste des avatars disponibles"
-    ></div>
+      id="modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-describedby="avatar-list"
+      tabindex="-1"
+    >
+      <div class="modal-content" role="document">
+        <h3 id="modal-title">Choisissez votre avatar</h3>
 
-    <!-- Boutons de la modale -->
-    <div class="modal-buttons">
-      <button type="button" id="btn-valider-avatar" disabled>Valider</button>
-      <button type="button" class="btn-retour" onclick="fermerModal()">Retour</button>
+        <div
+          id="avatar-list"
+          class="avatar-list"
+          role="list"
+          aria-label="Liste des avatars disponibles"
+        ></div>
+
+        <div class="modal-buttons">
+          <button type="button" id="btn-valider-avatar" disabled>Valider</button>
+          <button type="button" class="btn-retour" onclick="fermerModal()">Retour</button>
+        </div>
+
+        <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
+      </div>
     </div>
-
-    <!-- Message de retour -->
-    <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
-  </div>
-</div>
 
   </main>
 
