@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITRE DE LA PAGE - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="DESCRIPTION DE LA PAGE">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/848/848043.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg" as="image">
+  <link rel="stylesheet" href="../../Public/styles/style.css">
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('Service Worker enregistré:', reg.scope))
+          .catch(err => console.error('Erreur Service Worker:', err));
+      });
+    }
+  </script>
+
+  <!-- Paramètres utilisateur via utils.js -->
+  <script type="module">
+    import { applyUserSettings } from "../../Public/scripts/utils.js";
+    applyUserSettings();
+  </script>
+</head>
+
+<body>
+  <header>
+    <h1>Murder Party</h1>
+  </header>
+
+  <main>
+    <!-- Ton contenu principal ici (formulaires, boutons, etc.) -->
+  </main>
+
+  <footer>
+    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
+
+  <!-- Vibration au clic sur tous les boutons -->
+  <script>
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (navigator.vibrate) navigator.vibrate(15);
+      });
+    });
+  </script>
+</body>
+</html>
