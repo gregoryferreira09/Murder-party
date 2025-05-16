@@ -89,7 +89,7 @@ const afficherListeAvatars = (avatars, selectedAvatar, avatarList, onSelect) => 
     img.alt = `Avatar ${file.split('-')[1].split('.')[0]}`;
     img.className = "avatar-option";
     if (selectedAvatar === file) img.classList.add("selected");
-    img.tabIndex = 0; // rendre clavier accessible
+    img.tabIndex = 0;
     img.addEventListener("click", () => {
       avatarList.querySelectorAll(".avatar-option").forEach(a => a.classList.remove("selected"));
       img.classList.add("selected");
@@ -122,9 +122,7 @@ const initialiserProfil = () => {
   const pseudoInput = document.getElementById("pseudo-input");
   const pseudoValiderBtn = document.getElementById("btn-save-pseudo");
   const validerAvatarBtn = document.getElementById("btn-valider-avatar");
-
   const gradeElem = document.getElementById("grade");
-
   const statElems = document.querySelectorAll(".statistiques p strong");
 
   if (!avatar) console.warn("[initialiserProfil] Élément #avatar non trouvé.");
@@ -137,10 +135,7 @@ const initialiserProfil = () => {
 
   const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png", "avatar-4.png"];
   let selectedAvatar = localStorage.getItem("avatar") || avatars[0];
-
-  if (avatar) {
-    avatar.src = `${IMAGE_PATH}${selectedAvatar}`;
-  }
+  if (avatar) avatar.src = `${IMAGE_PATH}${selectedAvatar}`;
 
   const afficherMessage = (message, type = "info", cibleId = "pseudo-feedback") => {
     const cible = document.getElementById(cibleId);
@@ -156,37 +151,24 @@ const initialiserProfil = () => {
     }, 5000);
   };
 
-  // Ouvrir modale avatars
   const ouvrirModal = () => {
     console.log("[ouvrirModal] Ouverture modale avatars.");
-    if (!avatarList || !modal) {
-      console.warn("[ouvrirModal] avatarList ou modal non trouvé.");
-      return;
-    }
+    if (!avatarList || !modal) return;
     afficherListeAvatars(avatars, selectedAvatar, avatarList, (file) => {
       selectedAvatar = file;
-      if (validerAvatarBtn) {
-        validerAvatarBtn.disabled = false;
-        console.log("[ouvrirModal] Bouton valider avatar activé.");
-      }
+      if (validerAvatarBtn) validerAvatarBtn.disabled = false;
     });
     modal.style.display = "flex";
     modal.setAttribute("aria-hidden", "false");
     modal.focus();
   };
 
-  // Fermer modale avatars
   const fermerModal = (event) => {
-    if (!modal) {
-      console.warn("[fermerModal] Élément modal non trouvé.");
-      return;
-    }
+    if (!modal) return;
     if (!event || event.target === modal) {
       console.log("[fermerModal] Fermeture modale avatars.");
       modal.style.display = "none";
       modal.setAttribute("aria-hidden", "true");
-    } else {
-      console.log("[fermerModal] Click ignoré, cible :", event.target);
     }
   };
 
@@ -197,26 +179,18 @@ const initialiserProfil = () => {
       localStorage.setItem("avatar", selectedAvatar);
       modal.style.display = "none";
       modal.setAttribute("aria-hidden", "true");
-      console.log("[validerAvatarBtn] Avatar validé :", selectedAvatar);
       afficherMessage("Avatar enregistré avec succès.", "succes", "avatar-feedback");
     });
   }
 
-  if (avatar) {
-    avatar.addEventListener("click", ouvrirModal);
-  }
-
+  if (avatar) avatar.addEventListener("click", ouvrirModal);
   if (modal) {
     modal.addEventListener("click", fermerModal);
     modal.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        console.log("[modal] Touche Escape détectée, fermeture modale.");
-        fermerModal();
-      }
+      if (e.key === "Escape") fermerModal();
     });
   }
 
-  // Chargement pseudo
   if (pseudoInput) {
     const savedPseudo = localStorage.getItem("pseudo");
     if (savedPseudo) pseudoInput.value = savedPseudo;
@@ -231,14 +205,11 @@ const initialiserProfil = () => {
         return;
       }
       localStorage.setItem("pseudo", pseudo);
-      console.log("[pseudoValiderBtn] Pseudo enregistré :", pseudo);
       afficherMessage("Pseudo enregistré !", "succes");
     });
   }
 
-  // Chargement des stats dynamiques
   const stats = getStats();
-
   if (statElems.length >= 5) {
     statElems[0].textContent = stats.partiesJouees || 0;
     statElems[1].textContent = stats.victoires || 0;
@@ -247,7 +218,6 @@ const initialiserProfil = () => {
     statElems[4].textContent = formatDuree(stats.recordDuree || 0);
   }
 
-  // Calcul du grade selon victoires (choisir le plus haut seuil atteint)
   if (gradeElem) {
     const grades = [
       { seuil: 20, label: "Légende" },
@@ -265,7 +235,6 @@ const initialiserProfil = () => {
     console.log("[initialiserProfil] Grade calculé :", gradeTrouve);
   }
 
-  // --- AJOUT : Affichage du pourcentage de victoires ---
   const statsSection = document.querySelector(".statistiques");
   if (statsSection) {
     const pourcentage = stats.partiesJouees > 0
@@ -275,60 +244,14 @@ const initialiserProfil = () => {
     pPourcentage.innerHTML = `Taux de victoire : <strong>${pourcentage}%</strong>`;
     statsSection.appendChild(pPourcentage);
     console.log("[initialiserProfil] Taux de victoire affiché :", pourcentage);
-  }
 
-  // --- AJOUT : Badge Expert si 15 victoires ou plus ---
-  const badgesUl = document.querySelector(".badges-section ul");
-  if (badgesUl && stats.victoires >= 15) {
-    const newBadge = document.createElement("li");
-    const img = document.createElement("img");
-    img.src = "/Public/images/badges/expert.png";
-    img.alt = "Badge Expert";
-    newBadge.appendChild(img);
-    badgesUl.appendChild(newBadge);
-    console.log("[initialiserProfil] Badge Expert ajouté.");
-  }
-
-  // --- AJOUT : Boutons réinitialisation ---
-  // Crée les boutons et insère-les dans la section statistiques
-  if (statsSection) {
-    const resetStatsBtn = document.createElement("button");
-    resetStatsBtn.id = "reset-stats-btn";
-    resetStatsBtn.textContent = "Réinitialiser les statistiques";
-    resetStatsBtn.style.marginRight = "10px";
-
-    const resetProfilBtn = document.createElement("button");
-    resetProfilBtn.id = "reset-profil-btn";
-    resetProfilBtn.textContent = "Réinitialiser tout le profil";
-
-    statsSection.appendChild(resetStatsBtn);
-    statsSection.appendChild(resetProfilBtn);
-
-    // Gestion événements
-    resetStatsBtn.addEventListener("click", () => {
-      if (confirm("Êtes-vous sûr de vouloir réinitialiser les statistiques ?")) {
-        localStorage.removeItem("stats");
-        console.log("[resetStatsBtn] Statistiques réinitialisées.");
-        location.reload();
-      }
-    });
-
-    resetProfilBtn.addEventListener("click", () => {
-      if (confirm("Cette action réinitialisera le pseudo, l’avatar et les statistiques. Continuer ?")) {
-        localStorage.removeItem("stats");
-        localStorage.removeItem("pseudo");
-        localStorage.removeItem("avatar");
-        console.log("[resetProfilBtn] Profil complet réinitialisé.");
-        location.reload();
-      }
-    });
+    // --- BADGE EXPERT SI 15 VICTOIRES --- //
+    if (stats.victoires >= 15) {
+      const badge = document.createElement("p");
+      badge.className = "badge-expert";
+      badge.innerHTML = `🏅 <strong>Badge Expert</strong> : Décerné pour 15 victoires !`;
+      statsSection.appendChild(badge);
+      console.log("[initialiserProfil] Badge Expert affiché.");
+    }
   }
 };
-
-// --- INIT GLOBALE --- //
-
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("[DOMContentLoaded] Initialisation de la page.");
-  initialiserAccueil();
-  initialiserProfil();
-});
