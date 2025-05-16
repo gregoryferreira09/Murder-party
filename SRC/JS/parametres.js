@@ -3,7 +3,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const soundCheckbox = document.getElementById("toggleSound");
   const notifCheckbox = document.getElementById("toggleNotifications");
-  const pseudoInput = document.getElementById("pseudo");
   const langueSelect = document.getElementById("langue");
   const saveButton = document.getElementById("saveParams");
 
@@ -12,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (savedParams) {
     soundCheckbox.checked = savedParams.soundEnabled || false;
     notifCheckbox.checked = savedParams.notificationsEnabled || false;
-    pseudoInput.value = savedParams.pseudo || "";
     langueSelect.value = savedParams.langue || "fr";
   }
 
@@ -21,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const params = {
       soundEnabled: soundCheckbox.checked,
       notificationsEnabled: notifCheckbox.checked,
-      pseudo: pseudoInput.value.trim(),
       langue: langueSelect.value
     };
 
