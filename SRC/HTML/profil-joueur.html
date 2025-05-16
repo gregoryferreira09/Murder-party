@@ -151,34 +151,36 @@
     <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
 
     <!-- Modale Avatar -->
+<div
+  id="modal"
+  class="modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+  aria-describedby="avatar-list"
+  tabindex="-1"
+>
+  <div class="modal-content" role="document">
+    <h3 id="modal-title">Choisissez votre avatar</h3>
+
+    <!-- Liste des avatars -->
     <div
-      id="modal"
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      aria-describedby="avatar-list"
-      tabindex="-1"
-    >
-      <div class="modal-content" role="document">
-        <button
-          type="button"
-          class="close-btn"
-          aria-label="Fermer la fenêtre"
-          onclick="fermerModal()"
-        >
-          <span aria-hidden="true">×</span>
-        </button>
-        <h3 id="modal-title">Choisissez votre avatar</h3>
-        <div
-          id="avatar-list"
-          role="list"
-          aria-label="Liste des avatars disponibles"
-        ></div>
-        <button type="button" id="btn-valider-avatar" disabled>Valider</button>
-        <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
-      </div>
+      id="avatar-list"
+      class="avatar-list"
+      role="list"
+      aria-label="Liste des avatars disponibles"
+    ></div>
+
+    <!-- Boutons de la modale -->
+    <div class="modal-buttons">
+      <button type="button" id="btn-valider-avatar" disabled>Valider</button>
+      <button type="button" class="btn-retour" onclick="fermerModal()">Retour</button>
     </div>
+
+    <!-- Message de retour -->
+    <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
+  </div>
+</div>
 
   </main>
 
