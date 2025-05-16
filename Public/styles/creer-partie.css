@@ -417,18 +417,6 @@ a:hover {
       box-shadow: 0 0 15px 3px rgba(233, 199, 140, 0.5);
     }
 
-.form-container {
-  background: linear-gradient(145deg, #2c1b1b, #1f1313); /* Même fond que bandeau */
-  padding: 30px;
-  border-radius: 30px; /* identique à .bandeau-dore */
-  border: 3px solid transparent;
-  border-image: linear-gradient(90deg, #e9c78c, #c7b275, #e9c78c) 1;
-  box-shadow: 0 0 15px 3px rgba(233, 199, 140, 0.5);
-  margin: 0;
-  box-sizing: border-box;
-}
-
-
 .form-container label {
   font-size: 1.2em;
   margin-bottom: 10px;
