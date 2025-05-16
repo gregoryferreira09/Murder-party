@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <title>Créer une Partie - Murder Party</title>
@@ -8,81 +10,84 @@
   <link rel="stylesheet" href="../../Public/styles/creer-partie.css">
 </head>
 
-<body> 
+<body>
+  <h1>Créer une Partie</h1> 
 
-<h1>Créer une Partie</h1> 
+  <!-- Ajout du div avec classe bandeau-dore pour encadrer le form-container -->
+  <div class="bandeau-dore">
+    <div class="form-container"> 
+      <label for="mode">Choisissez le mode de jeu :</label> 
+      <select id="mode" name="mode"> 
+        <option value="classique">Classique</option> 
+        <option value="poison">Poison</option> 
+      </select> 
 
-<!-- Ajout du div avec classe bandeau-dore pour encadrer le form-container -->
-<div class="bandeau-dore">
-  <div class="form-container"> 
-    <label for="mode">Choisissez le mode de jeu :</label> 
-    <select id="mode" name="mode"> 
-      <option value="classique">Classique</option> 
-      <option value="poison">Poison</option> 
-    </select> 
+      <label for="duree">Durée de la partie :</label> 
+      <select id="duree" name="duree"> 
+        <option value="30">30 minutes</option> 
+        <option value="60">60 minutes</option> 
+      </select> 
 
-    <label for="duree">Durée de la partie :</label> 
-    <select id="duree" name="duree"> 
-      <option value="30">30 minutes</option> 
-      <option value="60">60 minutes</option> 
-    </select> 
+      <label for="periode">Choisissez la période du scénario :</label> 
+      <select id="periode" name="periode"> 
+        <option value="medieval">Moyen-Âge</option> 
+        <option value="victorien">Victorien</option> 
+        <option value="antiquite">Antiquité</option> 
+        <option value="renaissance">Renaissance</option> 
+        <option value="contemporain">Contemporain</option> 
+        <option value="futuriste">Futuriste</option> 
+        <option value="autre">Autre (préciser ci-dessous)</option> 
+      </select> 
 
-    <label for="periode">Choisissez la période du scénario :</label> 
-    <select id="periode" name="periode"> 
-      <option value="medieval">Moyen-Âge</option> 
-      <option value="victorien">Victorien</option> 
-      <option value="antiquite">Antiquité</option> 
-      <option value="renaissance">Renaissance</option> 
-      <option value="contemporain">Contemporain</option> 
-      <option value="futuriste">Futuriste</option> 
-      <option value="autre">Autre (préciser ci-dessous)</option> 
-    </select> 
+      <div id="autrePeriode" style="display: none;"> 
+        <label for="periode_autre">Précisez la période :</label> 
+        <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle"> 
+      </div> 
 
-    <div id="autrePeriode" style="display: none;"> 
-      <label for="periode_autre">Précisez la période :</label> 
-      <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle"> 
-    </div> 
+      <label for="nombreJoueurs">Nombre de joueurs :</label> 
+      <select id="nombreJoueurs" name="nombreJoueurs"> 
+        <option value="1">1 joueur</option> 
+        <option value="4">4 joueurs</option> 
+        <option value="5">5 joueurs</option> 
+        <option value="6">6 joueurs</option> 
+        <option value="7">7 joueurs</option> 
+        <option value="8">8 joueurs</option> 
+        <option value="9">9 joueurs</option> 
+        <option value="10">10 joueurs</option> 
+        <option value="11">11 joueurs</option> 
+        <option value="12">12 joueurs</option> 
+      </select> 
 
-    <label for="nombreJoueurs">Nombre de joueurs :</label> 
-    <select id="nombreJoueurs" name="nombreJoueurs"> 
-      <option value="1">1 joueur</option> 
-      <option value="4">4 joueurs</option> 
-      <option value="5">5 joueurs</option> 
-      <option value="6">6 joueurs</option> 
-      <option value="7">7 joueurs</option> 
-      <option value="8">8 joueurs</option> 
-      <option value="9">9 joueurs</option> 
-      <option value="10">10 joueurs</option> 
-      <option value="11">11 joueurs</option> 
-      <option value="12">12 joueurs</option> 
-    </select> 
+      <label for="criminels">Nombre de criminels :</label> 
+      <select id="criminels" name="criminels"> 
+        <option value="1">1 criminel</option> 
+        <option value="2">2 criminels</option> 
+        <option value="3">3 criminels</option> 
+      </select> 
 
-    <label for="criminels">Nombre de criminels :</label> 
-    <select id="criminels" name="criminels"> 
-      <option value="1">1 criminel</option> 
-      <option value="2">2 criminels</option> 
-      <option value="3">3 criminels</option> 
-    </select> 
+      <label> 
+        <input type="checkbox" id="criminel_fantome"> 
+        Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie) 
+      </label> 
 
-    <label> 
-      <input type="checkbox" id="criminel_fantome"> 
-      Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie) 
-    </label> 
+      <label> 
+        <input type="checkbox" id="avatars_legendaires"> 
+        Activer les avatars légendaires 
+      </label> 
 
-    <label> 
-      <input type="checkbox" id="avatars_legendaires"> 
-      Activer les avatars légendaires 
-    </label> 
+      <label> 
+        <input type="checkbox" id="inactifs"> 
+        Activer l'observation des inactifs (notifications après 5 min d'inactivité) 
+      </label> 
 
-    <label> 
-      <input type="checkbox" id="inactifs"> 
-      Activer l'observation des inactifs (notifications après 5 min d'inactivité) 
-    </label> 
+      <div class="boutons-actions">
+        <button class="gold-btn" onclick="genererScenario()">Générer</button>
+        <a class="gold-btn" href="./accueil.html">Retour</a>
+      </div>
+    </div>
+  </div>
 
-<div class="boutons-actions">
-  <button class="gold-btn" onclick="genererScenario()">Générer</button>
-  <a class="gold-btn" href="./accueil.html">Retour</a>
-</div>
-
-</body> 
+  <!-- Lien vers le JS externe (à mettre absolument ici, juste avant la fermeture du body) -->
+  <script src="../JS/creer-partie.js"></script>
+</body>
 </html>
