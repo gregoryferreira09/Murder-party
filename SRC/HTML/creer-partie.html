@@ -1,19 +1,11 @@
-<!DOCTYPE html> 
-
+<!DOCTYPE html>  
 <html lang="fr"> 
-
 <head> 
-
   <meta charset="UTF-8"> 
-
   <title>Créer une Partie - Murder Party</title> 
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-
   <link rel="stylesheet" href="style.css"> 
-
   <style> 
-
     body { 
       background-color: #1b1b1b; 
       font-family: 'Cormorant Garamond', serif; 
@@ -34,9 +26,9 @@
       border-radius: 10px; 
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); 
       margin: 20px 0; 
-      border: 2px solid #e9c78c; /* même bordure que sur la partie de lancement */ 
-      max-width: 400px; 
-      margin-left: auto; 
+      border: 2px solid #e9c78c; /* même bordure que la partie lancement */ 
+      max-width: 400px;
+      margin-left: auto;
       margin-right: auto;
     } 
 
@@ -49,11 +41,10 @@
 
     .form-container select, 
     .form-container input[type="checkbox"], 
-    .form-container input[type="text"], 
-    .form-container button { 
+    .form-container input[type="text"] { 
       font-size: 1em; 
       padding: 10px; 
-      margin: 10px 0; 
+      margin: 10px 0 20px 0; 
       width: 100%; 
       border-radius: 8px; 
       border: 1px solid #4eaf7c; 
@@ -63,16 +54,30 @@
       box-sizing: border-box;
     } 
 
+    /* Pour les checkbox, on ajuste le curseur et la taille */
     .form-container input[type="checkbox"] {
       width: auto;
       margin-right: 10px;
-      vertical-align: middle;
       cursor: pointer;
     }
 
+    .form-container button { 
+      font-size: 1.1em; 
+      padding: 12px 20px; 
+      margin: 20px 0 0 0; 
+      width: 100%; 
+      border-radius: 8px; 
+      border: none; 
+      background: linear-gradient(135deg, #4eaf7c, #2d7a52); 
+      color: #fff; 
+      cursor: pointer; 
+      transition: background 0.3s ease; 
+      box-shadow: 0 4px 8px rgba(46, 139, 87, 0.5);
+    } 
+
     .form-container button:hover { 
-      background-color: #4eaf7c; 
-      border-color: #3c9060;
+      background: linear-gradient(135deg, #2d7a52, #4eaf7c); 
+      box-shadow: 0 6px 12px rgba(46, 139, 87, 0.8);
     } 
 
     .return-btn { 
@@ -89,11 +94,9 @@
 
     .return-btn:hover { 
       background-color: #4eaf7c; 
-      border-color: #3c9060;
     } 
 
   </style> 
-
 </head> 
 
 <body> 
@@ -101,23 +104,19 @@
 <h1>Créer une Partie</h1> 
 
 <div class="form-container"> 
-
   <label for="mode">Choisissez le mode de jeu :</label> 
-
   <select id="mode" name="mode"> 
     <option value="classique">Classique</option> 
     <option value="poison">Poison</option> 
   </select> 
 
   <label for="duree">Durée de la partie :</label> 
-
   <select id="duree" name="duree"> 
     <option value="30">30 minutes</option> 
     <option value="60">60 minutes</option> 
   </select> 
 
   <label for="periode">Choisissez la période du scénario :</label> 
-
   <select id="periode" name="periode"> 
     <option value="medieval">Moyen-Âge</option> 
     <option value="victorien">Victorien</option> 
@@ -134,7 +133,6 @@
   </div> 
 
   <label for="nombreJoueurs">Nombre de joueurs :</label> 
-
   <select id="nombreJoueurs" name="nombreJoueurs"> 
     <option value="1">1 joueur</option> 
     <option value="4">4 joueurs</option> 
@@ -149,7 +147,6 @@
   </select> 
 
   <label for="criminels">Nombre de criminels :</label> 
-
   <select id="criminels" name="criminels"> 
     <option value="1">1 criminel</option> 
     <option value="2">2 criminels</option> 
@@ -172,13 +169,11 @@
   </label> 
 
   <button onclick="genererScenario()">Générer</button> 
-
 </div> 
 
 <a class="return-btn" href="accueil.html">Retour à l'accueil</a> 
 
 <script> 
-
   document.getElementById("periode").addEventListener("change", function () { 
     document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none"; 
   }); 
@@ -199,14 +194,14 @@
     localStorage.setItem("scenarioData", JSON.stringify(scenario)); 
 
     localStorage.setItem("introduction", scenario.introduction); 
-    localStorage.setItem("objectif", scenario.objectif); 
+    localStorage.setItem("objectif", scenario.objectifGlobal); 
     localStorage.setItem("parametresPartie", JSON.stringify({ 
       mode, duree, periode, periodeAutre, criminels, 
       criminelFantome, avatarsLegendaires, inactifs, nombreJoueurs 
     })); 
 
     console.log('Introduction générée :', scenario.introduction); 
-    console.log('Objectif généré :', scenario.objectif); 
+    console.log('Objectif généré :', scenario.objectifGlobal); 
     console.log('Données complètes générées :', scenario); 
     window.location.href = "lancement-partie.html"; 
   } 
@@ -219,18 +214,4 @@
     if (periode === "victorien") { 
       introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`; 
       crime = `Un empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`; 
-    } else if (periode === "autre" && periodeAutre !== "") { 
-      introduction = `Bienvenue dans une époque mystérieuse : ${periodeAutre}.`; 
-      crime = `Un crime s'est produit dans cette période complexe... Qui est coupable ?`; 
-    } 
-
-    const personnages = []; 
-    for (let i = 0; i < nombreJoueurs; i++) { 
-      personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires)); 
-    } 
-
-    return { introduction, crime, objectifGlobal, personnages }; 
-  } 
-
-  function genererPersonnage(index, criminels, avatarsLegendaires) { 
-    const roles = ['Detective', 'Médium', 'Servant', 'Noble', 'Docteur',
+    } else
