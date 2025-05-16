@@ -1,6 +1,4 @@
-<style> 
-    /* Changement 1 : style body */
-    body { 
+      body { 
       margin: 0;
       padding: 0;
       font-family: 'Cormorant Garamond', serif; 
@@ -106,5 +104,3 @@
   transform: scale(1.03);
   box-shadow: 0 0 15px rgba(233, 199, 140, 0.8);
 }
-
-  </style> 
