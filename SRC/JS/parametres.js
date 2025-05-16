@@ -6,17 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const notifCheckbox = document.getElementById("toggleNotifications");
   const langueSelect = document.getElementById("langue");
   const saveButton = document.getElementById("saveParams");
-
-  // Élément message de confirmation (à ajouter dans le HTML sous le bouton)
   const saveMessage = document.getElementById("saveMessage");
 
-  // Charge les paramètres depuis le profil
   const profil = getProfil();
+  console.log("Profil chargé au démarrage:", profil);
   soundCheckbox.checked = profil.soundEnabled || false;
   notifCheckbox.checked = profil.notificationsEnabled || false;
   langueSelect.value = profil.langue || "fr";
 
-  // Fonction commune pour sauvegarder et afficher le message
   function saveParams() {
     const validLangues = ["fr", "en"];
     if (!validLangues.includes(langueSelect.value)) {
@@ -28,8 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
     profil.notificationsEnabled = notifCheckbox.checked;
     profil.langue = langueSelect.value;
 
+    console.log("Profil avant sauvegarde:", profil);
+
     saveButton.disabled = true;
-    saveProfil(profil);
+    try {
+      saveProfil(profil);
+      console.log("Sauvegarde réussie");
+    } catch (e) {
+      console.error("Erreur lors de la sauvegarde :", e);
+    }
+
     applyUserSettings();
 
     if (saveMessage) {
@@ -45,10 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
   }
 
-  // Sauvegarder au clic
   saveButton.addEventListener("click", saveParams);
-
-  // Sauvegarder à chaque changement de paramètre
   soundCheckbox.addEventListener("change", saveParams);
   notifCheckbox.addEventListener("change", saveParams);
   langueSelect.addEventListener("change", saveParams);
