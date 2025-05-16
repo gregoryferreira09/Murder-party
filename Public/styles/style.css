@@ -237,15 +237,7 @@ a:hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   margin: 1rem 0; /* Centrage vertical */
-}
-
-.avatar-section img#avatar:hover,
-.avatar-section img#avatar:focus {
-  transform: scale(1.1);
-  box-shadow: 0 0 25px #e0c185cc;
-  outline: none;
-}
-
+  
 }
 
 .pseudo-section {
