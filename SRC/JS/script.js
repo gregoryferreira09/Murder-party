@@ -77,6 +77,20 @@ const initialiserAccueil = () => {
   } else {
     console.warn("[initialiserAccueil] Bouton créer salon non trouvé.");
   }
+
+  // --- ACCUEIL : AFFICHAGE PSEUDO + AVATAR --- //
+  const avatarElem = document.getElementById("affichage-avatar");
+  const pseudoElem = document.getElementById("affichage-pseudo");
+
+  if (avatarElem && pseudoElem) {
+    const pseudo = localStorage.getItem("pseudo") || "Anonyme";
+    const avatar = localStorage.getItem("avatar") || "avatar-1.png";
+    avatarElem.src = `${IMAGE_PATH}${avatar}`;
+    pseudoElem.textContent = pseudo;
+    console.log("[initialiserAccueil] Pseudo et avatar affichés :", pseudo, avatar);
+  } else {
+    console.warn("[initialiserAccueil] Élément d'affichage pseudo ou avatar manquant.");
+  }
 };
 
 // --- AVATARS --- //
