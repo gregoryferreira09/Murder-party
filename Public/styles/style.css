@@ -228,8 +228,7 @@ a:hover {
   text-align: center;
   color: #f4e4c1;
   font-family: 'Cormorant Garamond', serif;
-
-
+} /* ← AJOUTE cette accolade ici */
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Cinzel Decorative', cursive;
