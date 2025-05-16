@@ -22,8 +22,8 @@
 
     /* Changement 2 : bandeau doré autour du contenu et style du form-container */
     .bandeau-dore {
-      background: linear-gradient(145deg, #2c1b1b, #1a100f);
-      border: 3px solid;
+      background: linear-gradient(145deg, #2c1b1b, #1f1313);
+      border: 2px solid #e9c78c;
       border-image-slice: 1;
       border-width: 3px;
       border-image-source: linear-gradient(90deg, #e9c78c, #c7b275, #e9c78c);
