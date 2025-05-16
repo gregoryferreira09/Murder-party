@@ -1,4 +1,5 @@
-// Public/scripts/parametres.js
+// ../../Public/scripts/parametres.js
+import { getProfil, saveProfil, applyUserSettings } from './utils.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   const soundCheckbox = document.getElementById("toggleSound");
@@ -6,23 +7,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const langueSelect = document.getElementById("langue");
   const saveButton = document.getElementById("saveParams");
 
-  // Charger les paramètres depuis localStorage au chargement de la page
-  const savedParams = JSON.parse(localStorage.getItem("userSettings"));
-  if (savedParams) {
-    soundCheckbox.checked = savedParams.soundEnabled || false;
-    notifCheckbox.checked = savedParams.notificationsEnabled || false;
-    langueSelect.value = savedParams.langue || "fr";
-  }
+  // Charge les paramètres depuis le profil
+  const profil = getProfil();
+  soundCheckbox.checked = profil.soundEnabled || false;
+  notifCheckbox.checked = profil.notificationsEnabled || false;
+  langueSelect.value = profil.langue || "fr";
 
   // Sauvegarder les paramètres au clic
   saveButton.addEventListener("click", () => {
-    const params = {
-      soundEnabled: soundCheckbox.checked,
-      notificationsEnabled: notifCheckbox.checked,
-      langue: langueSelect.value
-    };
+    const profil = getProfil(); // récupérer à jour
+    profil.soundEnabled = soundCheckbox.checked;
+    profil.notificationsEnabled = notifCheckbox.checked;
+    profil.langue = langueSelect.value;
+    saveProfil(profil);
 
-    localStorage.setItem("userSettings", JSON.stringify(params));
+    // Appliquer les paramètres immédiatement (sons, langue, notifications)
+    applyUserSettings();
 
     // Feedback visuel
     saveButton.textContent = "✅ Paramètres enregistrés !";
