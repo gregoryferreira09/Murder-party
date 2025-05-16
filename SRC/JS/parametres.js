@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const langueSelect = document.getElementById("langue");
   const saveButton = document.getElementById("saveParams");
 
-  // Charger les paramètres depuis localStorage au démarrage
+  // Charger les paramètres depuis localStorage au chargement de la page
   const savedParams = JSON.parse(localStorage.getItem("userSettings"));
   if (savedParams) {
     soundCheckbox.checked = savedParams.soundEnabled || false;
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     langueSelect.value = savedParams.langue || "fr";
   }
 
-  // Sauvegarde au clic sur le bouton
+  // Sauvegarder les paramètres au clic
   saveButton.addEventListener("click", () => {
     const params = {
       soundEnabled: soundCheckbox.checked,
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     localStorage.setItem("userSettings", JSON.stringify(params));
 
-    // Feedback visuel simple
+    // Feedback visuel
     saveButton.textContent = "✅ Paramètres enregistrés !";
     setTimeout(() => {
       saveButton.textContent = "Sauvegarder les paramètres";
