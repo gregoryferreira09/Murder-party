@@ -32,6 +32,108 @@ body {
   box-sizing: border-box;
 }
 
+/* Formulaire créer-partie spécifique */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 16px 10px;
+  align-items: stretch;
+  background: rgba(44, 27, 27, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 0 8px #e9c78c33;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.form-container label {
+  text-align: left;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #e9c78c;
+}
+
+.form-container select,
+.form-container input[type="text"] {
+  padding: 10px 8px;
+  border-radius: 6px;
+  border: 1px solid #c2a97c;
+  background-color: #1a1a1a;
+  color: #f4e4c1;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  transition: border-color 0.3s;
+}
+
+.form-container select:focus,
+.form-container input[type="text"]:focus {
+  border-color: #e9c78c;
+  outline: none;
+}
+
+.form-container input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: #e9c78c;
+}
+
+.boutons-actions {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+/* Boutons dorés personnalisés */
+.gold-btn {
+  background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+  color: #3d2b1f;
+  border: 2px solid #e0c185;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 1.2em;
+  font-family: 'Cinzel Decorative', cursive;
+  cursor: pointer;
+  margin: 0 4px;
+  transition: box-shadow .2s, background .2s, color .2s;
+  text-decoration: none;
+  display: inline-block;
+  min-width: 120px;
+}
+
+.gold-btn:hover,
+.gold-btn:focus {
+  background: #e0c185;
+  color: #1a1a1a;
+  box-shadow: 0 0 8px #e0c18588;
+  outline: none;
+}
+
+button {
+  /* Pour les autres boutons éventuels */
+  background: #2c1b1b;
+  border: 2px solid #e9c78c;
+  color: #fdf3df;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4em;
+  padding: 20px 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 350px;
+}
+
+button:hover {
+  background-color: #3d2b1f;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #e0c18588;
+}
+
+button:focus {
+  outline: 2px solid #e0c185;
+  outline-offset: 4px;
+}
+
 /* Header */
 header {
   background: rgba(0, 0, 0, 0.6);
@@ -86,32 +188,6 @@ main {
   }
 }
 
-/* Boutons */
-button {
-  background: #2c1b1b;
-  border: 2px solid #e9c78c;
-  color: #fdf3df;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4em;
-  padding: 20px 40px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 350px;
-}
-
-button:hover {
-  background-color: #3d2b1f;
-  transform: scale(1.05);
-  box-shadow: 0 0 10px #e0c18588;
-}
-
-button:focus {
-  outline: 2px solid #e0c185;
-  outline-offset: 4px;
-}
-
 /* Footer */
 footer {
   background: rgba(0, 0, 0, 0.5);
@@ -136,12 +212,24 @@ a:hover {
 
 /* Responsive mobile */
 @media (max-width: 600px) {
-  button {
-    width: 90%;
-    padding: 15px 20px;
-    font-size: 1.2em;
+  .form-container {
+    padding: 8px 2px;
+    max-width: 98vw;
   }
-
+  .bandeau-dore {
+    padding: 10px;
+  }
+  .gold-btn,
+  button {
+    width: 100%;
+    max-width: 330px;
+    padding: 14px 10px;
+    font-size: 1em;
+  }
+  .boutons-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
   .menu-buttons {
     gap: 10px;
   }
@@ -154,7 +242,7 @@ a:hover {
     color: #f4e4c1;
   }
 
-  button {
+  button, .gold-btn {
     background: #1a1a1a;
     color: #fdf3df;
   }
@@ -228,7 +316,7 @@ a:hover {
   text-align: center;
   color: #f4e4c1;
   font-family: 'Cormorant Garamond', serif;
-} /* ← AJOUTE cette accolade ici */
+}
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Cinzel Decorative', cursive;
