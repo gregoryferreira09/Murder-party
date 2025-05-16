@@ -366,24 +366,21 @@ a:hover {
   background-color: #2c1b1b;
   color: #f4e4c1;
   border-radius: 10px;
-  text-decoration: none;
+  text-decoration: none !important;
   font-size: 1.25em;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: normal;
   transition: all 0.3s ease;
   max-width: 350px;
   width: 100%;
   box-sizing: border-box;
   cursor: pointer;
   text-align: center;
-  font-family: 'Cormorant Garamond', serif;
-}
-
-/* Spécial bouton : retire les styles par défaut */
-.gold-btn,
-.gold-btn:focus,
-.gold-btn:active {
-  outline: none;
-  box-shadow: none;
-  border: 2px solid #e0c185;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .gold-btn:hover,
@@ -391,32 +388,6 @@ a:hover {
   background-color: #3d2b1f;
   box-shadow: 0 0 15px #e0c185cc;
   outline: none;
-}
-
-/* Supprime le style natif du bouton */
-.gold-btn[type="button"],
-.gold-btn[type="submit"],
-.gold-btn[type="reset"],
-.gold-btn {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: #2c1b1b;
-  border: 2px solid #e0c185;
-  color: #f4e4c1;
-  font-size: 1.25em;
-  font-family: 'Cormorant Garamond', serif;
-  padding: 14px 28px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  box-sizing: border-box;
-}
-
-/* Pour empêcher le soulignement sur les liens */
-.gold-btn {
-  text-decoration: none !important;
 }
 
 /* ===== Fenêtre flottante avatar ===== */
