@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const notifCheckbox = document.getElementById("toggleNotifications");
   const langueSelect = document.getElementById("langue");
   const saveButton = document.getElementById("saveParams");
+
+  // Élément message de confirmation (à ajouter dans le HTML sous le bouton)
   const saveMessage = document.getElementById("saveMessage");
 
   // Charge les paramètres depuis le profil
@@ -14,25 +16,40 @@ document.addEventListener("DOMContentLoaded", () => {
   notifCheckbox.checked = profil.notificationsEnabled || false;
   langueSelect.value = profil.langue || "fr";
 
-  // Sauvegarder les paramètres au clic
-  saveButton.addEventListener("click", () => {
-    const profil = getProfil(); // récupérer à jour
+  // Fonction commune pour sauvegarder et afficher le message
+  function saveParams() {
+    const validLangues = ["fr", "en"];
+    if (!validLangues.includes(langueSelect.value)) {
+      alert("Langue non valide.");
+      return;
+    }
+
     profil.soundEnabled = soundCheckbox.checked;
     profil.notificationsEnabled = notifCheckbox.checked;
     profil.langue = langueSelect.value;
-    saveProfil(profil);
 
-    // Appliquer les paramètres immédiatement (sons, langue, notifications)
+    saveButton.disabled = true;
+    saveProfil(profil);
     applyUserSettings();
 
-    // Afficher le message de confirmation
-    saveMessage.textContent = "✅ Paramètres enregistrés avec succès !";
-    saveMessage.style.display = "block";
+    if (saveMessage) {
+      saveMessage.textContent = "Paramètres enregistrés avec succès !";
+      saveMessage.style.display = "block";
+    }
 
-    // Cacher le message après 3 secondes
     setTimeout(() => {
-      saveMessage.style.display = "none";
-      saveMessage.textContent = "";
+      saveButton.disabled = false;
+      if (saveMessage) {
+        saveMessage.style.display = "none";
+      }
     }, 3000);
-  });
+  }
+
+  // Sauvegarder au clic
+  saveButton.addEventListener("click", saveParams);
+
+  // Sauvegarder à chaque changement de paramètre
+  soundCheckbox.addEventListener("change", saveParams);
+  notifCheckbox.addEventListener("change", saveParams);
+  langueSelect.addEventListener("change", saveParams);
 });
