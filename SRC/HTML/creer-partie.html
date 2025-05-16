@@ -173,7 +173,7 @@
   </div> 
 </div> 
 
-<a class="return-btn" href="accueil.html">Retour à l'accueil</a> 
+<a class="return-btn" href="./accueil.html">Retour à l'accueil</a> 
 
 <script> 
   document.getElementById("periode").addEventListener("change", function () { 
@@ -195,4 +195,14 @@
 
     localStorage.setItem("scenarioData", JSON.stringify(scenario)); 
     localStorage.setItem("introduction", scenario.introduction); 
-    localStorage.setItem("objectif",
+    localStorage.setItem("objectif", scenario.objectif); 
+    // ... tu peux continuer la sauvegarde si besoin
+
+    // Tu peux afficher le scénario généré ou rediriger par exemple
+    alert("Scénario généré ! Vérifie la console ou la prochaine page.");
+    console.log(scenario);
+  }
+</script>
+
+</body> 
+</html>
