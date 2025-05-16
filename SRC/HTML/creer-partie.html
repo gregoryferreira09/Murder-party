@@ -1,217 +1,236 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>Créer une Partie - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  
-  <!-- Polices Google Fonts (à charger dans le head) -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=Cinzel+Decorative&display=swap" rel="stylesheet" />
-  
-  <style>
-    /* Reset et base */
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: 'Cormorant Garamond', serif;
-      background-color: #000;
-      color: #f4e4c1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      text-align: center;
-      scroll-behavior: smooth;
-    }
+<!DOCTYPE html> 
 
-    h1 {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 3rem;
-      margin-bottom: 30px;
-      color: #e9c78c;
-      text-shadow: 0 0 5px #e9c78c;
-    }
+<html lang="fr"> 
 
-    .form-container {
-      background: linear-gradient(145deg, #2c1b1b, #1f1313);
-      border: 2px solid #e9c78c;
-      border-radius: 12px;
-      padding: 30px 40px;
-      max-width: 480px;
-      width: 90%;
-      box-shadow: 0 0 15px rgba(233, 199, 140, 0.8);
-      box-sizing: border-box;
-    }
+<head> 
 
-    .form-container label {
-      display: block;
-      font-size: 1.3rem;
-      margin-top: 20px;
-      margin-bottom: 8px;
+  <meta charset="UTF-8"> 
+
+  <title>Créer une Partie - Murder Party</title> 
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+  <link rel="stylesheet" href="style.css"> 
+
+  <style> 
+
+    body { 
+      background-color: #1b1b1b; 
+      font-family: 'Cormorant Garamond', serif; 
+      color: #e0e0e0; 
+      text-align: center; 
+      padding: 20px; 
+    } 
+
+    h1 { 
+      font-family: 'Cinzel Decorative', serif; 
+      font-size: 2.5em; 
+      margin-bottom: 20px; 
+    } 
+
+    .form-container { 
+      background-color: #2c1b1b; 
+      padding: 30px; 
+      border-radius: 10px; 
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); 
+      margin: 20px 0; 
+      border: 2px solid #e9c78c; /* même bordure que sur la partie de lancement */ 
+      max-width: 400px; 
+      margin-left: auto; 
+      margin-right: auto;
+    } 
+
+    .form-container label { 
+      font-size: 1.2em; 
+      margin-bottom: 10px; 
+      display: block; 
       text-align: left;
-      color: #f4e4c1;
-    }
+    } 
 
-    select, input[type="text"] {
-      width: 100%;
-      padding: 12px 15px;
-      border-radius: 10px;
-      border: 1.5px solid #4eaf7c;
-      background-color: #222;
-      color: #f4e4c1;
-      font-size: 1.1rem;
-      transition: border-color 0.3s ease;
+    .form-container select, 
+    .form-container input[type="checkbox"], 
+    .form-container input[type="text"], 
+    .form-container button { 
+      font-size: 1em; 
+      padding: 10px; 
+      margin: 10px 0; 
+      width: 100%; 
+      border-radius: 8px; 
+      border: 1px solid #4eaf7c; 
+      background-color: #333; 
+      color: #fff; 
+      cursor: pointer; 
       box-sizing: border-box;
-    }
-    select:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: #e9c78c;
-      box-shadow: 0 0 8px #e9c78c;
-      background-color: #333;
-    }
+    } 
 
-    /* Checkbox custom container */
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      margin-top: 15px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      user-select: none;
-      color: #f4e4c1;
-      text-align: left;
-    }
-    .checkbox-container input[type="checkbox"] {
-      margin-right: 12px;
-      width: 20px;
-      height: 20px;
+    .form-container input[type="checkbox"] {
+      width: auto;
+      margin-right: 10px;
+      vertical-align: middle;
       cursor: pointer;
     }
 
-    button {
-      margin-top: 30px;
-      width: 100%;
-      padding: 15px;
-      font-size: 1.3rem;
-      border-radius: 12px;
-      border: none;
-      background-color: #4eaf7c;
-      color: #111;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 5px 10px rgba(78, 175, 124, 0.7);
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    button:hover,
-    button:focus {
-      background-color: #e9c78c;
-      color: #222;
-      outline: none;
-      box-shadow: 0 0 15px #e9c78c;
-    }
+    .form-container button:hover { 
+      background-color: #4eaf7c; 
+      border-color: #3c9060;
+    } 
 
-    .return-btn {
-      margin-top: 30px;
-      display: inline-block;
-      padding: 12px 25px;
-      font-size: 1.2rem;
-      background-color: #222;
-      border-radius: 12px;
-      border: 2px solid #4eaf7c;
-      color: #f4e4c1;
-      text-decoration: none;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      box-shadow: 0 3px 8px rgba(78, 175, 124, 0.6);
-    }
-    .return-btn:hover,
-    .return-btn:focus {
-      background-color: #4eaf7c;
-      color: #111;
-      outline: none;
-      box-shadow: 0 0 20px #4eaf7c;
-    }
+    .return-btn { 
+      display: inline-block; 
+      padding: 10px 20px; 
+      background-color: #333; 
+      color: white; 
+      border-radius: 8px; 
+      text-decoration: none; 
+      margin-top: 20px; 
+      border: 1px solid #4eaf7c; 
+      transition: background-color 0.3s ease;
+    } 
 
-    /* Champ autre période - animation d'apparition */
-    #autrePeriode {
-      margin-top: 10px;
-      max-width: 100%;
-      transition: max-height 0.4s ease, opacity 0.4s ease;
-      overflow: hidden;
-    }
-    #autrePeriode.hidden {
-      max-height: 0;
-      opacity: 0;
-      pointer-events: none;
-      margin-top: 0;
-    }
-    #autrePeriode.visible {
-      max-height: 100px;
-      opacity: 1;
-      pointer-events: auto;
-      margin-top: 15px;
-    }
-  </style>
-</head>
-<body>
+    .return-btn:hover { 
+      background-color: #4eaf7c; 
+      border-color: #3c9060;
+    } 
 
-  <h1>Créer une Partie</h1>
+  </style> 
 
-  <form class="form-container" id="formPartie" onsubmit="genererScenario(event)">
+</head> 
 
-    <label for="mode">Choisissez le mode de jeu :</label>
-    <select id="mode" name="mode" required>
-      <option value="classique">Classique</option>
-      <option value="poison">Poison</option>
-    </select>
+<body> 
 
-    <label for="duree">Durée de la partie :</label>
-    <select id="duree" name="duree" required>
-      <option value="30">30 minutes</option>
-      <option value="60">60 minutes</option>
-    </select>
+<h1>Créer une Partie</h1> 
 
-    <label for="periode">Choisissez la période du scénario :</label>
-    <select id="periode" name="periode" required>
-      <option value="medieval">Moyen-Âge</option>
-      <option value="victorien">Victorien</option>
-      <option value="antiquite">Antiquité</option>
-      <option value="renaissance">Renaissance</option>
-      <option value="contemporain">Contemporain</option>
-      <option value="futuriste">Futuriste</option>
-      <option value="autre">Autre (préciser ci-dessous)</option>
-    </select>
+<div class="form-container"> 
 
-    <div id="autrePeriode" class="hidden">
-      <label for="periode_autre">Précisez la période :</label>
-      <input type="text" id="periode_autre" name="periode_autre" placeholder="Ex. : 18ème siècle" maxlength="30" />
-    </div>
+  <label for="mode">Choisissez le mode de jeu :</label> 
 
-    <label for="nombreJoueurs">Nombre de joueurs :</label>
-    <select id="nombreJoueurs" name="nombreJoueurs" required>
-      <option value="1">1 joueur</option>
-      <option value="4">4 joueurs</option>
-      <option value="5">5 joueurs</option>
-      <option value="6">6 joueurs</option>
-      <option value="7">7 joueurs</option>
-      <option value="8">8 joueurs</option>
-      <option value="9">9 joueurs</option>
-      <option value="10">10 joueurs</option>
-      <option value="11">11 joueurs</option>
-      <option value="12">12 joueurs</option>
-    </select>
+  <select id="mode" name="mode"> 
+    <option value="classique">Classique</option> 
+    <option value="poison">Poison</option> 
+  </select> 
 
-    <label for="criminels">Nombre de criminels :</label>
-    <select id="criminels" name="criminels" required>
-      <option value="1">1 criminel</option>
-      <option value="2">2 criminels</option>
-      <option value="3">3 criminels</option>
-    </select>
+  <label for="duree">Durée de la partie :</label> 
 
-    <label class="checkbox-container" for="criminel_fantome">
-      <input type="checkbox" id="criminel_fantome" name="criminel_fantome" />
-      Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie)
-    </label>
+  <select id="duree" name="duree"> 
+    <option value="30">30 minutes</option> 
+    <option value="60">60 minutes</option> 
+  </select> 
 
-    <label class="checkbox-container" for="avatars_legendaires">
-      <input type="checkbox" id
+  <label for="periode">Choisissez la période du scénario :</label> 
+
+  <select id="periode" name="periode"> 
+    <option value="medieval">Moyen-Âge</option> 
+    <option value="victorien">Victorien</option> 
+    <option value="antiquite">Antiquité</option> 
+    <option value="renaissance">Renaissance</option> 
+    <option value="contemporain">Contemporain</option> 
+    <option value="futuriste">Futuriste</option> 
+    <option value="autre">Autre (préciser ci-dessous)</option> 
+  </select> 
+
+  <div id="autrePeriode" style="display: none;"> 
+    <label for="periode_autre">Précisez la période :</label> 
+    <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle"> 
+  </div> 
+
+  <label for="nombreJoueurs">Nombre de joueurs :</label> 
+
+  <select id="nombreJoueurs" name="nombreJoueurs"> 
+    <option value="1">1 joueur</option> 
+    <option value="4">4 joueurs</option> 
+    <option value="5">5 joueurs</option> 
+    <option value="6">6 joueurs</option> 
+    <option value="7">7 joueurs</option> 
+    <option value="8">8 joueurs</option> 
+    <option value="9">9 joueurs</option> 
+    <option value="10">10 joueurs</option> 
+    <option value="11">11 joueurs</option> 
+    <option value="12">12 joueurs</option> 
+  </select> 
+
+  <label for="criminels">Nombre de criminels :</label> 
+
+  <select id="criminels" name="criminels"> 
+    <option value="1">1 criminel</option> 
+    <option value="2">2 criminels</option> 
+    <option value="3">3 criminels</option> 
+  </select> 
+
+  <label> 
+    <input type="checkbox" id="criminel_fantome"> 
+    Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie) 
+  </label> 
+
+  <label> 
+    <input type="checkbox" id="avatars_legendaires"> 
+    Activer les avatars légendaires 
+  </label> 
+
+  <label> 
+    <input type="checkbox" id="inactifs"> 
+    Activer l'observation des inactifs (notifications après 5 min d'inactivité) 
+  </label> 
+
+  <button onclick="genererScenario()">Générer</button> 
+
+</div> 
+
+<a class="return-btn" href="accueil.html">Retour à l'accueil</a> 
+
+<script> 
+
+  document.getElementById("periode").addEventListener("change", function () { 
+    document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none"; 
+  }); 
+
+  function genererScenario() { 
+    const mode = document.getElementById("mode").value; 
+    const duree = document.getElementById("duree").value; 
+    const periode = document.getElementById("periode").value; 
+    const periodeAutre = document.getElementById("periode_autre").value; 
+    const criminels = parseInt(document.getElementById("criminels").value); 
+    const criminelFantome = document.getElementById("criminel_fantome").checked; 
+    const avatarsLegendaires = document.getElementById("avatars_legendaires").checked; 
+    const inactifs = document.getElementById("inactifs").checked; 
+    const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value); 
+
+    const scenario = genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs); 
+
+    localStorage.setItem("scenarioData", JSON.stringify(scenario)); 
+
+    localStorage.setItem("introduction", scenario.introduction); 
+    localStorage.setItem("objectif", scenario.objectif); 
+    localStorage.setItem("parametresPartie", JSON.stringify({ 
+      mode, duree, periode, periodeAutre, criminels, 
+      criminelFantome, avatarsLegendaires, inactifs, nombreJoueurs 
+    })); 
+
+    console.log('Introduction générée :', scenario.introduction); 
+    console.log('Objectif généré :', scenario.objectif); 
+    console.log('Données complètes générées :', scenario); 
+    window.location.href = "lancement-partie.html"; 
+  } 
+
+  function genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) { 
+    let introduction = `Bienvenue dans votre murder party.`; 
+    let crime = `Un crime mystérieux s’est produit...`; 
+    let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`; 
+
+    if (periode === "victorien") { 
+      introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`; 
+      crime = `Un empoisonnement a eu lieu lors d'un banquet fastueux. Qui est responsable ?`; 
+    } else if (periode === "autre" && periodeAutre !== "") { 
+      introduction = `Bienvenue dans une époque mystérieuse : ${periodeAutre}.`; 
+      crime = `Un crime s'est produit dans cette période complexe... Qui est coupable ?`; 
+    } 
+
+    const personnages = []; 
+    for (let i = 0; i < nombreJoueurs; i++) { 
+      personnages.push(genererPersonnage(i + 1, criminels, avatarsLegendaires)); 
+    } 
+
+    return { introduction, crime, objectifGlobal, personnages }; 
+  } 
+
+  function genererPersonnage(index, criminels, avatarsLegendaires) { 
+    const roles = ['Detective', 'Médium', 'Servant', 'Noble', 'Docteur',
