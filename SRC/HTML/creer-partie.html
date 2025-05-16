@@ -206,10 +206,15 @@
     window.location.href = "lancement-partie.html"; 
   } 
 
-  function genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) { 
-    let introduction = `Bienvenue dans votre murder party.`; 
-    let crime = `Un crime mystérieux s’est produit...`; 
-    let objectifGlobal = `Résoudre le mystère avant la fin du temps imparti.`; 
+ function genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs) {
+    let introduction = "Bienvenue dans votre murder party.";
+    let objectifGlobal = "Résoudre le mystère avant la fin du temps imparti.";
+    // Tu peux ajouter plus de logique ici si tu veux selon tes paramètres.
+    return {
+        introduction,
+        objectifGlobal
+    };
+}
 
     if (periode === "victorien") { 
       introduction = `Bienvenue dans un manoir victorien, où l'obscurité cache de terribles secrets.`; 
