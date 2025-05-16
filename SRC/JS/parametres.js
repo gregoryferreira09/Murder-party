@@ -14,41 +14,54 @@ document.addEventListener("DOMContentLoaded", () => {
   notifCheckbox.checked = profil.notificationsEnabled || false;
   langueSelect.value = profil.langue || "fr";
 
-  function saveParams() {
-    const validLangues = ["fr", "en"];
-    if (!validLangues.includes(langueSelect.value)) {
-      alert("Langue non valide.");
-      return;
-    }
+function saveParams() {
+  const validLangues = ["fr", "en"];
+  if (!validLangues.includes(langueSelect.value)) {
+    alert("Langue non valide.");
+    return;
+  }
 
-    profil.soundEnabled = soundCheckbox.checked;
-    profil.notificationsEnabled = notifCheckbox.checked;
-    profil.langue = langueSelect.value;
+  profil.soundEnabled = soundCheckbox.checked;
+  profil.notificationsEnabled = notifCheckbox.checked;
+  profil.langue = langueSelect.value;
 
-    console.log("Profil avant sauvegarde:", profil);
+  saveButton.disabled = true;
 
-    saveButton.disabled = true;
-    try {
-      saveProfil(profil);
-      console.log("Sauvegarde réussie");
-    } catch (e) {
-      console.error("Erreur lors de la sauvegarde :", e);
-    }
+  // Par défaut, on cache le message
+  saveMessage.style.display = "none";
+  saveMessage.textContent = "";
 
-    applyUserSettings();
+  try {
+    saveProfil(profil);
 
-    if (saveMessage) {
-      saveMessage.textContent = "Paramètres enregistrés avec succès !";
-      saveMessage.style.display = "block";
-    }
+    // Affiche le message de succès
+    saveMessage.textContent = "Paramètres enregistrés avec succès !";
+    saveMessage.style.display = "block";
+
+    // Disparition automatique après 3 secondes
+    setTimeout(() => {
+      saveMessage.style.display = "none";
+      saveMessage.textContent = "";
+    }, 3000);
+
+  } catch (e) {
+    console.error("Erreur lors de la sauvegarde :", e);
+
+    // Message d'erreur en cas d'échec
+    saveMessage.textContent = "Erreur lors de l'enregistrement des paramètres !";
+    saveMessage.style.display = "block";
+    saveMessage.style.color = "red";
 
     setTimeout(() => {
-      saveButton.disabled = false;
-      if (saveMessage) {
-        saveMessage.style.display = "none";
-      }
+      saveMessage.style.display = "none";
+      saveMessage.textContent = "";
+      saveMessage.style.color = "green";
     }, 3000);
   }
+
+  saveButton.disabled = false;
+  applyUserSettings();
+}
 
   saveButton.addEventListener("click", saveParams);
   soundCheckbox.addEventListener("change", saveParams);
