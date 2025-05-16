@@ -223,3 +223,7 @@ function fermerModal() {
     modal.setAttribute("aria-hidden", "true");
   }
 }
+
+function genererScenario() {
+  window.location.href = "./lancement-partie.html";
+}
