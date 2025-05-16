@@ -4,23 +4,17 @@
   <meta charset="UTF-8" />
   <title>Profil - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <!-- Préchargement des polices Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
-
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../Public/styles/style.css" />
 
-  <!-- Animation simple -->
   <style>
     .fade-in {
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeIn 0.8s ease-out forwards;
+      animation: fadeIn 0.8s ease-in forwards;
     }
 
     @keyframes fadeIn {
@@ -72,14 +66,6 @@
       margin-top: 0.5rem;
     }
 
-    .options-stats {
-      margin-top: 1rem;
-    }
-
-    .options-stats button {
-      margin-right: 1rem;
-    }
-
     .historique-section {
       margin-top: 2rem;
     }
@@ -89,55 +75,31 @@
     }
   </style>
 </head>
-<body>
 
+<body>
   <header role="banner">
     <h1 class="visually-hidden">Murder Party - Profil du joueur</h1>
   </header>
 
   <main class="profil-container fade-in">
-
-    <h1>Mon Profil</h1>
+    <h1>Mon profil</h1>
 
     <!-- Section Avatar -->
     <section class="avatar-section" aria-labelledby="avatar-heading">
-      <h2 id="avatar-heading">Mon Avatar</h2>
-      <img
-        id="avatar"
-        src="/Public/images/avatar-1.png"
-        alt="Avatar actuel"
-        tabindex="0"
-        role="button"
-        aria-pressed="false"
-        aria-haspopup="dialog"
-        aria-controls="modal"
-        onclick="ouvrirModal()"
-        onerror="this.onerror=null; this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';"
-      />
-      <button
-        type="button"
-        onclick="ouvrirModal()"
-        aria-haspopup="dialog"
-        aria-controls="modal"
-        aria-label="Ouvrir la sélection d'avatar"
-      >
-        Changer d'avatar
-      </button>
+      <h2 id="avatar-heading">Mon avatar</h2>
+      <img id="avatar" src="/Public/images/avatar-1.png" alt="Avatar actuel" tabindex="0" role="button"
+        aria-pressed="false" aria-haspopup="dialog" aria-controls="modal" onclick="ouvrirModal()"
+        onerror="this.onerror=null; this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';" />
+      <button type="button" onclick="ouvrirModal()" aria-haspopup="dialog" aria-controls="modal"
+        aria-label="Ouvrir la sélection d'avatar">Changer d'avatar</button>
     </section>
 
     <!-- Section Pseudo -->
     <section class="pseudo-section" aria-labelledby="pseudo-heading">
       <h2 id="pseudo-heading">Mon Pseudo</h2>
       <label for="pseudo-input" class="visually-hidden">Saisir votre pseudo</label>
-      <input
-        id="pseudo-input"
-        type="text"
-        maxlength="20"
-        aria-label="Saisir votre pseudo"
-        aria-describedby="pseudo-feedback"
-        aria-invalid="false"
-        placeholder="Votre pseudo ici"
-      />
+      <input id="pseudo-input" type="text" maxlength="20" aria-label="Saisir votre pseudo"
+        aria-describedby="pseudo-feedback" aria-invalid="false" placeholder="Votre pseudo ici" />
       <button type="button" id="btn-save-pseudo">Valider</button>
       <div id="pseudo-feedback" class="feedback-message visually-hidden" role="alert" aria-live="polite"></div>
     </section>
@@ -145,31 +107,23 @@
     <!-- Section Statistiques -->
     <section class="statistiques" aria-labelledby="stats-heading">
       <h2 id="stats-heading">Statistiques</h2>
-      <p>Parties jouées : <strong id="stat-parties">20</strong></p>
-      <p>Parties gagnées : <strong id="stat-victoires">7</strong></p>
-      <p>→ En tant qu’enquêteur : <strong id="stat-enqueteur">4</strong></p>
-      <p>→ En tant que criminel : <strong id="stat-criminel">3</strong></p>
-      <p>Record de durée d’une victoire : <strong id="stat-record">18 min 42s</strong></p>
-      <p>Grade : <strong id="grade">Aventurier</strong></p>
-
-      <div class="options-stats">
-        <button type="button" onclick="resetStats()">Réinitialiser mes stats</button>
-        <button type="button" onclick="exportStats()">Exporter mes stats</button>
-        <button type="button" onclick="importStats()">Importer des stats</button>
-      </div>
+      <p>Parties jouées : <strong id="stat-parties">0</strong></p>
+      <p>Parties gagnées : <strong id="stat-victoires">0</strong></p>
+      <p>→ En tant qu'enquêteur : <strong id="stat-enqueteur">0</strong></p>
+      <p>→ En tant que criminel : <strong id="stat-criminel">0</strong></p>
+      <p>Record de durée d'une victoire : <strong id="stat-record">—</strong></p>
+      <p>Note : <strong id="grade">—</strong></p>
     </section>
 
     <!-- Section Historique des parties -->
     <section class="historique-section" aria-labelledby="historique-heading">
       <h2 id="historique-heading">Historique des dernières parties</h2>
       <ul id="historique-liste">
-        <!-- Exemples d’entrées -->
-        <li>🗓️ 14/05 — Enquêteur — Victoire — 12 min</li>
-        <li>🗓️ 13/05 — Criminel — Défaite — 8 min</li>
+        <li>Aucune partie jouée pour le moment.</li>
       </ul>
     </section>
 
-    <!-- Section Badges -->
+    <!-- Badges -->
     <section class="badges-section" aria-labelledby="badges-heading">
       <h2 id="badges-heading">Mes Badges</h2>
       <ul role="list">
@@ -181,39 +135,23 @@
 
     <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
 
-    <!-- Modale Avatar -->
-    <div
-      id="modal"
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      aria-describedby="avatar-list"
-      tabindex="-1"
-    >
+    <!-- Avatar Modal -->
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"
+      aria-describedby="avatar-list" tabindex="-1">
       <div class="modal-content" role="document">
         <h3 id="modal-title">Choisissez votre avatar</h3>
-
-        <div
-          id="avatar-list"
-          class="avatar-list"
-          role="list"
-          aria-label="Liste des avatars disponibles"
-        ></div>
-
+        <div id="avatar-list" class="avatar-list" role="list" aria-label="Liste des avatars disponibles"></div>
         <div class="modal-buttons">
           <button type="button" id="btn-valider-avatar" disabled>Valider</button>
           <button type="button" class="btn-retour" onclick="fermerModal()">Retour</button>
         </div>
-
         <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
       </div>
     </div>
-
   </main>
 
   <footer role="contentinfo">
-    <p>&copy; 2025 Murder Party. Tous droits réservés.</p>
+    <p>&copy; Fête du meurtre de 2025. Tous droits réservés.</p>
   </footer>
 
   <script src="../../SRC/JS/script.js"></script>
@@ -223,6 +161,5 @@
       ⚠️ JavaScript est désactivé. Vous ne pourrez pas modifier votre avatar ou pseudo.
     </div>
   </noscript>
-
 </body>
 </html>
