@@ -82,16 +82,17 @@
       Activer l'observation des inactifs (notifications après 5 min d'inactivité) 
     </label> 
 
-    <button onclick="genererScenario()">Générer</button> 
-  </div> 
-</div> 
+<button onclick="genererScenario()">Générer</button>
+</div>
+</div>
 
-<a class="return-btn" href="./accueil.html">Retour à l'accueil</a> 
+<button onclick="window.location.href='./accueil.html'">Retour à l'accueil</button>
 
-<script> 
-  document.getElementById("periode").addEventListener("change", function () { 
-    document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none"; 
-  }); 
+<script>
+  document.getElementById("periode").addEventListener("change", function () {
+    document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
+  });
+</script>
 
   function genererScenario() { 
     const mode = document.getElementById("mode").value; 
