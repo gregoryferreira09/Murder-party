@@ -268,4 +268,68 @@ const initialiserProfil = () => {
       console.log("[initialiserProfil] Badge Expert affiché.");
     }
   }
+
+  // Avatar modal logic
+const avatarImg = document.getElementById('avatar');
+const modal = document.getElementById('modal');
+const avatarList = document.getElementById('avatar-list');
+const btnValider = document.getElementById('btn-valider-avatar');
+const avatarFeedback = document.getElementById('avatar-feedback');
+
+let selectedAvatar = null;
+
+// Liste des avatars disponibles (ajoute les bons chemins ici)
+const avatarsDisponibles = [
+  '/Public/images/avatar-1.png',
+  '/Public/images/avatar-2.png',
+  '/Public/images/avatar-3.png',
+  '/Public/images/avatar-4.png'
+];
+
+// Ouvre la modale
+function ouvrirModal() {
+  avatarList.innerHTML = ''; // Vider avant de remplir
+
+  avatarsDisponibles.forEach((src, index) => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `Avatar ${index + 1}`;
+    img.tabIndex = 0;
+    img.role = 'option';
+    img.classList.add('avatar-option');
+
+    img.onclick = () => {
+      // Supprimer les sélections précédentes
+      avatarList.querySelectorAll('img').forEach(i => i.classList.remove('selected'));
+      img.classList.add('selected');
+      selectedAvatar = src;
+      btnValider.disabled = false;
+      avatarFeedback.textContent = '';
+    };
+
+    avatarList.appendChild(img);
+  });
+
+  modal.style.display = 'block';
+  modal.focus();
+}
+
+// Ferme la modale
+function fermerModal() {
+  modal.style.display = 'none';
+  selectedAvatar = null;
+  btnValider.disabled = true;
+  avatarFeedback.textContent = '';
+}
+
+// Applique l’avatar sélectionné
+btnValider.addEventListener('click', () => {
+  if (selectedAvatar) {
+    avatarImg.src = selectedAvatar;
+    fermerModal();
+  } else {
+    avatarFeedback.textContent = "Veuillez sélectionner un avatar.";
+  }
+});
+
 };
