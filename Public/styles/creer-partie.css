@@ -347,6 +347,14 @@ a:hover {
   box-shadow: 0 0 15px #e0c185cc;
   outline: none;
 }
+
+.boutons-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* pour centrer horizontalement */
+  gap: 24px;           /* espace vertical entre les boutons */
+}
+
 /* ===== Fenêtre flottante avatar ===== */
 .modal {
   position: fixed;
