@@ -215,3 +215,10 @@ function formatDuree(seconds) {
   const sec = seconds % 60;
   return `${min} min ${sec}s`;
 }
+
+// --- NOUVELLE FONCTION : Réinitialiser les stats --- //
+function resetStats() {
+  localStorage.removeItem("stats");
+  console.log("[resetStats] Statistiques réinitialisées.");
+  location.reload(); // Recharge la page pour mettre à jour l'affichage
+}
