@@ -90,30 +90,7 @@
   document.getElementById("periode").addEventListener("change", function () {
     document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
   });
-</script>
 
-  function genererScenario() { 
-    const mode = document.getElementById("mode").value; 
-    const duree = document.getElementById("duree").value; 
-    const periode = document.getElementById("periode").value; 
-    const periodeAutre = document.getElementById("periode_autre").value; 
-    const criminels = parseInt(document.getElementById("criminels").value); 
-    const criminelFantome = document.getElementById("criminel_fantome").checked; 
-    const avatarsLegendaires = document.getElementById("avatars_legendaires").checked; 
-    const inactifs = document.getElementById("inactifs").checked; 
-    const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value); 
-
-    const scenario = genererScenarioDynamique(mode, duree, periode, periodeAutre, criminels, criminelFantome, avatarsLegendaires, nombreJoueurs); 
-
-    localStorage.setItem("scenarioData", JSON.stringify(scenario)); 
-    localStorage.setItem("introduction", scenario.introduction); 
-    localStorage.setItem("objectif", scenario.objectif); 
-    // ... tu peux continuer la sauvegarde si besoin
-
-    // Tu peux afficher le scénario généré ou rediriger par exemple
-    alert("Scénario généré ! Vérifie la console ou la prochaine page.");
-    console.log(scenario);
-  }
 </script>
 
 </body> 
