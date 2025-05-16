@@ -73,6 +73,73 @@
     .historique-section ul {
       padding-left: 1rem;
     }
+
+    /* Modal styles (si non dans style.css) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal[aria-modal="true"] {
+      display: flex;
+    }
+    .modal-content {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .avatar-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .avatar-list img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      transition: border-color 0.3s ease;
+    }
+    .avatar-list img.selected {
+      border-color: #e0c185;
+    }
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+    .btn-retour {
+      background-color: #ccc;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    #btn-valider-avatar {
+      background-color: #e0c185;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      color: black;
+    }
+    #btn-valider-avatar:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
@@ -153,7 +220,102 @@
     <p>&copy; Fête du meurtre de 2025. Tous droits réservés.</p>
   </footer>
 
-  <script src="../JS/script.js"></script>
+  <script>
+    // Liste des avatars disponibles
+    const avatars = [
+      { src: '/Public/images/avatar-1.png', alt: "Avatar 1" },
+      { src: '/Public/images/avatar-2.png', alt: "Avatar 2" },
+      { src: '/Public/images/avatar-3.png', alt: "Avatar 3" },
+      { src: '/Public/images/avatar-4.png', alt: "Avatar 4" },
+      { src: '/Public/images/avatar-5.png', alt: "Avatar 5" }
+    ];
+
+    const modal = document.getElementById('modal');
+    const avatarList = document.getElementById('avatar-list');
+    const btnValider = document.getElementById('btn-valider-avatar');
+    const avatarMain = document.getElementById('avatar');
+    const avatarFeedback = document.getElementById('avatar-feedback');
+
+    let avatarSelectionne = null;
+
+    // Remplir la liste des avatars dans le modal
+    function remplirListeAvatars() {
+      avatarList.innerHTML = '';
+      avatars.forEach((av, index) => {
+        const img = document.createElement('img');
+        img.src = av.src;
+        img.alt = av.alt;
+        img.tabIndex = 0;
+        img.setAttribute('role', 'option');
+        img.setAttribute('aria-selected', 'false');
+
+        // Click ou clavier
+        img.addEventListener('click', () => selectionnerAvatar(index));
+        img.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectionnerAvatar(index);
+          }
+        });
+
+        avatarList.appendChild(img);
+      });
+    }
+
+    // Fonction pour sélectionner un avatar dans la liste
+    function selectionnerAvatar(index) {
+      const imgs = avatarList.querySelectorAll('img');
+      imgs.forEach((img, i) => {
+        if(i === index) {
+          img.classList.add('selected');
+          img.setAttribute('aria-selected', 'true');
+          avatarSelectionne = avatars[i];
+        } else {
+          img.classList.remove('selected');
+          img.setAttribute('aria-selected', 'false');
+        }
+      });
+      btnValider.disabled = false;
+      avatarFeedback.textContent = '';
+    }
+
+    // Ouvrir modal
+    function ouvrirModal() {
+      remplirListeAvatars();
+      avatarSelectionne = null;
+      btnValider.disabled = true;
+      avatarFeedback.textContent = '';
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden', 'false');
+      modal.focus();
+    }
+
+    // Fermer modal
+    function fermerModal() {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+      avatarFeedback.textContent = '';
+    }
+
+    // Valider la sélection
+    btnValider.addEventListener('click', () => {
+      if(avatarSelectionne) {
+        avatarMain.src = avatarSelectionne.src;
+        avatarMain.alt = avatarSelectionne.alt;
+        avatarMain.setAttribute('aria-pressed', 'false');
+        avatarFeedback.textContent = 'Avatar mis à jour avec succès !';
+        avatarFeedback.className = 'feedback-message succes';
+        fermerModal();
+      } else {
+        avatarFeedback.textContent = 'Veuillez sélectionner un avatar avant de valider.';
+        avatarFeedback.className = 'feedback-message error';
+      }
+    });
+
+    // Associer les fonctions globalement pour onclick HTML inline
+    window.ouvrirModal = ouvrirModal;
+    window.fermerModal = fermerModal;
+  </script>
 
   <noscript>
     <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
