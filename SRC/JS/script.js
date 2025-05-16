@@ -216,9 +216,10 @@ function formatDuree(seconds) {
   return `${min} min ${sec}s`;
 }
 
-// --- NOUVELLE FONCTION : Réinitialiser les stats --- //
-function resetStats() {
-  localStorage.removeItem("stats");
-  console.log("[resetStats] Statistiques réinitialisées.");
-  location.reload(); // Recharge la page pour mettre à jour l'affichage
+function fermerModal() {
+  const modal = document.getElementById("modal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+  }
 }
