@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const langueSelect = document.getElementById("langue");
   const saveButton = document.getElementById("saveParams");
 
+  // Élément message de confirmation (à ajouter dans le HTML sous le bouton)
+  const saveMessage = document.getElementById("saveMessage");
+
   // Charge les paramètres depuis le profil
   const profil = getProfil();
   soundCheckbox.checked = profil.soundEnabled || false;
@@ -15,19 +18,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Sauvegarder les paramètres au clic
   saveButton.addEventListener("click", () => {
-    const profil = getProfil(); // récupérer à jour
+    // Validation simple de la langue
+    const validLangues = ["fr", "en"];
+    if (!validLangues.includes(langueSelect.value)) {
+      alert("Langue non valide.");
+      return;
+    }
+
+    // Mise à jour de l'objet profil
     profil.soundEnabled = soundCheckbox.checked;
     profil.notificationsEnabled = notifCheckbox.checked;
     profil.langue = langueSelect.value;
-    saveProfil(profil);
 
-    // Appliquer les paramètres immédiatement (sons, langue, notifications)
+    // Désactiver bouton pendant sauvegarde
+    saveButton.disabled = true;
+
+    saveProfil(profil);
     applyUserSettings();
 
-    // Feedback visuel
-    saveButton.textContent = "✅ Paramètres enregistrés !";
+    // Feedback visuel dédié
+    if (saveMessage) {
+      saveMessage.textContent = "Paramètres enregistrés avec succès !";
+      saveMessage.style.display = "block";
+    }
+
+    // Réactiver bouton et masquer message après délai
     setTimeout(() => {
-      saveButton.textContent = "Sauvegarder les paramètres";
-    }, 2000);
+      saveButton.disabled = false;
+      if (saveMessage) {
+        saveMessage.style.display = "none";
+      }
+    }, 3000);
   });
 });
