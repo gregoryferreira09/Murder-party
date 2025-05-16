@@ -351,7 +351,11 @@ a:hover {
 .boutons-actions {
   display: flex;
   flex-direction: column;
-  align-items: center; /* pour centrer horizontalement */
+  align-items: center;
+  gap: 24px;
+  max-width: 350px;   /* même valeur que max-width des boutons */
+  width: 100%;
+  margin: 0 auto;
 }
 
 .gold-btn {
