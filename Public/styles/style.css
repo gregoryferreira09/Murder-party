@@ -1,3 +1,8 @@
+/* === Début : TON FICHIER DE BASE === */
+
+/* Polices chargées via Google Fonts dans le HTML */
+
+/* Reset et base */
 body {
   margin: 0;
   padding: 0;
@@ -222,5 +227,20 @@ a:hover {
   animation: fadeUp 0.8s ease-out;
   text-align: center;
   color: #f4e4c1;
+  font-family: 'Cormorant Garamond', serif;
+
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cinzel Decorative', cursive;
+  color: #e0c185;
+  margin-bottom: 0.6em;
+}
+
+label,
+input,
+select,
+textarea,
+button {
   font-family: 'Cormorant Garamond', serif;
 }
