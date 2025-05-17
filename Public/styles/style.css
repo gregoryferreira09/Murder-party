@@ -293,12 +293,18 @@ a:hover {
   word-break: break-word; /* éviter débordements texte */
 }
 
-/* Responsive container (exemple, adapte selon ta mise en page) */
 .form-container {
-  max-width: 360px;
+  max-width: 480px;
   margin: 0 auto;
   padding: 15px;
   box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .form-container {
+    max-width: 98vw;
+    padding: 8px 2px;
+  }
 }
 
 /* Amélioration spacing boutons */
