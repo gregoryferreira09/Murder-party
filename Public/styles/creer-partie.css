@@ -376,9 +376,9 @@ a:hover {
   padding: 14px 28px;
   border: 2px solid #e9c78c;        /* Doré */
   background-color: #1a100f;        /* Noir profond */
-  color: #e9c78c;                   /* Texte doré */
+  color: #e9c78c !important;        /* Texte doré, !important pour forcer sur les liens */
   border-radius: 10px;
-  text-decoration: none !important;
+  text-decoration: none !important; /* Supprime la déco du lien */
   font-size: 1.25em;
   font-family: 'Cormorant Garamond', serif;
   font-weight: normal;
@@ -398,10 +398,11 @@ a:hover {
 .gold-btn:hover,
 .gold-btn:focus {
   background-color: #222;           /* Hover plus clair */
-  color: #fff2d0;
+  color: #fff2d0 !important;
   box-shadow: 0 0 15px #e0c185cc;
   outline: none;
 }
+
 
 /* ===== Fenêtre flottante avatar ===== */
 .modal {
