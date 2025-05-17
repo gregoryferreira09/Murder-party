@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   padding: 0;
@@ -33,13 +32,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 16px 10px;
+  padding: 15px 10px; /* fusion des paddings */
   align-items: stretch;
   background: rgba(44, 27, 27, 0.95);
   border-radius: 12px;
   box-shadow: 0 0 8px #e9c78c33;
   max-width: 480px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .form-container label {
@@ -156,7 +156,6 @@ button:focus {
   outline: 2px solid #e0c185;
   outline-offset: 4px;
 }
-
 
 /* Header */
 header {
@@ -291,20 +290,6 @@ a:hover {
   animation: fadeInMessage 0.5s ease forwards;
   min-height: 24px; /* éviter saut de mise en page quand message vide */
   word-break: break-word; /* éviter débordements texte */
-}
-
-.form-container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 15px;
-  box-sizing: border-box;
-}
-
-@media (max-width: 600px) {
-  .form-container {
-    max-width: 98vw;
-    padding: 8px 2px;
-  }
 }
 
 /* Amélioration spacing boutons */
