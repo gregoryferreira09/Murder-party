@@ -1,277 +1,81 @@
-<!DOCTYPE html> 
-
-<html lang="fr"> 
-
-<head> 
-
-  <meta charset="UTF-8"> 
-
-  <title>Salon de la Partie</title> 
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-
-  <style> 
-
-    body { 
-
-      background-color: #1b1b1b; 
-
-      color: #e0e0e0; 
-
-      font-family: 'Cormorant Garamond', serif; 
-
-      text-align: center; 
-
-      padding: 40px 20px; 
-
-    } 
-
- 
-
-    h1 { 
-
-      font-family: 'Cinzel Decorative', serif; 
-
-      color: #e9c78c; 
-
-      font-size: 2.5em; 
-
-    } 
-
- 
-
-    .code { 
-
-      font-size: 2em; 
-
-      background-color: #2c1b1b; 
-
-      border: 2px solid #e9c78c; 
-
-      display: inline-block; 
-
-      padding: 10px 20px; 
-
-      margin: 20px 0; 
-
-      border-radius: 10px; 
-
-      letter-spacing: 4px; 
-
-    } 
-
- 
-
-    .status { 
-
-      margin: 30px auto; 
-
-      font-size: 1.2em; 
-
-    } 
-
- 
-
-    button { 
-
-      background-color: #1b1b1b; 
-
-      color: #fff; 
-
-      border: 2px solid #e9c78c; 
-
-      border-radius: 8px; 
-
-      padding: 12px 24px; 
-
-      font-size: 1.1em; 
-
-      cursor: pointer; 
-
-      font-family: 'Cinzel Decorative', serif; 
-
-      transition: all 0.3s ease; 
-
-    } 
-
- 
-
-    button:disabled { 
-
-      opacity: 0.5; 
-
-      cursor: not-allowed; 
-
-    } 
-
- 
-
-    button:hover:enabled { 
-
-      background-color: #e9c78c; 
-
-      color: #000; 
-
-    } 
-
-button, .retour-btn {
-  display: block;               /* empiler verticalement */
-  width: 250px;                 /* largeur fixe */
-  box-sizing: border-box;       /* inclut padding et bordure dans la largeur */
-  margin: 15px auto 0 auto;     /* marge et centrage */
-  background-color: #1b1b1b;   /* fond identique */
-  color: #fff;
-  border: 2px solid #e9c78c;
-  border-radius: 8px;
-  padding: 12px 24px;           /* même padding */
-  font-size: 1.1em;
-  cursor: pointer;
-  font-family: 'Cinzel Decorative', serif;
-  text-decoration: none;       /* supprime soulignement sur <a> */
-  transition: all 0.3s ease;
-  text-align: center;
-  line-height: 1.2em;          /* pour alignement vertical du texte */
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-button:hover:enabled,
-.retour-btn:hover {
-  background-color: #e9c78c;
-  color: #000;
-}
-
-    
-  </style> 
-
-</head> 
-
-<body> 
-
- 
-
-  <h1 style="background: rgba(0, 0, 0, 0.6); width: 100%; padding: 20px 0; margin: 0;">Salon de la partie</h1> 
-
-  <p>Partagez ce code avec les autres joueurs :</p> 
-
-  <div class="code" id="codeSalon">------</div> 
-
- 
-
-  <div class="status" id="etatSalon"> 
-
-    En attente de joueurs... 
-
-  </div> 
-
- 
-
-  <button id="Générer un scénario" disabled>Générer un scénario</button> 
-
-  <a href="creer-partie.html" class="retour-btn">Retour</a>
- 
-
-  <script> 
-
-    const salonCode = generateCode(6); 
-
-    const parametres = JSON.parse(localStorage.getItem("parametresPartie")); 
-
-    const totalJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 1; 
-
-    const joueursAttendus = totalJoueurs - 1; // le créateur est déjà dedans 
-
- 
-
-    // Stockage du salon pour simulation locale 
-
-    localStorage.setItem("salonCode", salonCode); 
-
-    localStorage.setItem("joueursConnectes", "1"); // Le créateur est comptabilisé comme connecté dès le départ 
-
- 
-
-    document.getElementById("codeSalon").textContent = salonCode; 
-
- 
-
-    // Simule un "serveur" de salon : surveillance 
-
-    setInterval(() => { 
-
-      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "1"); 
-
-      const etat = document.getElementById("etatSalon"); 
-
-      etat.textContent = `${connectes} / ${totalJoueurs} joueurs connectés`; 
-
- 
-
-      if (connectes >= totalJoueurs) { 
-
-        document.getElementById("demarrerPartie").disabled = false; 
-
-        etat.textContent = "Tous les joueurs sont connectés ! Vous pouvez démarrer la partie."; 
-
- 
-
-        // Redirection vers la page de choix du personnage lorsque tous sont connectés 
-
-        window.location.href = "choix-personnage.html"; 
-
-      } 
-
-    }, 1000); 
-
- 
-
-    document.getElementById("demarrerPartie").addEventListener("click", () => { 
-
-      // Redirection vers la page de choix du personnage (si jamais l'utilisateur clique avant tout) 
-
-      window.location.href = "choix-personnage.html"; 
-
-    }); 
-
- 
-
-    // Simuler qu'un joueur se connecte après une période (juste pour les tests) 
-
-    setTimeout(() => { 
-
-      let connectes = parseInt(localStorage.getItem("joueursConnectes") || "1"); 
-
-      connectes++; 
-
-      localStorage.setItem("joueursConnectes", connectes.toString()); 
-
-    }, 5000); // Exemple de joueur qui rejoint après 5 secondes 
-
- 
-
-    function generateCode(length) { 
-
-      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; 
-
-      let result = ""; 
-
-      for (let i = 0; i < length; i++) { 
-
-        result += chars.charAt(Math.floor(Math.random() * chars.length)); 
-
-      } 
-
-      return result; 
-
-    } 
-
-  </script> 
-
- 
-
-</body> 
-
-</html> 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Salon de la Partie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Lien vers votre feuille de style principale -->
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <h1>Salon de la partie</h1>
+  </header>
+
+  <main>
+    <div class="bandeau-dore">
+      <p>Partagez ce code avec les autres joueurs :</p>
+      <div class="code" id="codeSalon" style="font-size: 2em; font-weight: bold; letter-spacing: 4px; padding: 12px; margin: 20px auto; border: 2px solid #e9c78c; border-radius: 10px; background: #2c1b1b; max-width: 250px;">------</div>
+
+      <div class="status" id="etatSalon" style="margin: 20px 0; font-size: 1.2em;">
+        En attente de joueurs...
+      </div>
+
+      <div class="menu-buttons">
+        <button id="demarrerPartie" disabled>Générer un scénario</button>
+        <a href="creer-partie.html" class="gold-btn">Retour</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Salon de la Partie. Tous droits réservés.
+  </footer>
+
+  <script>
+    const salonCode = generateCode(6);
+    const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
+    const totalJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 1;
+    const joueursAttendus = totalJoueurs - 1;
+
+    localStorage.setItem("salonCode", salonCode);
+    localStorage.setItem("joueursConnectes", "1");
+
+    document.getElementById("codeSalon").textContent = salonCode;
+
+    setInterval(() => {
+      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
+      const etat = document.getElementById("etatSalon");
+      etat.textContent = `${connectes} / ${totalJoueurs} joueurs connectés`;
+
+      if (connectes >= totalJoueurs) {
+        document.getElementById("demarrerPartie").disabled = false;
+        etat.textContent = "Tous les joueurs sont connectés ! Vous pouvez démarrer la partie.";
+        window.location.href = "choix-personnage.html";
+      }
+    }, 1000);
+
+    document.getElementById("demarrerPartie").addEventListener("click", () => {
+      window.location.href = "choix-personnage.html";
+    });
+
+    setTimeout(() => {
+      let connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
+      connectes++;
+      localStorage.setItem("joueursConnectes", connectes.toString());
+    }, 5000);
+
+    function generateCode(length) {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+  </script>
+
+</body>
+</html>
