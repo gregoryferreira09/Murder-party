@@ -31,6 +31,6 @@ document.getElementById("genererBtn").addEventListener("click", function(e) {
   };
   localStorage.setItem("parametresPartie", JSON.stringify(parametresPartie));
 
-  // Redirection vers la page de lancement
-  window.location.href = "Lancement-partie.html";
+  // Redirection vers la page salon
+  window.location.href = "salon.html";
 });
