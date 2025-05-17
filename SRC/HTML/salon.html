@@ -151,9 +151,10 @@ button:hover:enabled,
 
 <body> 
 
- 
-
-  <h1>Salon de la partie</h1> 
+  <!-- Ligne modifiée : ajout du style pour bandeau noir -->
+  <h1 style="background: rgba(0, 0, 0, 0.6); padding: 10px 0; border-radius: 8px; display: inline-block;">
+    Salon de la partie
+  </h1> 
 
   <p>Partagez ce code avec les autres joueurs :</p> 
 
@@ -236,7 +237,6 @@ button:hover:enabled,
 
     }); 
 
- 
 
     // Simuler qu'un joueur se connecte après une période (juste pour les tests) 
 
@@ -250,7 +250,6 @@ button:hover:enabled,
 
     }, 5000); // Exemple de joueur qui rejoint après 5 secondes 
 
- 
 
     function generateCode(length) { 
 
@@ -269,8 +268,6 @@ button:hover:enabled,
     } 
 
   </script> 
-
- 
 
 </body> 
 
