@@ -115,20 +115,22 @@
     } 
 
 button, .retour-btn {
-  display: block;               /* boutons en bloc, empilés verticalement */
-  width: 250px;                 /* même largeur */
-  margin: 15px auto 0 auto;    /* marge en haut + centrage horizontal */
-  background-color: #1b1b1b;   /* fond identique à la page */
-  color: #fff;                 /* texte blanc */
-  border: 2px solid #e9c78c;  /* bordure dorée */
+  display: block;               /* empiler verticalement */
+  width: 250px;                 /* largeur fixe */
+  box-sizing: border-box;       /* inclut padding et bordure dans la largeur */
+  margin: 15px auto 0 auto;     /* marge et centrage */
+  background-color: #1b1b1b;   /* fond identique */
+  color: #fff;
+  border: 2px solid #e9c78c;
   border-radius: 8px;
-  padding: 12px 24px;
+  padding: 12px 24px;           /* même padding */
   font-size: 1.1em;
   cursor: pointer;
   font-family: 'Cinzel Decorative', serif;
-  text-decoration: none;       /* supprime le soulignement du lien */
+  text-decoration: none;       /* supprime soulignement sur <a> */
   transition: all 0.3s ease;
-  text-align: center;          /* centre le texte dans le lien */
+  text-align: center;
+  line-height: 1.2em;          /* pour alignement vertical du texte */
 }
 
 button:disabled {
@@ -141,6 +143,7 @@ button:hover:enabled,
   background-color: #e9c78c;
   color: #000;
 }
+
     
   </style> 
 
