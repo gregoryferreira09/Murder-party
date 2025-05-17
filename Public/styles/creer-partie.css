@@ -376,7 +376,7 @@ a:hover {
   padding: 14px 28px;
   border: 2px solid #e9c78c;        /* Doré */
   background-color: #1a100f;        /* Noir profond */
-  color: #e9c78c !important;        /* Texte doré, !important pour forcer sur les liens */
+  color: #fdf3df !important;        /* Texte doré, !important pour forcer sur les liens */
   border-radius: 10px;
   text-decoration: none !important; /* Supprime la déco du lien */
   font-size: 1.25em;
