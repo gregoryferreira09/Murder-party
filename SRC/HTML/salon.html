@@ -53,12 +53,12 @@
       if (connectes >= totalJoueurs) {
         document.getElementById("demarrerPartie").disabled = false;
         etat.textContent = "Tous les joueurs sont connectés ! Vous pouvez démarrer la partie.";
-        window.location.href = "choix-personnage.html";
+        window.location.href = "lancement-partie.html";
       }
     }, 1000);
 
     document.getElementById("demarrerPartie").addEventListener("click", () => {
-      window.location.href = "choix-personnage.html";
+      window.location.href = "lancement-partie.html";
     });
 
     setTimeout(() => {
