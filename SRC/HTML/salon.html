@@ -115,7 +115,9 @@
     } 
 
 .retour-btn {
-  display: block;
+  display: block;           /* pour passer à la ligne */
+  width: 100%;              /* prend toute la largeur possible */
+  max-width: fit-content;   /* limite la largeur au contenu (optionnel) */
   background-color: #000;
   color: #fff;
   border: 2px solid #e9c78c;
@@ -125,8 +127,7 @@
   cursor: pointer;
   font-family: 'Cinzel Decorative', serif;
   text-decoration: none;
-  margin-left: 0;
-  margin-top: 15px; /* optionnel, pour espacer */
+  margin: 15px 0 0 0;      /* espace au-dessus */
   transition: all 0.3s ease;
 }
 .retour-btn:hover {
