@@ -115,21 +115,28 @@
     } 
 
 button, .retour-btn {
-  display: block;          /* pour passer à la ligne */
-  width: 250px;            /* largeur fixe identique */
-  margin: 15px auto 0 auto; /* marge en haut et centré horizontalement */
-  background-color: #000;
-  color: #fff;
-  border: 2px solid #e9c78c;
+  display: block;               /* boutons en bloc, empilés verticalement */
+  width: 250px;                 /* même largeur */
+  margin: 15px auto 0 auto;    /* marge en haut + centrage horizontal */
+  background-color: #1b1b1b;   /* fond identique à la page */
+  color: #fff;                 /* texte blanc */
+  border: 2px solid #e9c78c;  /* bordure dorée */
   border-radius: 8px;
   padding: 12px 24px;
   font-size: 1.1em;
   cursor: pointer;
   font-family: 'Cinzel Decorative', serif;
-  text-decoration: none;
-  margin: 15px 0 0 0;      /* espace au-dessus */
+  text-decoration: none;       /* supprime le soulignement du lien */
   transition: all 0.3s ease;
+  text-align: center;          /* centre le texte dans le lien */
 }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:hover:enabled,
 .retour-btn:hover {
   background-color: #e9c78c;
   color: #000;
