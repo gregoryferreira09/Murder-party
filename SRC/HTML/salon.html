@@ -2,107 +2,82 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Rejoindre une partie - Murder Party</title>
+  <title>Salon de la Partie</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Lien vers ton fichier CSS global -->
-  <link rel="stylesheet" href="../../Public/styles/style.css">
-
-  <!-- Police -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Lien vers votre feuille de style principale -->
+<link rel="stylesheet" href="../../Public/styles/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <main class="bandeau-dore">
+  <header>
+    <h1>Salon de la partie</h1>
+  </header>
 
-    <h1>🔑 Rejoindre une partie</h1>
+<main>
+  <div class="bandeau-dore">
+    <p>Partagez ce code avec les autres joueurs :</p>
+    <div class="code" id="codeSalon">------</div>
 
-    <div class="form-container">
-      <label for="codeInput">Entrez le code de salon reçu :</label>
-      <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" />
-
-      <div class="boutons-actions">
-        <button onclick="rejoindreSalon()">Valider</button>
-        <button onclick="retourAccueil()">Retour</button>
-      </div>
-
-      <div class="message" id="message"></div>
-      <div class="compteur" id="compteur"></div>
+    <div class="status" id="etatSalon">
+      En attente de joueurs...
     </div>
 
-  </main>
+    <div class="menu-buttons">
+      <button id="demarrerPartie" disabled>Générer un scénario</button>
+      <a href="creer-partie.html" class="gold-btn">Retour</a>
+    </div>
+  </div>
+</main>
+
+  <footer>
+    &copy; 2025 Salon de la Partie. Tous droits réservés.
+  </footer>
 
   <script>
-    let aDejaRejoint = false;
+    const salonCode = generateCode(6);
+    const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
+    const totalJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 1;
+    const joueursAttendus = totalJoueurs - 1;
 
-    function rejoindreSalon() {
-      if (aDejaRejoint) return;
+    localStorage.setItem("salonCode", salonCode);
+    localStorage.setItem("joueursConnectes", "1");
 
-      const codeEntre = document.getElementById("codeInput").value.trim().toUpperCase();
-      const codeSalon = localStorage.getItem("salonCode");
-      const messageDiv = document.getElementById("message");
-
-      if (!codeSalon) {
-        messageDiv.textContent = "Aucun salon actif trouvé. Demandez au créateur de la partie de créer un salon.";
-        messageDiv.style.color = "#ff6b6b";
-        return;
-      }
-
-      if (codeEntre === codeSalon) {
-        let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
-        let maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
-
-        if (connectes >= maxJoueurs - 1) {
-          messageDiv.textContent = "Le salon est déjà complet.";
-          messageDiv.style.color = "#ffa500";
-          return;
-        }
-
-        connectes += 1;
-        localStorage.setItem("joueursConnectes", connectes.toString());
-        localStorage.setItem("joueurRejoint_" + Date.now(), "oui");
-        aDejaRejoint = true;
-
-        messageDiv.textContent = "Connexion réussie !";
-        messageDiv.style.color = "#90ee90";
-
-        afficherCompteur();
-      } else {
-        messageDiv.textContent = "Code invalide. Vérifiez et réessayez.";
-        messageDiv.style.color = "#ff6b6b";
-      }
-    }
-
-    function afficherCompteur() {
-      const compteurDiv = document.getElementById("compteur");
-      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
-      const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
-      const maxJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 6;
-      compteurDiv.textContent = `${connectes} joueur(s) sur ${maxJoueurs} connectés`;
-    }
+    document.getElementById("codeSalon").textContent = salonCode;
 
     setInterval(() => {
-      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
-      const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
-      const maxJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 6;
+      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
+      const etat = document.getElementById("etatSalon");
+      etat.textContent = `${connectes} / ${totalJoueurs} joueurs connectés`;
 
-      afficherCompteur();
-
-      if (connectes >= maxJoueurs - 1) {
+      if (connectes >= totalJoueurs) {
+        document.getElementById("demarrerPartie").disabled = false;
+        etat.textContent = "Tous les joueurs sont connectés ! Vous pouvez démarrer la partie.";
         window.location.href = "choix-personnage.html";
       }
     }, 1000);
 
-    function retourAccueil() {
-      if (aDejaRejoint) {
-        let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
-        connectes -= 1;
-        localStorage.setItem("joueursConnectes", connectes.toString());
-        aDejaRejoint = false;
+    document.getElementById("demarrerPartie").addEventListener("click", () => {
+      window.location.href = "choix-personnage.html";
+    });
+
+    setTimeout(() => {
+      let connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
+      connectes++;
+      localStorage.setItem("joueursConnectes", connectes.toString());
+    }, 5000);
+
+    function generateCode(length) {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-      window.location.href = "accueil.html";
+      return result;
     }
   </script>
 
+</body>
+</html>
 </body>
 </html>
