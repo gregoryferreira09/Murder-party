@@ -130,6 +130,14 @@ button:focus {
   outline-offset: 4px;
 }
 
+/* Réduction hauteur des boutons Valider et Retour dans rejoindre-partie */
+.boutons-actions button {
+  padding: 6px 12px;
+  font-size: 14px;
+  height: 20px;
+  line-height: normal;
+}
+
 /* Header */
 header {
   background: rgba(0, 0, 0, 0.6);
