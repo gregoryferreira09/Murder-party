@@ -1,81 +1,77 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
-  <title>Salon de la Partie</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Lien vers votre feuille de style principale -->
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <title>Accueil - Murder Party</title>
+
+  <!-- ✅ Optimisation mobile + encoche -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta name="description" content="Bienvenue dans Murder Party, un jeu de mystère et d’enquête à vivre entre amis. Créez, rejoignez, et résolvez le crime.">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/848/848043.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- ✅ Préchargement image de fond -->
+  <link rel="preload" href="https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg" as="image">
+
+  <!-- Lien vers ton fichier CSS externe -->
+  <link rel="stylesheet" href="../../Public/styles/style.css">
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('Service Worker enregistré:', reg.scope))
+          .catch(err => console.error('Erreur Service Worker:', err));
+      });
+    }
+  </script>
+
+  <!-- Inclusion utils.js et application des paramètres -->
+  <script type="module">
+    import { applyUserSettings } from "../../Public/scripts/utils.js";
+    applyUserSettings();
+  </script>
 </head>
+
 <body>
 
   <header>
-    <h1>Salon de la partie</h1>
+    <h1>Murder Party</h1>
   </header>
 
   <main>
     <div class="bandeau-dore">
-      <p>Partagez ce code avec les autres joueurs :</p>
-      <div class="code" id="codeSalon" style="font-size: 2em; font-weight: bold; letter-spacing: 4px; padding: 12px; margin: 20px auto; border: 2px solid #e9c78c; border-radius: 10px; background: #2c1b1b; max-width: 250px;">------</div>
-
-      <div class="status" id="etatSalon" style="margin: 20px 0; font-size: 1.2em;">
-        En attente de joueurs...
-      </div>
-
-      <div class="menu-buttons">
-        <button id="demarrerPartie" disabled>Générer un scénario</button>
-        <a href="creer-partie.html" class="gold-btn">Retour</a>
+      <div class="scenario">
+        <section class="menu-buttons">
+          <button onclick="window.location.href='creer-partie.html'" aria-label="Créer une partie">🎮 Créer une partie</button>
+          <button onclick="window.location.href='rejoindre-partie.html'" aria-label="Rejoindre une partie">👥 Rejoindre une partie</button>
+          <button onclick="window.location.href='profil-joueur.html'" aria-label="Voir le profil">👤 Profil</button>
+          <button onclick="window.location.href='boutique.html'" aria-label="Accéder à la boutique">🛍️ Boutique</button>
+          <button onclick="window.location.href='parametres.html'" aria-label="Paramètres du jeu">⚙️ Paramètres</button>
+        </section>
       </div>
     </div>
   </main>
 
   <footer>
-    &copy; 2025 Salon de la Partie. Tous droits réservés.
+    <p class="credits">© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
+  <!-- ✅ Ajout vibration au clic -->
   <script>
-    const salonCode = generateCode(6);
-    const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
-    const totalJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 1;
-    const joueursAttendus = totalJoueurs - 1;
-
-    localStorage.setItem("salonCode", salonCode);
-    localStorage.setItem("joueursConnectes", "1");
-
-    document.getElementById("codeSalon").textContent = salonCode;
-
-    setInterval(() => {
-      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
-      const etat = document.getElementById("etatSalon");
-      etat.textContent = `${connectes} / ${totalJoueurs} joueurs connectés`;
-
-      if (connectes >= totalJoueurs) {
-        document.getElementById("demarrerPartie").disabled = false;
-        etat.textContent = "Tous les joueurs sont connectés ! Vous pouvez démarrer la partie.";
-        window.location.href = "choix-personnage.html";
-      }
-    }, 1000);
-
-    document.getElementById("demarrerPartie").addEventListener("click", () => {
-      window.location.href = "choix-personnage.html";
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (navigator.vibrate) navigator.vibrate(15);
+      });
     });
-
-    setTimeout(() => {
-      let connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
-      connectes++;
-      localStorage.setItem("joueursConnectes", connectes.toString());
-    }, 5000);
-
-    function generateCode(length) {
-      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-      let result = "";
-      for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return result;
-    }
   </script>
 
+</body>
+
+</html>
 </body>
 </html>
