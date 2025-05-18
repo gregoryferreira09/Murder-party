@@ -385,3 +385,22 @@ button {
   color: #f4e4c1;
   font-style: italic;
 }
+
+/* Pied de page */
+.footer {
+  background: #000;
+  color: #e0c185;
+  text-align: center;
+  padding: 15px 0;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.footer a {
+  color: #e0c185;
+  text-decoration: underline;
+}
+
+.footer a:hover {
+  color: #f4e4c1;
+  text-decoration: none;
+}
