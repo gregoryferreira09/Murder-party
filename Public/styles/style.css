@@ -413,3 +413,9 @@ button {
   box-shadow: 0 0 12px rgba(233, 199, 140, 0.25);
   text-align: center;
 }
+
+.bandeau-noir {
+  background-color: #000000; /* noir */
+  padding: 15px 0;           /* un peu d’espace vertical */
+  margin-bottom: 40px;       /* espace sous le bandeau */
+}
