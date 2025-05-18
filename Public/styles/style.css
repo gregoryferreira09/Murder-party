@@ -157,14 +157,6 @@ button:focus {
   outline-offset: 4px;
 }
 
-/* Header */
-header {
-  background: rgba(0, 0, 0, 0.6);
-  width: 100%;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
 h1 {
   font-family: 'Cinzel Decorative', cursive;
   font-size: 3em;
