@@ -13,19 +13,6 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Bandeau doré autour du contenu principal */
-.bandeau-dore {
-  background: linear-gradient(145deg, #2c1b1b, #1f1313);
-  border: 2px solid #e9c78c;
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 900px;
-  margin: 40px auto;
-  box-shadow: 0 0 15px rgba(233, 199, 140, 0.2);
-  text-align: center;
-  width: 90%;
-  box-sizing: border-box;
-}
 
 /* Formulaire créer-partie spécifique */
 .form-container {
