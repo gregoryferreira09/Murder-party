@@ -413,3 +413,14 @@ button {
   box-shadow: 0 0 12px rgba(233, 199, 140, 0.25);
   text-align: center;
 }
+
+.bandeau-noir {
+  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 0; /* pas de border-radius comme le header */
+  margin: 0 auto 40px auto;
+  text-align: center;
+  max-width: 900px; /* optionnel, pour rester cohérent avec accueil */
+}
