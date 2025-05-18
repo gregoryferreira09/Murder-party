@@ -393,14 +393,3 @@ button {
   color: #f4e4c1;
   font-style: italic;
 }
-
-/* Bandeau noir de section centrale (ex : "Créer une partie") */
-.bandeau-noir {
-  background-color: #000;
-  color: #e0c185;
-  padding: 20px 0;
-  width: 100%;
-  text-align: center;
-  font-family: 'Cinzel Decorative', cursive;
-  font-size: 2em;
-}
