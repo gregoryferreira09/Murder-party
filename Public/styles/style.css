@@ -401,3 +401,15 @@ button {
   color: #f4e4c1;
   font-style: italic;
 }
+
+.bandeau-noir {
+  background-color: #000;
+  border: 2px solid #e9c78c;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 30px auto;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 0 12px rgba(233, 199, 140, 0.25);
+  text-align: center;
+}
