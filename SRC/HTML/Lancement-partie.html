@@ -15,15 +15,15 @@
     <h1>Scénario proposé</h1>
   </header>
   
-  <!-- Encadré doré et fond intérieur sombre -->
+  <!-- Encadré doré incluant le scénario et les boutons -->
   <div id="scenarioContainer" class="scenario bandeau-dore fadeUp">
     Chargement du scénario...
-  </div>
 
-  <!-- Boutons avec style doré unifié -->
-  <div class="boutons-actions">
-    <a class="gold-btn" href="salon.html">Lancement</a> 
-    <a class="gold-btn" href="creer-partie.html">Retour</a> 
+    <!-- Boutons avec style doré unifié intégrés dans le bandeau -->
+    <div class="boutons-actions">
+      <a class="gold-btn" href="salon.html">Lancement</a> 
+      <a class="gold-btn" href="creer-partie.html">Retour</a> 
+    </div>
   </div>
 
   <script> 
@@ -46,7 +46,12 @@
         <p>Nombre de joueurs : ${scenarioData.nombreJoueurs}</p> 
         <p>Nombre de criminels : ${scenarioData.criminels}</p> 
         <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p> 
-        <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p> 
+        <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
+
+        <div class="boutons-actions">
+          <a class="gold-btn" href="salon.html">Lancement</a> 
+          <a class="gold-btn" href="creer-partie.html">Retour</a> 
+        </div>
       `; 
     } else { 
       document.getElementById("scenarioContainer").innerHTML = "Aucune donnée de scénario trouvée."; 
