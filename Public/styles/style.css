@@ -174,14 +174,6 @@ header {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Titre principal en haut de page */
-h1 {
-  font-family: 'Cinzel Decorative', cursive;
-  font-size: 3em;
-  color: #e0c185;
-  margin: 0;
-}
-
 /* Zone principale centrée */
 main {
   flex: 1;
