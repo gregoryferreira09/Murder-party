@@ -13,7 +13,7 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Bandeau doré autour du contenu principal */
+/* Conteneur principal avec effet doré et encadrement élégant */
 .bandeau-dore {
   background: linear-gradient(145deg, #2c1b1b, #1f1313);
   border: 2px solid #e9c78c;
@@ -27,12 +27,12 @@ body {
   box-sizing: border-box;
 }
 
-/* Formulaire créer-partie spécifique */
+/* Bloc de formulaire stylisé et centré */
 .form-container {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 15px 10px; /* fusion des paddings */
+  padding: 15px 10px;
   align-items: stretch;
   background: rgba(44, 27, 27, 0.95);
   border-radius: 12px;
@@ -42,6 +42,7 @@ body {
   box-sizing: border-box;
 }
 
+/* Style des étiquettes de champs */
 .form-container label {
   text-align: left;
   margin-bottom: 6px;
@@ -49,6 +50,7 @@ body {
   color: #e9c78c;
 }
 
+/* Champs de texte et listes déroulantes avec fond sombre */
 .form-container select,
 .form-container input[type="text"] {
   padding: 10px 8px;
@@ -61,25 +63,29 @@ body {
   transition: border-color 0.3s;
 }
 
+/* Effet de surbrillance sur focus */
 .form-container select:focus,
 .form-container input[type="text"]:focus {
   border-color: #e9c78c;
   outline: none;
 }
 
+/* Cases à cocher dorées */
 .form-container input[type="checkbox"] {
   margin-right: 8px;
   accent-color: #e9c78c;
 }
 
+/* Regroupement horizontal des boutons d'action */
 .boutons-actions {
   display: flex;
   gap: 18px;
   justify-content: center;
   margin-top: 18px;
+  flex-wrap: wrap;
 }
 
-/* Boutons dorés personnalisés */
+/* Boutons au style luxueux doré */
 .gold-btn {
   background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
   color: #3d2b1f;
@@ -96,6 +102,7 @@ body {
   min-width: 120px;
 }
 
+/* Survol et focus des boutons dorés */
 .gold-btn:hover,
 .gold-btn:focus {
   background: #e0c185;
@@ -104,8 +111,8 @@ body {
   outline: none;
 }
 
+/* Style générique pour autres boutons */
 button {
-  /* Pour les autres boutons éventuels */
   background: #2c1b1b;
   border: 2px solid #e9c78c;
   color: #fdf3df;
@@ -119,6 +126,7 @@ button {
   max-width: 350px;
 }
 
+/* Survol et focus sur boutons classiques */
 button:hover {
   background-color: #3d2b1f;
   transform: scale(1.05);
@@ -130,6 +138,7 @@ button:focus {
   outline-offset: 4px;
 }
 
+/* Bouton retour avec style unifié */
 .btn-retour {
   background: #2c1b1b;
   border: 2px solid #e9c78c;
@@ -157,6 +166,15 @@ button:focus {
   outline-offset: 4px;
 }
 
+/* En-tête de page discret et ombré */
+header {
+  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Titre principal en haut de page */
 h1 {
   font-family: 'Cinzel Decorative', cursive;
   font-size: 3em;
@@ -164,7 +182,7 @@ h1 {
   margin: 0;
 }
 
-/* Main */
+/* Zone principale centrée */
 main {
   flex: 1;
   width: 100%;
@@ -175,7 +193,7 @@ main {
   justify-content: center;
 }
 
-/* Scénario et menu boutons */
+/* Bloc de scénario et options */
 .scenario {
   display: flex;
   flex-direction: column;
@@ -191,7 +209,7 @@ main {
   animation: fadeUp 1s ease-out forwards;
 }
 
-/* Animation fade up */
+/* Animation d'apparition douce */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -203,7 +221,7 @@ main {
   }
 }
 
-/* Footer */
+/* Pied de page sobre */
 footer {
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
@@ -214,6 +232,7 @@ footer {
   margin-top: auto;
 }
 
+/* Style des liens */
 a {
   color: #d1c5a3;
   text-decoration: none;
@@ -225,7 +244,7 @@ a:hover {
   color: #f4e4c1;
 }
 
-/* Responsive mobile */
+/* Responsive pour mobiles */
 @media (max-width: 600px) {
   .form-container {
     padding: 8px 2px;
@@ -250,7 +269,7 @@ a:hover {
   }
 }
 
-/* Mode sombre automatique */
+/* Adaptation pour thème sombre système */
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #121212;
@@ -267,33 +286,25 @@ a:hover {
   }
 }
 
-/* Focus visible amélioré pour accessibilité */
+/* Meilleure accessibilité du focus */
 .gold-btn:focus {
   outline: 3px solid #ffd700;
   outline-offset: 2px;
 }
 
-/* Animation fade-in pour message */
+/* Apparition douce des messages */
 @keyframes fadeInMessage {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
 .message {
   animation: fadeInMessage 0.5s ease forwards;
-  min-height: 24px; /* éviter saut de mise en page quand message vide */
-  word-break: break-word; /* éviter débordements texte */
+  min-height: 24px;
+  word-break: break-word;
 }
 
-/* Amélioration spacing boutons */
-.boutons-actions {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-/* ===== STYLES SPÉCIFIQUES À paramètres.html ===== */
+/* Paramètres de configuration */
 .parametres {
   display: flex;
   flex-direction: column;
@@ -337,13 +348,13 @@ a:hover {
   max-width: 300px;
 }
 
-/* Section actions */
+/* Actions centrales sous les paramètres */
 .actions {
   text-align: center;
   margin-top: 30px;
 }
 
-/* ===== Pseudo & Profil ===== */
+/* Encadré du profil utilisateur */
 .profil-container {
   background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
   border: 2px solid #e0c185;
@@ -359,12 +370,14 @@ a:hover {
   font-family: 'Cormorant Garamond', serif;
 }
 
+/* Unification des titres */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Cinzel Decorative', cursive;
   color: #e0c185;
   margin-bottom: 0.6em;
 }
 
+/* Police uniforme pour les éléments interactifs */
 label,
 input,
 select,
@@ -373,7 +386,7 @@ button {
   font-family: 'Cormorant Garamond', serif;
 }
 
-
+/* Message de statut utilisateur */
 .status {
   margin: 20px 0;
   font-size: 1.2em;
@@ -381,6 +394,7 @@ button {
   font-style: italic;
 }
 
+/* Bandeau noir de section centrale (ex : "Créer une partie") */
 .bandeau-noir {
   background-color: #000;
   color: #e0c185;
@@ -390,4 +404,3 @@ button {
   font-family: 'Cinzel Decorative', cursive;
   font-size: 2em;
 }
-
