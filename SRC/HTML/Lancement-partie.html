@@ -7,7 +7,6 @@
 
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet"> 
-
 </head> 
 
 <body> 
@@ -16,12 +15,16 @@
     <h1>Scénario proposé</h1>
   </header>
   
-  <div id="scenarioContainer" class="scenario">
+  <!-- Encadré doré et fond intérieur sombre -->
+  <div id="scenarioContainer" class="scenario bandeau-dore fadeUp">
     Chargement du scénario...
   </div>
 
-  <a class="btn" href="salon.html">Lancement</a> 
-  <a class="btn" href="creer-partie.html">Retour</a> 
+  <!-- Boutons avec style doré unifié -->
+  <div class="boutons-actions">
+    <a class="gold-btn" href="salon.html">Lancement</a> 
+    <a class="gold-btn" href="creer-partie.html">Retour</a> 
+  </div>
 
   <script> 
     const scenarioData = JSON.parse(localStorage.getItem("parametresPartie")); 
@@ -50,10 +53,10 @@
     } 
   </script> 
 
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
 </body> 
 </html>
