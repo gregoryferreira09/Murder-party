@@ -290,33 +290,22 @@ function genererScenario() {
     <div style="display: flex; align-items: center; justify-content: center; position: relative;">
   <h2 style="flex:1; text-align: center; margin:0; font-family: 'Cinzel', Garamond, serif; letter-spacing: 1px;">
     Introduction
-  </h2>
+  <div style="position: relative; display: flex; justify-content: center; align-items: center;">
+  <h2 style="margin:0; text-align:center; width: 100%;">Introduction</h2>
   <button id="regenScenarioBtn" title="Générer un autre scénario"
     style="
       position: absolute;
       left: 50%;
-      transform: translateX(120px) translateY(-50%);
+      transform: translateX(120px); /* 120px ≈ 3cm */
       top: 50%;
-      font-size: 1.2em;
-      font-weight: bold;
-      background: linear-gradient(90deg, #ffe082, #b19657);
-      border: 2px solid #9b7d3a;
-      color: #7a5e2d;
-      font-family: 'Cinzel', Garamond, serif;
+      font-size: 1.6em;
+      background: none;
+      border: none;
       cursor: pointer;
-      padding: 10px 22px;
-      border-radius: 24px;
-      box-shadow: 0 2px 8px rgba(108, 84, 52, 0.13);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: filter 0.15s;
-    "
-    onmouseover="this.style.filter='brightness(1.10)'"
-    onmouseout="this.style.filter='brightness(1)'"
-  >
-    <span style="font-size:1.7em;">📜</span>
-    Générer un autre scénario
+      padding: 0;
+      color: #b19657;
+      ">
+    📜
   </button>
 </div>
   
