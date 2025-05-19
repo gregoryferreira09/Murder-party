@@ -45,7 +45,13 @@ const univers = {
       "Une soirée mondaine bat son plein dans la {lieu} : {victime} semble préoccupé·e par {motif}.",
       "{ambiance} enveloppe la {lieu}, où {victime}, célèbre pour son histoire de {motif}, est présent·e.",
       "Le manoir s'anime : {victime}, {traitVictime}, déambule dans la {lieu} sans se douter du danger.",
-      "Dans la {lieu}, les convives chuchotent sur {victime}, soupçonné·e d’être impliqué·e dans {motif}."
+      "Dans la {lieu}, les convives chuchotent sur {victime}, soupçonné·e d’être impliqué·e dans {motif}.",
+      // Ajouts intrigants :
+      "Londres, 1892 : lors d’un bal masqué dans le salon, Lady Emily s’effondre soudainement, le poison en cause, tandis que les regards se tournent vers le majordome Carter et la gouvernante Wells, tous deux étrangement nerveux ce soir-là.",
+      "Un cri perce la nuit d’orage : dans la bibliothèque, le comte Ashford, respecté mais controversé, est retrouvé frappé d’un chandelier ; le colonel Rutherford, vu rôder dans le couloir, nie toute implication.",
+      "Le manoir s’éveille dans le tumulte : la gouvernante Wells disparaît au petit matin, et déjà Lady Emily est soupçonnée d’avoir voulu cacher un secret compromettant.",
+      "Lors du dîner, le colonel Rutherford s’effondre, empoisonné ; certains murmurent que le comte Ashford et Lady Emily se disputaient violemment peu avant le drame.",
+      "Un vol bouleverse la salle de bal : le majordome Carter, témoin gêné, semble cacher quelque chose, tandis que la jalousie de la gouvernante Wells n’échappe à personne."
     ]
   },
   medieval: {
@@ -88,7 +94,13 @@ const univers = {
       "En l'an de grâce 1247, la {lieu} retentit d'une tragédie. {ambiance}. {victime}, connu·e pour être {traitVictime}, semble lié·e à une histoire de {motif}.",
       "Un banquet débute dans la {lieu}, où {victime} attire l’attention de la cour.",
       "Les remparts bruissent de rumeurs : {victime}, {traitVictime}, rôde dans la {lieu}.",
-      "La {lieu} s’agite alors que {ambiance}. {victime} semble inquiet·ète."
+      "La {lieu} s’agite alors que {ambiance}. {victime} semble inquiet·ète.",
+      // Ajouts intrigants :
+      "À la lueur des torches, dans la grande salle, la servante Ysabeau est retrouvée sans vie, une dague rouillée plantée dans le dos ; le seigneur de Montfaucon, furieux, accuse le chevalier Gaspard, mais certains chuchotent qu’Aliénor n’est pas étrangère à ce crime.",
+      "Un banquet agité tourne au drame : le bouffon Arthus disparaît mystérieusement, et la dame Aliénor, vue s’éclipser peu avant la fête, suscite les soupçons.",
+      "Dans le donjon, le chevalier Gaspard succombe à un poison discret ; la prophétie annoncée par la servante Ysabeau plane, tandis que le seigneur de Montfaucon cache mal son trouble.",
+      "La lune éclaire faiblement les remparts quand le coffre disparaît ; la servante Ysabeau, retrouvée bouleversée, accuse le bouffon Arthus, mais son alibi reste flou.",
+      "Le château s’éveille dans l’angoisse : la dame Aliénor est portée disparue, et déjà, les rumeurs courent sur la jalousie du chevalier Gaspard."
     ]
   },
   futuriste: {
@@ -131,7 +143,13 @@ const univers = {
       "An 2150. {ambiance} dans la {lieu}, {victime}, réputé·e pour être {traitVictime}, suscite les soupçons.",
       "La station orbitale s’agite : {victime}, {traitVictime}, a été vu·e dans la {lieu} avant l’incident.",
       "Un silence étrange règne dans la {lieu}, où {victime} travaille sur un projet lié à {motif}.",
-      "Le capitaine convoque l'équipage : {victime}, {traitVictime}, n'est pas à son poste dans la {lieu}."
+      "Le capitaine convoque l'équipage : {victime}, {traitVictime}, n'est pas à son poste dans la {lieu}.",
+      // Ajouts intrigants :
+      "An 2150, alerte rouge : le Dr Novak est désintégré dans le laboratoire, un sabotage évident, et la pilote Vega, vue entrer juste avant l’incident, prétend n’avoir rien remarqué.",
+      "Dans la soute plongée dans l’ombre, l’androïde JAX disparaît sans laisser de trace ; le directeur Kwan, nerveux, tente d’étouffer l’affaire, tandis que la technicienne Mia fouille les lieux en cachette.",
+      "Une coupure de courant frappe la station orbitale : la pilote Vega s’effondre, victime d’un nano-virus ; la rivalité croissante entre le Dr Novak et la technicienne Mia intrigue l’équipage.",
+      "Le réacteur est saboté dans le dôme botanique, sous la garde du directeur Kwan ; le silence de l’androïde JAX et le regard fuyant de Vega sèment la suspicion.",
+      "Un vol de module est signalé en cabine de pilotage : la technicienne Mia, témoin clé, hésite à parler, tandis que le Dr Novak manipule discrètement son terminal."
     ]
   },
   autre: {
@@ -168,11 +186,18 @@ const univers = {
     intro: [
       "Une atmosphère mystérieuse plane sur la {lieu}, tandis que {victime}, reconnu·e pour être {traitVictime}, vient de subir les conséquences de {motif}.",
       "Rien n'est réel ici : {ambiance} dans la {lieu}, {victime} s’interroge sur la nature de l’univers.",
-      "Des lois inconnues régissent la {lieu}, où {victime} poursuit une quête liée à {motif}."
+      "Des lois inconnues régissent la {lieu}, où {victime} poursuit une quête liée à {motif}.",
+      // Ajouts intrigants :
+      "Alors que la réalité vacille dans la dimension inconnue, l’énigmatique X s’évapore sans explication, tandis que la voix sans corps, présente sur les lieux, distille des indices troublants.",
+      "Un cri déformé retentit dans la galerie distordue : le voyageur temporel disparaît, le maître du jeu feint l’ignorance, mais son sourire en coin inquiète les observateurs.",
+      "Dans le laboratoire du temps, une onde mentale frappe la voix sans corps ; l’énigmatique X, dernier à l’avoir vue, parle d’une faille qui n’existait pas la veille.",
+      "Un artefact disparaît de la salle étrange, bouleversant le maître du jeu ; la paranoïa grandit autour du voyageur temporel, dont les souvenirs semblent s’effacer.",
+      "Sous des lumières irréelles, la voix sans corps accuse l’énigmatique X d’avoir altéré le cours du temps, mais personne ne sait qui dit vrai."
     ]
   }
 };
 
+// (Le reste du code JS du fichier ne change pas)
 const scenarioLibrary = {
   objectifs: {
     1: [
@@ -283,31 +308,31 @@ function genererScenario() {
     const dureeCat = categoriseDuree(scenarioData.duree);
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
-  container.innerHTML = `
-  <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
+    container.innerHTML = `
+    <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
 
-  <h2>Introduction</h2>
-  <p>${introduction}</p>
+    <h2>Introduction</h2>
+    <p>${introduction}</p>
 
-  <h2>Le crime</h2> 
-  <p>${crime}</p> 
+    <h2>Le crime</h2> 
+    <p>${crime}</p> 
 
-  <h2>Objectif général</h2> 
-  <p>${objectif}</p> 
+    <h2>Objectif général</h2> 
+    <p>${objectif}</p> 
 
-  <h2>Détails du jeu</h2> 
-  <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p> 
-  <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p> 
-  <p>Période : ${escapeHtml(periodeCle)}</p> 
-  <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p> 
-  <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p> 
-  <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p> 
-  <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
-  <div class="boutons-actions">
-    <a class="gold-btn" href="salon.html">Lancement</a> 
-    <a class="gold-btn" href="creer-partie.html">Retour</a> 
-  </div>
-`;
+    <h2>Détails du jeu</h2> 
+    <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p> 
+    <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p> 
+    <p>Période : ${escapeHtml(periodeCle)}</p> 
+    <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p> 
+    <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p> 
+    <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p> 
+    <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
+    <div class="boutons-actions">
+      <a class="gold-btn" href="salon.html">Lancement</a> 
+      <a class="gold-btn" href="creer-partie.html">Retour</a> 
+    </div>
+    `;
 
     // Action bouton molette
     const regenBtn = document.getElementById("regenScenarioBtn");
@@ -321,5 +346,4 @@ function genererScenario() {
 
 // Un seul DOMContentLoaded !
 document.addEventListener("DOMContentLoaded", genererScenario);
-// Un seul DOMContentLoaded !
 document.addEventListener("DOMContentLoaded", genererScenario);
