@@ -1,7 +1,5 @@
 // Scenario.js amélioré : génération dynamique et cohérente de murder party
 
-// 1. Structure de données enrichie
-
 const scenarioDataModel = {
   periodes: {
     antiquite: {
@@ -93,43 +91,30 @@ function melange(array) {
   return arr;
 }
 
-// Génération dynamique du scénario
 function genererScenarioDynamique(parametres) {
-  // Récupération période et données associées
   const periode = parametres.periode || randomItem(Object.keys(scenarioDataModel.periodes));
   const periodeData = scenarioDataModel.periodes[periode];
 
-  // Lieu compatible avec la période
   const lieu = randomItem(periodeData.lieux);
-  // Objet compatible avec la période
   const objet = randomItem(periodeData.objets);
 
-  // Crimes compatibles avec le lieu sélectionné
   const crimesPossibles = periodeData.crimes.filter(
     c => scenarioDataModel.crimes[c].lieuxCompatibles.includes(lieu)
   );
   const crimeType = randomItem(crimesPossibles);
   const crimeData = scenarioDataModel.crimes[crimeType];
 
-  // Description du crime avec variables
   let crimeDescription = crimeData.description
     .replace("{lieu}", lieu)
     .replace("{objet}", objet);
 
-  // Mobile du crime
   const mobile = randomItem(scenarioDataModel.mobiles);
-
-  // Rebondissement aléatoire
   const rebondissement = Math.random() < 0.5 ? randomItem(scenarioDataModel.rebondissements) : "";
-
-  // Faux indice éventuel
   const fauxIndice = Math.random() < 0.5 ? randomItem(scenarioDataModel.fauxIndices) : "";
 
-  // Personnages
   const nbJoueurs = parametres.nombreJoueurs || 6;
   const nomsPersos = melange(periodeData.noms).slice(0, nbJoueurs);
 
-  // Génération des relations et objectifs secrets
   let personnages = nomsPersos.map(nom => ({
     nom,
     alibi: randomItem([
@@ -143,9 +128,7 @@ function genererScenarioDynamique(parametres) {
     objectifSecret: randomItem(scenarioDataModel.objectifsSecrets)
   }));
 
-  // Générer des liens entre personnages (rivalité, alliance, secret partagé, etc.)
   personnages.forEach((perso, idx, arr) => {
-    // Relations aléatoires simples
     const autre = arr[(idx + 1) % arr.length];
     perso.relation = randomItem([
       `Soupçonne ${autre.nom} d’un acte louche.`,
@@ -155,7 +138,6 @@ function genererScenarioDynamique(parametres) {
     ]);
   });
 
-  // Résumé final
   return {
     introduction: `Période : ${periode}. Un mystère plane sur le/la ${lieu}...`,
     crime: crimeDescription,
@@ -167,8 +149,6 @@ function genererScenarioDynamique(parametres) {
   };
 }
 
-// Intégration dans le DOM + affichage détaillé
-
 document.addEventListener("DOMContentLoaded", () => {
   const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
   const container = document.getElementById("scenarioContainer");
@@ -176,7 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (scenarioData) {
     const scenario = genererScenarioDynamique(scenarioData);
 
-    // Fiches personnages à afficher
     let fichesPersos = scenario.personnages.map(p => `
       <div class="fiche-personnage">
         <strong>${p.nom}</strong><br>
@@ -203,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="persos-wrapper">${fichesPersos}</div>
 
       <div class="boutons-actions">
-        <a class="gold-btn" href="choix.personnage.html">Lancement</a>
+        <a class="gold-btn" href="salon.html">Lancement</a>
         <a class="gold-btn" href="creer-partie.html">Retour</a>
       </div>
     `;
