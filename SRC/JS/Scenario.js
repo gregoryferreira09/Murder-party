@@ -285,8 +285,9 @@ function genererScenario() {
 
   container.innerHTML = `
   <div style="text-align:right;">
-    <button id="regenScenarioBtn" class="gold-btn" type="button">📜 Générer un autre scénario</button>
-  </div>
+  <button id="regenScenarioBtn" type="button">📜</button>
+</div>
+
   <h2>Introduction</h2>
   <p>${introduction}</p>
 
