@@ -286,6 +286,7 @@ function genererScenario() {
     container.innerHTML = `
       <h2 style="display:flex; align-items:center;">
         Introduction
+         <button id="regenScenarioBtn" title="Générer un autre scénario"
           style="
             margin-left: auto;
             display: flex;
@@ -297,7 +298,7 @@ function genererScenario() {
             cursor: pointer;
             padding: 0 0 0 8px;
           ">
-          <span style="font-size:1.1em; margin-right:4px;">📜</span>
+          <span style="font-size:1.1em; margin-right:8px;">📜</span>
         </button>
       </h2>
       <p>${introduction}</p> 
