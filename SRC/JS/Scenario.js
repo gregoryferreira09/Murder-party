@@ -1,6 +1,23 @@
 // SRC/JS/Scenario.js
 
-// Univers étendu et immersif avec de nombreux templates
+// Univers étendu et immersif avec de nombreux templates et éléments dynamiques
+const temoins = [
+  "le jardinier Hopkins", "la cuisinière Mrs. Doyle", "le jeune Arthur",
+  "la vieille Miss Carter", "le palefrenier Giles", "la gouvernante Wells"
+];
+const indices = [
+  "une montre cassée a été retrouvée près du corps",
+  "un mouchoir monogrammé traînait dans la pièce",
+  "des traces de boue menaient vers la cave",
+  "une clé rouillée gisait sous le tapis",
+  "un verre de vin à moitié plein portait une étrange odeur",
+  "une lettre déchirée était cachée dans la cheminée"
+];
+
+function randomItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 const univers = {
   victorien: {
     lieux: ["manoir", "bibliothèque", "salon", "jardin", "sous-sol", "salle de bal", "fumoir"],
@@ -46,12 +63,15 @@ const univers = {
       "{ambiance} enveloppe la {lieu}, où {victime}, célèbre pour son histoire de {motif}, est présent·e.",
       "Le manoir s'anime : {victime}, {traitVictime}, déambule dans la {lieu} sans se douter du danger.",
       "Dans la {lieu}, les convives chuchotent sur {victime}, soupçonné·e d’être impliqué·e dans {motif}.",
-      // Ajouts intrigants :
-      "Londres, 1892 : lors d’un bal masqué dans le salon, Lady Emily s’effondre soudainement, le poison en cause, tandis que les regards se tournent vers le majordome Carter et la gouvernante Wells, tous deux étrangement nerveux ce soir-là.",
-      "Un cri perce la nuit d’orage : dans la bibliothèque, le comte Ashford, respecté mais controversé, est retrouvé frappé d’un chandelier ; le colonel Rutherford, vu rôder dans le couloir, nie toute implication.",
-      "Le manoir s’éveille dans le tumulte : la gouvernante Wells disparaît au petit matin, et déjà Lady Emily est soupçonnée d’avoir voulu cacher un secret compromettant.",
-      "Lors du dîner, le colonel Rutherford s’effondre, empoisonné ; certains murmurent que le comte Ashford et Lady Emily se disputaient violemment peu avant le drame.",
-      "Un vol bouleverse la salle de bal : le majordome Carter, témoin gêné, semble cacher quelque chose, tandis que la jalousie de la gouvernante Wells n’échappe à personne."
+      // Ajouts dynamiques
+      "Soudain, un cri. Silence. {victime} n’est plus. {temoin} affirme avoir vu une silhouette fuir la {lieu}.",
+      "Alors que la nuit d’orage bat son plein, {victime} s’effondre dans la {lieu} : {indice}",
+      "La tension est à son comble : {victime}, {traitVictime}, semblait cacher un secret—et ce soir, tout a basculé.",
+      "Un verre brisé, un murmure, une accusation : dans la {lieu}, chacun se demande qui pouvait en vouloir à {victime}.",
+      "Le manoir retient son souffle. {temoin} prétend que {victime} n’était pas seul·e dans la {lieu} ; mais qui croire ?",
+      "Londres, 1892 : lors d’un bal masqué, {victime} est retrouvé·e sans vie, tandis que le majordome Carter et la gouvernante Wells, tous deux nerveux, détournent les yeux.",
+      "La pluie martèle les vitres : {victime} a disparu, {indice} ; la suspicion s’abat sur tous les convives.",
+      "On pensait tout savoir sur {victime}... mais ce soir, les masques tombent."
     ]
   },
   medieval: {
@@ -95,12 +115,15 @@ const univers = {
       "Un banquet débute dans la {lieu}, où {victime} attire l’attention de la cour.",
       "Les remparts bruissent de rumeurs : {victime}, {traitVictime}, rôde dans la {lieu}.",
       "La {lieu} s’agite alors que {ambiance}. {victime} semble inquiet·ète.",
-      // Ajouts intrigants :
-      "À la lueur des torches, dans la grande salle, la servante Ysabeau est retrouvée sans vie, une dague rouillée plantée dans le dos ; le seigneur de Montfaucon, furieux, accuse le chevalier Gaspard, mais certains chuchotent qu’Aliénor n’est pas étrangère à ce crime.",
-      "Un banquet agité tourne au drame : le bouffon Arthus disparaît mystérieusement, et la dame Aliénor, vue s’éclipser peu avant la fête, suscite les soupçons.",
-      "Dans le donjon, le chevalier Gaspard succombe à un poison discret ; la prophétie annoncée par la servante Ysabeau plane, tandis que le seigneur de Montfaucon cache mal son trouble.",
-      "La lune éclaire faiblement les remparts quand le coffre disparaît ; la servante Ysabeau, retrouvée bouleversée, accuse le bouffon Arthus, mais son alibi reste flou.",
-      "Le château s’éveille dans l’angoisse : la dame Aliénor est portée disparue, et déjà, les rumeurs courent sur la jalousie du chevalier Gaspard."
+      // Ajouts dynamiques
+      "Sous la lueur des torches, {victime} est retrouvé·e sans vie, {arme} plantée dans le dos. {temoin} affirme avoir vu {victime} parler à la dame Aliénor peu avant.",
+      "La prophétie plane : la disparition de {victime} dans la {lieu} bouleverse la cour, surtout depuis que {indice}",
+      "Un cri, puis le silence : {victime} n’a pas reparu depuis la veille. {temoin} chuchote que le bouffon Arthus rôdait dans la {lieu}.",
+      "Un duel éclate, la tension monte. Soudain, {victime} s’effondre, sous les yeux de tous.",
+      "La lune éclaire faiblement les couloirs : la dame Aliénor a disparu, tandis que le chevalier Gaspard, le regard sombre, s’accuse lui-même d’un crime qu’il n’a peut-être pas commis.",
+      "La cloche du village résonne : un coffre a disparu, et la servante Ysabeau, bouleversée, accuse le bouffon Arthus.",
+      "La nuit, des bruits étranges dans le donjon : {indice}.",
+      "On croyait la paix revenue, mais la jalousie couve encore dans la grande salle…"
     ]
   },
   futuriste: {
@@ -144,12 +167,15 @@ const univers = {
       "La station orbitale s’agite : {victime}, {traitVictime}, a été vu·e dans la {lieu} avant l’incident.",
       "Un silence étrange règne dans la {lieu}, où {victime} travaille sur un projet lié à {motif}.",
       "Le capitaine convoque l'équipage : {victime}, {traitVictime}, n'est pas à son poste dans la {lieu}.",
-      // Ajouts intrigants :
-      "An 2150, alerte rouge : le Dr Novak est désintégré dans le laboratoire, un sabotage évident, et la pilote Vega, vue entrer juste avant l’incident, prétend n’avoir rien remarqué.",
-      "Dans la soute plongée dans l’ombre, l’androïde JAX disparaît sans laisser de trace ; le directeur Kwan, nerveux, tente d’étouffer l’affaire, tandis que la technicienne Mia fouille les lieux en cachette.",
-      "Une coupure de courant frappe la station orbitale : la pilote Vega s’effondre, victime d’un nano-virus ; la rivalité croissante entre le Dr Novak et la technicienne Mia intrigue l’équipage.",
-      "Le réacteur est saboté dans le dôme botanique, sous la garde du directeur Kwan ; le silence de l’androïde JAX et le regard fuyant de Vega sèment la suspicion.",
-      "Un vol de module est signalé en cabine de pilotage : la technicienne Mia, témoin clé, hésite à parler, tandis que le Dr Novak manipule discrètement son terminal."
+      // Ajouts dynamiques
+      "Alerte rouge : {victime} s’effondre dans le laboratoire, tandis que {temoin} prétend avoir croisé la pilote Vega fuyant la scène.",
+      "L’atmosphère est électrique : un sabotage vient d’être commis, {indice} ; la suspicion plane sur l’androïde JAX.",
+      "Une coupure de courant, un cri, puis plus rien. {victime} a disparu, et le directeur Kwan cherche désespérément une explication.",
+      "Pendant la maintenance, la technicienne Mia découvre un module saboté, alors que le Dr Novak, habituellement si discret, multiplie les allers-retours en cabine.",
+      "Un piratage raté : la pilote Vega accuse le directeur Kwan, mais la preuve semble avoir été effacée.",
+      "La sécurité enquête. {temoin} prétend que {victime} était surveillé·e par un drone d’entretien juste avant l’incident.",
+      "Sur les écrans, un message anonyme : “Ce n’est que le début…”",
+      "La station entière retient son souffle. {indice}"
     ]
   },
   autre: {
@@ -187,17 +213,17 @@ const univers = {
       "Une atmosphère mystérieuse plane sur la {lieu}, tandis que {victime}, reconnu·e pour être {traitVictime}, vient de subir les conséquences de {motif}.",
       "Rien n'est réel ici : {ambiance} dans la {lieu}, {victime} s’interroge sur la nature de l’univers.",
       "Des lois inconnues régissent la {lieu}, où {victime} poursuit une quête liée à {motif}.",
-      // Ajouts intrigants :
-      "Alors que la réalité vacille dans la dimension inconnue, l’énigmatique X s’évapore sans explication, tandis que la voix sans corps, présente sur les lieux, distille des indices troublants.",
-      "Un cri déformé retentit dans la galerie distordue : le voyageur temporel disparaît, le maître du jeu feint l’ignorance, mais son sourire en coin inquiète les observateurs.",
-      "Dans le laboratoire du temps, une onde mentale frappe la voix sans corps ; l’énigmatique X, dernier à l’avoir vue, parle d’une faille qui n’existait pas la veille.",
-      "Un artefact disparaît de la salle étrange, bouleversant le maître du jeu ; la paranoïa grandit autour du voyageur temporel, dont les souvenirs semblent s’effacer.",
-      "Sous des lumières irréelles, la voix sans corps accuse l’énigmatique X d’avoir altéré le cours du temps, mais personne ne sait qui dit vrai."
+      // Ajouts dynamiques
+      "Un cri déformé retentit. Quand le silence retombe, {victime} a disparu. {temoin} affirme n’avoir vu qu’une ombre.",
+      "Dans la galerie distordue, {indice}. Le maître du jeu sourit : tout était-il prévu ?",
+      "La réalité vacille : {victime} n’est plus là. La voix sans corps murmure une énigme qui glace les sangs.",
+      "Le temps s’arrête. {victime}, {traitVictime}, s’effondre. La cause : un artefact inconnu.",
+      "Sous des lumières irréelles, chacun doute de ses souvenirs. {temoin} prétend que la vérité n’est qu’illusion.",
+      "La dimension inconnue absorbe toute certitude. On croyait {victime} coupable—mais la folie règne sur le laboratoire du temps."
     ]
   }
 };
 
-// (Le reste du code JS du fichier ne change pas)
 const scenarioLibrary = {
   objectifs: {
     1: [
@@ -235,9 +261,6 @@ const scenarioLibrary = {
   }
 };
 
-function randomItem(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
 function categoriseDuree(minutes) {
   if (minutes <= 30) return "court";
   if (minutes <= 90) return "moyen";
@@ -287,6 +310,10 @@ function genererScenario() {
     const arme = randomItem(periodeData.armes);
     const ambiance = randomItem(periodeData.ambiances);
 
+    // Ajouts dynamiques pour intro
+    const temoin = randomItem(temoins);
+    const indice = randomItem(indices);
+
     let modeCrime = scenarioData.mode;
     if (!periodeData.crimes[modeCrime]) modeCrime = "classique";
     const crimeTpl = randomItem(periodeData.crimes[modeCrime]);
@@ -299,7 +326,9 @@ function genererScenario() {
       "{traitVictime}": traitVictime,
       "{motif}": motif,
       "{arme}": arme,
-      "{ambiance}": ambiance
+      "{ambiance}": ambiance,
+      "{temoin}": temoin,
+      "{indice}": indice
     };
 
     const introduction = replaceVars(introTpl, variables);
@@ -310,16 +339,12 @@ function genererScenario() {
 
     container.innerHTML = `
     <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
-
     <h2>Introduction</h2>
     <p>${introduction}</p>
-
     <h2>Le crime</h2> 
     <p>${crime}</p> 
-
     <h2>Objectif général</h2> 
     <p>${objectif}</p> 
-
     <h2>Détails du jeu</h2> 
     <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p> 
     <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p> 
