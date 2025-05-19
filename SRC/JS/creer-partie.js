@@ -1,21 +1,15 @@
-// Affiche ou masque le champ "autre période"
-document.getElementById("periode").addEventListener("change", function () {
-  document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
-});
-
 document.getElementById("genererBtn").addEventListener("click", function(e) {
   e.preventDefault();
 
   // Récupération des valeurs du formulaire
   const mode = document.getElementById("mode").value;
-  const duree = document.getElementById("duree").value;
+  const duree = parseInt(document.getElementById("duree").value, 10);
   const periode = document.getElementById("periode").value;
   const periodeAutre = (periode === "autre") ? document.getElementById("periode_autre").value : "";
-  const nombreJoueurs = document.getElementById("nombreJoueurs").value;
-  const criminels = document.getElementById("criminels").value;
+  const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value, 10);
+  const criminels = parseInt(document.getElementById("criminels").value, 10);
   const criminelFantome = document.getElementById("criminel_fantome").checked;
   const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
-  const inactifs = document.getElementById("inactifs").checked;
 
   // Stockage dans le localStorage
   const parametresPartie = {
@@ -26,11 +20,9 @@ document.getElementById("genererBtn").addEventListener("click", function(e) {
     nombreJoueurs,
     criminels,
     criminelFantome,
-    avatarsLegendaires,
-    inactifs
+    avatarsLegendaires
   };
   localStorage.setItem("parametresPartie", JSON.stringify(parametresPartie));
 
-  // Redirection vers la page salon
   window.location.href = "salon.html";
 });
