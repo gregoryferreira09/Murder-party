@@ -219,7 +219,7 @@ function categoriseDuree(minutes) {
   return "long";
 }
 
-// Échappement XSS de base
+// Sécurité XSS sur le texte injecté
 function escapeHtml(text) {
   return String(text)
     .replace(/&/g, "&amp;")
@@ -229,7 +229,7 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-// Remplacement de toutes les variables dynamiques (optimisé)
+// Remplacement des variables dans un template, avec échappement
 function replaceVars(tpl, variables) {
   return Object.entries(variables).reduce(
     (txt, [key, val]) => txt.replaceAll(key, escapeHtml(val)),
@@ -237,7 +237,6 @@ function replaceVars(tpl, variables) {
   );
 }
 
-// Génère et affiche un scénario (pour la moulinette !)
 function genererScenario() {
   let scenarioData;
   try {
@@ -285,8 +284,23 @@ function genererScenario() {
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
     container.innerHTML = `
-      <h2 style="display: flex; align-items: center;">Introduction
-        <button id="regenScenarioBtn" title="Générer un nouveau scénario" style="margin-left:10px;">🔄</button>
+      <h2 style="display:flex; align-items:center;">
+        Introduction
+        <button id="regenScenarioBtn" title="Générer un autre scénario"
+          style="
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+            background: none;
+            border: none;
+            color: #b19657;
+            cursor: pointer;
+            padding: 0 0 0 8px;
+          ">
+          <span style="font-size:1.1em; margin-right:4px;">⚙️</span>
+          <span style="font-size:0.95em;">Générer un autre scénario</span>
+        </button>
       </h2>
       <p>${introduction}</p> 
 
@@ -297,22 +311,20 @@ function genererScenario() {
       <p>${objectif}</p> 
 
       <h2>Détails du jeu</h2> 
-      <ul>
-        <li><b>Mode de jeu :</b> ${escapeHtml(scenarioData.mode)}</li>
-        <li><b>Durée de la partie :</b> ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</li>
-        <li><b>Période :</b> ${escapeHtml(periodeCle)}</li>
-        <li><b>Nombre de joueurs :</b> ${escapeHtml(String(scenarioData.nombreJoueurs))}</li>
-        <li><b>Nombre de criminels :</b> ${escapeHtml(String(scenarioData.criminels))}</li>
-        <li><b>Mode criminels fantômes :</b> ${scenarioData.criminelFantome ? "Oui" : "Non"}</li>
-        <li><b>Avatars légendaires activés :</b> ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</li>
-      </ul>
+      <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p> 
+      <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p> 
+      <p>Période : ${escapeHtml(periodeCle)}</p> 
+      <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p> 
+      <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p> 
+      <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p> 
+      <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
       <div class="boutons-actions">
         <a class="gold-btn" href="salon.html">Lancement</a> 
         <a class="gold-btn" href="creer-partie.html">Retour</a> 
       </div>
     `;
 
-    // Ajout moulinette pour régénérer le scénario
+    // Action bouton molette
     const regenBtn = document.getElementById("regenScenarioBtn");
     if (regenBtn) {
       regenBtn.onclick = genererScenario;
