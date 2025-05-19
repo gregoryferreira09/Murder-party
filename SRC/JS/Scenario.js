@@ -324,34 +324,17 @@ function genererScenario() {
       </div>
     `;
 
-container.innerHTML = `
-  <div style="position:relative;">
-    <button id="regenScenarioBtn" title="Générer un autre scénario"
-      style="
-        position:absolute;top:4px;right:6px;
-        background:none;
-        border:none;
-        font-size:1.18em;
-        color:#b19657;
-        cursor:pointer;
-        z-index:3;
-        padding:2px 6px;
-        border-radius:50%;
-        transition: background 0.2s, transform 0.15s;
-      "
-      onmouseover="this.style.transform='rotate(20deg)';this.style.background='#ffeebd44'"
-      onmouseout="this.style.transform='none';this.style.background='none';"
-    >&#9881;</button>
-    <h2>Introduction</h2>
-    <p>${introduction}</p>
-    ...
-  </div>
-`;
-// Action bouton molette
-const regenBtn = document.getElementById("regenScenarioBtn");
-if (regenBtn) {
-  regenBtn.onclick = genererScenario;
+    // Action bouton molette
+    const regenBtn = document.getElementById("regenScenarioBtn");
+    if (regenBtn) {
+      regenBtn.onclick = genererScenario;
+    }
+  } else {
+    container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
+  }
 }
 
+// Un seul DOMContentLoaded !
+document.addEventListener("DOMContentLoaded", genererScenario);
 // Un seul DOMContentLoaded !
 document.addEventListener("DOMContentLoaded", genererScenario);
