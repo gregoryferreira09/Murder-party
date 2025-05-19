@@ -1,121 +1,129 @@
-// Public/scripts/scenario.js .. Lancement partie.html
+// Scenario.js amélioré pour cohérence et immersion
 
-// Bibliothèque de données cohérentes selon la période et le mode de crime
-const scenarioCohesif = {
+const univers = {
   victorien: {
     lieux: ["manoir", "bibliothèque", "salon", "jardin", "sous-sol"],
+    victimes: ["le comte Ashford", "la gouvernante Wells", "le colonel Rutherford", "lady Emily"],
+    traitsVictimes: ["respecté", "craintif", "mystérieux", "détesté"],
+    motifs: ["l’héritage", "la jalousie", "une ancienne rancune", "un secret inavoué"],
     crimes: {
       poison: [
-        "Une fiole de cyanure a été versée dans le verre du comte, scellant son sort en silence.",
-        "Le poison s’est glissé dans le repas, invisible mais mortel, révélant la main d’un expert en discrétion."
+        "Une fiole de cyanure a été versée dans le verre de {victime}, scellant son sort en silence dans la {lieu}."
       ],
       classique: [
-        "Le corps a été retrouvé sans vie dans la {lieu}, une balle dans la tête et un regard figé de stupeur.",
-        "Un poignard planté dans le dos, la victime n’a rien vu venir. Le silence de la {lieu} en dit long."
+        "Le corps de {victime} a été retrouvé sans vie dans la {lieu}, une arme encore ensanglantée à ses côtés."
       ],
       disparition: [
-        "La victime a disparu sans laisser de traces dans la {lieu}, un mystère à élucider avant que les pistes ne s’effacent."
+        "{victime} a disparu sans laisser de traces dans la {lieu}, un mystère à élucider avant que les pistes ne s’effacent."
       ],
       vol: [
-        "Un vol audacieux a eu lieu au cœur de la {lieu}, un objet précieux manque et les soupçons s’envolent."
+        "Un vol audacieux a eu lieu au cœur de la {lieu}, un objet précieux manque et {victime} est introuvable."
       ]
     },
-    intro: (lieu) =>
-      `Londres, 1892. Une ombre plane sur le manoir des Ashford, alors qu'un meurtre macabre trouble la haute société, dans la ${lieu}.`
+    intro: ({ lieu, victime, traitVictime, motif }) =>
+      `Londres, 1892. Dans la ${lieu}, ${victime}, réputé·e pour être ${traitVictime}, est au centre de toutes les attentions. Motif probable du crime : ${motif}.`
   },
   medieval: {
     lieux: ["château", "grande salle", "forêt", "cave", "donjon"],
+    victimes: ["le seigneur de Montfaucon", "la servante Ysabeau", "le chevalier Gaspard", "la dame de la cour"],
+    traitsVictimes: ["loyal", "superstitieux", "redouté", "manipulateur"],
+    motifs: ["la vengeance", "un héritage contesté", "une histoire d’amour interdite", "un serment brisé"],
     crimes: {
       poison: [
-        "Des herbes toxiques ont été versées dans le repas du seigneur, le condamnant dans la ${lieu}."
+        "Des herbes toxiques ont été versées dans le repas de {victime}, le condamnant dans la {lieu}."
       ],
       classique: [
-        "Le corps gît dans la ${lieu}, marqué par une lutte violente et un poignard médiéval encore planté.",
-        "La scène de crime dans la ${lieu} est maculée de sang, témoignage d'une mise en scène morbide."
+        "Le corps de {victime} gît dans la {lieu}, marqué par une lutte violente et un poignard médiéval encore planté."
       ],
       disparition: [
-        "Un chevalier s’est volatilisé dans la ${lieu}, laissant son épée derrière lui."
+        "{victime} s’est volatilisé·e dans la ${lieu}, laissant son épée derrière lui·elle."
       ],
       vol: [
-        "Un artefact sacré a disparu mystérieusement de la ${lieu}, semant le trouble dans le château."
+        "Un artefact sacré a disparu mystérieusement de la {lieu} alors que {victime} assurait la garde."
       ]
     },
-    intro: (lieu) =>
-      `Au cœur du Moyen-Âge, la ${lieu} retentit d'une tragédie sourde, et les murmures courent dans les couloirs de pierre.`
+    intro: ({ lieu, victime, traitVictime, motif }) =>
+      `En l'an de grâce 1247, la ${lieu} retentit d'une tragédie : ${victime}, connu·e pour être ${traitVictime}, pourrait avoir été victime de ${motif}.`
   },
   futuriste: {
     lieux: ["station orbitale", "laboratoire", "cyber-café", "dôme botanique", "soute"],
+    victimes: ["le Dr Novak", "l'androïde JAX", "la pilote Vega", "le directeur Kwan"],
+    traitsVictimes: ["visionnaire", "calculateur", "instable", "secret"],
+    motifs: ["l’espionnage industriel", "une trahison amoureuse", "un piratage raté", "une quête de pouvoir"],
     crimes: {
       poison: [
-        "Un nano-virus a été injecté dans l’air de la ${lieu}, provoquant une mort rapide et indétectable."
+        "Un nano-virus a été injecté dans le système de {victime} dans la {lieu}, provoquant une mort indétectable."
       ],
       classique: [
-        "Le corps a été retrouvé désintégré dans la ${lieu}, les robots de sécurité n’ayant rien vu."
+        "Le corps de {victime} a été retrouvé désintégré dans la {lieu}, les robots de sécurité n’ayant rien vu."
       ],
       disparition: [
-        "Un scientifique s’est volatilisé de la ${lieu}, laissant derrière lui une énigme cybernétique."
+        "{victime} s’est volatilisé·e de la {lieu}, laissant derrière lui·elle une énigme cybernétique."
       ],
       vol: [
-        "Le cœur d’un réacteur a été dérobé dans la ${lieu} ; la station entière est en danger !"
+        "Le cœur d’un réacteur a été dérobé dans la {lieu} sous la garde de {victime}."
       ]
     },
-    intro: (lieu) =>
-      `An 2150. Dans la ${lieu}, un crime high-tech secoue les élites, dissimulé dans les méandres du cyberespace.`
+    intro: ({ lieu, victime, traitVictime, motif }) =>
+      `An 2150. Dans la ${lieu}, ${victime}, réputé·e pour être ${traitVictime}, suscite les soupçons. Motif évoqué : ${motif}.`
   },
   autre: {
     lieux: ["salle étrange", "dimension inconnue"],
+    victimes: ["l’énigmatique X", "le voyageur temporel", "la voix sans corps"],
+    traitsVictimes: ["insaisissable", "omniscient", "paranoïaque"],
+    motifs: ["une anomalie temporelle", "l’envie de pouvoir", "la folie pure"],
     crimes: {
       poison: [
-        "Un breuvage inconnu a été empoisonné dans la ${lieu}."
+        "Un breuvage inconnu a été empoisonné dans la {lieu}, affectant {victime}."
       ],
       classique: [
-        "Un corps a été retrouvé dans la ${lieu}, la cause de la mort défiant toute logique."
+        "Un corps, peut-être celui de {victime}, a été retrouvé dans la {lieu}, la cause de la mort défiant toute logique."
       ],
       disparition: [
-        "Quelqu’un s’est volatilisé dans la ${lieu}, sans la moindre explication."
+        "{victime} s’est volatilisé·e dans la {lieu}, sans la moindre explication."
       ],
       vol: [
-        "Un objet d’une importance capitale a disparu dans la ${lieu}, bouleversant les lois de la réalité."
+        "Un objet d’une importance capitale a disparu dans la {lieu}, bouleversant le destin de {victime}."
       ]
     },
-    intro: (lieu) =>
-      `Une atmosphère mystérieuse plane dans la ${lieu}, entre réalité déformée et vérités multiples.`
+    intro: ({ lieu, victime, traitVictime, motif }) =>
+      `Une atmosphère mystérieuse plane sur la ${lieu}, tandis que ${victime}, reconnu·e pour être ${traitVictime}, vient de subir les conséquences de ${motif}.`
   }
 };
 
 const scenarioLibrary = {
   objectifs: {
     1: [
-      "Dénichez le meurtrier avant qu’il ne frappe à nouveau. Chaque minute compte, chaque regard peut trahir.",
-      "Trouvez l'assassin avant que la vérité ne soit effacée à jamais. Il ou elle se cache peut-être juste sous vos yeux.",
-      "Résolvez cette énigme en un temps limité pour sauver l’innocent, car le vrai coupable vous observe déjà."
+      "Dénichez le meurtrier avant qu’il ne frappe à nouveau.",
+      "Trouvez l'assassin avant que la vérité ne soit effacée à jamais.",
+      "Résolvez cette énigme en un temps limité pour sauver l’innocent."
     ],
     2: [
-      "Deux coupables se cachent... à vous de les démasquer avant qu’ils ne s’enfuient. Ils pourraient même se couvrir mutuellement.",
+      "Deux coupables se cachent... à vous de les démasquer avant qu’ils ne s’enfuient.",
       "Découvrez l’identité des deux criminels avant qu’ils n’aient le temps de manipuler toute l’enquête.",
-      "La complexité augmente : deux meurtriers, un seul mystère. Faites attention à ce que chacun dit… ou tait."
+      "La complexité augmente : deux meurtriers, un seul mystère."
     ],
     3: [
-      "Trois assassins, liés par un pacte secret, ont dissimulé leur crime derrière une toile de mensonges. Saurez-vous démêler le vrai du faux avant qu’un innocent ne tombe ?",
-      "Une trahison orchestrée par trois esprits machiavéliques secoue le domaine. Chaque indice pourrait être un leurre. La vérité n’est qu’un masque de plus…",
-      "Ils sont trois. Trois silhouettes dans l’ombre, unies par un mobile insondable. Certains indices mènent à eux, d’autres vous éloignent à dessein. Trouverez-vous le fil rouge ?"
+      "Trois assassins, liés par un pacte secret, ont dissimulé leur crime derrière une toile de mensonges.",
+      "Une trahison orchestrée par trois esprits machiavéliques secoue le domaine.",
+      "Ils sont trois. Trois silhouettes dans l’ombre, unies par un mobile insondable."
     ]
   },
   durees: {
     court: [
-      "Le temps presse, chaque minute compte dans cette course contre la montre. Les erreurs seront fatales.",
+      "Le temps presse, chaque minute compte dans cette course contre la montre.",
       "Une enquête rapide mais intense vous attend. Vos instincts devront primer sur vos doutes.",
-      "La résolution doit être rapide pour empêcher un nouveau drame. Gardez vos sens en alerte constante."
+      "La résolution doit être rapide pour empêcher un nouveau drame."
     ],
     moyen: [
-      "Un temps équilibré pour réfléchir et agir. La prudence pourrait faire la différence.",
-      "Une enquête qui mêle tension et réflexion. L’intuition, la logique, et l’observation sont vos alliés.",
-      "Le temps vous donne une marge, mais attention aux erreurs. Les coupables gagnent à chaque hésitation."
+      "Un temps équilibré pour réfléchir et agir.",
+      "Une enquête qui mêle tension et réflexion.",
+      "Le temps vous donne une marge, mais attention aux erreurs."
     ],
     long: [
-      "Une longue enquête où chaque détail peut faire basculer l’affaire. Rien ne doit vous échapper.",
-      "Vous avez le temps d'explorer chaque piste en profondeur. Mais les criminels savent aussi jouer avec le temps.",
-      "Une énigme complexe qui nécessite patience et perspicacité. Ne vous laissez pas berner par les apparences."
+      "Une longue enquête où chaque détail peut faire basculer l’affaire.",
+      "Vous avez le temps d'explorer chaque piste en profondeur.",
+      "Une énigme complexe qui nécessite patience et perspicacité."
     ]
   }
 };
@@ -134,29 +142,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("scenarioContainer");
 
   if (scenarioData) {
-    // Détermination de la période cohérente
     let periodeCle = scenarioData.periode;
     if (periodeCle === "autre" && scenarioData.periodeAutre) {
       periodeCle = "autre";
     }
-    if (!scenarioCohesif[periodeCle]) periodeCle = "autre";
-    const periodeData = scenarioCohesif[periodeCle];
+    if (!univers[periodeCle]) periodeCle = "autre";
+    const periodeData = univers[periodeCle];
 
-    // Lieu cohérent pour cette période
+    // Tirage cohérent de tous les éléments
     const lieu = randomItem(periodeData.lieux);
+    const victime = randomItem(periodeData.victimes);
+    const traitVictime = randomItem(periodeData.traitsVictimes);
+    const motif = randomItem(periodeData.motifs);
 
-    // Crime cohérent pour cette période et mode de jeu
     let modeCrime = scenarioData.mode;
     if (!periodeData.crimes[modeCrime]) modeCrime = "classique";
     let crimeBrut = randomItem(periodeData.crimes[modeCrime]);
+    crimeBrut = crimeBrut.replace(/\{lieu\}/g, lieu).replace(/\{victime\}/g, victime);
 
-    // Remplacer le placeholder {lieu} ou ${lieu} pour rendre le texte cohérent
-    crimeBrut = crimeBrut.replace(/\{lieu\}/g, lieu).replace(/\$\{lieu\}/g, lieu);
-
-    // Introduction cohérente avec le lieu
-    const introduction = periodeData.intro(lieu);
-
-    // Objectif & durée inchangés
+    const introduction = periodeData.intro({ lieu, victime, traitVictime, motif });
     const objectif = randomItem(scenarioLibrary.objectifs[scenarioData.criminels] || scenarioLibrary.objectifs[1]);
     const dureeCat = categoriseDuree(scenarioData.duree);
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
