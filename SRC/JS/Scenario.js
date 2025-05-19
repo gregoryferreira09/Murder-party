@@ -1,6 +1,6 @@
 // SRC/JS/Scenario.js
 
-const SCENARIO_HISTORY_SIZE = 5;
+const ANTI_REPEAT_HISTORY_SIZE = 1; // On n'évite que la répétition du dernier scénario
 
 // --- Utilitaires français ---
 function getArticle(word, articles = { m: 'le', f: 'la' }) {
@@ -25,60 +25,16 @@ function randomItem(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-// --- Historique & Favoris ---
+// --- Historique localStorage ---
 function getScenarioHistory() {
   let history = localStorage.getItem("scenarioHistory");
   return history ? JSON.parse(history) : [];
 }
 function addScenarioToHistory(scenario) {
   let history = getScenarioHistory();
-  // Remove duplicates (by hash)
-  history = history.filter(s => s.hash !== scenario.hash);
   history.unshift(scenario);
-  if (history.length > SCENARIO_HISTORY_SIZE) history = history.slice(0, SCENARIO_HISTORY_SIZE);
+  if (history.length > ANTI_REPEAT_HISTORY_SIZE) history = history.slice(0, ANTI_REPEAT_HISTORY_SIZE);
   localStorage.setItem("scenarioHistory", JSON.stringify(history));
-}
-function getFavorites() {
-  let favs = localStorage.getItem("scenarioFavorites");
-  return favs ? JSON.parse(favs) : [];
-}
-function toggleFavorite(scenario) {
-  let favs = getFavorites();
-  const idx = favs.findIndex(s => s.hash === scenario.hash);
-  if (idx !== -1) {
-    favs.splice(idx, 1);
-  } else {
-    favs.unshift(scenario);
-  }
-  localStorage.setItem("scenarioFavorites", JSON.stringify(favs));
-}
-function isFavorite(hash) {
-  return getFavorites().some(s => s.hash === hash);
-}
-
-// --- Exclusions personnalisées ---
-function getExclusions() {
-  let ex = localStorage.getItem("scenarioExclusions");
-  return ex ? JSON.parse(ex) : [];
-}
-function toggleExclusion(type, value) {
-  let ex = getExclusions();
-  if (ex.some(e => e.type === type && e.value === value)) {
-    ex = ex.filter(e => !(e.type === type && e.value === value));
-  } else {
-    ex.push({ type, value });
-  }
-  localStorage.setItem("scenarioExclusions", JSON.stringify(ex));
-}
-function isExcluded(type, value) {
-  return getExclusions().some(e => e.type === type && e.value === value);
-}
-
-// --- Hashing utilitaire ---
-function hashScenario(obj) {
-  return [
-    obj.lieu, obj.victime, obj.arme, obj.ambiance, obj.suspect1, obj.suspect2
-  ].join('|').toLowerCase();
 }
 
 // --- Univers & templates complets ---
@@ -442,17 +398,20 @@ function replaceVars(tpl, variables) {
     tpl
   );
 }
-function randomNewItem(array, key, history, exclusions=[]) {
-  const used = new Set(history.map(s => typeof key === "function" ? key(s) : s[key]));
-  const filtered = array.filter(el => {
-    const v = typeof key === "function" ? key(el) : (el[key] ?? el);
-    return !used.has(v) && !exclusions.includes(v);
-  });
-  if (filtered.length > 0) return randomItem(filtered);
-  return randomItem(array);
+
+// --- Antirépétition fonctionnelle : évite la répétition de la victime, du lieu, de l'arme, de l'ambiance, du binôme lieu/victime ---
+function tirageSansRepetition(array, key, history, key2) {
+  if (!history.length) return randomItem(array);
+  const last = history[0];
+  return (
+    randomItem(array.filter(el => {
+      const val = key2 ? [el[key], el[key2]].join("|") : el[key];
+      const lastVal = key2 ? [last[key], last[key2]].join("|") : last[key];
+      return val !== lastVal;
+    })) || randomItem(array)
+  );
 }
 
-// --- Génération principale ---
 function genererScenario() {
   let scenarioData;
   try {
@@ -471,154 +430,105 @@ function genererScenario() {
     const periodeData = univers[periodeCle];
     const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
 
-    // Historique et exclusions
+    // Historique court pour antirépétition
     const history = getScenarioHistory();
-    const exclusions = getExclusions();
 
-    // Anti-répétition sur tous les éléments principaux
-    const lieuObj = randomNewItem(
-      periodeData.lieux,
-      x => x.nom,
-      history,
-      exclusions.filter(e=>e.type==="lieu").map(e=>e.value)
-    );
-    const victimeObj = randomNewItem(
-      periodeData.victimes,
-      x => x.nom,
-      history,
-      exclusions.filter(e=>e.type==="victime").map(e=>e.value)
-    );
-    const traitVictime = randomNewItem(
-      periodeData.traitsVictimes,
-      x => x,
-      history,
-      exclusions.filter(e=>e.type==="traitVictime").map(e=>e.value)
-    );
-    const motif = randomNewItem(
-      periodeData.motifs,
-      x => x,
-      history,
-      exclusions.filter(e=>e.type==="motif").map(e=>e.value)
-    );
-    const arme = randomNewItem(
-      periodeData.armes,
-      x => x,
-      history,
-      exclusions.filter(e=>e.type==="arme").map(e=>e.value)
-    );
-    const ambiance = randomNewItem(
-      periodeData.ambiances,
-      x => x,
-      history,
-      exclusions.filter(e=>e.type==="ambiance").map(e=>e.value)
-    );
+    // Tirages antirépétition
+    const lieuObj = tirageSansRepetition(periodeData.lieux, "nom", history, "lieu");
+    const victimeObj = tirageSansRepetition(periodeData.victimes, "nom", history, "victime");
+    const arme = tirageSansRepetition(periodeData.armes, null, history, "arme");
+    const ambiance = tirageSansRepetition(periodeData.ambiances, null, history, "ambiance");
 
-    // Suspects (anti-répétition aussi)
-    const suspects = [...periodeData.suspects];
-    const suspectList = suspects.filter(sus => !victimeObj.nom.toLowerCase().includes(sus.toLowerCase()));
-    const suspect1 = randomNewItem(
-      suspectList, x => x, history, exclusions.filter(e=>e.type==="suspect1").map(e=>e.value)
-    );
-    const suspect2 = randomNewItem(
-      suspectList.filter(sus => sus !== suspect1), x => x, history, exclusions.filter(e=>e.type==="suspect2").map(e=>e.value)
-    );
-
-    let temoinObj, temoin;
-    if (nbJoueurs >= 4 && periodeData.temoins) {
-      temoinObj = randomItem(periodeData.temoins.filter(t => !exclusions.filter(e=>e.type==="temoin").map(e=>e.value).includes(t.nom)));
-      temoin = temoinObj ? temoinObj.nom : undefined;
-    }
-    let indice = (nbJoueurs >= 3 && periodeData.indices) ?
-      randomItem(periodeData.indices.filter(i => !exclusions.filter(e=>e.type==="indice").map(e=>e.value).includes(i))) : undefined;
-
-    // Binôme lieu/victime anti-répétition
-    const binomeStr = lieuObj.nom + "|" + victimeObj.nom;
-    if (history.some(h => (h.lieu + "|" + h.victime) === binomeStr)) {
-      // On force un nouveau tirage (sauf si impossible)
-      return genererScenario();
+    // Binôme lieu/victime (évite la même combinaison)
+    if (
+      history.length &&
+      history[0].lieu === lieuObj.nom &&
+      history[0].victime === victimeObj.nom
+    ) {
+      // On tire à nouveau la victime (au pire, possible boucle infinie si peu d'options)
+      const autresVictimes = periodeData.victimes.filter(v => v.nom !== victimeObj.nom);
+      if (autresVictimes.length > 0) {
+        const victimeObjBis = randomItem(autresVictimes);
+        return genererScenarioAvecTirages(lieuObj, victimeObjBis, arme, ambiance, scenarioData, periodeData, nbJoueurs);
+      }
     }
 
-    // Intro/crime
-    let introCandidates = periodeData.intro.filter((tpl) => {
-      if (tpl.startsWith("[TEMOIN]")) return temoin;
-      if (tpl.startsWith("[INDICE]")) return indice;
-      return true;
-    });
-    const introTpl = randomItem(introCandidates).replace(/^\[(INDICE|TEMOIN)\]\s?/, "");
+    return genererScenarioAvecTirages(lieuObj, victimeObj, arme, ambiance, scenarioData, periodeData, nbJoueurs);
+  } else {
+    document.getElementById("scenarioContainer").innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
+  }
+}
 
-    let modeCrime = scenarioData.mode;
-    if (!periodeData.crimes[modeCrime]) modeCrime = "classique";
-    const crimeTemplates = periodeData.crimes[modeCrime].filter(tpl => {
-      if (tpl.includes("{temoin}") && !temoin) return false;
-      if (tpl.includes("{indice}") && !indice) return false;
-      if (tpl.includes("{suspect2}") && !suspect2) return false;
-      return true;
-    });
-    const crimeTpl = randomItem(crimeTemplates);
+function genererScenarioAvecTirages(lieuObj, victimeObj, arme, ambiance, scenarioData, periodeData, nbJoueurs) {
+  const suspects = [...periodeData.suspects];
+  const suspectList = suspects.filter(sus => !victimeObj.nom.toLowerCase().includes(sus.toLowerCase()));
+  const suspect1 = randomItem(suspectList);
+  const suspect2 = randomItem(suspectList.filter(sus => sus !== suspect1));
 
-    const artLieu = getArticle(lieuObj.nom, { m: 'le', f: 'la' });
-    const artDansLieu = articleDans(lieuObj.nom, artLieu);
-    const artVictime = getArticle(victimeObj.nom, { m: 'le', f: 'la' });
+  let temoinObj, temoin;
+  if (nbJoueurs >= 4 && periodeData.temoins) {
+    temoinObj = randomItem(periodeData.temoins);
+    temoin = temoinObj ? temoinObj.nom : undefined;
+  }
+  let indice = (nbJoueurs >= 3 && periodeData.indices) ? randomItem(periodeData.indices) : undefined;
 
-    const variables = {
-      "{lieu}": lieuObj.nom,
-      "{la_lieu}": artLieu + (artLieu.endsWith("'") ? "" : " ") + lieuObj.nom,
-      "{dans_la_lieu}": artDansLieu + " " + lieuObj.nom,
-      "{victime}": victimeObj.nom,
-      "{le_victime}": artVictime + (artVictime.endsWith("'") ? "" : " ") + victimeObj.nom,
-      "{traitVictime}": traitVictime,
-      "{motif}": motif,
-      "{arme}": arme,
-      "{ambiance}": ambiance,
-      "{suspect1}": suspect1,
-      "{suspect2}": suspect2
-    };
-    if (temoin) variables["{temoin}"] = temoin;
-    if (indice) variables["{indice}"] = indice;
+  let introCandidates = periodeData.intro.filter((tpl) => {
+    if (tpl.startsWith("[TEMOIN]")) return temoin;
+    if (tpl.startsWith("[INDICE]")) return indice;
+    return true;
+  });
+  const introTpl = randomItem(introCandidates).replace(/^\[(INDICE|TEMOIN)\]\s?/, "");
 
-    const introduction = replaceVars(introTpl, variables);
-    const crime = replaceVars(crimeTpl, variables);
-    const objectif = randomItem(scenarioLibrary.objectifs[scenarioData.criminels] || scenarioLibrary.objectifs[1]);
-    const dureeCat = categoriseDuree(scenarioData.duree);
-    const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
+  let modeCrime = scenarioData.mode;
+  if (!periodeData.crimes[modeCrime]) modeCrime = "classique";
+  const crimeTemplates = periodeData.crimes[modeCrime].filter(tpl => {
+    if (tpl.includes("{temoin}") && !temoin) return false;
+    if (tpl.includes("{indice}") && !indice) return false;
+    if (tpl.includes("{suspect2}") && !suspect2) return false;
+    return true;
+  });
+  const crimeTpl = randomItem(crimeTemplates);
 
-    // Stockage du scénario courant dans l'historique
-    const scenarioObj = {
-      hash: hashScenario({
-        lieu: lieuObj.nom,
-        victime: victimeObj.nom,
-        arme,
-        ambiance,
-        suspect1,
-        suspect2
-      }),
-      lieu: lieuObj.nom,
-      victime: victimeObj.nom,
-      traitVictime,
-      motif,
-      arme,
-      ambiance,
-      suspect1,
-      suspect2,
-      temoin,
-      indice,
-      introTpl,
-      crimeTpl,
-      modeCrime,
-      periodeCle,
-      scenarioData,
-      introduction,
-      crime,
-      objectif,
-      dureeCat,
-      detailsDuree
-    };
-    addScenarioToHistory(scenarioObj);
+  const artLieu = getArticle(lieuObj.nom, { m: 'le', f: 'la' });
+  const artDansLieu = articleDans(lieuObj.nom, artLieu);
+  const artVictime = getArticle(victimeObj.nom, { m: 'le', f: 'la' });
 
-    // Affichage
-    container.innerHTML = `
+  const traitVictime = randomItem(periodeData.traitsVictimes);
+  const motif = randomItem(periodeData.motifs);
+
+  const variables = {
+    "{lieu}": lieuObj.nom,
+    "{la_lieu}": artLieu + (artLieu.endsWith("'") ? "" : " ") + lieuObj.nom,
+    "{dans_la_lieu}": artDansLieu + " " + lieuObj.nom,
+    "{victime}": victimeObj.nom,
+    "{le_victime}": artVictime + (artVictime.endsWith("'") ? "" : " ") + victimeObj.nom,
+    "{traitVictime}": traitVictime,
+    "{motif}": motif,
+    "{arme}": arme,
+    "{ambiance}": ambiance,
+    "{suspect1}": suspect1,
+    "{suspect2}": suspect2
+  };
+  if (temoin) variables["{temoin}"] = temoin;
+  if (indice) variables["{indice}"] = indice;
+
+  const introduction = replaceVars(introTpl, variables);
+  const crime = replaceVars(crimeTpl, variables);
+
+  const objectif = randomItem(scenarioLibrary.objectifs[scenarioData.criminels] || scenarioLibrary.objectifs[1]);
+  const dureeCat = categoriseDuree(scenarioData.duree);
+  const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
+
+  // Stockage dans l'historique antirépétition
+  addScenarioToHistory({
+    lieu: lieuObj.nom,
+    victime: victimeObj.nom,
+    arme,
+    ambiance
+  });
+
+  document.getElementById("scenarioContainer").innerHTML = `
     <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
-    <span id="favoriteScenarioBtn" style="cursor:pointer; float:right; font-size:1.5em; margin-right:10px;" title="Ajouter/retirer des favoris">${isFavorite(scenarioObj.hash) ? "⭐" : "☆"}</span>
     <h2>Introduction</h2>
     <p>${introduction}</p>
     <h2>Le crime</h2>
@@ -628,7 +538,7 @@ function genererScenario() {
     <h2>Détails du jeu</h2>
     <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p>
     <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p>
-    <p>Période : ${escapeHtml(periodeCle)}</p>
+    <p>Période : ${escapeHtml(scenarioData.periode)}</p>
     <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p>
     <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p>
     <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
@@ -637,65 +547,11 @@ function genererScenario() {
       <a class="gold-btn" href="salon.html">Lancement</a>
       <a class="gold-btn" href="creer-partie.html">Retour</a>
     </div>
-    <hr>
-    <h3>Favoris</h3>
-    <ul id="favoritesList"></ul>
-    <h3>Derniers scénarios proposés</h3>
-    <ul id="scenarioHistoryList"></ul>
-    <hr>
-    <h3>Éléments à exclure</h3>
-    <div id="exclusionChoices"></div>
     `;
 
-    // Favoris
-    document.getElementById("favoriteScenarioBtn").onclick = () => {
-      toggleFavorite(scenarioObj);
-      genererScenario();
-    };
-
-    // Historique
-    const historyList = getScenarioHistory();
-    let histHtml = "";
-    historyList.forEach((h, idx) => {
-      histHtml += `<li>${escapeHtml(h.victime)} / ${escapeHtml(h.lieu)} (${h.ambiance}) - <span style="cursor:pointer;color:#e6b800;" onclick="(function(){localStorage.setItem('scenarioHistory',JSON.stringify([${JSON.stringify(h)}, ...JSON.parse(localStorage.getItem('scenarioHistory')||'[]').filter(x=>x.hash!=='${h.hash}')].slice(0,${SCENARIO_HISTORY_SIZE})));window.location.reload();})()">🔄 Rejouer</span></li>`;
-    });
-    document.getElementById("scenarioHistoryList").innerHTML = histHtml;
-
-    // Favoris
-    const favorites = getFavorites();
-    let favHtml = "";
-    favorites.forEach(h => {
-      favHtml += `<li>${escapeHtml(h.victime)} / ${escapeHtml(h.lieu)} (${h.ambiance}) - <span style="cursor:pointer;color:#e6b800;" onclick="(function(){toggleFavorite(${JSON.stringify(h)});window.location.reload();})()">❌ Retirer</span></li>`;
-    });
-    document.getElementById("favoritesList").innerHTML = favHtml;
-
-    // Exclusion choix
-    const exclusionTypes = [
-      { type: "lieu", array: periodeData.lieux.map(x=>x.nom) },
-      { type: "victime", array: periodeData.victimes.map(x=>x.nom) },
-      { type: "arme", array: periodeData.armes },
-      { type: "ambiance", array: periodeData.ambiances },
-      { type: "suspect1", array: periodeData.suspects },
-      { type: "suspect2", array: periodeData.suspects }
-    ];
-    let exclusionHtml = "";
-    exclusionTypes.forEach(({type, array})=>{
-      exclusionHtml += `<strong>${type[0].toUpperCase()+type.slice(1)}:</strong> `;
-      array.forEach(val=>{
-        exclusionHtml += `<label style="margin-right:8px;"><input type="checkbox" ${isExcluded(type,val)?'checked':''} onchange="(function(){toggleExclusion('${type}','${val}');window.location.reload();})()">${escapeHtml(val)}</label>`;
-      });
-      exclusionHtml += "<br/>";
-    });
-    document.getElementById("exclusionChoices").innerHTML = exclusionHtml;
-
-    // Action bouton molette
-    const regenBtn = document.getElementById("regenScenarioBtn");
-    if (regenBtn) regenBtn.onclick = genererScenario;
-  } else {
-    container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
-  }
+  // Action bouton molette
+  const regenBtn = document.getElementById("regenScenarioBtn");
+  if (regenBtn) regenBtn.onclick = genererScenario;
 }
 
 document.addEventListener("DOMContentLoaded", genererScenario);
-window.toggleFavorite = toggleFavorite;
-window.toggleExclusion = toggleExclusion;
