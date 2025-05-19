@@ -24,5 +24,5 @@ document.getElementById("genererBtn").addEventListener("click", function(e) {
   };
   localStorage.setItem("parametresPartie", JSON.stringify(parametresPartie));
 
-  window.location.href = "Lancement-partie.html";
+  window.location.href = "SRC/HTML/Lancement-partie.html";
 });
