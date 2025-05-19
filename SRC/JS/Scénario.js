@@ -1,22 +1,23 @@
-// Public/scripts/scenario.js
+// Public/scripts/scenario.js.. Lancement partie.html
 
 document.addEventListener("DOMContentLoaded", () => {
   const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-
   const container = document.getElementById("scenarioContainer");
 
   if (scenarioData) {
-    const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre ? scenarioData.periodeAutre : scenarioData.periode;
+    const periode = scenarioData.periode === "autre" && scenarioData.periodeAutre
+      ? scenarioData.periodeAutre
+      : scenarioData.periode;
 
     container.innerHTML = `
       <h2>Introduction</h2> 
       <p>${scenarioData.introduction || "Bienvenue dans votre Murder Party !"}</p> 
 
       <h2>Le crime</h2> 
-      <p>${scenarioData.crime || "Un crime mystérieux s’est produit..."}</p> 
+      <p>${scenarioData.crime || "Un crime mystérieux s’est produit. À vous de le résoudre !"}</p> 
 
       <h2>Objectif général</h2> 
-      <p>${scenarioData.objectif || "Résoudre le mystère avant la fin du temps imparti."}</p> 
+      <p>${scenarioData.objectif || "Résolvez le mystère avant la fin du temps imparti."}</p> 
 
       <h2>Détails du jeu</h2> 
       <p>Mode de jeu : ${scenarioData.mode}</p> 
