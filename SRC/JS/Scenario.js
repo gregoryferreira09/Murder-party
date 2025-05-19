@@ -285,8 +285,8 @@ function genererScenario() {
 
     container.innerHTML = `
     
-287|       <h2>Introduction</h2>
-288|       <p>${introduction}</p>
+<h2>Introduction</h2>
+<p>${introduction}</p>
 
       <h2>Le crime</h2> 
       <p>${crime}</p> 
