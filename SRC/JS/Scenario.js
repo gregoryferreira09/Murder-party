@@ -292,22 +292,20 @@ function genererScenario() {
     Introduction
   <div style="position: relative; display: flex; justify-content: center; align-items: center;">
   <h2 style="margin:0; text-align:center; width: 100%;">Introduction</h2>
-  <button id="regenScenarioBtn" title="Générer un autre scénario"
-    style="
-      position: absolute;
-      left: 50%;
-      transform: translateX(120px); /* 120px ≈ 3cm */
-      top: 50%;
-      font-size: 1.6em;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      color: #b19657;
-      ">
-    📜
-  </button>
-</div>
+<button id="regenScenarioBtn" title="Générer un autre scénario"
+  style="
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    font-size: 1.3em;
+    background: none;
+    border: none;
+    color: #b19657;
+    cursor: pointer;
+    padding: 0 0 0 8px;
+  ">
+  📜
+</button>
   
       <p>${introduction}</p> 
 
