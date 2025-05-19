@@ -219,8 +219,32 @@ function categoriseDuree(minutes) {
   return "long";
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+// Échappement XSS de base
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Remplacement de toutes les variables dynamiques (optimisé)
+function replaceVars(tpl, variables) {
+  return Object.entries(variables).reduce(
+    (txt, [key, val]) => txt.replaceAll(key, escapeHtml(val)),
+    tpl
+  );
+}
+
+// Génère et affiche un scénario (pour la moulinette !)
+function genererScenario() {
+  let scenarioData;
+  try {
+    scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+  } catch {
+    scenarioData = null;
+  }
   const container = document.getElementById("scenarioContainer");
 
   if (scenarioData) {
@@ -253,17 +277,17 @@ document.addEventListener("DOMContentLoaded", () => {
       "{arme}": arme,
       "{ambiance}": ambiance
     };
-    const replaceVars = (tpl) =>
-      Object.entries(variables).reduce((txt, [key, val]) => txt.replaceAll(key, val), tpl);
 
-    const introduction = replaceVars(introTpl);
-    const crime = replaceVars(crimeTpl);
+    const introduction = replaceVars(introTpl, variables);
+    const crime = replaceVars(crimeTpl, variables);
     const objectif = randomItem(scenarioLibrary.objectifs[scenarioData.criminels] || scenarioLibrary.objectifs[1]);
     const dureeCat = categoriseDuree(scenarioData.duree);
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
     container.innerHTML = `
-      <h2>Introduction</h2> 
+      <h2 style="display: flex; align-items: center;">Introduction
+        <button id="regenScenarioBtn" title="Générer un nouveau scénario" style="margin-left:10px;">🔄</button>
+      </h2>
       <p>${introduction}</p> 
 
       <h2>Le crime</h2> 
@@ -273,20 +297,30 @@ document.addEventListener("DOMContentLoaded", () => {
       <p>${objectif}</p> 
 
       <h2>Détails du jeu</h2> 
-      <p>Mode de jeu : ${scenarioData.mode}</p> 
-      <p>Durée de la partie : ${scenarioData.duree} minutes — ${detailsDuree}</p> 
-      <p>Période : ${periodeCle}</p> 
-      <p>Nombre de joueurs : ${scenarioData.nombreJoueurs}</p> 
-      <p>Nombre de criminels : ${scenarioData.criminels}</p> 
-      <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p> 
-      <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
+      <ul>
+        <li><b>Mode de jeu :</b> ${escapeHtml(scenarioData.mode)}</li>
+        <li><b>Durée de la partie :</b> ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</li>
+        <li><b>Période :</b> ${escapeHtml(periodeCle)}</li>
+        <li><b>Nombre de joueurs :</b> ${escapeHtml(String(scenarioData.nombreJoueurs))}</li>
+        <li><b>Nombre de criminels :</b> ${escapeHtml(String(scenarioData.criminels))}</li>
+        <li><b>Mode criminels fantômes :</b> ${scenarioData.criminelFantome ? "Oui" : "Non"}</li>
+        <li><b>Avatars légendaires activés :</b> ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</li>
+      </ul>
       <div class="boutons-actions">
         <a class="gold-btn" href="salon.html">Lancement</a> 
         <a class="gold-btn" href="creer-partie.html">Retour</a> 
       </div>
     `;
+
+    // Ajout moulinette pour régénérer le scénario
+    const regenBtn = document.getElementById("regenScenarioBtn");
+    if (regenBtn) {
+      regenBtn.onclick = genererScenario;
+    }
   } else {
-    container.innerHTML = "Aucune donnée de scénario trouvée.";
+    container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
-});
-document.addEventListener("DOMContentLoaded", renderScenario);
+}
+
+// Un seul DOMContentLoaded !
+document.addEventListener("DOMContentLoaded", genererScenario);
