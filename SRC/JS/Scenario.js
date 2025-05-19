@@ -284,23 +284,9 @@ function genererScenario() {
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
     container.innerHTML = `
-      <h2 style="display:flex; align-items:center;">
-        Introduction
-          style="
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            font-size: 0.9em;
-            background: none;
-            border: none;
-            color: #b19657;
-            cursor: pointer;
-            padding: 0 0 0 8px;
-   ">
-          <span style="font-size:1.1em; margin-right:4px;">📜</span>
-        </button>
-      </h2>
-      <p>${introduction}</p> 
+    
+287|       <h2>Introduction</h2>
+288|       <p>${introduction}</p>
 
       <h2>Le crime</h2> 
       <p>${crime}</p> 
