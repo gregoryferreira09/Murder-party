@@ -291,7 +291,7 @@ function genererScenario() {
             margin-left: auto;
             display: flex;
             align-items: center;
-            font-size: 0.9em;
+            font-size: 4.9em;
             background: none;
             border: none;
             color: #b19657;
