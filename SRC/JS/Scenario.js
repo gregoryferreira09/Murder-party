@@ -284,9 +284,7 @@ function genererScenario() {
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
   container.innerHTML = `
-  <div style="text-align:right;">
-  <button id="regenScenarioBtn" type="button">📜</button>
-</div>
+  <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
 
   <h2>Introduction</h2>
   <p>${introduction}</p>
