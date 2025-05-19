@@ -1,79 +1,49 @@
-<!DOCTYPE html> 
-<html lang="fr"> 
-<head> 
-  <meta charset="UTF-8"> 
-  <title>Lancement de la Partie - Murder Party</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-
-  <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet"> 
-</head> 
-
-<body> 
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Détail de la partie - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../../Public/styles/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet" />
+</head>
+<body>
   <header>
-    <h1>Scénario proposé</h1>
+    <h1>Détail de la Partie</h1>
   </header>
-  
-  <!-- Ajout du container et bouton de génération -->
-  <div>
-    <label for="epoque-select">Choisissez une époque :</label>
-    <select id="epoque-select">
-      <option value="victorien">Époque victorienne</option>
-      <option value="medieval">Époque médiévale</option>
-      <option value="futuriste">Époque futuriste</option>
+
+  <!-- Sélecteurs d'époque et de durée (si utilisés pour choisir la partie) -->
+  <section id="choix-partie" class="scenario bandeau-dore fadeUp">
+    <label for="epoque-select">Époque :</label>
+    <select id="epoque-select" name="epoque-select">
+      <option value="victorien">Victorien</option>
+      <option value="medieval">Médiéval</option>
+      <option value="futuriste">Futuriste</option>
     </select>
 
-    <label for="duree-select">Durée de la partie :</label>
-    <select id="duree-select">
+    <label for="duree-select">Durée :</label>
+    <select id="duree-select" name="duree-select">
       <option value="court">Court</option>
-      <option value="moyen" selected>Moyen</option>
+      <option value="moyen">Moyen</option>
       <option value="long">Long</option>
     </select>
+  </section>
 
-    <button id="generer-btn">Générer Scénario</button>
-  </div>
-
-  <!-- Encadré doré incluant le scénario -->
-  <div id="scenarioContainer" class="scenario bandeau-dore fadeUp" style="margin-top:20px;">
-    Chargement du scénario...
-  </div>
+  <!-- Conteneur principal pour afficher le scénario généré par ton script JS -->
+  <section id="detail-partie" class="scenario bandeau-dore fadeUp">
+    <p><strong>Introduction :</strong> <span id="introduction">—</span></p>
+    <p><strong>Lieu :</strong> <span id="lieu">—</span></p>
+    <p><strong>Crime :</strong> <span id="crime">—</span></p>
+    <p><strong>Arme :</strong> <span id="arme">—</span></p>
+    <p><strong>Objectif :</strong> <span id="objectif">—</span></p>
+    <p><strong>Durée :</strong> <span id="duree-description">—</span></p>
+  </section>
 
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
-  <script src="../JS/Scénario.js"></script>
-
-  <script>
-    // Fonction d’affichage adaptée pour le container unique
-    function afficherScenario() {
-      const epoque = document.getElementById("epoque-select").value;
-      const duree = document.getElementById("duree-select").value;
-
-      const scenario = genererScenario(epoque, duree);
-      if (!scenario) return;
-
-      const html = `
-        <h2>Introduction</h2><p>${scenario.introduction}</p>
-        <h2>Lieu</h2><p>${scenario.lieu}</p>
-        <h2>Arme du crime</h2><p>${scenario.arme}</p>
-        <h2>Type de crime</h2><p>${scenario.crime}</p>
-        <h2>Objectif</h2><p>${scenario.objectif}</p>
-        <h2>Description durée</h2><p>${scenario.dureeDescription}</p>
-      `;
-
-      document.getElementById("scenarioContainer").innerHTML = html;
-    }
-
-    document.getElementById("generer-btn").addEventListener("click", afficherScenario);
-
-    // Génération automatique à l’ouverture
-    window.addEventListener("DOMContentLoaded", () => {
-      afficherScenario();
-    });
-  </script>
-
-</body> 
+  <script src="../JS/Scenario.js"></script>
+</body>
 </html>
