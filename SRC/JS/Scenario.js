@@ -95,3 +95,6 @@ function genererScenario() {
 }
 
 document.addEventListener("DOMContentLoaded", genererScenario);
+}
+
+document.addEventListener("DOMContentLoaded", genererScenario);
