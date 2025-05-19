@@ -289,6 +289,7 @@ function genererScenario() {
          <button id="regenScenarioBtn" title="Générer un autre scénario"
           style="
             margin-left: auto;
+            align-items: center;
             display: flex;
             font-size: 1em;
             background: none;
