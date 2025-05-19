@@ -290,15 +290,14 @@ function genererScenario() {
           style="
             margin-left: auto;
             display: flex;
-            align-items: center;
-            font-size: 4.9em;
+            font-size: 1em;
             background: none;
             border: none;
             color: #b19657;
             cursor: pointer;
             padding: 0 0 0 8px;
           ">
-          <span style="font-size:1.1em; margin-right:8px;">📜</span>
+          <span style="font-size:1.1em; margin-right: 4px;">📜</span>
         </button>
       </h2>
       <p>${introduction}</p> 
