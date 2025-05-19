@@ -1,31 +1,49 @@
-<!DOCTYPE html> 
-<html lang="fr"> 
-<head> 
-  <meta charset="UTF-8"> 
-  <title>Lancement de la Partie - Murder Party</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-
-  <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet"> 
-</head> 
-
-<body> 
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Détail de la partie - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../../Public/styles/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet" />
+</head>
+<body>
   <header>
-    <h1>Scénario proposé</h1>
+    <h1>Détail de la Partie</h1>
   </header>
-  
-  <!-- Encadré doré incluant le scénario et les boutons -->
-  <div id="scenarioContainer" class="scenario bandeau-dore fadeUp">
-    Chargement du scénario...
-  </div>
+
+  <!-- Sélecteurs d'époque et de durée (si utilisés pour choisir la partie) -->
+  <section id="choix-partie" class="scenario bandeau-dore fadeUp">
+    <label for="epoque-select">Époque :</label>
+    <select id="epoque-select" name="epoque-select">
+      <option value="victorien">Victorien</option>
+      <option value="medieval">Médiéval</option>
+      <option value="futuriste">Futuriste</option>
+    </select>
+
+    <label for="duree-select">Durée :</label>
+    <select id="duree-select" name="duree-select">
+      <option value="court">Court</option>
+      <option value="moyen">Moyen</option>
+      <option value="long">Long</option>
+    </select>
+  </section>
+
+  <!-- Conteneur principal pour afficher le scénario généré par ton script JS -->
+  <section id="detail-partie" class="scenario bandeau-dore fadeUp">
+    <p><strong>Introduction :</strong> <span id="introduction">—</span></p>
+    <p><strong>Lieu :</strong> <span id="lieu">—</span></p>
+    <p><strong>Crime :</strong> <span id="crime">—</span></p>
+    <p><strong>Arme :</strong> <span id="arme">—</span></p>
+    <p><strong>Objectif :</strong> <span id="objectif">—</span></p>
+    <p><strong>Durée :</strong> <span id="duree-description">—</span></p>
+  </section>
 
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
-  <!-- ✅ Chemin corrigé vers le script -->
   <script src="../JS/Scénario.js"></script>
-</body> 
+</body>
 </html>
