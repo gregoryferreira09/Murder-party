@@ -299,7 +299,6 @@ function genererScenario() {
             padding: 0 0 0 8px;
           ">
           <span style="font-size:1.1em; margin-right:4px;">⚙📜</span>
-          <span style="font-size:0.95em;">Générer un autre scénario</span>
         </button>
       </h2>
       <p>${introduction}</p> 
