@@ -1,24 +1,16 @@
 // SRC/JS/Scenario.js
 
-// Utilitaires pour gestion des articles français
 function getArticle(word, articles = { m: 'le', f: 'la' }) {
   if (!word) return '';
   word = word.trim();
   const firstLetter = word[0].toLowerCase();
   if ("aeiouyh".includes(firstLetter)) return "l'";
-  // Exceptions féminines fréquentes
   const feminine = [
     "bibliothèque","gouvernante","salle","cave","chapelle","forêt","dimension","galerie","voix","technicienne","station","soute","cabine","ombre"
   ];
   const wordLC = word.toLowerCase();
   if (feminine.some(x => wordLC.startsWith(x))) return articles.f;
   return articles.m;
-}
-function articleDe(word, article) {
-  if (article === "le") return "du";
-  if (article === "la") return "de la";
-  if (article === "l'") return "de l'";
-  return "de";
 }
 function articleDans(word, article) {
   if (article === "le") return "dans le";
@@ -30,7 +22,6 @@ function randomItem(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-// Univers et templates adaptés
 const univers = {
   victorien: {
     lieux: [
@@ -76,46 +67,39 @@ const univers = {
       "un dîner animé se prépare",
       "des éclats de voix résonnent dans la maison"
     ],
-    // INTRO : pas de révélation du crime, mais du contexte, soupçons, tensions
     intro: [
-      "Londres, 1892. {ambiance} dans {la_lieu}. Les secrets se murmurent, les regards s’évitent.",
-      "Ce soir, le manoir vibre d’une excitation étrange : chacun semble cacher quelque chose.",
-      "{ambiance} enveloppe {la_lieu}, où la rivalité entre les convives n’a jamais été aussi forte.",
-      "Dans {la_lieu}, la tension est palpable : on guette le moindre faux pas.",
+      "{ambiance} dans {la_lieu}. Les secrets se murmurent, les regards s’évitent.",
+      "Le manoir vibre d’une excitation étrange. {suspect1} semble préoccupé·e ce soir.",
+      "Dans {la_lieu}, la tension monte. Des rumeurs courent sur {motif}.",
       "Un bal masqué s’organise : la jalousie couve entre {suspect1} et {suspect2}.",
-      "Des rumeurs circulent à propos de {motif}.",
-      // Indice (min 3 joueurs)
-      "[INDICE] La soirée débute dans {la_lieu}. Déjà, {indice}.",
-      // Temoin (min 4 joueurs)
-      "[TEMOIN] Selon {temoin}, quelque chose cloche dans l’attitude de {suspect1} ce soir."
+      "[INDICE] La soirée commence dans {la_lieu}. Déjà, {indice}.",
+      "[TEMOIN] Selon {temoin}, l’attitude de {suspect1} est étrange ce soir."
     ],
-    // CRIME : révélation du drame, détails, indices, suspects, réactions
     crimes: {
       classique: [
-        "Soudain, un cri retentit : {victime} gît sans vie {dans_la_lieu}, {arme} à ses côtés.",
-        "La découverte est brutale : {victime} vient d’être retrouvé·e mort·e {dans_la_lieu}. {indice}.",
-        "Les invités sont sous le choc : {victime} a succombé à une attaque violente {dans_la_lieu}. Rapidement, la suspicion se porte sur {suspect1}.",
-        "{temoin} affirme avoir vu {suspect2} rôder près de {la_lieu} peu avant le drame.",
-        "La police découvre {arme} abandonné·e {dans_la_lieu}. Tous les regards se tournent vers {suspect1}."
+        "Un cri retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés. {indice}",
+        "{victime} a été assassiné·e {dans_la_lieu}. {temoin} affirme avoir vu {suspect1} rôder dans le secteur.",
+        "La découverte est brutale : {victime} gît {dans_la_lieu}, la scène est figée. Rapidement, tous se tournent vers {suspect1}.",
+        "{victime} a succombé à une attaque violente {dans_la_lieu}. {temoin} est bouleversé·e.",
+        "Le drame s'est joué {dans_la_lieu} : {victime} a été tué·e. {indice}"
       ],
       poison: [
-        "Le drame éclate lors du repas : {victime} s’effondre, empoisonné·e. {indice}.",
-        "Un parfum suspect flotte {dans_la_lieu} : {victime} n’a pas survécu à une gorgée de trop.",
-        "Le médecin du manoir accuse un empoisonnement. {suspect1} et {suspect2} multiplient les explications confuses."
+        "Le repas tourne au drame : {victime} s’effondre, empoisonné·e. {indice}",
+        "{victime} n’a pas survécu à une gorgée de trop {dans_la_lieu}. {temoin} accuse {suspect1}.",
+        "Le médecin du manoir parle d’empoisonnement. {suspect1} et {suspect2} se défaussent."
       ],
       disparition: [
-        "L’aube révèle l’absence inquiétante de {victime}. On ne retrouve que {indice} {dans_la_lieu}.",
-        "Nul ne sait ce qui est advenu de {victime} : {temoin} prétend l’avoir vu·e quitter {la_lieu} précipitamment.",
-        "La famille s’inquiète : {victime} n’a pas reparu depuis la veille. {suspect1} semble nerveux·se."
+        "On ne retrouve plus {victime} {dans_la_lieu}. {temoin} l’a vu quitter la pièce précipitamment.",
+        "La famille s’inquiète : {victime} n’a pas reparu depuis la veille. {indice}",
+        "{victime} a disparu sans laisser de traces {dans_la_lieu}. {suspect1} reste silencieux."
       ],
       vol: [
-        "Un bijou d’une grande valeur a disparu. {suspect1} accuse {suspect2}, mais {temoin} dit avoir vu autre chose.",
-        "Dans la confusion, {victime} remarque la disparition d’un objet précieux {dans_la_lieu}.",
-        "Un vol audacieux fait trembler la maisonnée. {indice} pourrait bien trahir le coupable."
+        "Un bijou a disparu, et {victime} donne l’alerte. {temoin} dit avoir vu {suspect1} rôder dans les environs.",
+        "Dans la confusion, {victime} remarque la disparition d’un objet précieux {dans_la_lieu}. {indice}",
+        "Un vol audacieux déstabilise tout le monde. {suspect1} est immédiatement suspecté."
       ]
     }
   },
-
   medieval: {
     lieux: [
       { nom: "château", genre: "m" },
@@ -161,42 +145,38 @@ const univers = {
       "les flammes vacillent dans la cheminée"
     ],
     intro: [
-      "Au cœur de la nuit, {ambiance} dans {la_lieu}. Les dames murmurent, les seigneurs s’observent.",
-      "Ce soir, la tension est à son comble : un héritage contesté fait jaser toute la cour.",
-      "Dans {la_lieu}, la servante Ysabeau évite le regard du chevalier Gaspard.",
-      "La rumeur d’une prophétie circule : certains craignent qu’elle ne se réalise.",
+      "{ambiance} dans {la_lieu}. Les dames murmurent, les seigneurs s’observent.",
+      "La tension est à son comble dans la cour. {suspect1} semble éviter {suspect2}.",
+      "Dans {la_lieu}, les conversations se font secrètes. Certains évoquent {motif}.",
       "Un festin débute, mais déjà la suspicion plane entre {suspect1} et {suspect2}.",
-      // Indice
       "[INDICE] {indice}. L’atmosphère s’alourdit dans {la_lieu}.",
-      // Temoin
       "[TEMOIN] {temoin} pense avoir surpris {suspect1} à l’écart, l’air troublé."
     ],
     crimes: {
       classique: [
-        "Un cri fend la nuit : {victime} gît sans vie {dans_la_lieu}, {arme} plantée dans le dos.",
-        "Le chaos s’empare de la cour : {victime} vient d’être assassiné·e {dans_la_lieu}. {indice}.",
-        "La stupeur est totale : {victime} a succombé à une attaque brutale {dans_la_lieu}. {suspect1} paraît nerveux·se.",
-        "{temoin} affirme avoir vu {suspect2} rôder près de {la_lieu} peu avant le drame.",
-        "Une arme ensanglantée est retrouvée {dans_la_lieu}. Les soupçons se resserrent sur {suspect1}."
+        "Un cri fend la nuit : {victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} plantée dans le dos. {indice}",
+        "Le chaos s’empare de la cour : {victime} vient d’être assassiné·e {dans_la_lieu}. {temoin} accuse {suspect1}.",
+        "La stupeur est totale : {victime} gît {dans_la_lieu}. Tous se tournent vers {suspect1}.",
+        "{victime} a succombé à une attaque brutale {dans_la_lieu}. {temoin} est bouleversé·e.",
+        "Le drame s'est joué {dans_la_lieu} : {victime} a été tué·e. {indice}"
       ],
       poison: [
-        "Le drame survient lors du festin : {victime} s’effondre, victime d’un poison sournois. {indice}.",
-        "Un parfum suspect flotte {dans_la_lieu} : {victime} n’a pas survécu à une gorgée de trop.",
-        "Le médecin du château suspecte un empoisonnement. {suspect1} et {suspect2} multiplient les dénégations."
+        "Le festin vire au cauchemar : {victime} s’effondre, empoisonné·e. {indice}",
+        "{victime} n’a pas survécu à une gorgée fatale {dans_la_lieu}. {temoin} accuse {suspect1}.",
+        "Le médecin du château parle d’empoisonnement. {suspect1} et {suspect2} s’accusent mutuellement."
       ],
       disparition: [
-        "Dès l’aube, on découvre l’absence de {victime}. Seul·e {temoin} semble avoir aperçu une silhouette dans {la_lieu}.",
-        "Nul ne sait ce qu’est devenu {victime} : {suspect1} murmure que tout est lié à {motif}.",
-        "La cour s’inquiète : {victime} n’a pas reparu depuis la veille. {indice}."
+        "On ne retrouve plus {victime} {dans_la_lieu}. {temoin} l’a aperçu quitter la pièce à la hâte.",
+        "La cour s’inquiète : {victime} n’a pas reparu depuis la veille. {indice}",
+        "{victime} a disparu sans laisser de traces {dans_la_lieu}. {suspect1} se renferme."
       ],
       vol: [
-        "Le trésor du château a disparu. {suspect1} accuse {suspect2}, mais {temoin} dit avoir vu autre chose.",
-        "Dans la confusion, {victime} remarque la disparition d’un objet précieux {dans_la_lieu}.",
-        "Un vol audacieux fait vaciller la noblesse. {indice} pourrait bien trahir le coupable."
+        "Le trésor du château a disparu. {temoin} dit avoir vu {suspect1} rôder dans les couloirs.",
+        "Dans la confusion, {victime} remarque la disparition d’un objet précieux {dans_la_lieu}. {indice}",
+        "Un vol audacieux choque la noblesse. {suspect1} est immédiatement suspecté."
       ]
     }
   },
-
   futuriste: {
     lieux: [
       { nom: "station orbitale", genre: "f" },
@@ -241,41 +221,38 @@ const univers = {
       "la maintenance s'éternise"
     ],
     intro: [
-      "An 2150. {ambiance} {dans_la_lieu}. Chacun travaille, chacun se méfie.",
-      "L’équipage se réunit pour un rapport de mission : la tension est palpable.",
-      "Des rivalités éclatent : {suspect1} et {suspect2} se disputent un brevet.",
+      "{ambiance} {dans_la_lieu}. Chacun travaille, chacun se méfie.",
+      "L’équipage se réunit pour un rapport de mission. {suspect1} évite le regard de {suspect2}.",
+      "Des tensions éclatent. Certains parlent de {motif}.",
       "L’IA centrale observe les moindres faits et gestes.",
-      // Indice
       "[INDICE] {indice}. L’équipage échange des regards inquiets.",
-      // Temoin
       "[TEMOIN] Selon {temoin}, {suspect1} a agi de façon étrange près du sas."
     ],
     crimes: {
       classique: [
-        "Un cri retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, frappé·e par {arme}.",
-        "La stupeur gagne l’équipage : {victime} a succombé à une attaque fatale. {indice}.",
+        "Un cri retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, frappé·e par {arme}. {indice}",
+        "La stupeur gagne l’équipage : {victime} a succombé à une attaque fatale. {temoin} accuse {suspect1}.",
         "Tout le monde se tourne vers {suspect1}, vu·e non loin de la scène.",
-        "{temoin} affirme avoir intercepté une transmission suspecte juste avant l’incident.",
-        "La sécurité découvre {arme} abandonné·e {dans_la_lieu}."
+        "{victime} a été tué·e. {temoin} a intercepté une transmission suspecte.",
+        "Le drame s'est joué {dans_la_lieu} : {victime} a été éliminé·e. {indice}"
       ],
       poison: [
-        "Une contamination soudaine frappe : {victime} s’effondre, victime d'un nano-virus. {indice}.",
-        "Le laboratoire est sous quarantaine : {victime} n’a pas survécu à une injection mortelle.",
-        "Un traceur chimique révèle la présence de poison dans la boisson de {victime}. {suspect1} est interrogé·e."
+        "Une contamination soudaine frappe : {victime} s’effondre, victime d'un nano-virus. {indice}",
+        "{victime} n’a pas survécu à une injection mortelle {dans_la_lieu}. {temoin} accuse {suspect1}.",
+        "Un traceur chimique révèle la présence de poison. {suspect1} est interrogé·e."
       ],
       disparition: [
-        "L’alarme signale la disparition de {victime}. Seul·e {temoin} a vu une silhouette s’éloigner {dans_la_lieu}.",
+        "L’alarme signale la disparition de {victime}. {temoin} a vu une silhouette s’éloigner {dans_la_lieu}.",
         "Plus de trace de {victime} : {suspect1} soupçonne un acte de sabotage.",
-        "La station entière cherche {victime}, disparu·e alors que {ambiance}."
+        "{victime} a disparu. {indice}"
       ],
       vol: [
-        "Un module clé est dérobé : {suspect1} accuse {suspect2}, mais {temoin} affirme le contraire.",
-        "L'IA détecte un accès non autorisé : {indice}.",
-        "Un vol audacieux met en péril la mission. Tous les regards se tournent vers {suspect1}."
+        "Un module clé est dérobé : {temoin} dit avoir vu {suspect1} près de la zone.",
+        "L'IA détecte un accès non autorisé. {indice}",
+        "Un vol met en péril la mission. {suspect1} est suspecté."
       ]
     }
   },
-
   autre: {
     lieux: [
       { nom: "salle étrange", genre: "f" },
@@ -315,37 +292,35 @@ const univers = {
       "quand le temps s’arrête"
     ],
     intro: [
-      "Ici, tout défie la logique. {ambiance} {dans_la_lieu}.",
-      "Les lois de la causalité semblent avoir disparu. Des murmures circulent sur {motif}.",
-      "On ne sait plus qui est réel : {suspect1} observe {suspect2} d’un air méfiant.",
+      "{ambiance} {dans_la_lieu}. Les lois de la causalité semblent altérées.",
+      "Une énigme plane sur l’assemblée. {suspect1} observe {suspect2} d’un air méfiant.",
+      "Les souvenirs semblent s’effacer. Certains parlent de {motif}.",
       "Chaque instant, la dimension se reconfigure.",
-      // Indice
       "[INDICE] {indice} survient soudain, glaçant l’assemblée.",
-      // Temoin
       "[TEMOIN] Selon {temoin}, la disparition de {suspect1} n’est pas un hasard."
     ],
     crimes: {
       classique: [
-        "Un cri déformé retentit : {victime} n’est plus {dans_la_lieu}.",
-        "La réalité vacille : {victime} s’effondre, frappé·e par {arme}. {indice}.",
+        "Un cri déformé retentit : {victime} n’est plus {dans_la_lieu}. {indice}",
+        "La réalité vacille : {victime} s’effondre, frappé·e par {arme}. {temoin} prétend avoir vu {suspect1}.",
         "On accuse {suspect1}, mais la vérité vacille.",
-        "{temoin} croit avoir vu {suspect2} franchir une faille.",
+        "{victime} disparaît sans explication. {indice}",
         "Un artefact disparu bouleverse {la_lieu}."
       ],
       poison: [
-        "Un breuvage inconnu a été empoisonné {dans_la_lieu}, affectant {victime}.",
-        "On soupçonne {arme} d’avoir altéré l’esprit de {victime} {dans_la_lieu}.",
-        "{suspect1} murmure des avertissements incompréhensibles."
+        "Un breuvage inconnu empoisonne {victime} {dans_la_lieu}. {indice}",
+        "On soupçonne {arme} d’avoir altéré l’esprit de {victime} {dans_la_lieu}. {temoin} murmure des avertissements.",
+        "{suspect1} se tait, mais tout le monde le regarde."
       ],
       disparition: [
-        "{victime} s’est volatilisé·e {dans_la_lieu}, sans la moindre explication.",
-        "Nul ne sait où ni quand {victime} a disparu : {la_lieu} semble en être la clé.",
+        "{victime} s’est volatilisé·e {dans_la_lieu}. {temoin} croit avoir vu une silhouette franchir une faille.",
+        "Nul ne sait où ni quand {victime} a disparu. {indice}",
         "Une onde mentale efface les souvenirs de {temoin}."
       ],
       vol: [
-        "Un objet d’une importance capitale disparaît {dans_la_lieu}, bouleversant le destin de {victime}.",
+        "Un objet d’une importance capitale disparaît {dans_la_lieu}. {temoin} accuse {suspect1}.",
         "Dans {la_lieu}, {arme} a été volé pendant que {victime} menait une expérience.",
-        "Un paradoxe menace tout équilibre. {suspect1} est désigné·e, mais tout doute."
+        "Un paradoxe menace tout équilibre. {suspect1} est désigné·e, mais tout le monde doute."
       ]
     }
   }
@@ -394,7 +369,6 @@ function categoriseDuree(minutes) {
   return "long";
 }
 
-// Sécurité XSS sur le texte injecté
 function escapeHtml(text) {
   return String(text)
     .replace(/&/g, "&amp;")
@@ -404,7 +378,6 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-// Remplacement des variables dans un template, avec échappement
 function replaceVars(tpl, variables) {
   return Object.entries(variables).reduce(
     (txt, [key, val]) => txt.replaceAll(key, escapeHtml(val)),
@@ -429,10 +402,8 @@ function genererScenario() {
     if (!univers[periodeCle]) periodeCle = "autre";
     const periodeData = univers[periodeCle];
 
-    // Nombre de joueurs
     const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
 
-    // Tirage cohérent des éléments
     const lieuObj = randomItem(periodeData.lieux);
     const victimeObj = randomItem(periodeData.victimes);
     const traitVictime = randomItem(periodeData.traitsVictimes);
@@ -440,20 +411,15 @@ function genererScenario() {
     const arme = randomItem(periodeData.armes);
     const ambiance = randomItem(periodeData.ambiances);
 
-    // Articles adaptés
     const artLieu = getArticle(lieuObj.nom, { m: 'le', f: 'la' });
     const artDansLieu = articleDans(lieuObj.nom, artLieu);
     const artVictime = getArticle(victimeObj.nom, { m: 'le', f: 'la' });
 
-    // Suspects
     const suspects = [...periodeData.suspects];
-    // On retire la victime si elle est aussi dans la liste des suspects (évite incohérence)
     const suspectList = suspects.filter(sus => !victimeObj.nom.toLowerCase().includes(sus.toLowerCase()));
     const suspect1 = randomItem(suspectList);
-    // Pour un 2e suspect, autre que suspect1
     const suspect2 = randomItem(suspectList.filter(sus => sus !== suspect1));
 
-    // Témoins et indices uniquement si disponibles ET pertinents
     let temoinObj, temoin;
     if (nbJoueurs >= 4 && periodeData.temoins) {
       temoinObj = randomItem(periodeData.temoins);
@@ -461,18 +427,15 @@ function genererScenario() {
     }
     let indice = (nbJoueurs >= 3 && periodeData.indices) ? randomItem(periodeData.indices) : undefined;
 
-    // Choix du template d'intro selon contexte
     let introCandidates = periodeData.intro.filter((tpl) => {
       if (tpl.startsWith("[TEMOIN]")) return temoin;
       if (tpl.startsWith("[INDICE]")) return indice;
       return true;
     });
-    // Retire les balises d'indication
     const introTpl = randomItem(introCandidates).replace(/^\[(INDICE|TEMOIN)\]\s?/, "");
 
     let modeCrime = scenarioData.mode;
     if (!periodeData.crimes[modeCrime]) modeCrime = "classique";
-    // Les crimes peuvent utiliser temoin/indice/suspect1/suspect2
     const crimeTemplates = periodeData.crimes[modeCrime].filter(tpl => {
       if (tpl.includes("{temoin}") && !temoin) return false;
       if (tpl.includes("{indice}") && !indice) return false;
@@ -481,7 +444,6 @@ function genererScenario() {
     });
     const crimeTpl = randomItem(crimeTemplates);
 
-    // Remplacement de toutes les variables dynamiques
     const variables = {
       "{lieu}": lieuObj.nom,
       "{la_lieu}": artLieu + (artLieu.endsWith("'") ? "" : " ") + lieuObj.nom,
@@ -508,25 +470,24 @@ function genererScenario() {
     <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
     <h2>Introduction</h2>
     <p>${introduction}</p>
-    <h2>Le crime</h2> 
-    <p>${crime}</p> 
-    <h2>Objectif général</h2> 
-    <p>${objectif}</p> 
-    <h2>Détails du jeu</h2> 
-    <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p> 
-    <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p> 
-    <p>Période : ${escapeHtml(periodeCle)}</p> 
-    <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p> 
-    <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p> 
-    <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p> 
+    <h2>Le crime</h2>
+    <p>${crime}</p>
+    <h2>Objectif général</h2>
+    <p>${objectif}</p>
+    <h2>Détails du jeu</h2>
+    <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p>
+    <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p>
+    <p>Période : ${escapeHtml(periodeCle)}</p>
+    <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p>
+    <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p>
+    <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
     <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
     <div class="boutons-actions">
-      <a class="gold-btn" href="salon.html">Lancement</a> 
-      <a class="gold-btn" href="creer-partie.html">Retour</a> 
+      <a class="gold-btn" href="salon.html">Lancement</a>
+      <a class="gold-btn" href="creer-partie.html">Retour</a>
     </div>
     `;
 
-    // Action bouton molette
     const regenBtn = document.getElementById("regenScenarioBtn");
     if (regenBtn) {
       regenBtn.onclick = genererScenario;
@@ -536,5 +497,4 @@ function genererScenario() {
   }
 }
 
-// Un seul DOMContentLoaded !
 document.addEventListener("DOMContentLoaded", genererScenario);
