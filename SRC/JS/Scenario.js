@@ -284,24 +284,66 @@ function genererScenario() {
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
     container.innerHTML = `
-      <h2 style="display:flex; align-items:center;">
-        Introduction
-        <button id="regenScenarioBtn" title="Générer un autre scénario"
-          style="
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            font-size: 0.9em;
-            background: none;
-            border: none;
-            color: #b19657;
-            cursor: pointer;
-            padding: 0 0 0 8px;
+  <div style="display: flex; align-items: center; justify-content: center; position: relative;">
+    <h2 style="flex:1; text-align: center; margin:0; font-family: 'Cinzel', Garamond, serif; letter-spacing: 1px;">
+      Introduction
+    </h2>
+    <button id="regenScenarioBtn" title="Générer un autre scénario"
+      style="
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2em;
+        font-weight: bold;
+        background: linear-gradient(90deg, #ffe082, #b19657);
+        border: 2px solid #9b7d3a;
+        color: #7a5e2d;
+        font-family: 'Cinzel', Garamond, serif;
+        cursor: pointer;
+        padding: 10px 22px;
+        border-radius: 24px;
+        box-shadow: 0 2px 8px rgba(108, 84, 52, 0.13);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        transition: filter 0.15s;
+      "
+      onmouseover="this.style.filter='brightness(1.10)'"
+      onmouseout="this.style.filter='brightness(1)'"
+    >
+      <span style="
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #fffbe6;
+        border: 2px solid #c7a045;
+        box-shadow: 0 2px 8px rgba(199, 160, 69, 0.10);
+        text-align: center;
+        line-height: 44px;
+        font-size: 2.1em;
+        color: #c7a045;
+        ">
+        ↻
+        <span style="
+          position:absolute;
+          left:0; top:0;
+          width:100%; height:100%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:1.25em;
+          color:#ad8a3c;
           ">
-          <span style="font-size:1.1em; margin-right:4px;">⚙️</span>
-          <span style="font-size:0.95em;">Générer un autre scénario</span>
-        </button>
-      </h2>
+          📜
+        </span>
+      </span>
+      Générer un autre scénario
+    </button>
+  </div>
+  
       <p>${introduction}</p> 
 
       <h2>Le crime</h2> 
