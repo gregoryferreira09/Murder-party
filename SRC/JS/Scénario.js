@@ -143,7 +143,3 @@ document.addEventListener("DOMContentLoaded", () => {
     container.innerHTML = "Aucune donnée de scénario trouvée.";
   }
 });
-
-    container.innerHTML = "Aucune donnée de scénario trouvée.";
-  }
-});
