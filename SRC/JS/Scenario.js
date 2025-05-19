@@ -283,30 +283,32 @@ function genererScenario() {
     const dureeCat = categoriseDuree(scenarioData.duree);
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
-    container.innerHTML = `
-    
-<h2>Introduction</h2>
-<p>${introduction}</p>
+  container.innerHTML = `
+  <div style="text-align:right;">
+    <button id="regenScenarioBtn" class="gold-btn" type="button">📜 Générer un autre scénario</button>
+  </div>
+  <h2>Introduction</h2>
+  <p>${introduction}</p>
 
-      <h2>Le crime</h2> 
-      <p>${crime}</p> 
+  <h2>Le crime</h2> 
+  <p>${crime}</p> 
 
-      <h2>Objectif général</h2> 
-      <p>${objectif}</p> 
+  <h2>Objectif général</h2> 
+  <p>${objectif}</p> 
 
-      <h2>Détails du jeu</h2> 
-      <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p> 
-      <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p> 
-      <p>Période : ${escapeHtml(periodeCle)}</p> 
-      <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p> 
-      <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p> 
-      <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p> 
-      <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
-      <div class="boutons-actions">
-        <a class="gold-btn" href="salon.html">Lancement</a> 
-        <a class="gold-btn" href="creer-partie.html">Retour</a> 
-      </div>
-    `;
+  <h2>Détails du jeu</h2> 
+  <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p> 
+  <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${detailsDuree}</p> 
+  <p>Période : ${escapeHtml(periodeCle)}</p> 
+  <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p> 
+  <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p> 
+  <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p> 
+  <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
+  <div class="boutons-actions">
+    <a class="gold-btn" href="salon.html">Lancement</a> 
+    <a class="gold-btn" href="creer-partie.html">Retour</a> 
+  </div>
+`;
 
     // Action bouton molette
     const regenBtn = document.getElementById("regenScenarioBtn");
