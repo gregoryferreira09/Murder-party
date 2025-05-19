@@ -284,29 +284,24 @@ function genererScenario() {
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
     container.innerHTML = `
-  <div style="display: flex; align-items: center; justify-content: center; position: relative;">
-    <h2 style="flex:1; text-align: center; margin:0; font-family: 'Cinzel', Garamond, serif; letter-spacing: 1px;">
-      Introduction
-    <div style="display: flex; align-items: center; justify-content: center; position: relative;">
-  <h2 style="flex:1; text-align: center; margin:0; font-family: 'Cinzel', Garamond, serif; letter-spacing: 1px;">
-    Introduction
-  <div style="position: relative; display: flex; justify-content: center; align-items: center;">
-  <h2 style="margin:0; text-align:center; width: 100%;">Introduction</h2>
-<button id="regenScenarioBtn" title="Générer un autre scénario"
-  style="
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    font-size: 1.3em;
-    background: none;
-    border: none;
-    color: #b19657;
-    cursor: pointer;
-    padding: 0 0 0 8px;
-  ">
-  📜
-</button>
-  
+      <h2 style="display:flex; align-items:center;">
+        Introduction
+        <button id="regenScenarioBtn" title="Générer un autre scénario"
+          style="
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+            background: none;
+            border: none;
+            color: #b19657;
+            cursor: pointer;
+            padding: 0 0 0 8px;
+          ">
+          <span style="font-size:1.1em; margin-right:4px;">⚙📜</span>
+          <span style="font-size:0.95em;">Générer un autre scénario</span>
+        </button>
+      </h2>
       <p>${introduction}</p> 
 
       <h2>Le crime</h2> 
