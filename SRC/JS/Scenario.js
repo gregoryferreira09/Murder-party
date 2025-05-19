@@ -1,12 +1,15 @@
 // SRC/JS/Scenario.js
 
+const SCENARIO_HISTORY_SIZE = 5;
+
+// --- Utilitaires français ---
 function getArticle(word, articles = { m: 'le', f: 'la' }) {
   if (!word) return '';
   word = word.trim();
   const firstLetter = word[0].toLowerCase();
   if ("aeiouyh".includes(firstLetter)) return "l'";
   const feminine = [
-    "bibliothèque","gouvernante","salle","cave","chapelle","forêt","dimension","galerie","voix","technicienne","station","soute","cabine","ombre"
+    "bibliothèque", "gouvernante", "salle", "cave", "chapelle", "forêt", "dimension", "galerie", "voix", "technicienne", "station", "soute", "cabine", "ombre"
   ];
   const wordLC = word.toLowerCase();
   if (feminine.some(x => wordLC.startsWith(x))) return articles.f;
@@ -22,6 +25,63 @@ function randomItem(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
+// --- Historique & Favoris ---
+function getScenarioHistory() {
+  let history = localStorage.getItem("scenarioHistory");
+  return history ? JSON.parse(history) : [];
+}
+function addScenarioToHistory(scenario) {
+  let history = getScenarioHistory();
+  // Remove duplicates (by hash)
+  history = history.filter(s => s.hash !== scenario.hash);
+  history.unshift(scenario);
+  if (history.length > SCENARIO_HISTORY_SIZE) history = history.slice(0, SCENARIO_HISTORY_SIZE);
+  localStorage.setItem("scenarioHistory", JSON.stringify(history));
+}
+function getFavorites() {
+  let favs = localStorage.getItem("scenarioFavorites");
+  return favs ? JSON.parse(favs) : [];
+}
+function toggleFavorite(scenario) {
+  let favs = getFavorites();
+  const idx = favs.findIndex(s => s.hash === scenario.hash);
+  if (idx !== -1) {
+    favs.splice(idx, 1);
+  } else {
+    favs.unshift(scenario);
+  }
+  localStorage.setItem("scenarioFavorites", JSON.stringify(favs));
+}
+function isFavorite(hash) {
+  return getFavorites().some(s => s.hash === hash);
+}
+
+// --- Exclusions personnalisées ---
+function getExclusions() {
+  let ex = localStorage.getItem("scenarioExclusions");
+  return ex ? JSON.parse(ex) : [];
+}
+function toggleExclusion(type, value) {
+  let ex = getExclusions();
+  if (ex.some(e => e.type === type && e.value === value)) {
+    ex = ex.filter(e => !(e.type === type && e.value === value));
+  } else {
+    ex.push({ type, value });
+  }
+  localStorage.setItem("scenarioExclusions", JSON.stringify(ex));
+}
+function isExcluded(type, value) {
+  return getExclusions().some(e => e.type === type && e.value === value);
+}
+
+// --- Hashing utilitaire ---
+function hashScenario(obj) {
+  return [
+    obj.lieu, obj.victime, obj.arme, obj.ambiance, obj.suspect1, obj.suspect2
+  ].join('|').toLowerCase();
+}
+
+// --- Univers & templates complets ---
 const univers = {
   victorien: {
     lieux: [
@@ -368,7 +428,6 @@ function categoriseDuree(minutes) {
   if (minutes <= 90) return "moyen";
   return "long";
 }
-
 function escapeHtml(text) {
   return String(text)
     .replace(/&/g, "&amp;")
@@ -377,14 +436,23 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
 function replaceVars(tpl, variables) {
   return Object.entries(variables).reduce(
     (txt, [key, val]) => txt.replaceAll(key, escapeHtml(val)),
     tpl
   );
 }
+function randomNewItem(array, key, history, exclusions=[]) {
+  const used = new Set(history.map(s => typeof key === "function" ? key(s) : s[key]));
+  const filtered = array.filter(el => {
+    const v = typeof key === "function" ? key(el) : (el[key] ?? el);
+    return !used.has(v) && !exclusions.includes(v);
+  });
+  if (filtered.length > 0) return randomItem(filtered);
+  return randomItem(array);
+}
 
+// --- Génération principale ---
 function genererScenario() {
   let scenarioData;
   try {
@@ -401,32 +469,76 @@ function genererScenario() {
     }
     if (!univers[periodeCle]) periodeCle = "autre";
     const periodeData = univers[periodeCle];
-
     const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
 
-    const lieuObj = randomItem(periodeData.lieux);
-    const victimeObj = randomItem(periodeData.victimes);
-    const traitVictime = randomItem(periodeData.traitsVictimes);
-    const motif = randomItem(periodeData.motifs);
-    const arme = randomItem(periodeData.armes);
-    const ambiance = randomItem(periodeData.ambiances);
+    // Historique et exclusions
+    const history = getScenarioHistory();
+    const exclusions = getExclusions();
 
-    const artLieu = getArticle(lieuObj.nom, { m: 'le', f: 'la' });
-    const artDansLieu = articleDans(lieuObj.nom, artLieu);
-    const artVictime = getArticle(victimeObj.nom, { m: 'le', f: 'la' });
+    // Anti-répétition sur tous les éléments principaux
+    const lieuObj = randomNewItem(
+      periodeData.lieux,
+      x => x.nom,
+      history,
+      exclusions.filter(e=>e.type==="lieu").map(e=>e.value)
+    );
+    const victimeObj = randomNewItem(
+      periodeData.victimes,
+      x => x.nom,
+      history,
+      exclusions.filter(e=>e.type==="victime").map(e=>e.value)
+    );
+    const traitVictime = randomNewItem(
+      periodeData.traitsVictimes,
+      x => x,
+      history,
+      exclusions.filter(e=>e.type==="traitVictime").map(e=>e.value)
+    );
+    const motif = randomNewItem(
+      periodeData.motifs,
+      x => x,
+      history,
+      exclusions.filter(e=>e.type==="motif").map(e=>e.value)
+    );
+    const arme = randomNewItem(
+      periodeData.armes,
+      x => x,
+      history,
+      exclusions.filter(e=>e.type==="arme").map(e=>e.value)
+    );
+    const ambiance = randomNewItem(
+      periodeData.ambiances,
+      x => x,
+      history,
+      exclusions.filter(e=>e.type==="ambiance").map(e=>e.value)
+    );
 
+    // Suspects (anti-répétition aussi)
     const suspects = [...periodeData.suspects];
     const suspectList = suspects.filter(sus => !victimeObj.nom.toLowerCase().includes(sus.toLowerCase()));
-    const suspect1 = randomItem(suspectList);
-    const suspect2 = randomItem(suspectList.filter(sus => sus !== suspect1));
+    const suspect1 = randomNewItem(
+      suspectList, x => x, history, exclusions.filter(e=>e.type==="suspect1").map(e=>e.value)
+    );
+    const suspect2 = randomNewItem(
+      suspectList.filter(sus => sus !== suspect1), x => x, history, exclusions.filter(e=>e.type==="suspect2").map(e=>e.value)
+    );
 
     let temoinObj, temoin;
     if (nbJoueurs >= 4 && periodeData.temoins) {
-      temoinObj = randomItem(periodeData.temoins);
-      temoin = temoinObj.nom;
+      temoinObj = randomItem(periodeData.temoins.filter(t => !exclusions.filter(e=>e.type==="temoin").map(e=>e.value).includes(t.nom)));
+      temoin = temoinObj ? temoinObj.nom : undefined;
     }
-    let indice = (nbJoueurs >= 3 && periodeData.indices) ? randomItem(periodeData.indices) : undefined;
+    let indice = (nbJoueurs >= 3 && periodeData.indices) ?
+      randomItem(periodeData.indices.filter(i => !exclusions.filter(e=>e.type==="indice").map(e=>e.value).includes(i))) : undefined;
 
+    // Binôme lieu/victime anti-répétition
+    const binomeStr = lieuObj.nom + "|" + victimeObj.nom;
+    if (history.some(h => (h.lieu + "|" + h.victime) === binomeStr)) {
+      // On force un nouveau tirage (sauf si impossible)
+      return genererScenario();
+    }
+
+    // Intro/crime
     let introCandidates = periodeData.intro.filter((tpl) => {
       if (tpl.startsWith("[TEMOIN]")) return temoin;
       if (tpl.startsWith("[INDICE]")) return indice;
@@ -443,6 +555,10 @@ function genererScenario() {
       return true;
     });
     const crimeTpl = randomItem(crimeTemplates);
+
+    const artLieu = getArticle(lieuObj.nom, { m: 'le', f: 'la' });
+    const artDansLieu = articleDans(lieuObj.nom, artLieu);
+    const artVictime = getArticle(victimeObj.nom, { m: 'le', f: 'la' });
 
     const variables = {
       "{lieu}": lieuObj.nom,
@@ -466,8 +582,43 @@ function genererScenario() {
     const dureeCat = categoriseDuree(scenarioData.duree);
     const detailsDuree = randomItem(scenarioLibrary.durees[dureeCat]);
 
+    // Stockage du scénario courant dans l'historique
+    const scenarioObj = {
+      hash: hashScenario({
+        lieu: lieuObj.nom,
+        victime: victimeObj.nom,
+        arme,
+        ambiance,
+        suspect1,
+        suspect2
+      }),
+      lieu: lieuObj.nom,
+      victime: victimeObj.nom,
+      traitVictime,
+      motif,
+      arme,
+      ambiance,
+      suspect1,
+      suspect2,
+      temoin,
+      indice,
+      introTpl,
+      crimeTpl,
+      modeCrime,
+      periodeCle,
+      scenarioData,
+      introduction,
+      crime,
+      objectif,
+      dureeCat,
+      detailsDuree
+    };
+    addScenarioToHistory(scenarioObj);
+
+    // Affichage
     container.innerHTML = `
     <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
+    <span id="favoriteScenarioBtn" style="cursor:pointer; float:right; font-size:1.5em; margin-right:10px;" title="Ajouter/retirer des favoris">${isFavorite(scenarioObj.hash) ? "⭐" : "☆"}</span>
     <h2>Introduction</h2>
     <p>${introduction}</p>
     <h2>Le crime</h2>
@@ -486,15 +637,65 @@ function genererScenario() {
       <a class="gold-btn" href="salon.html">Lancement</a>
       <a class="gold-btn" href="creer-partie.html">Retour</a>
     </div>
+    <hr>
+    <h3>Favoris</h3>
+    <ul id="favoritesList"></ul>
+    <h3>Derniers scénarios proposés</h3>
+    <ul id="scenarioHistoryList"></ul>
+    <hr>
+    <h3>Éléments à exclure</h3>
+    <div id="exclusionChoices"></div>
     `;
 
+    // Favoris
+    document.getElementById("favoriteScenarioBtn").onclick = () => {
+      toggleFavorite(scenarioObj);
+      genererScenario();
+    };
+
+    // Historique
+    const historyList = getScenarioHistory();
+    let histHtml = "";
+    historyList.forEach((h, idx) => {
+      histHtml += `<li>${escapeHtml(h.victime)} / ${escapeHtml(h.lieu)} (${h.ambiance}) - <span style="cursor:pointer;color:#e6b800;" onclick="(function(){localStorage.setItem('scenarioHistory',JSON.stringify([${JSON.stringify(h)}, ...JSON.parse(localStorage.getItem('scenarioHistory')||'[]').filter(x=>x.hash!=='${h.hash}')].slice(0,${SCENARIO_HISTORY_SIZE})));window.location.reload();})()">🔄 Rejouer</span></li>`;
+    });
+    document.getElementById("scenarioHistoryList").innerHTML = histHtml;
+
+    // Favoris
+    const favorites = getFavorites();
+    let favHtml = "";
+    favorites.forEach(h => {
+      favHtml += `<li>${escapeHtml(h.victime)} / ${escapeHtml(h.lieu)} (${h.ambiance}) - <span style="cursor:pointer;color:#e6b800;" onclick="(function(){toggleFavorite(${JSON.stringify(h)});window.location.reload();})()">❌ Retirer</span></li>`;
+    });
+    document.getElementById("favoritesList").innerHTML = favHtml;
+
+    // Exclusion choix
+    const exclusionTypes = [
+      { type: "lieu", array: periodeData.lieux.map(x=>x.nom) },
+      { type: "victime", array: periodeData.victimes.map(x=>x.nom) },
+      { type: "arme", array: periodeData.armes },
+      { type: "ambiance", array: periodeData.ambiances },
+      { type: "suspect1", array: periodeData.suspects },
+      { type: "suspect2", array: periodeData.suspects }
+    ];
+    let exclusionHtml = "";
+    exclusionTypes.forEach(({type, array})=>{
+      exclusionHtml += `<strong>${type[0].toUpperCase()+type.slice(1)}:</strong> `;
+      array.forEach(val=>{
+        exclusionHtml += `<label style="margin-right:8px;"><input type="checkbox" ${isExcluded(type,val)?'checked':''} onchange="(function(){toggleExclusion('${type}','${val}');window.location.reload();})()">${escapeHtml(val)}</label>`;
+      });
+      exclusionHtml += "<br/>";
+    });
+    document.getElementById("exclusionChoices").innerHTML = exclusionHtml;
+
+    // Action bouton molette
     const regenBtn = document.getElementById("regenScenarioBtn");
-    if (regenBtn) {
-      regenBtn.onclick = genererScenario;
-    }
+    if (regenBtn) regenBtn.onclick = genererScenario;
   } else {
     container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
 }
 
 document.addEventListener("DOMContentLoaded", genererScenario);
+window.toggleFavorite = toggleFavorite;
+window.toggleExclusion = toggleExclusion;
