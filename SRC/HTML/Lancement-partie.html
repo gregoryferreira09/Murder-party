@@ -15,8 +15,27 @@
     <h1>Scénario proposé</h1>
   </header>
   
-  <!-- Encadré doré incluant le scénario et les boutons -->
-  <div id="scenarioContainer" class="scenario bandeau-dore fadeUp">
+  <!-- Ajout du container et bouton de génération -->
+  <div>
+    <label for="epoque-select">Choisissez une époque :</label>
+    <select id="epoque-select">
+      <option value="victorien">Époque victorienne</option>
+      <option value="medieval">Époque médiévale</option>
+      <option value="futuriste">Époque futuriste</option>
+    </select>
+
+    <label for="duree-select">Durée de la partie :</label>
+    <select id="duree-select">
+      <option value="court">Court</option>
+      <option value="moyen" selected>Moyen</option>
+      <option value="long">Long</option>
+    </select>
+
+    <button id="generer-btn">Générer Scénario</button>
+  </div>
+
+  <!-- Encadré doré incluant le scénario -->
+  <div id="scenarioContainer" class="scenario bandeau-dore fadeUp" style="margin-top:20px;">
     Chargement du scénario...
   </div>
 
@@ -25,7 +44,36 @@
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
-  <!-- ✅ Chemin corrigé vers le script -->
-  <script src="../JS/Scenario.js"></script>
+  <script src="../JS/Scénario.js"></script>
+
+  <script>
+    // Fonction d’affichage adaptée pour le container unique
+    function afficherScenario() {
+      const epoque = document.getElementById("epoque-select").value;
+      const duree = document.getElementById("duree-select").value;
+
+      const scenario = genererScenario(epoque, duree);
+      if (!scenario) return;
+
+      const html = `
+        <h2>Introduction</h2><p>${scenario.introduction}</p>
+        <h2>Lieu</h2><p>${scenario.lieu}</p>
+        <h2>Arme du crime</h2><p>${scenario.arme}</p>
+        <h2>Type de crime</h2><p>${scenario.crime}</p>
+        <h2>Objectif</h2><p>${scenario.objectif}</p>
+        <h2>Description durée</h2><p>${scenario.dureeDescription}</p>
+      `;
+
+      document.getElementById("scenarioContainer").innerHTML = html;
+    }
+
+    document.getElementById("generer-btn").addEventListener("click", afficherScenario);
+
+    // Génération automatique à l’ouverture
+    window.addEventListener("DOMContentLoaded", () => {
+      afficherScenario();
+    });
+  </script>
+
 </body> 
 </html>
