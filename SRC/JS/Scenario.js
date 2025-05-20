@@ -124,6 +124,267 @@ const univers = {
     }
   },
 
+Western: {
+  lieux: [
+    { nom: "saloon", genre: "m" }, { nom: "ranch", genre: "m" }, { nom: "gare", genre: "f" },
+    { nom: "banque", genre: "f" }, { nom: "ruelle poussiéreuse", genre: "f" }, { nom: "bureau du shérif", genre: "m" }
+  ],
+  victimes: [
+    { nom: "le shérif Johnson", genre: "m" }, { nom: "la chanteuse Daisy", genre: "f" }, { nom: "le banquier Miller", genre: "m" },
+    { nom: "le joueur de poker Sam", genre: "m" }, { nom: "la patronne Mary", genre: "f" }
+  ],
+  suspects: [
+    "le hors-la-loi Billy", "la serveuse Kate", "le joueur de poker Sam", "le fermier Bob", "la patronne Mary", "le barman Joe"
+  ],
+  temoins: [
+    { nom: "le barman Joe", genre: "m" }, { nom: "la serveuse Kate", genre: "f" }, { nom: "le conducteur de train Jack", genre: "m" }
+  ],
+  indices: [
+    "un revolver encore chaud", "un chapeau troué", "une carte d’as ensanglantée",
+    "une botte couverte de boue", "un verre cassé derrière le bar"
+  ],
+  traitsVictimes: [
+    "dur", "respecté", "redouté", "chanceux", "solitaire", "rancunier"
+  ],
+  motifs: [
+    "la vengeance", "une dette de jeu", "une histoire d’amour contrariée", "un vol manqué", "une rivalité dans la ville"
+  ],
+  armes: [
+    "un revolver", "un couteau", "du poison", "une corde de lasso", "un pichet de whisky"
+  ],
+  ambiances: [
+    "le vent soulève la poussière", "le piano joue dans le saloon", "le soleil tape sur la ville", "le train approche en sifflant"
+  ],
+  intro: [
+    "{ambiance} dans {la_lieu}. Les regards sont méfiants.",
+    "Le saloon est en effervescence. {suspect1} surveille {suspect2}.",
+    "Dans {la_lieu}, la tension monte autour de {motif}.",
+    "[INDICE] {indice} trouble le calme.",
+    "[TEMOIN] {temoin} prétend avoir vu {suspect1} près de la scène.",
+    "Un étranger vient d’entrer en ville.",
+    "Tout le monde attend le prochain coup de feu."
+  ],
+  crimes: {
+    classique: [
+      "Un coup de feu retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés. {indice}",
+      "{victime} a été abattu·e {dans_la_lieu}. {temoin} accuse {suspect1}.",
+      "Le drame s'est joué {dans_la_lieu} : {victime} gît au sol. {indice}",
+      "La stupeur s’empare du saloon : {suspect1} est aussitôt suspecté."
+    ],
+    poison: [
+      "La soirée tourne court : {victime} s’effondre, empoisonné·e. {indice}",
+      "{victime} n’a pas survécu à un whisky trafiqué {dans_la_lieu}. {temoin} accuse {suspect1}.",
+      "Le médecin parle d’empoisonnement. {suspect1} et {suspect2} sont interrogés."
+    ],
+    disparition: [
+      "{victime} reste introuvable {dans_la_lieu}. {temoin} l’a vu fuir en direction du désert.",
+      "La ville s’inquiète : {victime} n’a pas reparu depuis la nuit. {indice}",
+      "{victime} a disparu sans laisser de traces {dans_la_lieu}."
+    ],
+    vol: [
+      "Le coffre de la banque a été vidé : {temoin} a vu {suspect1} rôder.",
+      "Dans la cohue, {victime} remarque la disparition d’un objet {dans_la_lieu}. {indice}",
+      "Un casse audacieux secoue la ville. {suspect1} est suspecté."
+    ]
+  }
+},
+
+Contemporain: {
+  lieux: [
+    { nom: "appartement", genre: "m" }, { nom: "bureau", genre: "m" }, { nom: "discothèque", genre: "f" },
+    { nom: "parking souterrain", genre: "m" }, { nom: "galerie d’art", genre: "f" }, { nom: "rooftop", genre: "m" }
+  ],
+  victimes: [
+    { nom: "le PDG Martin", genre: "m" }, { nom: "la DJ Sandra", genre: "f" }, { nom: "l’avocat Paul", genre: "m" },
+    { nom: "la galeriste Inès", genre: "f" }, { nom: "le gardien Boris", genre: "m" }
+  ],
+  suspects: [
+    "l’assistante Julie", "le collègue Antoine", "la voisine Clara", "le DJ Max", "la galeriste Inès", "le gardien Boris"
+  ],
+  temoins: [
+    { nom: "le concierge Michel", genre: "m" }, { nom: "la réceptionniste Anna", genre: "f" }, { nom: "le livreur Lucas", genre: "m" }
+  ],
+  indices: [
+    "une clé USB mystérieuse", "une empreinte sur une vitre", "un téléphone cassé", "un ticket de parking oublié",
+    "une trace de rouge à lèvres inhabituelle"
+  ],
+  traitsVictimes: [
+    "ambitieux", "secret", "inquiet", "apprécié", "solitaire", "innovant"
+  ],
+  motifs: [
+    "la rivalité professionnelle", "un secret d’entreprise", "une histoire d’amour cachée", "une vengeance personnelle", "un chantage"
+  ],
+  armes: [
+    "un couteau de cuisine", "un pistolet", "du poison", "un câble électrique", "un objet contondant"
+  ],
+  ambiances: [
+    "la nuit tombe sur la ville", "la musique résonne dans la discothèque", "une pluie fine s’abat sur la rue", "un orage gronde au loin"
+  ],
+  intro: [
+    "{ambiance} dans {la_lieu}. Les conversations s’arrêtent brusquement.",
+    "La fête bat son plein. {suspect1} observe {suspect2}.",
+    "Dans {la_lieu}, la tension monte autour de {motif}.",
+    "[INDICE] {indice} attire déjà les soupçons.",
+    "[TEMOIN] {temoin} pense avoir aperçu {suspect1} à l’écart.",
+    "Un coup de téléphone trouble la soirée.",
+    "Des regards inquiets se croisent."
+  ],
+  crimes: {
+    classique: [
+      "Un cri retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés. {indice}",
+      "{victime} a été assassiné·e {dans_la_lieu}. {temoin} accuse {suspect1}.",
+      "Le drame a eu lieu {dans_la_lieu} : {victime} a été tué·e. {indice}",
+      "Stupeur générale : {suspect1} est immédiatement suspecté."
+    ],
+    poison: [
+      "Le cocktail est fatal : {victime} s’effondre, empoisonné·e. {indice}",
+      "{victime} n’a pas survécu à une boisson suspecte {dans_la_lieu}. {temoin} accuse {suspect1}.",
+      "Le médecin conclut à un empoisonnement. {suspect1} et {suspect2} sont interrogés."
+    ],
+    disparition: [
+      "{victime} n’est plus visible {dans_la_lieu}. {temoin} croit l’avoir vu sortir précipitamment.",
+      "La fête s’interrompt : {victime} n’a pas reparu depuis un moment. {indice}",
+      "{victime} a disparu sans laisser de traces."
+    ],
+    vol: [
+      "Un objet de valeur a disparu : {temoin} a vu {suspect1} rôder.",
+      "Dans la confusion, {victime} remarque la disparition d’un objet {dans_la_lieu}. {indice}",
+      "Un vol trouble la soirée. {suspect1} est suspecté."
+    ]
+  }
+},
+
+"Scène historique": {
+  lieux: [
+    { nom: "château", genre: "m" }, { nom: "salle du trône", genre: "f" }, { nom: "tranchée", genre: "f" },
+    { nom: "place publique", genre: "f" }, { nom: "cabinet royal", genre: "m" }, { nom: "campement", genre: "m" }
+  ],
+  victimes: [
+    { nom: "le roi Charles", genre: "m" }, { nom: "la duchesse Anne", genre: "f" }, { nom: "le général Lefebvre", genre: "m" },
+    { nom: "le philosophe Voltaire", genre: "m" }, { nom: "la résistante Lucie", genre: "f" }
+  ],
+  suspects: [
+    "la duchesse Anne", "le général Lefebvre", "le philosophe Voltaire", "le garde Gaston", "la servante Jeanne", "le conseiller Richelieu"
+  ],
+  temoins: [
+    { nom: "le garde Gaston", genre: "m" }, { nom: "la servante Jeanne", genre: "f" }, { nom: "le médecin royal Dubois", genre: "m" }
+  ],
+  indices: [
+    "une lettre codée", "une arme ancienne retrouvée", "un uniforme taché de sang",
+    "un drapeau chiffonné", "un médaillon brisé"
+  ],
+  traitsVictimes: [
+    "influent", "visionnaire", "controversé", "apprécié", "craint", "incompris"
+  ],
+  motifs: [
+    "la rivalité politique", "la vengeance", "un changement de régime", "une trahison", "la peur du scandale"
+  ],
+  armes: [
+    "une épée d’apparat", "un pistolet ancien", "du poison", "une corde", "un chandelier de bronze"
+  ],
+  ambiances: [
+    "le peuple gronde sur la place", "la guerre fait rage aux portes de la ville", "le roi donne audience au palais", "la nuit tombe sur le campement"
+  ],
+  intro: [
+    "{ambiance} dans {la_lieu}. Les événements prennent une tournure dramatique.",
+    "Le château bruisse de rumeurs. {suspect1} semble éviter {suspect2}.",
+    "Dans {la_lieu}, tout le monde parle de {motif}.",
+    "[INDICE] {indice} sème le trouble.",
+    "[TEMOIN] {temoin} a vu {suspect1} agir de façon étrange.",
+    "Un discours interrompt les conversations.",
+    "La tension monte dans toute la ville."
+  ],
+  crimes: {
+    classique: [
+      "Un cri retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés. {indice}",
+      "{victime} a été assassiné·e {dans_la_lieu}. {temoin} accuse {suspect1}.",
+      "Le drame s'est joué {dans_la_lieu} : {victime} a été tué·e. {indice}",
+      "Stupeur générale : {suspect1} est immédiatement suspecté."
+    ],
+    poison: [
+      "Le repas du roi tourne au drame : {victime} s’effondre, empoisonné·e. {indice}",
+      "{victime} n’a pas survécu à une coupe suspecte {dans_la_lieu}. {temoin} accuse {suspect1}.",
+      "Le médecin royal évoque un empoisonnement. {suspect1} et {suspect2} sont surveillés."
+    ],
+    disparition: [
+      "{victime} n’est plus visible {dans_la_lieu}. {temoin} croit l’avoir vu fuir.",
+      "La cour s’agite : {victime} n’a pas reparu depuis la veille. {indice}",
+      "{victime} a disparu sans laisser de traces {dans_la_lieu}."
+    ],
+    vol: [
+      "Un objet d’État a disparu : {temoin} a vu {suspect1} dans la pièce.",
+      "Dans la confusion, {victime} remarque la disparition d’un objet {dans_la_lieu}. {indice}",
+      "Un vol trouble la tranquillité du palais. {suspect1} est suspecté."
+    ]
+  }
+},
+
+  
+Renaissance: {
+  lieux: [
+    { nom: "palais", genre: "m" }, { nom: "atelier d'artiste", genre: "m" }, { nom: "jardin royal", genre: "m" },
+    { nom: "salle de bal", genre: "f" }, { nom: "bibliothèque", genre: "f" }, { nom: "salle des cartes", genre: "f" }
+  ],
+  victimes: [
+    { nom: "le duc Lorenzo", genre: "m" }, { nom: "la marquise Isabelle", genre: "f" }, { nom: "le peintre Vasari", genre: "m" },
+    { nom: "la musicienne Bianca", genre: "f" }, { nom: "l’alchimiste Cesare", genre: "m" }
+  ],
+  suspects: [
+    "la marquise Isabelle", "le peintre Vasari", "la musicienne Bianca", "le chevalier Raffaello", "le chambellan Pietro", "la dame d’honneur Sofia"
+  ],
+  temoins: [
+    { nom: "le valet Tomaso", genre: "m" }, { nom: "la servante Lucia", genre: "f" }, { nom: "le jardinier Marco", genre: "m" }
+  ],
+  indices: [
+    "une plume tachée d’encre", "un flacon de poison caché derrière un livre", "un mouchoir brodé retrouvé dans le jardin",
+    "une partition déchirée", "une bague ornée d’un blason inconnu"
+  ],
+  traitsVictimes: [
+    "brillant", "envieux", "mystérieux", "innovant", "jalousé", "érudit"
+  ],
+  motifs: [
+    "la jalousie artistique", "un héritage contesté", "une trahison amoureuse", "la rivalité entre familles", "un secret d’alchimiste"
+  ],
+  armes: [
+    "une dague ouvragée", "du poison", "un chandelier", "une épée fine", "un livre lourd"
+  ],
+  ambiances: [
+    "le bal bat son plein", "la fête illumine les salons", "un débat savant agite la bibliothèque", "la musique envahit le palais"
+  ],
+  intro: [
+    "{ambiance} dans {la_lieu}. Les intrigues de cour s’entremêlent.",
+    "Le palais résonne de rumeurs. {suspect1} semble éviter {suspect2}.",
+    "Dans {la_lieu}, les artistes chuchotent à propos de {motif}.",
+    "[INDICE] {indice} trouble déjà la soirée.",
+    "[TEMOIN] {temoin} croit avoir surpris {suspect1} à l’écart.",
+    "Une tension palpable flotte sous les ors du palais.",
+    "Un air de mystère plane sur la fête."
+  ],
+  crimes: {
+    classique: [
+      "Un cri retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés. {indice}",
+      "{victime} a été assassiné·e {dans_la_lieu}. {temoin} affirme avoir vu {suspect1} rôder.",
+      "Le drame s'est joué {dans_la_lieu} : {victime} a été tué·e. {indice}",
+      "Le choc est total : {victime} gît {dans_la_lieu}. Tous se tournent vers {suspect1}."
+    ],
+    poison: [
+      "Le festin vire au drame : {victime} s’effondre, empoisonné·e. {indice}",
+      "{victime} n’a pas survécu à une gorgée suspecte {dans_la_lieu}. {temoin} accuse {suspect1}.",
+      "Le médecin du palais parle d’empoisonnement. {suspect1} et {suspect2} s’observent."
+    ],
+    disparition: [
+      "On ne retrouve plus {victime} {dans_la_lieu}. {temoin} l’a vu partir précipitamment.",
+      "La cour s’inquiète : {victime} n’a pas reparu depuis la veille. {indice}",
+      "{victime} a disparu sans laisser de traces {dans_la_lieu}."
+    ],
+    vol: [
+      "Un bijou a disparu, et {victime} donne l’alerte. {temoin} dit avoir vu {suspect1} rôder.",
+      "Dans la confusion, {victime} remarque la disparition d’un objet précieux {dans_la_lieu}. {indice}",
+      "Un vol audacieux ébranle la fête. {suspect1} est suspecté."
+    ]
+  }
+},
+  
   medieval: {
     lieux: [
       { nom: "château", genre: "m" }, { nom: "grande salle", genre: "f" }, { nom: "forêt", genre: "f" }, { nom: "cave", genre: "f" },
@@ -282,80 +543,6 @@ const univers = {
       ]
     }
   },
-
-  autre: {
-    lieux: [
-      { nom: "salle étrange", genre: "f" }, { nom: "dimension inconnue", genre: "f" }, { nom: "galerie distordue", genre: "f" },
-      { nom: "laboratoire du temps", genre: "m" }, { nom: "monolithe mouvant", genre: "m" }, { nom: "hypercube", genre: "m" }
-    ],
-    victimes: [
-      { nom: "l’énigmatique X", genre: "m" }, { nom: "le voyageur temporel", genre: "m" }, { nom: "la voix sans corps", genre: "f" },
-      { nom: "le maître du jeu", genre: "m" }, { nom: "l’observateur Mu", genre: "m" }
-    ],
-    suspects: [
-      "le voyageur temporel", "la voix sans corps", "l’énigmatique X", "le maître du jeu", "l’ombre du passé", "le reflet spectral"
-    ],
-    temoins: [
-      { nom: "le reflet spectral", genre: "m" }, { nom: "la voix d’outre-espace", genre: "f" }, { nom: "l’ombre du passé", genre: "f" },
-      { nom: "l’observateur Mu", genre: "m" }
-    ],
-    indices: [
-      "une horloge fondue marque minuit treize", "un écho temporel trouble la pièce", "une faille s’ouvre au centre du sol",
-      "un fragment de mémoire flotte dans l’air", "une énigme gravée sur les murs pulse faiblement", "une clé quantique disparaît"
-    ],
-    traitsVictimes: [
-      "insaisissable", "omniscient", "paranoïaque", "double", "hors du temps", "fragmenté", "halluciné"
-    ],
-    motifs: [
-      "une anomalie temporelle", "l’envie de pouvoir", "la folie pure", "l’équilibre de l’univers", "la peur du néant"
-    ],
-    armes: [
-      "un artefact", "une onde mentale", "une faille dimensionnelle", "un miroir fractal", "un rayon paradoxal"
-    ],
-    ambiances: [
-      "alors que la réalité vacille", "sous des lumières irréelles", "au moment du grand passage", "quand le temps s’arrête",
-      "l’espace se plie et se tord", "le temps s’effiloche"
-    ],
-    intro: [
-      "{ambiance} {dans_la_lieu}. Les lois de la causalité semblent altérées.",
-      "Une énigme plane sur l’assemblée. {suspect1} observe {suspect2} d’un air méfiant.",
-      "Les souvenirs semblent s’effacer. Certains parlent de {motif}.",
-      "Chaque instant, la dimension se reconfigure.",
-      "[INDICE] {indice} survient soudain, glaçant l’assemblée.",
-      "[TEMOIN] Selon {temoin}, la disparition de {suspect1} n’est pas un hasard.",
-      "Un vortex s’ouvre. Les regards se troublent.",
-      "Des ombres traversent les murs, semant le trouble."
-    ],
-    crimes: {
-      classique: [
-        "Un cri déformé retentit : {victime} n’est plus {dans_la_lieu}. {indice}",
-        "La réalité vacille : {victime} s’effondre, frappé·e par {arme}. {temoin} prétend avoir vu {suspect1}.",
-        "On accuse {suspect1}, mais la vérité vacille.",
-        "{victime} disparaît sans explication. {indice}",
-        "Un artefact disparu bouleverse {la_lieu}.",
-        "{victime} s’efface lentement, laissant à peine une trace."
-      ],
-      poison: [
-        "Un breuvage inconnu empoisonne {victime} {dans_la_lieu}. {indice}",
-        "On soupçonne {arme} d’avoir altéré l’esprit de {victime} {dans_la_lieu}. {temoin} murmure des avertissements.",
-        "{suspect1} se tait, mais tout le monde le regarde.",
-        "Un champ d’énergie instable fait vaciller {victime}."
-      ],
-      disparition: [
-        "{victime} s’est volatilisé·e {dans_la_lieu}. {temoin} croit avoir vu une silhouette franchir une faille.",
-        "Nul ne sait où ni quand {victime} a disparu. {indice}",
-        "Une onde mentale efface les souvenirs de {temoin}.",
-        "{victime} semble ne jamais avoir existé."
-      ],
-      vol: [
-        "Un objet d’une importance capitale disparaît {dans_la_lieu}. {temoin} accuse {suspect1}.",
-        "Dans {la_lieu}, {arme} a été volé pendant que {victime} menait une expérience.",
-        "Un paradoxe menace tout équilibre. {suspect1} est désigné·e, mais tout le monde doute.",
-        "Le cœur de la dimension a été subtilisé."
-      ]
-    }
-  }
-};
 
 const scenarioLibrary = {
   objectifs: {
