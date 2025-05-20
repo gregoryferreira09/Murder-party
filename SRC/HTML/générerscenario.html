@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>générerscenario.html</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #222;
+      font-family: 'Georgia', serif;
+      color: #f3e9d2;
+      margin: 0; padding: 0;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 750px;
+      margin: 50px auto;
+      background: #2e211a;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.7);
+      padding: 36px 32px 32px 32px;
+      border: 2px solid #c49b66;
+      position: relative;
+    }
+    h1 {
+      color: #ffe6b3;
+      font-size: 2.1em;
+      text-align: center;
+      margin-top: 0;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 8px #000;
+    }
+    .molette-btn {
+      background: #c49b66;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 62px;
+      height: 62px;
+      font-size: 2.3em;
+      cursor: pointer;
+      position: absolute;
+      top: -31px;
+      right: 28px;
+      box-shadow: 0 2px 8px #0007;
+      transition: transform 0.2s;
+    }
+    .molette-btn:active {
+      transform: rotate(90deg) scale(1.1);
+    }
+    .selectors {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 34px;
+      margin: 0 0 28px 0;
+      flex-wrap: wrap;
+    }
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 170px;
+    }
+    .slider-label {
+      font-size: 1.1em;
+      color: #ffe6b3;
+      margin-bottom: 7px;
+      letter-spacing: 0.5px;
+    }
+    .slider-epoque {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .epoque-btn {
+      background: #c49b66;
+      color: #21190f;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      font-size: 1.3em;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .epoque-btn:active {
+      background: #a27b4b;
+    }
+    .epoque-list {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding: 2px 0;
+      max-width: 210px;
+      scrollbar-width: thin;
+      scrollbar-color: #c49b66 #2e211a;
+    }
+    .epoque-item {
+      min-width: 92px;
+      padding: 7px 16px;
+      border-radius: 8px;
+      background: #3e2e21;
+      color: #ffe6b3;
+      text-align: center;
+      font-size: 1em;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .epoque-item.selected {
+      border: 2px solid #c49b66;
+      background: #5a3e2b;
+      color: #fff3d6;
+      font-weight: bold;
+    }
+    /* Nombre de joueurs slider */
+    .slider-nbjoueurs input[type="range"] {
+      width: 140px;
+      accent-color: #c49b66;
+    }
+    .slider-nbjoueurs .slider-value {
+      margin-top: 4px;
+      font-size: 1.2em;
+      color: #ffe6b3;
+      font-weight: bold;
+      text-shadow: 1px 1px 1px #0009;
+      letter-spacing: 1px;
+    }
+    /* Scénario sections */
+    .scenario-section {
+      background: rgba(44,30,22,0.90);
+      border-left: 4px solid #c49b66;
+      margin-bottom: 18px;
+      padding: 18px 18px 10px 18px;
+      border-radius: 7px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+      min-height: 54px;
+    }
+    h2 {
+      color: #ffe6b3;
+      margin-top: 0;
+      font-size: 1.2em;
+      margin-bottom: 7px;
+      text-align: left;
+    }
+    .scenario-section p {
+      margin: 0;
+      font-size: 1.08em;
+      line-height: 1.6;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 10px 2px; }
+      .selectors { flex-direction: column; gap: 16px; }
+      .slider-group { min-width: unset; }
+      .molette-btn { right: 8px; }
+      .epoque-list { max-width: 120px; }
+      .epoque-item { min-width: 68px; font-size: 0.98em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Générateur de Scénario</h1>
+    <button class="molette-btn" id="regenBtn" title="Générer un autre scénario">&#x1F5D3;</button>
+    <div class="selectors">
+      <!-- Bandeau défilant époque -->
+      <div class="slider-group">
+        <div class="slider-label">Époque</div>
+        <div class="slider-epoque">
+          <button class="epoque-btn" id="epoqueLeftBtn">&#x25C0;</button>
+          <div class="epoque-list" id="epoqueList"></div>
+          <button class="epoque-btn" id="epoqueRightBtn">&#x25B6;</button>
+        </div>
+      </div>
+      <!-- Slider nombre de joueurs -->
+      <div class="slider-group slider-nbjoueurs">
+        <div class="slider-label">Nombre de joueurs</div>
+        <input type="range" min="3" max="12" value="6" id="nbJoueursSlider">
+        <div class="slider-value"><span id="nbJoueursValue">6</span></div>
+      </div>
+    </div>
+    <div class="scenario-section">
+      <h2>Introduction</h2>
+      <p id="introduction"></p>
+    </div>
+    <div class="scenario-section">
+      <h2>Le crime</h2>
+      <p id="crime"></p>
+    </div>
+    <div class="scenario-section">
+      <h2>Objectif général</h2>
+      <p id="objectif"></p>
+    </div>
+  </div>
+  <script>
+    // --- Petites données fictives pour la démo ---
+    // À remplacer par ton import réel de generateurScenario.js !
+    const epoques = [
+      { key: 'medieval', label: 'Médiéval' },
+      { key: 'renaissance', label: 'Renaissance' },
+      { key: 'victorien', label: 'Victorien' },
+      { key: 'western', label: 'Western' },
+      { key: 'contemporain', label: 'Contemporain' },
+      { key: 'futuriste', label: 'Futuriste' },
+      { key: 'historique', label: 'Historique' }
+    ];
+    // Simule le générateur de scénario (à remplacer par ton import réel)
+    function fakeGenererScenario(periode, options) {
+      return {
+        introduction: `Exemple d'introduction pour l'époque <b>${periode}</b> avec ${options.nbJoueurs} joueurs.`,
+        crime: `Un crime a été commis dans un lieu emblématique de l'époque <b>${periode}</b>.`,
+        objectif: `Découvrez le coupable avant la fin de la partie !`
+      };
+    }
+
+    // --- Initialisation bandeau époque ---
+    let selectedEpoqueIdx = 2; // victorien par défaut
+    function renderEpoqueList() {
+      const list = document.getElementById('epoqueList');
+      list.innerHTML = '';
+      epoques.forEach((ep, idx) => {
+        const div = document.createElement('div');
+        div.className = 'epoque-item' + (idx === selectedEpoqueIdx ? ' selected' : '');
+        div.textContent = ep.label;
+        div.onclick = () => { selectedEpoqueIdx = idx; renderEpoqueList(); updateScenario(); };
+        list.appendChild(div);
+      });
+      // Scroll to selected
+      const selected = list.children[selectedEpoqueIdx];
+      if (selected) selected.scrollIntoView({inline: "center", behavior: "smooth"});
+    }
+    document.getElementById('epoqueLeftBtn').onclick = () => {
+      selectedEpoqueIdx = (selectedEpoqueIdx - 1 + epoques.length) % epoques.length;
+      renderEpoqueList(); updateScenario();
+    };
+    document.getElementById('epoqueRightBtn').onclick = () => {
+      selectedEpoqueIdx = (selectedEpoqueIdx + 1) % epoques.length;
+      renderEpoqueList(); updateScenario();
+    };
+
+    // --- Slider nombre de joueurs ---
+    const nbJoueursSlider = document.getElementById('nbJoueursSlider');
+    const nbJoueursValue = document.getElementById('nbJoueursValue');
+    nbJoueursSlider.oninput = () => {
+      nbJoueursValue.textContent = nbJoueursSlider.value;
+      updateScenario();
+    };
+
+    // --- Molette bouton ---
+    document.getElementById('regenBtn').onclick = () => {
+      updateScenario(true);
+    };
+
+    // --- Génération de scénario ---
+    function updateScenario(forceNew) {
+      const periode = epoques[selectedEpoqueIdx].key;
+      const nbJoueurs = nbJoueursSlider.value;
+      // À remplacer par ton vrai générateur
+      const scenario = fakeGenererScenario(periode, {nbJoueurs});
+      document.getElementById('introduction').innerHTML = scenario.introduction;
+      document.getElementById('crime').innerHTML = scenario.crime;
+      document.getElementById('objectif').innerHTML = scenario.objectif;
+    }
+
+    // --- Initialisation ---
+    renderEpoqueList();
+    updateScenario();
+  </script>
+</body>
+</html>
