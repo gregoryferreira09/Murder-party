@@ -32,18 +32,21 @@ export function genererScenario(periode = 'victorien', options = {}) {
   const data = univers[periode];
   if (!data) throw new Error("Période inconnue");
 
-  // 1. Sélections aléatoires
-  const lieu = randomItem(data.lieux);
-  const arme = randomItem(data.armes);
+  // 1. Sélections aléatoires (utilise .nom !)
+  const lieuObj = randomItem(data.lieux);
+  const lieu = lieuObj.nom;
+  const genreLieu = lieuObj.genre;
+  const arme = randomItem(data.armes); // adapte si armes sont des objets !
   const mobile = randomItem(data.mobiles);
   const ambiance = randomItem(data.ambiances);
   const personnages = [...data.personnages];
-  const victime = randomItem(personnages);
-  const suspects = personnages.filter(p => p !== victime);
+  const victimeObj = randomItem(personnages);
+  const victime = victimeObj.nom;
+  const suspects = personnages.filter(p => p.nom !== victime);
   const suspect1 = randomItem(suspects);
-  const suspect2 = suspects.length > 1 ? randomItem(suspects.filter(s => s !== suspect1)) : suspect1;
+  const suspect2 = suspects.length > 1 ? randomItem(suspects.filter(s => s.nom !== suspect1.nom)) : suspect1;
   const indice = randomItem(data.indices);
-  const temoin = randomItem(personnages.filter(p => p !== victime && p !== suspect1 && p !== suspect2));
+  const temoin = randomItem(personnages.filter(p => ![victime, suspect1.nom, suspect2.nom].includes(p.nom)));
 
   // 2. Préparation des variables pour templates
   const artLieu = getArticle(lieu, { m: 'le', f: 'la' });
@@ -53,12 +56,12 @@ export function genererScenario(periode = 'victorien', options = {}) {
     "{lieu}": lieu,
     "{la_lieu}": artLieu + (artLieu.endsWith("'") ? "" : " ") + lieu,
     "{dans_la_lieu}": artDansLieu + " " + lieu,
-    "{suspect1}": suspect1,
-    "{suspect2}": suspect2,
+    "{suspect1}": suspect1.nom,
+    "{suspect2}": suspect2.nom,
     "{victime}": victime,
     "{motif}": mobile,
     "{indice}": indice,
-    "{temoin}": temoin,
+    "{temoin}": temoin ? temoin.nom : "",
     "{ambiance}": ambiance,
   };
 
