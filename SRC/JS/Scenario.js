@@ -124,7 +124,7 @@ const univers = {
     }
   },
 
-Western: {
+western: {
   lieux: [
     { nom: "saloon", genre: "m" }, { nom: "ranch", genre: "m" }, { nom: "gare", genre: "f" },
     { nom: "banque", genre: "f" }, { nom: "ruelle poussiéreuse", genre: "f" }, { nom: "bureau du shérif", genre: "m" }
@@ -189,7 +189,7 @@ Western: {
   }
 },
 
-Contemporain: {
+contemporain: {
   lieux: [
     { nom: "appartement", genre: "m" }, { nom: "bureau", genre: "m" }, { nom: "discothèque", genre: "f" },
     { nom: "parking souterrain", genre: "m" }, { nom: "galerie d’art", genre: "f" }, { nom: "rooftop", genre: "m" }
@@ -254,7 +254,7 @@ Contemporain: {
   }
 },
 
-"Scène historique": {
+historique: {
   lieux: [
     { nom: "château", genre: "m" }, { nom: "salle du trône", genre: "f" }, { nom: "tranchée", genre: "f" },
     { nom: "place publique", genre: "f" }, { nom: "cabinet royal", genre: "m" }, { nom: "campement", genre: "m" }
@@ -320,7 +320,7 @@ Contemporain: {
 },
 
   
-Renaissance: {
+renaissance: {
   lieux: [
     { nom: "palais", genre: "m" }, { nom: "atelier d'artiste", genre: "m" }, { nom: "jardin royal", genre: "m" },
     { nom: "salle de bal", genre: "f" }, { nom: "bibliothèque", genre: "f" }, { nom: "salle des cartes", genre: "f" }
@@ -628,12 +628,14 @@ function genererScenario() {
   }
   const container = document.getElementById("scenarioContainer");
 
-let periodeCle = scenarioData.periode;
-if (!univers[periodeCle]) {
+let periodeCle = scenarioData.periode.trim().toLowerCase();
+// mapping spécifique si besoin
+if (periodeCle === "scène historique") periodeCle = "historique";
+const periodeData = univers[periodeCle];
+if (!periodeData) {
   document.getElementById("scenarioContainer").innerHTML = "<p>Période de jeu non reconnue.</p>";
   return;
 }
-const periodeData = univers[periodeCle];
 
     // Historique long pour antirépétition stricte
     let history = getScenarioHistory();
