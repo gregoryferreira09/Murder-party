@@ -1,3 +1,5 @@
+import { lieuxParEpoque } from './lieux.js';
+
 // SRC/JS/Scenario.js
 
 const ANTI_REPEAT_HISTORY_SIZE = 5;
@@ -44,12 +46,9 @@ function addScenarioToHistory(scenario) {
 // === UNIVERS COHÉRENTS & ÉLARGIS ===
 const univers = {
   victorien: {
-    lieux: [
-      { nom: "manoir", genre: "m" }, { nom: "bibliothèque", genre: "f" }, { nom: "salon", genre: "m" }, { nom: "jardin", genre: "m" },
-      { nom: "sous-sol", genre: "m" }, { nom: "salle de bal", genre: "f" }, { nom: "fumoir", genre: "m" }, { nom: "cuisine", genre: "f" },
-      { nom: "orangerie", genre: "f" }, { nom: "chambre forte", genre: "f" }, { nom: "serre", genre: "f" }, { nom: "grenier", genre: "m" },
-      { nom: "cabinet d'étude", genre: "m" }, { nom: "galerie de portraits", genre: "f" }, { nom: "salle de musique", genre: "f" }
-    ],
+  lieux: lieuxParEpoque.victorien,
+  // autres propriétés...
+},
     victimes: [
       { nom: "le comte Ashford", genre: "m" }, { nom: "la gouvernante Wells", genre: "f" }, { nom: "le colonel Rutherford", genre: "m" },
       { nom: "lady Emily", genre: "f" }, { nom: "le majordome Carter", genre: "m" }, { nom: "le jeune héritier Samuel", genre: "m" },
@@ -125,10 +124,9 @@ const univers = {
   },
 
 Western: {
-  lieux: [
-    { nom: "saloon", genre: "m" }, { nom: "ranch", genre: "m" }, { nom: "gare", genre: "f" },
-    { nom: "banque", genre: "f" }, { nom: "ruelle poussiéreuse", genre: "f" }, { nom: "bureau du shérif", genre: "m" }
-  ],
+  lieux: lieuxParEpoque.Western,
+  // autres propriétés...
+},
   victimes: [
     { nom: "le shérif Johnson", genre: "m" }, { nom: "la chanteuse Daisy", genre: "f" }, { nom: "le banquier Miller", genre: "m" },
     { nom: "le joueur de poker Sam", genre: "m" }, { nom: "la patronne Mary", genre: "f" }
