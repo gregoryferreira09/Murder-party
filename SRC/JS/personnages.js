@@ -86,6 +86,7 @@ const personnagesParEpoque = {
     { nom: "Ruggero le Maître de musique", role: "Maître de musique", description: "Dirige les concerts du palais.", categories: ["suspect","victime","temoin"] },
     { nom: "Marta la Boulangère", role: "Boulangère", description: "Ses pâtisseries sont les meilleures.", categories: ["suspect","victime","temoin"] }
   ],
+  
   victorien: [
     { nom: "Ashford le Comte", role: "Comte influent", description: "Respecté mais parfois craint par ses pairs.", categories:["suspect","victime","temoin"] },
     { nom: "Emily la Gouvernante", role: "Gouvernante stricte", description: "Aucun détail ne lui échappe.", categories:["suspect","victime","temoin"] },
@@ -126,6 +127,7 @@ const personnagesParEpoque = {
     { nom: "Harriet la Couturière", role: "Couturière", description: "Habille toute la maison.", categories:["suspect","victime","temoin"] },
     { nom: "Frederick le Banquier", role: "Banquier", description: "Gère la fortune du domaine.", categories:["suspect","victime","temoin"] },
     { nom: "Laura la Bibliothécaire", role: "Bibliothécaire", description: "Connaît tous les livres et toutes les histoires.", categories:["suspect","victime","temoin"] }
+  ],
 
 
  western: [
