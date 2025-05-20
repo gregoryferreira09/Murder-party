@@ -68,24 +68,22 @@
     <div id="resultats"></div>
   </div>
   <script type="module">
-    import univers from '../JS/univers.js';
+import univers from '../JS/univers.js';
 
-    function renderList(label, arr) {
-      if (!arr || !arr.length) return `<span class="empty">Aucune donnée</span>`;
-      return `<ul>` + arr.map(x =>
-        typeof x === 'string' ? `<li>${x}</li>` :
-        (x.nom ? `<li>${x.nom}</li>` : `<li>${JSON.stringify(x)}</li>`)
-      ).join('') + `</ul>`;
+let html = '';
+for (const [epoque, data] of Object.entries(univers)) {
+  html += `<h2>${epoque.charAt(0).toUpperCase() + epoque.slice(1)}</h2>`;
+  if (Array.isArray(data.personnages) && data.personnages.length) {
+    html += '<ul>';
+    for (const perso of data.personnages) {
+      html += `<li>${typeof perso === 'string' ? perso : JSON.stringify(perso)}</li>`;
     }
-
-    let html = '';
-    for (const [epoque, data] of Object.entries(univers)) {
-      html += `<div class="epoque-block"><h2>${epoque.charAt(0).toUpperCase() + epoque.slice(1)}</h2>`;
-      html += `<div class="label">Personnages :</div>${renderList("Personnages", data.personnages)}`;
-      html += `<div class="label">Armes :</div>${renderList("Armes", data.armes)}`;
-      html += `</div>`;
-    }
-    document.getElementById('resultats').innerHTML = html;
-  </script>
+    html += '</ul>';
+  } else {
+    html += `<p style="color:red"><i>Aucun personnage trouvé</i></p>`;
+  }
+}
+document.body.innerHTML = html;
+</script>
 </body>
 </html>
