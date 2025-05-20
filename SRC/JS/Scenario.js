@@ -43,8 +43,6 @@ function addScenarioToHistory(scenario) {
   localStorage.setItem("scenarioHistory", JSON.stringify(history));
 }
 
-import { genererScenario } from './generateurScenario.js';
-
 // ... autres fonctions outils ...
 
 function afficherScenario() {
