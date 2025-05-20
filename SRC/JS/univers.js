@@ -258,3 +258,4 @@ const univers = {
   }
   // Ajoute ici d'autres époques si besoin
 };
+export default univers;
