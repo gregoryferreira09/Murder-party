@@ -31,30 +31,35 @@
       line-height: 1.6;
       text-align: left;
     }
+    .gold-btn {
+      background: linear-gradient(90deg, #e9c78c 0%, #ffebc6 100%);
+      color: #2c1b1b;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin: 10px 5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+      display:inline-block;
+    }
+    .gold-btn:hover {
+      background: #e9c78c;
+      color: #1b1b1b;
+    }
+    #regenScenarioBtn {
+      cursor:pointer; 
+      float:right; 
+      font-size:1.8em;
+    }
   </style>
 </head>
 <body>
   <h1>Scénario généré</h1>
-  <div id="contenuScenario" class="scenario">Chargement du scénario...</div>
-
-  <script>
-    const data = JSON.parse(localStorage.getItem("scenarioData"));
-    const conteneur = document.getElementById("contenuScenario");
-
-    if (!data) {
-      conteneur.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
-    } else {
-      let html = `<p><strong>Introduction :</strong> ${data.introduction}</p>`;
-      html += `<p><strong>Crime :</strong> ${data.crime}</p>`;
-      html += `<p><strong>Objectif global :</strong> ${data.objectifsGlobal}</p>`;
-      html += `<h2>Joueurs :</h2>`;
-      html += `<ul>`;
-      Object.values(data.joueurs).forEach(joueur => {
-        html += `<li><strong>${joueur.nom}</strong> — ${joueur.role}, ${joueur.trait}. Objectif : ${joueur.objectifSecret}. Criminel : ${joueur.estCriminel ? "Oui" : "Non"}</li>`;
-      });
-      html += `</ul>`;
-      conteneur.innerHTML = html;
-    }
-  </script>
+  <div id="scenarioContainer" class="scenario">Chargement du scénario...</div>
+  
+  <script type="module" src="../JS/Scenario.js"></script>
 </body>
 </html>
