@@ -9,7 +9,7 @@ document.getElementById("genererBtn").addEventListener("click", function(e) {
   // Récupération des valeurs du formulaire
   const mode = document.getElementById("mode").value;
   const duree = document.getElementById("duree").value;
-  const periode = document.getElementById("periode").value;
+  const periode = document.getElementById("periode").value.trim().toLowerCase();
   const periodeAutre = (periode === "autre") ? document.getElementById("periode_autre").value : "";
   const nombreJoueurs = document.getElementById("nombreJoueurs").value;
   const criminels = document.getElementById("criminels").value;
