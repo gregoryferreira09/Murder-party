@@ -544,80 +544,7 @@ Renaissance: {
     }
   },
 
-  autre: {
-    lieux: [
-      { nom: "salle étrange", genre: "f" }, { nom: "dimension inconnue", genre: "f" }, { nom: "galerie distordue", genre: "f" },
-      { nom: "laboratoire du temps", genre: "m" }, { nom: "monolithe mouvant", genre: "m" }, { nom: "hypercube", genre: "m" }
-    ],
-    victimes: [
-      { nom: "l’énigmatique X", genre: "m" }, { nom: "le voyageur temporel", genre: "m" }, { nom: "la voix sans corps", genre: "f" },
-      { nom: "le maître du jeu", genre: "m" }, { nom: "l’observateur Mu", genre: "m" }
-    ],
-    suspects: [
-      "le voyageur temporel", "la voix sans corps", "l’énigmatique X", "le maître du jeu", "l’ombre du passé", "le reflet spectral"
-    ],
-    temoins: [
-      { nom: "le reflet spectral", genre: "m" }, { nom: "la voix d’outre-espace", genre: "f" }, { nom: "l’ombre du passé", genre: "f" },
-      { nom: "l’observateur Mu", genre: "m" }
-    ],
-    indices: [
-      "une horloge fondue marque minuit treize", "un écho temporel trouble la pièce", "une faille s’ouvre au centre du sol",
-      "un fragment de mémoire flotte dans l’air", "une énigme gravée sur les murs pulse faiblement", "une clé quantique disparaît"
-    ],
-    traitsVictimes: [
-      "insaisissable", "omniscient", "paranoïaque", "double", "hors du temps", "fragmenté", "halluciné"
-    ],
-    motifs: [
-      "une anomalie temporelle", "l’envie de pouvoir", "la folie pure", "l’équilibre de l’univers", "la peur du néant"
-    ],
-    armes: [
-      "un artefact", "une onde mentale", "une faille dimensionnelle", "un miroir fractal", "un rayon paradoxal"
-    ],
-    ambiances: [
-      "alors que la réalité vacille", "sous des lumières irréelles", "au moment du grand passage", "quand le temps s’arrête",
-      "l’espace se plie et se tord", "le temps s’effiloche"
-    ],
-    intro: [
-      "{ambiance} {dans_la_lieu}. Les lois de la causalité semblent altérées.",
-      "Une énigme plane sur l’assemblée. {suspect1} observe {suspect2} d’un air méfiant.",
-      "Les souvenirs semblent s’effacer. Certains parlent de {motif}.",
-      "Chaque instant, la dimension se reconfigure.",
-      "[INDICE] {indice} survient soudain, glaçant l’assemblée.",
-      "[TEMOIN] Selon {temoin}, la disparition de {suspect1} n’est pas un hasard.",
-      "Un vortex s’ouvre. Les regards se troublent.",
-      "Des ombres traversent les murs, semant le trouble."
-    ],
-    crimes: {
-      classique: [
-        "Un cri déformé retentit : {victime} n’est plus {dans_la_lieu}. {indice}",
-        "La réalité vacille : {victime} s’effondre, frappé·e par {arme}. {temoin} prétend avoir vu {suspect1}.",
-        "On accuse {suspect1}, mais la vérité vacille.",
-        "{victime} disparaît sans explication. {indice}",
-        "Un artefact disparu bouleverse {la_lieu}.",
-        "{victime} s’efface lentement, laissant à peine une trace."
-      ],
-      poison: [
-        "Un breuvage inconnu empoisonne {victime} {dans_la_lieu}. {indice}",
-        "On soupçonne {arme} d’avoir altéré l’esprit de {victime} {dans_la_lieu}. {temoin} murmure des avertissements.",
-        "{suspect1} se tait, mais tout le monde le regarde.",
-        "Un champ d’énergie instable fait vaciller {victime}."
-      ],
-      disparition: [
-        "{victime} s’est volatilisé·e {dans_la_lieu}. {temoin} croit avoir vu une silhouette franchir une faille.",
-        "Nul ne sait où ni quand {victime} a disparu. {indice}",
-        "Une onde mentale efface les souvenirs de {temoin}.",
-        "{victime} semble ne jamais avoir existé."
-      ],
-      vol: [
-        "Un objet d’une importance capitale disparaît {dans_la_lieu}. {temoin} accuse {suspect1}.",
-        "Dans {la_lieu}, {arme} a été volé pendant que {victime} menait une expérience.",
-        "Un paradoxe menace tout équilibre. {suspect1} est désigné·e, mais tout le monde doute.",
-        "Le cœur de la dimension a été subtilisé."
-      ]
-    }
-  }
-};
-
+  
 const scenarioLibrary = {
   objectifs: {
     1: [
@@ -701,14 +628,12 @@ function genererScenario() {
   }
   const container = document.getElementById("scenarioContainer");
 
-  if (scenarioData) {
-    let periodeCle = scenarioData.periode;
-    if (periodeCle === "autre" && scenarioData.periodeAutre) {
-      periodeCle = "autre";
-    }
-    if (!univers[periodeCle]) periodeCle = "autre";
-    const periodeData = univers[periodeCle];
-    const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
+let periodeCle = scenarioData.periode;
+if (!univers[periodeCle]) {
+  document.getElementById("scenarioContainer").innerHTML = "<p>Période de jeu non reconnue.</p>";
+  return;
+}
+const periodeData = univers[periodeCle];
 
     // Historique long pour antirépétition stricte
     let history = getScenarioHistory();
