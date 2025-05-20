@@ -124,7 +124,7 @@ const univers = {
   },
 
 Western: {
-  lieux: lieuxParEpoque.western,
+  lieux: lieuxParEpoque.western, // <-- minuscule !
   // autres propriétés...
 },
   victimes: [
