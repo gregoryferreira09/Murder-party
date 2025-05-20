@@ -1,7 +1,5 @@
 // SRC/JS/armes.js
 
-// SRC/JS/arme.js
-
 const armesParEpoque = {
   medieval: {
     "château": [
@@ -1071,7 +1069,7 @@ western: {
   ]
 },
 
-renaissance: {
+enaissance: {
   "palais ducal": [
     { nom: "épée de cour", genre: "f" },
     { nom: "canne sculptée", genre: "f" },
@@ -1284,7 +1282,7 @@ renaissance: {
   ]
 },
 
-historique: {
+istorique: {
   "Colisée": [
     { nom: "gladius romain", genre: "m" },
     { nom: "trident", genre: "m" },
