@@ -53,28 +53,48 @@ function enrichirUnivers(univers) {
       "Le drame s'est joué {dans_la_lieu} : {victime} a été tué·e. {indice}",
       "{victime} est retrouvé·e étendu·e {dans_la_lieu}, la scène est figée, {arme} à la main."
     ]
-    // Ajoute d'autres modes si tu veux un fallback
   };
 
-  // Pour chaque époque, on enrichit à la volée
   Object.keys(univers).forEach(epoque => {
     const u = univers[epoque];
-    // Victimes
+
+    // Fusionner les armes de tous les lieux pour avoir un tableau unique si besoin
+    if (u.armes && !Array.isArray(u.armes)) {
+      u.armes = Object.values(u.armes).flat().map(a => a.nom ? a.nom : a);
+    }
+
+    // Pour les lieux, idem
+    if (u.lieux && !Array.isArray(u.lieux)) {
+      u.lieux = Object.values(u.lieux).flat();
+    }
+
+    // Génération victimes
     u.victimes = (u.personnages || [])
       .filter(p => p.categories && p.categories.includes('victime'))
-      .map(p => ({ nom: p.nom, genre: p.role && p.role.endsWith('e') ? 'f' : 'm' })); // genre = heuristique
+      .map(p => ({
+        nom: p.nom,
+        genre: (typeof p.role === "string" && p.role.endsWith('e')) ? 'f' : 'm'
+      }));
+
     // Suspects
     u.suspects = (u.personnages || [])
       .filter(p => p.categories && p.categories.includes('suspect'))
       .map(p => p.nom);
+
     // Témoins
     u.temoins = (u.personnages || [])
       .filter(p => p.categories && p.categories.includes('temoin'))
-      .map(p => ({ nom: p.nom, genre: p.role && p.role.endsWith('e') ? 'f' : 'm' }));
+      .map(p => ({
+        nom: p.nom,
+        genre: (typeof p.role === "string" && p.role.endsWith('e')) ? 'f' : 'm'
+      }));
+
     // TraitsVictimes
     if (!u.traitsVictimes) u.traitsVictimes = defaultTraitsVictimes;
+
     // Motifs
     if (!u.motifs && u.mobiles) u.motifs = u.mobiles;
+
     // Crimes
     if (!u.crimes) u.crimes = defaultCrimes;
   });
