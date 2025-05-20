@@ -44,7 +44,7 @@ const personnagesParEpoque = {
     { nom: "Alix la Fille du forgeron", role: "Fille du forgeron", description: "Aide son père et rêve de liberté.", categories: ["suspect","victime","temoin"] },
     { nom: "Blaise le Tavernier", role: "Tavernier du village", description: "Il sert à boire et des rumeurs.", categories: ["suspect","victime","temoin"] }
   ],
-  Renaissance: [
+  renaissance: [
     { nom: "Leonardo l’Inventeur", role: "Génie créatif", description: "Plongé dans ses croquis.", categories: ["suspect","victime","temoin"] },
     { nom: "Giulietta la Dame de compagnie", role: "Confidente avisée", description: "Connait chaque secret du palais.", categories: ["suspect","victime","temoin"] },
     { nom: "Donatello le Sculpteur", role: "Sculpteur talentueux", description: "Ses œuvres cachent parfois des messages.", categories: ["suspect","victime","temoin"] },
