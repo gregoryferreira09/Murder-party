@@ -168,14 +168,14 @@ const ambiances = {
 };
 
 // Harmonisation de la casse pour "renaissance" dans personnagesParEpoque
-const personnagesRenaissance = personnagesParEpoque.renaissance || personnagesParEpoque.Renaissance;
+const personnagesRenaissance = (personnagesParEpoque.renaissance || personnagesParEpoque.Renaissance).map(p => p.nom);
 
 // Structure univers complète
 const univers = {
   medieval: {
     alibis: alibis.medieval,
     indices: indices.medieval,
-    personnages: personnagesParEpoque.medieval,
+    personnages: personnagesParEpoque.medieval.map(p => p.nom),
     lieux: lieuxParEpoque.medieval,
     armes: armesParEpoque.medieval,
     secrets: secrets.medieval,
@@ -187,7 +187,7 @@ const univers = {
   victorien: {
     alibis: alibis.victorien,
     indices: indices.victorien,
-    personnages: personnagesParEpoque.victorien,
+    personnages: personnagesParEpoque.victorien.map(p => p.nom),
     lieux: lieuxParEpoque.victorien,
     armes: armesParEpoque.victorien,
     secrets: secrets.victorien,
@@ -199,7 +199,7 @@ const univers = {
   futuriste: {
     alibis: alibis.futuriste,
     indices: indices.futuriste,
-    personnages: personnagesParEpoque.futuriste,
+    personnages: personnagesParEpoque.futuriste.map(p => p.nom),
     lieux: lieuxParEpoque.futuriste,
     armes: armesParEpoque.futuriste,
     secrets: secrets.futuriste,
@@ -211,7 +211,7 @@ const univers = {
   western: {
     alibis: alibis.western,
     indices: indices.western,
-    personnages: personnagesParEpoque.western,
+    personnages: personnagesParEpoque.western.map(p => p.nom),
     lieux: lieuxParEpoque.western,
     armes: armesParEpoque.western,
     secrets: secrets.western,
@@ -223,7 +223,7 @@ const univers = {
   contemporain: {
     alibis: alibis.contemporain,
     indices: indices.contemporain,
-    personnages: personnagesParEpoque.contemporain,
+    personnages: personnagesParEpoque.contemporain.map(p => p.nom),
     lieux: lieuxParEpoque.contemporain,
     armes: armesParEpoque.contemporain,
     secrets: secrets.contemporain,
@@ -247,7 +247,7 @@ const univers = {
   historique: {
     alibis: alibis.historique,
     indices: indices.historique,
-    personnages: personnagesParEpoque.historique,
+    personnages: personnagesParEpoque.historique.map(p => p.nom),
     lieux: lieuxParEpoque.historique,
     armes: armesParEpoque.historique,
     secrets: secrets.historique,
@@ -258,5 +258,3 @@ const univers = {
   }
   // Ajoute ici d'autres époques si besoin
 };
-
-export default univers;
