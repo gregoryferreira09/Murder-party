@@ -1,32 +1,33 @@
-<!DOCTYPE html> 
-<html lang="fr"> 
-<head> 
-  <meta charset="UTF-8"> 
-  <title>Lancement de la Partie - Murder Party</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-
-  <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet"> 
-</head> 
-
-<body> 
-
-  <header>
-    <h1>Scénario proposé</h1>
-  </header>
-  
-  <!-- Encadré doré incluant le scénario et les boutons -->
-  <div id="scenarioContainer" class="scenario bandeau-dore fadeUp">
-    Chargement du scénario...
-  </div>
-
-  <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Lancement de la partie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1b1b1b;
+      color: #e0e0e0;
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      color: #e9c78c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lancement de la partie</h1>
+  <!-- Ici tu peux ajouter d’autres éléments pour le lancement -->
 
   <!-- ✅ On charge d'abord les personnages, puis le scénario -->
-  <script src="../JS/personnages.js"></script>
-<script type="module" src="../JS/Scenario.js"></script>
-</body> 
+  <script type="module" src="../JS/personnages.js"></script>
+  <script type="module" src="../JS/Scenario.js"></script>
+</body>
 </html>
