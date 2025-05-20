@@ -168,7 +168,7 @@ const ambiances = {
 };
 
 // Harmonisation de la casse pour "renaissance" dans personnagesParEpoque
-const personnagesRenaissance = (personnagesParEpoque.renaissance || personnagesParEpoque.Renaissance).map(p => p.nom);
+const personnagesrenaissance = (personnagesParEpoque.renaissance || personnagesParEpoque.renaissance).map(p => p.nom);
 
 // Structure univers complète
 const univers = {
