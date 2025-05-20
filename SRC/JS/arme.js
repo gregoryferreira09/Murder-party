@@ -1069,7 +1069,7 @@ western: {
   ]
 },
 
-enaissance: {
+renaissance: {
   "palais ducal": [
     { nom: "épée de cour", genre: "f" },
     { nom: "canne sculptée", genre: "f" },
@@ -1282,7 +1282,7 @@ enaissance: {
   ]
 },
 
-istorique: {
+historique: {
   "Colisée": [
     { nom: "gladius romain", genre: "m" },
     { nom: "trident", genre: "m" },
