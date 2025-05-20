@@ -45,9 +45,9 @@ function addScenarioToHistory(scenario) {
 
 import { genererScenario } from './generateurScenario.js';
 
-// ... (conserve tout le code pour l’historique, les détails du jeu, etc.)
+// ... autres fonctions outils ...
 
-function genererScenario() {
+function afficherScenario() {
   let scenarioData;
   try {
     scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
@@ -57,17 +57,16 @@ function genererScenario() {
   const container = document.getElementById("scenarioContainer");
 
   if (scenarioData) {
-    // On récupère la période
     let periodeCle = scenarioData.periode;
     if (periodeCle === "autre" && scenarioData.periodeAutre) {
       periodeCle = "autre";
     }
     if (!periodeCle) periodeCle = "victorien";
 
-    // On utilise la fonction centrale pour générer le scénario (introduction, crime, objectif)
+    // Appel du générateur central
     const scenario = genererScenario(periodeCle);
 
-    // Injection dans le DOM des sections dynamiques
+    // Injection DOM
     container.innerHTML = `
       <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
       <h2>Introduction</h2>
@@ -76,7 +75,6 @@ function genererScenario() {
       <p>${scenario.crime}</p>
       <h2>Objectif général</h2>
       <p>${scenario.objectif}</p>
-      <!-- Le reste (détails du jeu, boutons, etc.) est inchangé et suit juste après -->
       <h2>Détails du jeu</h2>
       <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p>
       <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${scenario.detailsDuree ? scenario.detailsDuree : ''}</p>
@@ -91,10 +89,10 @@ function genererScenario() {
       </div>
     `;
     const regenBtn = document.getElementById("regenScenarioBtn");
-    if (regenBtn) regenBtn.onclick = genererScenario;
+    if (regenBtn) regenBtn.onclick = afficherScenario;
   } else {
     document.getElementById("scenarioContainer").innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
 }
 
-document.addEventListener("DOMContentLoaded", genererScenario);
+document.addEventListener("DOMContentLoaded", afficherScenario);
