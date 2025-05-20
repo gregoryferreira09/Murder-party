@@ -1,184 +1,302 @@
-// personnages.js
+// SRC/JS/personnages.js
 
-const listeDesPersonnages = [
-  {
-    id: 1,
-    nom: 'Violette',
-    image: 'assets/violette.jpg',
-    role: 'La complice rusée',
-    objectifs: [
-      'Protéger le meurtrier',
-      'Semer le doute chez les enquêteurs'
-    ],
-    indices: [
-      'Une lettre déchirée retrouvée dans la cheminée.',
-      'Elle a été vue quittant la pièce 10 minutes avant le meurtre.'
-    ],
-    pouvoirs: [
-      'Peut mentir une fois sans pénalité',
-      'Peut intercepter un indice destiné à un autre joueur'
-    ]
-  },
-  {
-    id: 2,
-    nom: 'Colonel Moutarde',
-    image: 'assets/moutarde.jpg',
-    role: 'L’ancien militaire au passé trouble',
-    objectifs: [
-      'Laver son honneur',
-      'Découvrir qui le fait chanter'
-    ],
-    indices: [
-      'Possède une arme similaire à celle du crime.',
-      'A un alibi flou.'
-    ],
-    pouvoirs: [
-      'Peut forcer un joueur à répondre à une question',
-      'Peut bloquer un vote une fois'
-    ]
-  },
-  {
-    id: 3,
-    nom: 'Inspecteur Lavande',
-    image: 'images/perso1.png',
-    role: 'L’enquêteur perspicace',
-    objectifs: [
-      'Résoudre l’affaire coûte que coûte',
-      'Protéger les innocents'
-    ],
-    indices: [
-      'A retrouvé un carnet avec des initiales suspectes.',
-      'Était dans la bibliothèque au moment du meurtre.'
-    ],
-    pouvoirs: [
-      'Peut recouper deux indices et en tirer une vérité',
-      'Peut désigner un joueur à suivre'
-    ]
-  },
-  {
-    id: 4,
-    nom: 'Madame Célestine',
-    image: 'images/perso2.png',
-    role: 'La voyante trouble',
-    objectifs: [
-      'Découvrir l’identité du coupable à travers ses visions',
-      'Protéger un secret personnel'
-    ],
-    indices: [
-      'A fait un rêve étrange la nuit précédente.',
-      'A entendu un cri dans le couloir.'
-    ],
-    pouvoirs: [
-      'Peut poser une question sur le rôle d’un autre joueur (sans réponse obligatoire)',
-      'Peut "voir" un indice flou supplémentaire'
-    ]
-  },
-  {
-    id: 5,
-    nom: 'Professeur Grimoire',
-    image: 'images/perso3.png',
-    role: 'Le scientifique excentrique',
-    objectifs: [
-      'Tester une nouvelle théorie criminologique',
-      'Garder le contrôle sur ses expériences'
-    ],
-    indices: [
-      'Possède une fiole contenant un résidu suspect.',
-      'Avait accès au plan du manoir.'
-    ],
-    pouvoirs: [
-      'Peut rejouer un tour d’interrogatoire',
-      'Peut changer l’ordre des votes'
-    ]
-  },
-  {
-    id: 6,
-    nom: 'Capitaine Rouge',
-    image: 'images/perso4.png',
-    role: 'Le marin à la retraite',
-    objectifs: [
-      'Protéger un vieil ami',
-      'Masquer un ancien crime de guerre'
-    ],
-    indices: [
-      'A laissé des traces de pas humides dans le couloir.',
-      'Possède une carte très ancienne.'
-    ],
-    pouvoirs: [
-      'Peut échanger son indice avec un autre joueur',
-      'Peut désigner un joueur pour qu’il ne parle pas pendant un tour'
-    ]
-  },
-  {
-    id: 7,
-    nom: 'Sœur Marguerite',
-    image: 'images/perso5.png',
-    role: 'La religieuse silencieuse',
-    objectifs: [
-      'Protéger la morale et la vérité',
-      'Expier un péché ancien'
-    ],
-    indices: [
-      'A récité une prière étrange avant le crime.',
-      'Connait un lourd secret sur la victime.'
-    ],
-    pouvoirs: [
-      'Peut absoudre un joueur (réduire les soupçons sur lui)',
-      'Peut forcer un aveu partiel'
-    ]
-  },
-  {
-    id: 8,
-    nom: 'Docteur Alambic',
-    image: 'images/perso6.png',
-    role: 'Le médecin mystérieux',
-    objectifs: [
-      'Dissiper les doutes sur ses expériences',
-      'Découvrir un remède caché par la victime'
-    ],
-    indices: [
-      'A un accès aux registres médicaux de tous.',
-      'A menti sur sa localisation pendant l’enquête.'
-    ],
-    pouvoirs: [
-      'Peut anesthésier un joueur (le faire passer son tour)',
-      'Peut poser une question confidentielle'
-    ]
-  },
-  {
-    id: 9,
-    nom: 'Baron Mystère',
-    image: 'images/perso7.png',
-    role: 'Le noble masqué',
-    objectifs: [
-      'Garder son identité secrète',
-      'Manipuler les autres sans être démasqué'
-    ],
-    indices: [
-      'Toujours vu avec des gants.',
-      'Possède un objet trouvé sur la scène de crime.'
-    ],
-    pouvoirs: [
-      'Peut échanger son identité avec un autre joueur (une seule fois)',
-      'Peut mentir sans que cela soit suspecté une fois'
-    ]
-  },
-  {
-    id: 10,
-    nom: 'Comtesse Ombrelune',
-    image: 'images/perso8.png',
-    role: 'L’aristocrate vénéneuse',
-    objectifs: [
-      'Éliminer un rival discret',
-      'Faire accuser un innocent'
-    ],
-    indices: [
-      'Était proche de la victime la veille.',
-      'Possède un flacon de parfum suspect.'
-    ],
-    pouvoirs: [
-      'Peut empoisonner un indice pour qu’il devienne faux',
-      'Peut accuser un joueur sans preuve une fois'
-    ]
-  }
-];
+const personnagesParEpoque = {
+  medieval: [
+    { nom: "Ysabeau la Servante", role: "Servante fidèle", description: "Toujours à l’écoute des ragots, elle sait tout ce qui se passe au château." },
+    { nom: "Gaspard le Chevalier", role: "Chevalier loyal", description: "Redouté sur le champ de bataille, mais aussi cible de jalousie." },
+    { nom: "Aliénor la Dame", role: "Dame mystérieuse", description: "Son regard perçant cache de nombreux secrets." },
+    { nom: "Arthus le Bouffon", role: "Bouffon malicieux", description: "Ses plaisanteries cachent parfois de sombres vérités." },
+    { nom: "Enguerrand le Moine", role: "Moine austère", description: "Gardien de la chapelle, il est le confident de tous." },
+    { nom: "Berthe la Cuisinière", role: "Cuisinière généreuse", description: "Sa cuisine rassemble tous les habitants du château." },
+    { nom: "Mahaut la Lavandière", role: "Lavandière discrète", description: "Toujours présente près de la rivière, elle observe sans être vue." },
+    { nom: "Colin le Ménestrel", role: "Ménestrel charmeur", description: "Il voyage de cour en cour, porteur de nouvelles et de chansons." },
+    { nom: "Thomas le Prévôt", role: "Prévôt rigoureux", description: "Garant de la loi, il n’a pas que des amis." },
+    { nom: "Hugues le Forgeron", role: "Forgeron costaud", description: "Ses bras puissants valent autant que sa discrétion." },
+    { nom: "Rémi le Page", role: "Jeune page", description: "Toujours prêt à rendre service, il écoute aux portes." },
+    { nom: "Béatrix la Guérisseuse", role: "Guérisseuse", description: "Connaît tous les secrets des plantes et des blessures." },
+    { nom: "Lambert le Cuisinier", role: "Cuisinier adroit", description: "Il prépare les festins et sait tout ce qui passe en cuisine." },
+    { nom: "Isabeau la Tisseuse", role: "Tisseuse habile", description: "Ses doigts agiles cachent peut-être de lourds secrets." },
+    { nom: "Renaud l'Archer", role: "Archer du domaine", description: "Redouté lors des tournois, discret lors des complots." },
+    { nom: "Jehanne la Dame de compagnie", role: "Dame de compagnie", description: "Elle accompagne la maîtresse de maison partout." },
+    { nom: "Guillaume le Châtelain", role: "Châtelain", description: "Le seigneur du château, autoritaire mais respecté." },
+    { nom: "Eudes le Prêtre", role: "Prêtre", description: "Il confesse tout le village et sait bien des secrets." },
+    { nom: "Guillemette la Bâtarde", role: "Enfant illégitime", description: "Elle cherche à s’intégrer malgré son statut." },
+    { nom: "Etienne le Sénéchal", role: "Sénéchal", description: "Administrateur des terres, il gère les comptes et les querelles." },
+    { nom: "Gaudry le Sergent", role: "Sergent d’armes", description: "Il veille sur la sécurité du château." },
+    { nom: "Marion la Fille du meunier", role: "Fille du meunier", description: "Souvent aux abords du château, elle entend tout." },
+    { nom: "Héloïse la Dame de cœur", role: "Dame de cœur", description: "Ses amours font jaser la maisonnée." },
+    { nom: "Aymard le Messager", role: "Messager", description: "Il transporte des messages… et parfois des menaces." },
+    { nom: "Baudouin l’Écuyer", role: "Écuyer", description: "Fidèle au chevalier, il rêve de gloire." },
+    { nom: "Perrot le Garde", role: "Garde du château", description: "Veille sur la porte principale, pas toujours sobre." },
+    { nom: "Adélaïde la Veuve", role: "Veuve éplorée", description: "Son mari est mort dans des circonstances troubles." },
+    { nom: "Gilles le Moissonneur", role: "Moissonneur", description: "Travaille aux champs, mais s’invite souvent en cuisine." },
+    { nom: "Isambart le Charpentier", role: "Charpentier", description: "Bricoleur du château, il entend tout ce qui grince." },
+    { nom: "Odeline la Sage-femme", role: "Sage-femme", description: "Connaît tous les secrets des naissances." },
+    { nom: "Agnès la Boulangère", role: "Boulangère", description: "Fournit le pain et les rumeurs." },
+    { nom: "Barthélemy le Berger", role: "Berger", description: "Amène ses bêtes près des murs et observe tout." },
+    { nom: "Roseline la Jardinière", role: "Jardinière", description: "Cultive les herbes et les confidences." },
+    { nom: "Thibaut le Tonnelier", role: "Tonnelier", description: "Fabrique les tonneaux, goûte parfois trop le vin." },
+    { nom: "Perrine la Couturière", role: "Couturière", description: "Coud pour toute la maisonnée et écoute beaucoup." },
+    { nom: "Raimond le Jongleur", role: "Jongleur", description: "Anime les soirées, mais fouille aussi les poches." },
+    { nom: "Marguerite la Nonne", role: "Nonne pieuse", description: "Sa piété est sans faille, ou presque…" },
+    { nom: "Hervé le Maître d’armes", role: "Maître d’armes", description: "Forme les jeunes nobles au combat." },
+    { nom: "Guibert le Voleur repenti", role: "Voleur repenti", description: "Il cherche à se racheter… ou pas." },
+    { nom: "Alix la Fille du forgeron", role: "Fille du forgeron", description: "Elle aide son père et rêve de liberté." }
+  ],
+
+  Renaissance: [
+    { nom: "Leonardo l’Inventeur", role: "Génie créatif", description: "Toujours plongé dans ses croquis, il intrigue la cour." },
+    { nom: "Giulietta la Dame de compagnie", role: "Confidente avisée", description: "Elle connaît chaque secret du palais." },
+    { nom: "Donatello le Sculpteur", role: "Sculpteur talentueux", description: "Ses œuvres cachent parfois des messages secrets." },
+    { nom: "Isabella la Duchesse", role: "Duchesse raffinée", description: "Son influence s’étend dans tout le duché." },
+    { nom: "Francesco le Banquier", role: "Banquier influent", description: "Ses finances lui valent des ennemis puissants." },
+    { nom: "Raffaella la Courtisane", role: "Courtisane en vue", description: "Ses charmes font tourner bien des têtes." },
+    { nom: "Bartolomeo le Condottiere", role: "Mercenaire redouté", description: "Il vend ses services au plus offrant." },
+    { nom: "Lucrezia la Peintre", role: "Peintre passionnée", description: "Elle immortalise les secrets de la noblesse." },
+    { nom: "Giovanni le Cardinal", role: "Prince de l’Église", description: "Il tire les ficelles dans l’ombre." },
+    { nom: "Fiorenzo le Musicien", role: "Musicien virtuose", description: "Sa musique charme et manipule." },
+    { nom: "Caterina la Médium", role: "Mystique énigmatique", description: "Elle prétend voir l’avenir… ou le manipuler." },
+    { nom: "Lorenzo le Marchand", role: "Marchand prospère", description: "Il contrôle de nombreux échanges commerciaux." },
+    { nom: "Camilla la Tisseuse", role: "Tisseuse habile", description: "Ses tissus sont prisés dans toute la ville." },
+    { nom: "Vittorio le Médecin", role: "Médecin renommé", description: "Soigne les puissants, ou les empoisonne ?" },
+    { nom: "Beatrice la Gouvernante", role: "Gouvernante stricte", description: "Elle surveille les jeunes nobles." },
+    { nom: "Orlando le Poète", role: "Poète rêveur", description: "Ses vers révèlent parfois plus qu’ils ne devraient." },
+    { nom: "Maddalena la Jardinière", role: "Jardinière", description: "Cultive les plantes et les secrets du palais." },
+    { nom: "Giulia la Danseuse", role: "Danseuse gracieuse", description: "Sa présence illumine les bals." },
+    { nom: "Salvatore l’Érudit", role: "Érudit respecté", description: "Sa sagesse est recherchée… et crainte." },
+    { nom: "Rosalba la Couturière", role: "Couturière fine", description: "Habille la noblesse et écoute leurs confidences." },
+    { nom: "Luca le Valet", role: "Valet discret", description: "Il observe tout, dit peu." },
+    { nom: "Costanza la Sage-femme", role: "Sage-femme", description: "Elle veille aux naissances… et aux secrets de famille." },
+    { nom: "Tommaso le Libraire", role: "Libraire", description: "Il sait où trouver chaque livre et chaque ragot." },
+    { nom: "Pietro le Jardinier", role: "Jardinier", description: "Sa passion pour les plantes est sans égale." },
+    { nom: "Anastasia la Voleuse", role: "Voleuse", description: "Elle dérobe cœurs et bijoux." },
+    { nom: "Giuseppe le Maître d’hôtel", role: "Maître d’hôtel", description: "Il veille au bon déroulement des banquets." },
+    { nom: "Alessandro le Jongleur", role: "Jongleur", description: "Il amuse la cour et fouille les poches." },
+    { nom: "Violetta la Fille du boulanger", role: "Fille du boulanger", description: "Son pain est apprécié et ses oreilles traînent partout." },
+    { nom: "Emilia la Veuve", role: "Veuve éplorée", description: "Son mari est mort mystérieusement." },
+    { nom: "Renato le Peintre", role: "Peintre", description: "Il immortalise la beauté… ou la trahison." },
+    { nom: "Livia la Ménagère", role: "Ménagère", description: "Elle tient la maison d’une main de fer." },
+    { nom: "Domenico le Chef", role: "Chef renommé", description: "Ses plats sont aussi délicieux que dangereux." },
+    { nom: "Paola la Lavandière", role: "Lavandière", description: "Elle connaît tous les secrets du linge sale." },
+    { nom: "Simone le Garde", role: "Garde du palais", description: "Il protège la noblesse, ou ce qui l’arrange." },
+    { nom: "Teresa la Fleuriste", role: "Fleuriste", description: "Ses bouquets ornent chaque cérémonie." },
+    { nom: "Cesare le Forgeron", role: "Forgeron", description: "Ses armes sont réputées dans toute la région." },
+    { nom: "Filippo le Messager", role: "Messager", description: "Il livre des lettres… et parfois des menaces." },
+    { nom: "Lucia la Dame d’honneur", role: "Dame d’honneur", description: "Toujours présente auprès de la duchesse." },
+    { nom: "Ruggero le Maître de musique", role: "Maître de musique", description: "Il dirige les concerts du palais." },
+    { nom: "Marta la Boulangère", role: "Boulangère", description: "Ses pâtisseries sont les meilleures de la ville." }
+  ],
+
+  victorien: [
+    { nom: "Ashford le Comte", role: "Comte influent", description: "Respecté mais parfois craint par ses pairs." },
+    { nom: "Emily la Gouvernante", role: "Gouvernante stricte", description: "Aucun détail ne lui échappe dans la maison." },
+    { nom: "Samuel l’Héritier", role: "Jeune héritier", description: "Ambitieux, il rêve de modernité." },
+    { nom: "Miss Carter", role: "Vieille demoiselle", description: "Elle observe tout depuis son fauteuil." },
+    { nom: "Majordome Carter", role: "Majordome", description: "Toujours impeccable, il est le pilier de la maison." },
+    { nom: "Lady Emily", role: "Lady mondaine", description: "Reine des salons, elle mène la danse." },
+    { nom: "Colonel Rutherford", role: "Colonel à la retraite", description: "Son passé militaire est source de rumeurs." },
+    { nom: "Agathe la Cousine", role: "Cousine discrète", description: "Elle s’efface, mais écoute tout." },
+    { nom: "Dr Finch", role: "Médecin du domaine", description: "Il soigne corps et âmes avec tact." },
+    { nom: "Margery la Pianiste", role: "Pianiste douée", description: "Sa musique enchante les soirées." },
+    { nom: "Hopkins le Jardinier", role: "Jardinier", description: "Il cultive les fleurs et les secrets." },
+    { nom: "Mrs Doyle la Cuisinière", role: "Cuisinière", description: "Son pudding est célèbre, tout comme ses ragots." },
+    { nom: "Giles le Palefrenier", role: "Palefrenier", description: "Il veille sur les écuries et les chevaux." },
+    { nom: "Brown le Cocher", role: "Cocher", description: "Il connaît tous les trajets, et toutes les fuites." },
+    { nom: "May l’Institutrice", role: "Institutrice", description: "Elle enseigne aux enfants de la maison." },
+    { nom: "Violette la Complice", role: "Complice rusée", description: "Toujours prête à semer le doute." },
+    { nom: "Inspecteur Lavande", role: "Enquêteur perspicace", description: "Il résout toutes les énigmes… ou presque." },
+    { nom: "Madame Célestine", role: "Voyante trouble", description: "Ses visions effraient ou fascinent." },
+    { nom: "Professeur Grimoire", role: "Scientifique excentrique", description: "Il expérimente tout, même l’interdit." },
+    { nom: "Capitaine Rouge", role: "Marin à la retraite", description: "Il raconte de sombres histoires." },
+    { nom: "Sœur Marguerite", role: "Religieuse silencieuse", description: "Elle prie pour tous… ou presque." },
+    { nom: "Docteur Alambic", role: "Médecin mystérieux", description: "Son remède n’est pas toujours sans danger." },
+    { nom: "Baron Mystère", role: "Noble masqué", description: "Il manipule sans jamais se dévoiler." },
+    { nom: "Comtesse Ombrelune", role: "Aristocrate vénéneuse", description: "Son parfum trouble plus d’un convive." },
+    { nom: "Victor le Chauffeur", role: "Chauffeur", description: "Il écoute tout à travers la vitre." },
+    { nom: "Jane la Gouvernante adjointe", role: "Gouvernante adjointe", description: "Elle surveille la maison d’un œil neuf." },
+    { nom: "Edwin le Valet", role: "Valet de pied", description: "Il sert et observe tout le monde." },
+    { nom: "Daisy la Fleuriste", role: "Fleuriste", description: "Elle fournit la maison en fleurs et ragots." },
+    { nom: "Martha la Lingère", role: "Lingère", description: "Elle lave le linge sale… parfois au sens figuré." },
+    { nom: "Ernest le Jardinier", role: "Jardinier en chef", description: "Il dirige les apprentis et sait tout sur tout." },
+    { nom: "Nora la Cuisinière", role: "Cuisinière adjointe", description: "Elle rêve de prendre la place de Mrs Doyle." },
+    { nom: "Clarence le Dandy", role: "Dandy", description: "Toujours tiré à quatre épingles, il se fait remarquer." },
+    { nom: "Alice la Demoiselle", role: "Jeune demoiselle", description: "Elle rêve de romance et d’aventure." },
+    { nom: "Simon l’Écrivain", role: "Écrivain", description: "Il s’inspire des drames de la maison." },
+    { nom: "Beatrix la Sage-femme", role: "Sage-femme", description: "Elle veille sur les naissances et les secrets de famille." },
+    { nom: "George le Facteur", role: "Facteur", description: "Il distribue lettres et nouvelles, bonnes ou mauvaises." },
+    { nom: "Harriet la Couturière", role: "Couturière", description: "Elle habille toute la maison." },
+    { nom: "Frederick le Banquier", role: "Banquier", description: "Il gère la fortune du domaine." },
+    { nom: "Laura la Bibliothécaire", role: "Bibliothécaire", description: "Elle connaît tous les livres… et toutes les histoires." }
+  ],
+
+  Western: [
+    { nom: "Billy le Tireur", role: "Cowboy rapide", description: "Jamais sans son colt, il est redouté en duel." },
+    { nom: "Sally la Danseuse", role: "Danseuse du saloon", description: "Un sourire pour tous, mais une oreille attentive aux conversations." },
+    { nom: "Sheriff Carter", role: "Sheriff incorruptible", description: "Il fait régner la loi d’une main de fer." },
+    { nom: "Doc Brown", role: "Médecin du village", description: "Il soigne les blessures… et les secrets." },
+    { nom: "Miss Daisy", role: "Maîtresse du saloon", description: "Elle tient son établissement d’une main de fer." },
+    { nom: "Tommy le Joueur", role: "Joueur professionnel", description: "Il tente toujours sa chance, parfois avec des cartes truquées." },
+    { nom: "Juanita la Cuisinière", role: "Cuisinière mexicaine", description: "Sa cuisine réchauffe le cœur et la langue." },
+    { nom: "Red le Bandit", role: "Bandit recherché", description: "Sa tête est mise à prix dans tout l’Ouest." },
+    { nom: "Sam le Forgeron", role: "Forgeron du bourg", description: "Il répare tout, sauf les cœurs brisés." },
+    { nom: "Mary la Fermière", role: "Fermière", description: "Elle défend sa terre bec et ongles." },
+    { nom: "Hank le Barman", role: "Barman", description: "Il mélange les verres et les ragots." },
+    { nom: "Martha la Couturière", role: "Couturière", description: "Elle recoud les habits… et parfois les plaies." },
+    { nom: "Jesse le Cow-boy", role: "Cow-boy solitaire", description: "Il parcourt les plaines, mystérieux." },
+    { nom: "Clyde le Fossoyeur", role: "Fossoyeur", description: "Il creuse plus de tombes qu’il n’en dit." },
+    { nom: "Little Joe", role: "Jeune berger", description: "Il surveille les troupeaux et les disputes." },
+    { nom: "Rosie la Fleuriste", role: "Fleuriste", description: "Elle vend des fleurs aux vivants et aux morts." },
+    { nom: "Big Bill", role: "Conducteur de diligence", description: "Il connaît tous les trajets et tous les dangers." },
+    { nom: "Eli le Pasteur", role: "Pasteur", description: "Il prêche la bonne parole… ou la vengeance." },
+    { nom: "Bobby l’Indien", role: "Éclaireur indien", description: "Il lit les traces mieux que quiconque." },
+    { nom: "Clara la Maîtresse d’école", role: "Maîtresse d’école", description: "Elle apprend à lire… ou à mentir." },
+    { nom: "Slim le Trappeur", role: "Trappeur", description: "Il vit en marge, mais sait tout ce qui se trame." },
+    { nom: "Duke le Chasseur de primes", role: "Chasseur de primes", description: "Il ne lâche jamais sa proie." },
+    { nom: "Pearl la Veuve noire", role: "Veuve noire", description: "Ses maris disparaissent mystérieusement." },
+    { nom: "Dusty le Marchand ambulant", role: "Marchand ambulant", description: "Il vend tout, même des secrets." },
+    { nom: "Frank le Garçon d’écurie", role: "Garçon d’écurie", description: "Il soigne les chevaux et espionne les voyageurs." },
+    { nom: "Morgan le Banquier", role: "Banquier", description: "Il gère la fortune de la ville, ou la sienne." },
+    { nom: "Calamity Jane", role: "Aventurière", description: "Elle n’a peur de rien ni de personne." },
+    { nom: "Lilly la Sage-femme", role: "Sage-femme", description: "Elle veille sur les naissances et les morts." },
+    { nom: "Tex le Shérif adjoint", role: "Adjoint du shérif", description: "Toujours prêt à dégainer." },
+    { nom: "Daisy May la Serveuse", role: "Serveuse du saloon", description: "Elle sert plus d’histoires que de verres." },
+    { nom: "Jack le Télégraphiste", role: "Télégraphiste", description: "Il transmet les messages… ou les détourne." },
+    { nom: "Doc Holliday", role: "Dentiste armé", description: "Il soigne ou fait mal, selon le tarif." },
+    { nom: "Belle la Barmaid", role: "Barmaid", description: "Elle entend et répète tout ce qu’on lui dit." },
+    { nom: "Pat Garrett", role: "Chasseur de hors-la-loi", description: "Il poursuit les bandits sans relâche." },
+    { nom: "Preacher", role: "Prédicateur itinérant", description: "Il prêche la morale… ou la terreur." },
+    { nom: "Buck le Prospecteur", role: "Chercheur d’or", description: "Il rêve de fortune, mais trouve souvent des ennuis." },
+    { nom: "Maggie la Dentelière", role: "Dentelière", description: "Elle brode les tissus et les histoires." },
+    { nom: "Slim Jim", role: "Rancher", description: "Il possède de vastes terres et peu d’amis." },
+    { nom: "Eugene le Photographe", role: "Photographe", description: "Il immortalise les visages, parfois pour la dernière fois." }
+  ],
+
+  contemporain: [
+    { nom: "Lucas le Hacker", role: "Virtuose du clavier", description: "Il accède à tous les secrets numériques." },
+    { nom: "Emma la Journaliste", role: "Journaliste d’investigation", description: "Rien ne lui échappe, elle cherche la vérité." },
+    { nom: "Sophie la Cheffe", role: "Cheffe étoilée", description: "Ses plats font le tour du monde." },
+    { nom: "Antoine le Policier", role: "Policier dévoué", description: "Toujours sur le terrain, il enquête sans relâche." },
+    { nom: "Inès la Médecin", role: "Médecin généraliste", description: "Elle soigne tout le quartier." },
+    { nom: "Karim le Chauffeur", role: "Chauffeur VTC", description: "Il connaît tous les coins et potins de la ville." },
+    { nom: "Mélanie la Prof", role: "Professeure de lycée", description: "Elle motive ses élèves avec passion." },
+    { nom: "Jules l’Artiste", role: "Artiste urbain", description: "Ses graffitis intriguent la police." },
+    { nom: "Clara la Startupeuse", role: "Entrepreneuse innovante", description: "Toujours connectée, elle veut changer le monde." },
+    { nom: "Marc l’Avocat", role: "Avocat redouté", description: "Il gagne tous ses procès." },
+    { nom: "Amandine la Fleuriste", role: "Fleuriste", description: "Elle connaît la vie de tous ses clients." },
+    { nom: "Nina la Coach sportive", role: "Coach sportive", description: "Elle motive tout le quartier à bouger." },
+    { nom: "Victor le Banquier", role: "Banquier", description: "Il gère les finances des plus riches." },
+    { nom: "Élodie la Babysitter", role: "Babysitter", description: "Elle garde les enfants… et les secrets." },
+    { nom: "Pierre le Concierge", role: "Concierge", description: "Il voit tout, sait tout, ne dit rien." },
+    { nom: "Romain le Barman", role: "Barman", description: "Il écoute toutes les confidences nocturnes." },
+    { nom: "Léa la Blogueuse", role: "Blogueuse influente", description: "Son avis compte sur les réseaux." },
+    { nom: "Nicolas le Photographe", role: "Photographe", description: "Il immortalise la vie urbaine." },
+    { nom: "Sarah la Musicienne", role: "Musicienne", description: "Elle joue dans le métro et sur scène." },
+    { nom: "Kevin le Coach de vie", role: "Coach de vie", description: "Il conseille, parfois trop." },
+    { nom: "Julie la Libraire", role: "Libraire passionnée", description: "Elle partage ses lectures et ses soupçons." },
+    { nom: "Dylan le Livreur", role: "Livreur à vélo", description: "Il connaît tous les raccourcis de la ville." },
+    { nom: "Manon la Chef de projet", role: "Chef de projet", description: "Elle gère tout d’une main de maître." },
+    { nom: "Camille la Psychologue", role: "Psychologue", description: "Elle écoute tout le quartier." },
+    { nom: "Alexandre le Comptable", role: "Comptable", description: "Il jongle avec les chiffres et les arrangements." },
+    { nom: "Marine la Restauratrice", role: "Restauratrice", description: "Elle tient le bistrot du coin." },
+    { nom: "Paul le DJ", role: "DJ", description: "Il anime toutes les soirées branchées." },
+    { nom: "Jade la Community Manager", role: "CM", description: "Maîtrise les buzz et les crises en ligne." },
+    { nom: "Rachid le Gardien", role: "Gardien d’immeuble", description: "Il surveille tout, parfois trop." },
+    { nom: "Laure la Médiatrice", role: "Médiatrice sociale", description: "Elle calme tous les conflits de voisinage." },
+    { nom: "Omar le Chauffeur de bus", role: "Chauffeur de bus", description: "Il connaît tous les trajets et les horaires." },
+    { nom: "Elise la Chef de chantier", role: "Chef de chantier", description: "Elle dirige les ouvriers sans faiblir." },
+    { nom: "Benoît le Policier municipal", role: "Policier municipal", description: "Il veille à l’ordre sur la place." },
+    { nom: "Céline la Directrice d’école", role: "Directrice d’école", description: "Elle gère les élèves, les profs et les parents." },
+    { nom: "Alban le Videur", role: "Videur de boîte", description: "Il trie les clients à l’entrée." },
+    { nom: "Gabrielle la Sage-femme", role: "Sage-femme", description: "Elle veille sur les naissances du quartier." },
+    { nom: "Robin le Plombier", role: "Plombier", description: "Il répare tout, mais pas les couples." },
+    { nom: "Lucie la Graphiste", role: "Graphiste", description: "Elle met de la couleur dans la vie de tous." },
+    { nom: "Bruno le Chauffagiste", role: "Chauffagiste", description: "Il réchauffe les appartements… et les discussions." }
+  ],
+
+  futuriste: [
+    { nom: "Vega la Pilote", role: "Pilote intrépide", description: "Elle manœuvre les vaisseaux les plus rapides de la galaxie." },
+    { nom: "JAX l’Androïde", role: "Robot multifonction", description: "Il assiste tous les membres d’équipage sans jamais se fatiguer." },
+    { nom: "Dr Novak", role: "Scientifique spatial", description: "Il teste de nouvelles technologies." },
+    { nom: "Zora la Roboticienne", role: "Roboticienne", description: "Elle programme les IA les plus avancées." },
+    { nom: "Directeur Kwan", role: "Directeur de station", description: "Il dirige d’une main de fer la colonie orbitale." },
+    { nom: "Mia la Technicienne", role: "Technicienne de maintenance", description: "Elle répare tout, même l’inimaginable." },
+    { nom: "Ikar le Biologiste", role: "Biologiste de l’espace", description: "Il découvre la vie là où on ne l’attend pas." },
+    { nom: "Chef Rolf", role: "Chef de la sécurité", description: "Il veille à la sécurité de la station." },
+    { nom: "Tao l’Ingénieur", role: "Ingénieur système", description: "Il anticipe toutes les pannes." },
+    { nom: "S-19 le Robot", role: "Robot assistant", description: "Il collecte et analyse les données." },
+    { nom: "EVA l’IA", role: "Intelligence artificielle", description: "Elle orchestre toutes les opérations." },
+    { nom: "Boris le Technicien", role: "Technicien", description: "Il est responsable de la salle des machines." },
+    { nom: "Lin la Biologiste", role: "Biologiste", description: "Elle analyse l’ADN extraterrestre." },
+    { nom: "Yuto le Stagiaire", role: "Stagiaire", description: "Il assiste partout et s’attire des ennuis." },
+    { nom: "Astra la Navigatrice", role: "Navigatrice", description: "Elle trace les routes spatiales." },
+    { nom: "Nemo le Prospecteur", role: "Prospecteur de planètes", description: "Il explore les mondes inconnus." },
+    { nom: "Orion le Commandant", role: "Commandant du vaisseau", description: "Il prend toutes les décisions cruciales." },
+    { nom: "Nova la Médecin", role: "Médecin spatial", description: "Elle soigne même les blessures exotiques." },
+    { nom: "Atlas le Transporteur", role: "Conducteur de navette", description: "Il gère les déplacements dans la station." },
+    { nom: "Pixel le Hacker", role: "Hacker spatial", description: "Il pirate les systèmes ennemis." },
+    { nom: "Echo la Télépathe", role: "Télépathe", description: "Elle lit les pensées des autres." },
+    { nom: "Quasar le Cybercriminel", role: "Cybercriminel", description: "Il infiltre les réseaux." },
+    { nom: "Vortex la Contrebandeuse", role: "Contrebandeuse", description: "Elle fait passer tout ce qui est interdit." },
+    { nom: "Cosmo l’Agronome", role: "Agronome", description: "Il cultive les plantes dans l’espace." },
+    { nom: "Stella la Diplomate", role: "Diplomate galactique", description: "Elle négocie avec les autres espèces." },
+    { nom: "Flash l’Explorateur", role: "Explorateur", description: "Il découvre de nouveaux territoires." },
+    { nom: "Ion le Physicien", role: "Physicien", description: "Il expérimente des énergies nouvelles." },
+    { nom: "Xenon la Chimiste", role: "Chimiste", description: "Elle invente de nouveaux composés." },
+    { nom: "Hyperion le Stratège", role: "Stratège militaire", description: "Il prépare la défense de la station." },
+    { nom: "Mira la Psychologue", role: "Psychologue", description: "Elle analyse les comportements des équipages." },
+    { nom: "Zen la Médiatrice", role: "Médiatrice", description: "Elle gère les conflits interstellaires." },
+    { nom: "Gamma la Pilote de drones", role: "Pilote de drones", description: "Elle surveille la station à distance." },
+    { nom: "Bolt le Messager", role: "Messager ultra-rapide", description: "Il livre les informations cruciales." },
+    { nom: "Luna la Botaniste", role: "Botaniste", description: "Elle crée de nouvelles espèces végétales." },
+    { nom: "Neptune le Plombier spatial", role: "Plombier spatial", description: "Il répare les fuites d’oxygène." },
+    { nom: "Alpha la Commandante", role: "Commandante", description: "Elle donne les ordres, personne ne conteste." },
+    { nom: "Delta le Logisticien", role: "Responsable logistique", description: "Il gère les stocks et les flux." },
+    { nom: "Sigma l’Archiviste", role: "Archiviste", description: "Il conserve toutes les données de la station." }
+  ],
+
+  historique: [
+    { nom: "Cléopâtre", role: "Reine d’Égypte", description: "Sa beauté et son intelligence font trembler les puissants." },
+    { nom: "Jules César", role: "Empereur romain", description: "Général charismatique, il suscite admiration et complots." },
+    { nom: "Napoléon Bonaparte", role: "Empereur", description: "Son ambition bouleverse l’Europe." },
+    { nom: "Marie Curie", role: "Scientifique pionnière", description: "Elle découvre l’invisible." },
+    { nom: "Alexandre le Grand", role: "Conquérant", description: "Il rêve d’unir le monde." },
+    { nom: "Jeanne d’Arc", role: "Héroïne", description: "Guidée par ses voix, elle sauve la France." },
+    { nom: "Louis XIV", role: "Roi Soleil", description: "Il règne en maître sur Versailles." },
+    { nom: "Mozart", role: "Compositeur", description: "Sa musique séduit toutes les cours." },
+    { nom: "Victor Hugo", role: "Écrivain engagé", description: "Il défend la justice et la liberté." },
+    { nom: "Marie-Antoinette", role: "Reine de France", description: "Sa frivolité fait scandale." },
+    { nom: "Gutenberg", role: "Inventeur", description: "Il révolutionne la diffusion du savoir." },
+    { nom: "Richelieu", role: "Cardinal", description: "Il manipule la politique dans l’ombre." },
+    { nom: "George Sand", role: "Femme de lettres", description: "Elle brise les codes de son temps." },
+    { nom: "Mata Hari", role: "Espionne", description: "Ses charmes cachent de sombres secrets." },
+    { nom: "Vercingétorix", role: "Chef gaulois", description: "Il résiste à l’envahisseur romain." },
+    { nom: "Louis Pasteur", role: "Scientifique", description: "Il sauve des vies grâce à ses découvertes." },
+    { nom: "Émile Zola", role: "Écrivain", description: "Il défend les opprimés par sa plume." },
+    { nom: "Sarah Bernhardt", role: "Comédienne", description: "La scène n’a pas de secret pour elle." },
+    { nom: "Charles de Gaulle", role: "Général", description: "Il guide la France en temps de crise." },
+    { nom: "Honoré de Balzac", role: "Romancier", description: "Il brosse le portrait de la société." },
+    { nom: "Ramsès II", role: "Pharaon", description: "Son règne marque l’apogée de l’Égypte." },
+    { nom: "Élisabeth Ire", role: "Reine d’Angleterre", description: "Son règne est celui de la grandeur." },
+    { nom: "Léonard de Vinci", role: "Génie universel", description: "Il invente, il dessine, il rêve." },
+    { nom: "Nefertiti", role: "Reine d’Égypte", description: "Sa beauté traverse les siècles." },
+    { nom: "Benjamin Franklin", role: "Inventeur", description: "Il éclaire le monde de ses idées." },
+    { nom: "Catherine de Médicis", role: "Reine", description: "Elle intrigue dans l’ombre du pouvoir." },
+    { nom: "Oscar Wilde", role: "Dandy", description: "Il provoque et fascine la société." },
+    { nom: "Rosalind Franklin", role: "Biologiste", description: "Elle révèle la structure de la vie." },
+    { nom: "Galilée", role: "Astronome", description: "Il défie les dogmes par la science." },
+    { nom: "Molière", role: "Dramaturge", description: "Il fait rire et réfléchir la cour." },
+    { nom: "Clovis", role: "Roi des Francs", description: "Il fonde une dynastie." },
+    { nom: "Aliénor d’Aquitaine", role: "Reine", description: "Elle traverse deux royaumes et deux époques." },
+    { nom: "Henri IV", role: "Roi", description: "Il veut la paix pour tous." },
+    { nom: "Pierre Curie", role: "Scientifique", description: "Il travaille avec Marie pour percer les mystères de la matière." },
+    { nom: "Robespierre", role: "Révolutionnaire", description: "Il tranche dans le vif du sujet." },
+    { nom: "Voltaire", role: "Philosophe", description: "Il défend la tolérance et la raison." },
+    { nom: "Sophie Germain", role: "Mathématicienne", description: "Elle brille dans un monde d’hommes." },
+    { nom: "Paul Éluard", role: "Poète", description: "Il chante la liberté et l’amour." },
+    { nom: "Danton", role: "Tribun", description: "Il harangue la foule dans la Révolution." },
+    { nom: "Marie de Médicis", role: "Reine", description: "Elle gouverne pour son fils, puis pour elle-même." }
+  ]
+};
+
+// Pour une utilisation en module ES :
+// export default personnagesParEpoque;
