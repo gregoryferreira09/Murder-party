@@ -298,5 +298,7 @@ const personnagesParEpoque = {
   ]
 };
 
+export { personnagesParEpoque };
+
 // Pour une utilisation en module ES :
 // export default personnagesParEpoque;
