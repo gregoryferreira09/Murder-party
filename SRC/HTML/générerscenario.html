@@ -181,8 +181,8 @@
       <!-- Slider nombre de joueurs -->
       <div class="slider-group slider-nbjoueurs">
         <div class="slider-label">Nombre de joueurs</div>
-        <input type="range" min="3" max="12" value="6" id="nbJoueursSlider">
-        <div class="slider-value"><span id="nbJoueursValue">6</span></div>
+        <input type="range" min="3" max="12" value="7" id="nbJoueursSlider">
+        <div class="slider-value"><span id="nbJoueursValue">7</span></div>
       </div>
     </div>
     <div class="scenario-section">
@@ -194,33 +194,153 @@
       <p id="crime"></p>
     </div>
     <div class="scenario-section">
+      <h2>Suspects</h2>
+      <p id="suspects"></p>
+    </div>
+    <div class="scenario-section">
+      <h2>Indice & Témoin</h2>
+      <p id="indice"></p>
+    </div>
+    <div class="scenario-section">
       <h2>Objectif général</h2>
       <p id="objectif"></p>
     </div>
   </div>
   <script>
-    // --- Petites données fictives pour la démo ---
-    // À remplacer par ton import réel de generateurScenario.js !
+    // --- Données simplifiées inspirées de univers.js (adapte avec import réel) ---
+    const univers = {
+      medieval: {
+        lieux: [{nom:"château", genre:"m"},{nom:"grande salle", genre:"f"},{nom:"forêt", genre:"f"}],
+        personnages: [
+          {nom:"le seigneur de Montfaucon", genre:"m"}, {nom:"la servante Ysabeau", genre:"f"}, {nom:"le chevalier Gaspard", genre:"m"},
+          {nom:"la dame Aliénor", genre:"f"}, {nom:"le bouffon Arthus", genre:"m"}, {nom:"la cuisinière Berthe", genre:"f"}
+        ],
+        armes: ["une épée", "une dague rouillée", "du poison"],
+        indices: ["des traces de sang mènent vers la cave", "un médaillon brisé a été retrouvé sous une table"],
+        mobiles: ["la vengeance", "un héritage contesté"],
+        intro: [
+          "Le banquet bat son plein dans {la_lieu}. Les seigneurs et les dames murmurent à voix basse.",
+          "La tension monte dans {la_lieu}, alors que {suspect1} semble s’éclipser discrètement.",
+          "Des rumeurs courent sur {motif}. Les regards se croisent dans {la_lieu}."
+        ],
+        ambiances: ["Le banquet bat son plein", "Une tempête gronde au-dehors"]
+      },
+      victorien: {
+        lieux: [
+          {nom:"manoir",genre:"m"},{nom:"bibliothèque",genre:"f"},{nom:"salon",genre:"m"},
+          {nom:"jardin",genre:"m"},{nom:"salle de bal",genre:"f"},{nom:"serre",genre:"f"}
+        ],
+        personnages: [
+          {nom:"le comte Ashford",genre:"m"},{nom:"la gouvernante Wells",genre:"f"},{nom:"le colonel Rutherford",genre:"m"},
+          {nom:"lady Emily",genre:"f"},{nom:"le majordome Carter",genre:"m"},{nom:"le jardinier Hopkins",genre:"m"},
+          {nom:"la cuisinière Mrs. Doyle",genre:"f"}
+        ],
+        armes: ["un chandelier","une dague","du poison","un revolver"],
+        indices: ["un mouchoir monogrammé oublié sur le sol","un carnet griffonné tombé sous un canapé"],
+        mobiles: ["la jalousie","un secret inavoué","l’héritage"],
+        intro: [
+          "{ambiance} dans {la_lieu}. Les secrets se murmurent, les regards s’évitent.",
+          "Le manoir vibre d’une excitation étrange. {suspect1} semble préoccupé·e ce soir.",
+          "Dans {la_lieu}, la tension monte. Des rumeurs courent sur {motif}.",
+          "Un bal masqué s’organise : la jalousie couve entre {suspect1} et {suspect2}."
+        ],
+        ambiances: [
+          "Le tonnerre gronde au loin",
+          "Les invités masqués se perdent dans la fête",
+          "Le brouillard étreint le jardin"
+        ]
+      }
+      // Ajoute les autres époques si besoin...
+    };
     const epoques = [
       { key: 'medieval', label: 'Médiéval' },
-      { key: 'renaissance', label: 'Renaissance' },
-      { key: 'victorien', label: 'Victorien' },
-      { key: 'western', label: 'Western' },
-      { key: 'contemporain', label: 'Contemporain' },
-      { key: 'futuriste', label: 'Futuriste' },
-      { key: 'historique', label: 'Historique' }
+      { key: 'victorien', label: 'Victorien' }
     ];
-    // Simule le générateur de scénario (à remplacer par ton import réel)
-    function fakeGenererScenario(periode, options) {
-      return {
-        introduction: `Exemple d'introduction pour l'époque <b>${periode}</b> avec ${options.nbJoueurs} joueurs.`,
-        crime: `Un crime a été commis dans un lieu emblématique de l'époque <b>${periode}</b>.`,
-        objectif: `Découvrez le coupable avant la fin de la partie !`
+
+    // --- Générateur dynamique ---
+    function getArticle(word, articles = { m: 'le', f: 'la' }) {
+      if (!word) return '';
+      word = word.trim();
+      const firstLetter = word[0].toLowerCase();
+      if ("aeiouyh".includes(firstLetter)) return "l'";
+      const feminine = ["bibliothèque", "gouvernante", "salle", "cave", "chapelle", "forêt", "dimension", "galerie", "voix", "technicienne", "serre"];
+      if (feminine.some(x => word.toLowerCase().startsWith(x))) return articles.f;
+      return articles.m;
+    }
+    function articleDans(word, article) {
+      if (article === "le") return "dans le";
+      if (article === "la") return "dans la";
+      if (article === "l'") return "dans l'";
+      return "dans";
+    }
+    function randomItem(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+    function genererScenario(periode, options) {
+      const data = univers[periode];
+      if (!data) throw new Error("Période inconnue");
+
+      // Lieu & ambiance
+      const lieuObj = randomItem(data.lieux);
+      const lieu = lieuObj.nom;
+      const artLieu = getArticle(lieu, { m: 'le', f: 'la' });
+      const artDansLieu = articleDans(lieu, artLieu);
+
+      // Ambiance et intro
+      const ambiance = randomItem(data.ambiances);
+      const introTpl = randomItem(data.intro);
+      
+      // Personnages (suspects)
+      let persos = [...data.personnages];
+      const victimeObj = randomItem(persos);
+      const victime = victimeObj.nom;
+      persos = persos.filter(p=>p.nom !== victime);
+      // Nombre de suspects selon joueurs (au moins 3)
+      const nbSuspects = Math.max(3, Math.min(options.nbJoueurs-2, persos.length));
+      const suspects = [];
+      while(suspects.length < nbSuspects) {
+        const s = randomItem(persos);
+        if (!suspects.find(x=>x.nom===s.nom)) suspects.push(s);
+      }
+      // Témoin différent
+      let temoin = randomItem(persos.filter(p=>!suspects.find(x=>x.nom===p.nom)));
+      if (!temoin) temoin = randomItem(persos);
+
+      // Arme, indice, mobile
+      const arme = randomItem(data.armes);
+      const indice = randomItem(data.indices);
+      const mobile = randomItem(data.mobiles);
+
+      // Variables pour template
+      const variables = {
+        "{la_lieu}": artLieu + (artLieu.endsWith("'") ? "" : " ") + lieu,
+        "{ambiance}": ambiance,
+        "{suspect1}": suspects[0]?.nom || "",
+        "{suspect2}": suspects[1]?.nom || "",
+        "{motif}": mobile
       };
+      let introduction = introTpl;
+      Object.entries(variables).forEach(([k,v])=>{introduction = introduction.replaceAll(k,v);});
+
+      // Crime
+      const crime = `Un cri retentit : <b>${victime}</b> est retrouvé·e sans vie <b>${artDansLieu} ${lieu}</b>, ${arme} à ses côtés.<br>
+      <i>Indice trouvé :</i> ${indice}.<br>
+      <i>Mobile soupçonné :</i> ${mobile}.`;
+
+      // Suspects
+      const suspectsText = suspects.map(s=>s.nom).join(" <b>&bull;</b> ");
+
+      // Indice & témoin
+      const indiceText = `<b>Témoin clef :</b> ${temoin.nom}<br><b>Indice :</b> ${indice}`;
+
+      // Objectif
+      const objectif = "Découvrez qui est le meurtrier avant la fin de la partie.";
+
+      return { introduction, crime, suspects: suspectsText, indice: indiceText, objectif };
     }
 
-    // --- Initialisation bandeau époque ---
-    let selectedEpoqueIdx = 2; // victorien par défaut
+    // --- UI dynamique ---
+    let selectedEpoqueIdx = 1; // victorien par défaut
     function renderEpoqueList() {
       const list = document.getElementById('epoqueList');
       list.innerHTML = '';
@@ -244,7 +364,7 @@
       renderEpoqueList(); updateScenario();
     };
 
-    // --- Slider nombre de joueurs ---
+    // Slider nombre de joueurs
     const nbJoueursSlider = document.getElementById('nbJoueursSlider');
     const nbJoueursValue = document.getElementById('nbJoueursValue');
     nbJoueursSlider.oninput = () => {
@@ -252,23 +372,24 @@
       updateScenario();
     };
 
-    // --- Molette bouton ---
+    // Molette bouton
     document.getElementById('regenBtn').onclick = () => {
       updateScenario(true);
     };
 
-    // --- Génération de scénario ---
+    // Génération de scénario affichage
     function updateScenario(forceNew) {
       const periode = epoques[selectedEpoqueIdx].key;
-      const nbJoueurs = nbJoueursSlider.value;
-      // À remplacer par ton vrai générateur
-      const scenario = fakeGenererScenario(periode, {nbJoueurs});
+      const nbJoueurs = Number(nbJoueursSlider.value);
+      const scenario = genererScenario(periode, {nbJoueurs});
       document.getElementById('introduction').innerHTML = scenario.introduction;
       document.getElementById('crime').innerHTML = scenario.crime;
+      document.getElementById('suspects').innerHTML = scenario.suspects;
+      document.getElementById('indice').innerHTML = scenario.indice;
       document.getElementById('objectif').innerHTML = scenario.objectif;
     }
 
-    // --- Initialisation ---
+    // Initialisation
     renderEpoqueList();
     updateScenario();
   </script>
