@@ -1,9 +1,91 @@
-import univers from '../JS/univers.js';
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Armes et Personnages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #222;
+      font-family: 'Georgia', serif;
+      color: #f3e9d2;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #2e211a;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.7);
+      padding: 36px 32px 32px 32px;
+      border: 2px solid #c49b66;
+      position: relative;
+    }
+    h1 {
+      color: #ffe6b3;
+      font-size: 2.1em;
+      text-align: center;
+      margin-top: 0;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 8px #000;
+    }
+    h2 {
+      color: #ffe6b3;
+      margin-bottom: 0.4em;
+      margin-top: 1.8em;
+      font-size: 1.3em;
+    }
+    .epoque-block {
+      margin-bottom: 32px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #c49b66;
+    }
+    .label {
+      color: #c49b66;
+      font-weight: bold;
+    }
+    ul {
+      margin: 0 0 1em 24px;
+      padding: 0;
+    }
+    li {
+      margin: 0 0 2px 0;
+    }
+    .empty {
+      color: #ff8080;
+      font-style: italic;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 10px 2px; }
+      h1 { font-size: 1.3em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Vérification des personnages et armes par époque</h1>
+    <div id="resultats"></div>
+  </div>
+  <script type="module">
+    import univers from '../JS/univers.js';
 
-let html = '';
-for (const [epoque, data] of Object.entries(univers)) {
-    html += `<h2>${epoque}</h2>`;
-    html += `<b>Personnages :</b> ${Array.isArray(data.personnages) ? data.personnages.join(', ') : JSON.stringify(data.personnages)}<br>`;
-    html += `<b>Armes :</b> ${Array.isArray(data.armes) ? data.armes.map(a => a.nom || a).join(', ') : JSON.stringify(data.armes)}<br><br>`;
-}
-document.body.innerHTML = html;
+    function renderList(label, arr) {
+      if (!arr || !arr.length) return `<span class="empty">Aucune donnée</span>`;
+      return `<ul>` + arr.map(x =>
+        typeof x === 'string' ? `<li>${x}</li>` :
+        (x.nom ? `<li>${x.nom}</li>` : `<li>${JSON.stringify(x)}</li>`)
+      ).join('') + `</ul>`;
+    }
+
+    let html = '';
+    for (const [epoque, data] of Object.entries(univers)) {
+      html += `<div class="epoque-block"><h2>${epoque.charAt(0).toUpperCase() + epoque.slice(1)}</h2>`;
+      html += `<div class="label">Personnages :</div>${renderList("Personnages", data.personnages)}`;
+      html += `<div class="label">Armes :</div>${renderList("Armes", data.armes)}`;
+      html += `</div>`;
+    }
+    document.getElementById('resultats').innerHTML = html;
+  </script>
+</body>
+</html>
