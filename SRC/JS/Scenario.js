@@ -43,7 +43,14 @@ function addScenarioToHistory(scenario) {
   localStorage.setItem("scenarioHistory", JSON.stringify(history));
 }
 
-// ... autres fonctions outils ...
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 function afficherScenario() {
   let scenarioData;
