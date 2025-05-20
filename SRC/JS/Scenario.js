@@ -1,7 +1,5 @@
 // SRC/JS/Scenario.js
 
-import { personnagesParEpoque } from './personnages.js';
-
 const ANTI_REPEAT_HISTORY_SIZE = 5;
 
 // ... (fonctions utilitaires inchangées: getArticle, articleDans, randomItem, shuffleArray, etc.) ...
