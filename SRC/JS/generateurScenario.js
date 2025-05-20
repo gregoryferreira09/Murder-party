@@ -32,14 +32,16 @@ export function genererScenario(periode = 'victorien', options = {}) {
   const data = univers[periode];
   if (!data) throw new Error("Période inconnue");
 
-  // 1. Sélections aléatoires (utilise .nom !)
+  // 1. Sélections aléatoires
   const lieuObj = randomItem(data.lieux);
   const lieu = lieuObj.nom;
   const genreLieu = lieuObj.genre;
-  // Récupère toutes les armes possibles (tous les tableaux concaténés)
-const toutesArmes = Object.values(data.armes).flat();
-const armeObj = randomItem(toutesArmes);
-const arme = armeObj ? armeObj.nom : "une arme inconnue";
+
+  // Correction pour les armes : concatène tous les tableaux d'armes de tous les lieux
+  const toutesArmes = Object.values(data.armes).flat();
+  const armeObj = randomItem(toutesArmes);
+  const arme = armeObj ? armeObj.nom : "une arme inconnue";
+
   const mobile = randomItem(data.mobiles);
   const ambiance = randomItem(data.ambiances);
   const personnages = [...data.personnages];
@@ -77,7 +79,7 @@ const arme = armeObj ? armeObj.nom : "une arme inconnue";
   let introTpl = randomItem(introTpls).replace(/^\[(INDICE|TEMOIN)\]\s?/, "");
   let introduction = replaceVars(introTpl, variables);
 
-  // 4. Génération du crime (exemple simple, à améliorer selon ton propre modèle de crime)
+  // 4. Génération du crime
   const crime = `Un crime a été commis ${variables["{dans_la_lieu}"]}. L'arme : ${arme}. Indice trouvé : ${indice}.`;
 
   // 5. Génération de l’objectif de jeu
@@ -95,10 +97,3 @@ const arme = armeObj ? armeObj.nom : "une arme inconnue";
     objectif
   };
 }
-
-// --- Exemple d'intégration (dans un autre fichier, ou dans un bouton d'UI) ---
-// import { genererScenario } from './generateurScenario.js';
-// const scenario = genererScenario('victorien');
-// document.getElementById('intro').innerText = scenario.introduction;
-// document.getElementById('crime').innerText = scenario.crime;
-// document.getElementById('objectif').innerText = scenario.objectif;
