@@ -253,9 +253,11 @@
       // Ajoute les autres époques si besoin...
     };
     const epoques = [
-      { key: 'medieval', label: 'Médiéval' },
-      { key: 'victorien', label: 'Victorien' }
-    ];
+// Génère dynamiquement la liste des époques à partir des clés de l'objet univers
+const epoques = Object.keys(univers).map(key => ({
+  key,
+  label: key.charAt(0).toUpperCase() + key.slice(1) // ou une fonction pour mieux formater
+}));
 
     // --- Générateur dynamique ---
     function getArticle(word, articles = { m: 'le', f: 'la' }) {
