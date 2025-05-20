@@ -1,3 +1,4 @@
+import { lieuxParEpoque } from './lieux.js';
 // SRC/JS/Scenario.js
 
 const ANTI_REPEAT_HISTORY_SIZE = 5;
