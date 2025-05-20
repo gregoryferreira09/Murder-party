@@ -235,7 +235,7 @@ const univers = {
   renaissance: {
     alibis: alibis.renaissance,
     indices: indices.renaissance,
-    personnages: personnagesRenaissance,
+    personnages: personnagesrenaissance,
     lieux: lieuxParEpoque.renaissance,
     armes: armesParEpoque.renaissance,
     secrets: secrets.renaissance,
