@@ -36,7 +36,10 @@ export function genererScenario(periode = 'victorien', options = {}) {
   const lieuObj = randomItem(data.lieux);
   const lieu = lieuObj.nom;
   const genreLieu = lieuObj.genre;
-  const arme = randomItem(data.armes); // adapte si armes sont des objets !
+  // Récupère toutes les armes possibles (tous les tableaux concaténés)
+const toutesArmes = Object.values(data.armes).flat();
+const armeObj = randomItem(toutesArmes);
+const arme = armeObj ? armeObj.nom : "une arme inconnue";
   const mobile = randomItem(data.mobiles);
   const ambiance = randomItem(data.ambiances);
   const personnages = [...data.personnages];
