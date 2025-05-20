@@ -375,6 +375,23 @@ const scenarioLibrary = {
       "Ils sont trois. Trois silhouettes dans l’ombre, unies par un mobile insondable."
     ]
   },
+  durees: {
+    court: [
+      "Le temps presse, chaque minute compte dans cette course contre la montre.",
+      "Une enquête rapide mais intense vous attend. Vos instincts devront primer sur vos doutes.",
+      "La résolution doit être rapide pour empêcher un nouveau drame."
+    ],
+    moyen: [
+      "Un temps équilibré pour réfléchir et agir.",
+      "Une enquête qui mêle tension et réflexion.",
+      "Le temps vous donne une marge, mais attention aux erreurs."
+    ],
+    long: [
+      "Une longue enquête où chaque détail peut faire basculer l’affaire.",
+      "Vous avez le temps d'explorer chaque piste en profondeur.",
+      "Une énigme complexe qui nécessite patience et perspicacité."
+    ]
+  }
 };
 
 function categoriseDuree(minutes) {
