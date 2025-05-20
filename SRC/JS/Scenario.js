@@ -45,12 +45,6 @@ function addScenarioToHistory(scenario) {
 // === UNIVERS COHÉRENTS & ÉLARGIS ===
 const univers = {
   victorien: {
-    lieux: [
-      { nom: "manoir", genre: "m" }, { nom: "bibliothèque", genre: "f" }, { nom: "salon", genre: "m" }, { nom: "jardin", genre: "m" },
-      { nom: "sous-sol", genre: "m" }, { nom: "salle de bal", genre: "f" }, { nom: "fumoir", genre: "m" }, { nom: "cuisine", genre: "f" },
-      { nom: "orangerie", genre: "f" }, { nom: "chambre forte", genre: "f" }, { nom: "serre", genre: "f" }, { nom: "grenier", genre: "m" },
-      { nom: "cabinet d'étude", genre: "m" }, { nom: "galerie de portraits", genre: "f" }, { nom: "salle de musique", genre: "f" }
-    ],
     victimes: [
       { nom: "le comte Ashford", genre: "m" }, { nom: "la gouvernante Wells", genre: "f" }, { nom: "le colonel Rutherford", genre: "m" },
       { nom: "lady Emily", genre: "f" }, { nom: "le majordome Carter", genre: "m" }, { nom: "le jeune héritier Samuel", genre: "m" },
@@ -126,11 +120,6 @@ const univers = {
   },
 
   medieval: {
-    lieux: [
-      { nom: "château", genre: "m" }, { nom: "grande salle", genre: "f" }, { nom: "forêt", genre: "f" }, { nom: "cave", genre: "f" },
-      { nom: "donjon", genre: "m" }, { nom: "chapelle", genre: "f" }, { nom: "remparts", genre: "m" }, { nom: "écuries", genre: "f" },
-      { nom: "salle d'arme", genre: "f" }, { nom: "jardin potager", genre: "m" }, { nom: "crypte", genre: "f" }, { nom: "tour de guet", genre: "f" }
-    ],
     victimes: [
       { nom: "le seigneur de Montfaucon", genre: "m" }, { nom: "la servante Ysabeau", genre: "f" }, { nom: "le chevalier Gaspard", genre: "m" },
       { nom: "la dame Aliénor", genre: "f" }, { nom: "le bouffon Arthus", genre: "m" }, { nom: "la cuisinière Berthe", genre: "f" },
@@ -204,12 +193,6 @@ const univers = {
   },
 
   futuriste: {
-    lieux: [
-      { nom: "station orbitale", genre: "f" }, { nom: "laboratoire", genre: "m" }, { nom: "cyber-café", genre: "m" },
-      { nom: "dôme botanique", genre: "m" }, { nom: "soute", genre: "f" }, { nom: "cabine de pilotage", genre: "f" },
-      { nom: "couloir stérile", genre: "m" }, { nom: "hangar à drones", genre: "m" }, { nom: "salle des machines", genre: "f" },
-      { nom: "observatoire", genre: "m" }
-    ],
     victimes: [
       { nom: "le Dr Novak", genre: "m" }, { nom: "l'androïde JAX", genre: "m" }, { nom: "la pilote Vega", genre: "f" },
       { nom: "le directeur Kwan", genre: "m" }, { nom: "la technicienne Mia", genre: "f" }, { nom: "le biologiste Ikar", genre: "m" },
@@ -285,10 +268,6 @@ const univers = {
   },
 
   autre: {
-    lieux: [
-      { nom: "salle étrange", genre: "f" }, { nom: "dimension inconnue", genre: "f" }, { nom: "galerie distordue", genre: "f" },
-      { nom: "laboratoire du temps", genre: "m" }, { nom: "monolithe mouvant", genre: "m" }, { nom: "hypercube", genre: "m" }
-    ],
     victimes: [
       { nom: "l’énigmatique X", genre: "m" }, { nom: "le voyageur temporel", genre: "m" }, { nom: "la voix sans corps", genre: "f" },
       { nom: "le maître du jeu", genre: "m" }, { nom: "l’observateur Mu", genre: "m" }
