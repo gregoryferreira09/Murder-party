@@ -5,7 +5,6 @@
   <title>Rôle et Indices - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link rel="stylesheet" href="../../Public/styles/gameplay-extra.css"><!-- Optionnel, pour tes améliorations -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -23,6 +22,7 @@
         <button class="gold-btn tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
       </div>
 
+      <!-- Fiche personnage -->
       <section id="fiche" class="tab-content active">
         <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
         <img src="image-personnage.jpg" alt="Image du Personnage" class="avatar">
@@ -30,15 +30,25 @@
         <p><strong>Pouvoir :</strong> Interrogez deux joueurs à chaque tour...</p>
       </section>
 
+      <!-- Indices -->
       <section id="indices" class="tab-content" style="display:none;">
         <h3>Vos indices :</h3>
         <div id="listeIndices"></div>
       </section>
 
+      <!-- Onglet Vote/Connexion (mêmes avatars pour simplification) -->
       <section id="action" class="tab-content" style="display:none;">
         <h3 id="action-titre"></h3>
-        <div class="connexion-joueur" id="action-joueurs"></div>
-        <button class="gold-btn" id="action-btn"></button>
+        <div class="connexion-joueur" id="action-joueurs">
+          <!-- N'affiche pas Inspecteur Alaric pour le vote -->
+          <div class="joueur-avatar" data-nom="Violette" data-fiabilite="fiable" data-indices="A été vue avec la victime peu avant le crime.|Semblait nerveuse lors du dîner.">
+            <img src="violette.jpg" alt="Violette" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>Violette
+          </div>
+          <div class="joueur-avatar" data-nom="Brume" data-fiabilite="suspect" data-indices="Possède une clé suspecte.|A disparu 10 minutes pendant la soirée.">
+            <img src="brume.jpg" alt="Brume" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>Brume
+          </div>
+        </div>
+        <button class="gold-btn" id="action-btn" disabled>Valider</button>
         <div id="actionResult" style="margin-top:10px;"></div>
       </section>
     </div>
