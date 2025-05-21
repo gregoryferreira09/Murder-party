@@ -41,32 +41,6 @@ function addScenarioToHistory(scenario) {
   localStorage.setItem("scenarioHistory", JSON.stringify(history));
 }
 
-container.innerHTML = `
-  ...
-  <div class="boutons-actions">
-    <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Lancement dans 30s</a>
-    <a class="gold-btn" href="creer-partie.html">Retour</a>
-  </div>
-`;
-const launchBtn = document.getElementById("launchBtn");
-let timeLeft = 30;
-if (launchBtn) {
-  launchBtn.textContent = `Lancement dans ${timeLeft}s`;
-  launchBtn.style.pointerEvents = "none";
-  launchBtn.style.opacity = "0.6";
-  const interval = setInterval(() => {
-    timeLeft--;
-    if (timeLeft > 0) {
-      launchBtn.textContent = `Lancement dans ${timeLeft}s`;
-    } else {
-      clearInterval(interval);
-      launchBtn.textContent = "Lancement";
-      launchBtn.style.pointerEvents = "auto";
-      launchBtn.style.opacity = "1";
-    }
-  }, 1000);
-}
-
 // === UNIVERS COHÉRENTS & ÉLARGIS ===
 const univers = {
   victorien: {
@@ -611,11 +585,29 @@ function genererScenario() {
       <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p>
       <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
       <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
-      <div class="boutons-actions">
-        <a class="gold-btn" href="choix-personnage.html">Lancement</a>
-        <a class="gold-btn" href="creer-partie.html">Retour</a>
-      </div>
-      `;
+  <div class="boutons-actions">
+  <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Lancement dans 30s</a>
+  <a class="gold-btn" href="creer-partie.html">Retour</a>
+</div>
+
+const launchBtn = document.getElementById("launchBtn");
+let timeLeft = 30;
+if (launchBtn) {
+  launchBtn.textContent = `Lancement dans ${timeLeft}s`;
+  launchBtn.style.pointerEvents = "none";
+  launchBtn.style.opacity = "0.6";
+  const interval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      launchBtn.textContent = `Lancement dans ${timeLeft}s`;
+    } else {
+      clearInterval(interval);
+      launchBtn.textContent = "Lancement";
+      launchBtn.style.pointerEvents = "auto";
+      launchBtn.style.opacity = "1";
+    }
+  }, 1000);
+}
     const regenBtn = document.getElementById("regenScenarioBtn");
     if (regenBtn) regenBtn.onclick = genererScenario;
   } else {
