@@ -103,9 +103,11 @@ function validerConnexion() {
 function showConnexionModal(nomCible) {
   document.getElementById('modal-connexion-text').textContent = `Voulez-vous vous connecter avec ${nomCible} ?`;
   document.getElementById('modal-connexion').classList.add('show');
+  document.body.classList.add('modal-open'); // Empêche le scroll du body quand la modale est ouverte
 }
 function accepterConnexion() {
   document.getElementById('modal-connexion').classList.remove('show');
+  document.body.classList.remove('modal-open'); // Rétablit le scroll du body
   connexionsRestantes--;
   document.getElementById("connexionRestantes").textContent = connexionsRestantes;
   showToast("Connexion acceptée !");
@@ -132,6 +134,7 @@ function accepterConnexion() {
 }
 function refuserConnexion() {
   document.getElementById('modal-connexion').classList.remove('show');
+  document.body.classList.remove('modal-open'); // Rétablit le scroll du body
   showToast("Connexion refusée.");
 }
 
@@ -173,44 +176,16 @@ function showToast(msg) {
   setTimeout(() => { toast.className = "toast"; }, 2500);
 }
 
-function showConnexionModal(nomCible) {
-  document.getElementById('modal-connexion-text').textContent = `Voulez-vous vous connecter avec ${nomCible} ?`;
-  document.getElementById('modal-connexion').classList.add('show');
-  document.body.classList.add('modal-open'); // Ajoute ici
-}
-
-function accepterConnexion() {
-  document.getElementById('modal-connexion').classList.remove('show');
-  document.body.classList.remove('modal-open'); // Ajoute ici
-  // ... reste du code ...
-}
-
-function refuserConnexion() {
-  document.getElementById('modal-connexion').classList.remove('show');
-  document.body.classList.remove('modal-open'); // Ajoute ici
-  showToast("Connexion refusée.");
-}
-
-// Fermer la modale avec Escape ou clic hors contenu :
+// --- Accessibilité : fermer modale avec Échap ou clic hors contenu ---
 document.addEventListener('keydown', function(e) {
   if (e.key === "Escape") {
     document.getElementById('modal-connexion').classList.remove('show');
-    document.body.classList.remove('modal-open'); // Ajoute ici
+    document.body.classList.remove('modal-open');
   }
 });
 document.getElementById('modal-connexion').addEventListener('click', function(e) {
   if (e.target === this) {
     this.classList.remove('show');
-    document.body.classList.remove('modal-open'); // Ajoute ici
+    document.body.classList.remove('modal-open');
   }
-});
-
-// --- Accessibilité : fermer modale avec Échap ou clic hors contenu ---
-document.addEventListener('keydown', function(e) {
-  if (e.key === "Escape") {
-    document.getElementById('modal-connexion').classList.remove('show');
-  }
-});
-document.getElementById('modal-connexion').addEventListener('click', function(e) {
-  if (e.target === this) this.classList.remove('show');
 });
