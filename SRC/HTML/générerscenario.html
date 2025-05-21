@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Test Armes et Personnages</title>
+  <title>Générateur de Scénarios Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -36,10 +36,29 @@
       margin-top: 1.8em;
       font-size: 1.3em;
     }
-    .epoque-block {
+    .scenario-block {
       margin-bottom: 32px;
-      padding-bottom: 10px;
+      padding-bottom: 16px;
       border-bottom: 1px solid #c49b66;
+      background: #241a15;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px #0004;
+    }
+    button {
+      display: block;
+      margin: 20px auto 30px auto;
+      padding: 12px 28px;
+      background: #c49b66;
+      color: #2e211a;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    button:hover {
+      background: #ffe6b3;
     }
     .label {
       color: #c49b66;
@@ -64,26 +83,60 @@
 </head>
 <body>
   <div class="container">
-    <h1>Vérification des personnages et armes par époque</h1>
-    <div id="resultats"></div>
+    <h1>Générateur de Scénarios Murder Party</h1>
+    <button id="regenBtn">Générer un scénario pour chaque époque</button>
+    <div id="scenarios"></div>
   </div>
   <script type="module">
 import univers from '../JS/univers.js';
 
-let html = '';
-for (const [epoque, data] of Object.entries(univers)) {
-  html += `<h2>${epoque.charAt(0).toUpperCase() + epoque.slice(1)}</h2>`;
-  if (Array.isArray(data.personnages) && data.personnages.length) {
-    html += '<ul>';
-    for (const perso of data.personnages) {
-      html += `<li>${typeof perso === 'string' ? perso : JSON.stringify(perso)}</li>`;
-    }
-    html += '</ul>';
-  } else {
-    html += `<p style="color:red"><i>Aucun personnage trouvé</i></p>`;
-  }
+function getRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
-document.body.innerHTML = html;
+
+function genererScenario(epoque, data) {
+  // Sélectionne les éléments aléatoires
+  const intro = getRandom(data.intro)
+    .replace('{ambiance}', getRandom(data.ambiances))
+    .replace('{la_lieu}', getRandom(data.lieux))
+    .replace('{suspect1}', getRandom(data.personnages))
+    .replace('{suspect2}', getRandom(data.personnages))
+    .replace('{motif}', getRandom(data.mobiles))
+    .replace('{indice}', getRandom(data.indices))
+    .replace('{temoin}', getRandom(data.personnages));
+  const victime = getRandom(data.personnages);
+  const arme = getRandom(data.armes);
+  const lieu = getRandom(data.lieux);
+  const suspect = getRandom(data.personnages);
+  const indice = getRandom(data.indices);
+
+  return `
+    <div class="scenario-block">
+      <h2>${epoque.charAt(0).toUpperCase() + epoque.slice(1)}</h2>
+      <p><span class="label">Introduction :</span> ${intro}</p>
+      <p><span class="label">Victime :</span> ${victime}</p>
+      <p><span class="label">Lieu du crime :</span> ${lieu}</p>
+      <p><span class="label">Arme du crime :</span> ${arme}</p>
+      <p><span class="label">Suspect principal :</span> ${suspect}</p>
+      <p><span class="label">Indice clé :</span> ${indice}</p>
+      <p><span class="label">Mobile probable :</span> ${getRandom(data.mobiles)}</p>
+      <p><span class="label">Secret découvert :</span> ${getRandom(data.secrets)}</p>
+    </div>
+  `;
+}
+
+function afficherScenarios() {
+  let html = '';
+  for (const [epoque, data] of Object.entries(univers)) {
+    html += genererScenario(epoque, data);
+  }
+  document.getElementById('scenarios').innerHTML = html;
+}
+
+document.getElementById('regenBtn').addEventListener('click', afficherScenarios);
+
+// Génère à l'ouverture
+afficherScenarios();
 </script>
 </body>
 </html>
