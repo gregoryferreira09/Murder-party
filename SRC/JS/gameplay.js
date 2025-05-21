@@ -18,6 +18,7 @@ const joueurs = [
 let connexionsRestantes = 5;
 let actionType = null; // "vote" ou "connexion"
 let joueurSelectionAction = null;
+let indicesGagnes = []; // Pour synchroniser l'onglet indices
 
 // --- Gestion des onglets ---
 function switchTab(tabName) {
@@ -32,6 +33,7 @@ function switchTab(tabName) {
   } else {
     document.getElementById(tabName).style.display = 'block';
     document.getElementById(tabName).classList.add('active');
+    if(tabName === 'indices') updateOngletIndices();
   }
   document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
 }
@@ -56,16 +58,20 @@ function setupActionTab(type) {
   const joueursDiv = document.getElementById('action-joueurs');
   joueursDiv.innerHTML = '';
   joueurs.forEach(j => {
+    // Empêcher de voter pour soi-même
+    if (type === "vote" && j.nom === "Inspecteur Alaric") return;
     const div = document.createElement('div');
     div.className = 'joueur-avatar';
-    div.innerHTML = `<img src="${j.image}" alt="${j.nom}" class="avatar"><br>${j.nom}`;
+    div.innerHTML = `<img src="${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
     div.tabIndex = 0; // accessibilité clavier
     div.onclick = () => selectJoueur(div, j);
     div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") selectJoueur(div, j); };
     joueursDiv.appendChild(div);
   });
 
-  document.getElementById('action-btn').disabled = true;
+  // Désactiver bouton si aucune sélection ou plus de connexions
+  document.getElementById('action-btn').disabled = (type === "connexion" && connexionsRestantes <= 0);
+
   document.getElementById('action-btn').onclick = function() {
     if (!joueurSelectionAction) return;
     if (actionType === "vote") {
@@ -73,6 +79,7 @@ function setupActionTab(type) {
       showToast("Vote enregistré !");
       const effet = document.getElementById("effetElimination");
       effet.classList.add("visible");
+      try { document.getElementById('sound-vote').play(); } catch(e){}
       setTimeout(() => effet.classList.remove("visible"), 2000);
     } else {
       validerConnexion();
@@ -102,26 +109,50 @@ function accepterConnexion() {
   connexionsRestantes--;
   document.getElementById("connexionRestantes").textContent = connexionsRestantes;
   showToast("Connexion acceptée !");
+  try { document.getElementById('sound-connexion').play(); } catch(e){}
   // Affichage d'indice
   const indice = joueurSelectionAction.indices[Math.floor(Math.random() * joueurSelectionAction.indices.length)];
-  const estFiable = joueurSelectionAction.fiabilite === "fiable";
-  const fiabiliteTexte = estFiable ? "Haute" : "Douteuse";
-  const fiabiliteClasse = estFiable ? "fiable" : "suspect";
-  const indiceDiv = document.createElement('div');
-  indiceDiv.className = 'indice';
-  indiceDiv.innerHTML = `<p>🔍 "${indice}"</p><p><span class="fiabilite ${fiabiliteClasse}">Fiabilité : ${fiabiliteTexte}</span></p>`;
-  document.getElementById('listeIndices').appendChild(indiceDiv);
+  indicesGagnes.push({
+    indice,
+    fiabilite: joueurSelectionAction.fiabilite
+  });
+  afficherIndice(indice, joueurSelectionAction.fiabilite);
   if (Math.random() < 0.25) {
     showToast("Souvenir mystérieux débloqué !");
-    const bonus = document.createElement('div');
-    bonus.className = 'indice';
-    bonus.innerHTML = `<p>🎁 Un indice bonus vous traverse l'esprit : "Un allié secret pourrait être proche..."</p>`;
-    document.getElementById('listeIndices').appendChild(bonus);
+    const bonus = "Un allié secret pourrait être proche...";
+    indicesGagnes.push({indice: bonus, fiabilite: "fiable"});
+    afficherIndice(bonus, "fiable");
+  }
+  // Si on est sur l'onglet indices, on met à jour
+  updateOngletIndices();
+  // Désactiver le bouton si plus de connexions
+  if (connexionsRestantes <= 0 && actionType === "connexion") {
+    document.getElementById('action-btn').disabled = true;
   }
 }
 function refuserConnexion() {
   document.getElementById('modal-connexion').classList.remove('show');
   showToast("Connexion refusée.");
+}
+
+// --- Affichage indice dynamique ---
+function afficherIndice(texte, fiabilite) {
+  const estFiable = fiabilite === "fiable";
+  const fiabiliteTexte = estFiable ? "Haute" : "Douteuse";
+  const fiabiliteClasse = estFiable ? "fiable" : "suspect";
+  const indiceDiv = document.createElement('div');
+  indiceDiv.className = 'indice';
+  indiceDiv.innerHTML = `<p>🔍 "${texte}"</p><p><span class="fiabilite ${fiabiliteClasse}">Fiabilité : ${fiabiliteTexte}</span></p>`;
+  document.getElementById('listeIndices').appendChild(indiceDiv);
+}
+
+// --- Synchronisation onglet indices ---
+function updateOngletIndices() {
+  const liste = document.getElementById('listeIndices');
+  liste.innerHTML = '';
+  indicesGagnes.forEach(({indice, fiabilite}) => {
+    afficherIndice(indice, fiabilite);
+  });
 }
 
 // --- Chronomètre ---
@@ -142,8 +173,12 @@ function showToast(msg) {
   setTimeout(() => { toast.className = "toast"; }, 2500);
 }
 
-// --- Accessibilité/ergonomie supplémentaire possible dans ton CSS ---
-// .joueur-avatar.selected { outline: 3px solid #e0c185; box-shadow: 0 0 12px #e0c185; }
-// .avatar { width:80px; border-radius:50%; border:3px solid #e9c78c; }
-// .modal        { ... } .modal-content { ... } .modal-actions { ... }
-// .toast        { ... } .toast.show { ... }
+// --- Accessibilité : fermer modale avec Échap ou clic hors contenu ---
+document.addEventListener('keydown', function(e) {
+  if (e.key === "Escape") {
+    document.getElementById('modal-connexion').classList.remove('show');
+  }
+});
+document.getElementById('modal-connexion').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('show');
+});
