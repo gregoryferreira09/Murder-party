@@ -1,308 +1,133 @@
-<!DOCTYPE html> 
-
-<html lang="fr"> 
-
-<head> 
-
-  <meta charset="UTF-8"> 
-
-  <title>Rôle et Indices - Murder Party</title> 
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Rôle et Indices - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet"> 
+  <!-- Cinzel Decorative est déjà utilisée pour les titres dans style.css -->
+</head>
+<body>
+  <div class="effet-elimination" id="effetElimination"></div>
+  <header>
+    <h1>🕵️ Murder Party - Rôle & Indices</h1>
+  </header>
+  <main>
+    <div id="chrono">Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span></div>
 
-  <style> 
-    :root {
-      --main-yellow: #ffe066; /* <- adapte ici si besoin */
+    <div class="tabs">
+      <button class="tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
+      <button class="tab-button" onclick="switchTab('indices')">🧩 Indices</button>
+      <button class="tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
+      <button class="tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
+    </div>
+
+    <section id="fiche" class="tab-content active fiche-personnage">
+      <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
+      <img src="image-personnage.jpg" alt="Image du Personnage">
+      <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble...</p>
+      <p><strong>Pouvoir :</strong> Interrogez deux joueurs à chaque tour...</p>
+    </section>
+
+    <section id="indices" class="tab-content">
+      <h3>Vos indices :</h3>
+      <div id="listeIndices"></div>
+    </section>
+
+    <section id="vote" class="tab-content">
+      <h3>Votez pour un suspect :</h3>
+      <form id="voteForm">
+        <select id="suspect"></select>
+        <button type="submit">Voter</button>
+      </form>
+      <div id="voteResult" style="margin-top: 10px;"></div>
+    </section>
+
+    <section id="connexion" class="tab-content">
+      <h3>Connexion entre joueurs :</h3>
+      <div class="connexion-joueur" id="joueursList"></div>
+      <button onclick="validerConnexion()">Valider la connexion</button>
+    </section>
+
+    <footer class="footer">
+      <p>© 2025 Murder Party. Tous droits réservés.</p>
+      <a href="mentions-legales.html">Mentions légales</a>
+    </footer>
+  </main>
+
+  <script>
+    const joueurs = [
+      { nom: 'Violette', image: 'violette.jpg', indices: ["A été vue avec la victime peu avant le crime.", "Semblait nerveuse lors du dîner."], fiabilite: "fiable" },
+      { nom: 'Brume', image: 'brume.jpg', indices: ["Possède une clé suspecte.", "A disparu 10 minutes pendant la soirée."], fiabilite: "suspect" }
+    ];
+    let connexionsRestantes = 5;
+    let joueurSelectionne = null;
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
     }
-    body { 
-      font-family: 'Cinzel', serif; 
-      background-color: #111; 
-      color: #eee; 
-      margin: 0; 
-      padding: 0; 
-    } 
 
-    header { 
-      text-align: center; 
-      padding: 20px 0; 
-      background-color: #1a1a1a; 
-      border-bottom: 2px solid #333; 
-    } 
+    function initialiserJoueurs() {
+      const select = document.getElementById('suspect');
+      const joueursDiv = document.getElementById('joueursList');
+      joueurs.forEach(j => {
+        select.innerHTML += `<option value="${j.nom}">${j.nom}</option>`;
+        const div = document.createElement('div');
+        div.innerHTML = `<img src="${j.image}" alt="${j.nom}"><br>${j.nom}`;
+        div.onclick = () => joueurSelectionne = j;
+        joueursDiv.appendChild(div);
+      });
+    }
 
-    h1 { 
-      margin: 0; 
-      font-size: 2rem; 
-      color: var(--main-yellow); 
-    } 
+    function validerConnexion() {
+      if (!joueurSelectionne || connexionsRestantes <= 0) return alert("Connexion impossible.");
+      connexionsRestantes--;
+      document.getElementById("connexionRestantes").textContent = connexionsRestantes;
 
-    main { 
-      padding: 20px; 
-    } 
+      const indice = joueurSelectionne.indices[Math.floor(Math.random() * joueurSelectionne.indices.length)];
+      const estFiable = joueurSelectionne.fiabilite === "fiable";
+      const fiabiliteTexte = estFiable ? "Haute" : "Douteuse";
+      const fiabiliteClasse = estFiable ? "fiable" : "suspect";
 
-    .tabs { 
-      display: flex; 
-      justify-content: center; 
-      margin-bottom: 20px; 
-    } 
+      const indiceDiv = document.createElement('div');
+      indiceDiv.className = 'indice';
+      indiceDiv.innerHTML = `<p>🔍 "${indice}"</p><p><span class="fiabilite ${fiabiliteClasse}">Fiabilité : ${fiabiliteTexte}</span></p>`;
+      document.getElementById('listeIndices').appendChild(indiceDiv);
 
-    .tab-button { 
-      padding: 12px 20px; 
-      margin: 0 5px; 
-      background-color: #222; 
-      border: 1px solid #555; 
-      color: #ccc; 
-      cursor: pointer; 
-      font-weight: bold; 
-      transition: 0.3s ease; 
-      border-radius: 8px 8px 0 0; 
-    } 
+      // Bonus spécial aléatoire
+      if (Math.random() < 0.25) {
+        alert("Vous ressentez une connexion étrange... un souvenir refait surface !");
+        const bonus = document.createElement('div');
+        bonus.className = 'indice';
+        bonus.innerHTML = `<p>🎁 Un indice bonus vous traverse l'esprit : "Un allié secret pourrait être proche..."</p>`;
+        document.getElementById('listeIndices').appendChild(bonus);
+      }
+    }
 
-    .tab-button:hover { 
-      background-color: #333; 
-    } 
+    document.getElementById('voteForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const suspect = document.getElementById('suspect').value;
+      document.getElementById('voteResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${suspect}</strong> a été scellé...</p>`;
+      // Effet visuel d'élimination
+      const effet = document.getElementById("effetElimination");
+      effet.classList.add("visible");
+      setTimeout(() => effet.classList.remove("visible"), 2000);
+    });
 
-    .tab-button.active { 
-      background-color: var(--main-yellow); 
-      color: #111; 
-    } 
+    // Chronomètre
+    let secondes = 1800;
+    function updateChrono() {
+      const minutes = Math.floor(secondes / 60);
+      const sec = secondes % 60;
+      document.getElementById("tempsRestant").textContent = `${minutes}:${sec < 10 ? '0' : ''}${sec}`;
+      if (secondes > 0) secondes--;
+    }
+    setInterval(updateChrono, 1000);
 
-    .tab-content { 
-      display: none; 
-      padding: 20px; 
-      background-color: #1a1a1a; 
-      border: 1px solid #333; 
-      border-radius: 0 0 12px 12px; 
-      animation: fadeIn 0.3s ease; 
-    } 
-
-    .tab-content.active { 
-      display: block; 
-    } 
-
-    @keyframes fadeIn { 
-      from { opacity: 0; } 
-      to { opacity: 1; } 
-    } 
-
-    .fiche-personnage img, .connexion-joueur img { 
-      width: 80px; 
-      border-radius: 50%; 
-      border: 3px solid var(--main-yellow); 
-      margin: 5px; 
-    } 
-
-    .connexion-joueur { 
-      display: flex; 
-      flex-wrap: wrap; 
-      gap: 10px; 
-    } 
-
-    .indice { 
-      background-color: #222; 
-      border-left: 5px solid var(--main-yellow); 
-      padding: 10px; 
-      margin: 10px 0; 
-      border-radius: 5px; 
-    } 
-
-    .fiabilite { 
-      font-weight: bold; 
-    } 
-
-    .fiabilite.suspect { 
-      color: #f44336; 
-    } 
-
-    .fiabilite.fiable { 
-      color: #4CAF50; 
-    } 
-
-    select, button[type="submit"], button { 
-      background-color: var(--main-yellow); 
-      color: #111; 
-      padding: 10px 15px; 
-      border: none; 
-      margin-top: 10px; 
-      border-radius: 5px; 
-      font-weight: bold; 
-      cursor: pointer; 
-      transition: background-color 0.3s ease; 
-    } 
-
-    button:hover { 
-      background-color: #e0a800; 
-    } 
-
-    footer { 
-      text-align: center; 
-      padding: 20px; 
-      font-size: 0.9rem; 
-      background-color: #111; 
-      border-top: 1px solid #333; 
-    } 
-
-    footer a { 
-      color: #888; 
-      text-decoration: none; 
-    } 
-
-    footer a:hover { 
-      text-decoration: underline; 
-    } 
-
-    #chrono { 
-      font-size: 1.1rem; 
-      font-weight: bold; 
-      margin-bottom: 15px; 
-      text-align: center; 
-      color: #4CAF50; 
-    } 
-
-    .effet-elimination { 
-      position: fixed; 
-      top: 0; left: 0; 
-      width: 100%; height: 100%; 
-      background: linear-gradient(to bottom right, red, black); 
-      opacity: 0; 
-      pointer-events: none; 
-      transition: opacity 1.5s ease; 
-      z-index: 1000; 
-    } 
-
-    .effet-elimination.visible { 
-      opacity: 0.8; 
-    } 
-  </style> 
-
-</head> 
-
-<body> 
-
-  <div class="effet-elimination" id="effetElimination"></div> 
-
-  <header> 
-    <h1>🕵️ Murder Party - Rôle & Indices</h1> 
-  </header> 
-
-  <main> 
-    <div id="chrono">Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span></div> 
-
-    <div class="tabs"> 
-      <button class="tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button> 
-      <button class="tab-button" onclick="switchTab('indices')">🧩 Indices</button> 
-      <button class="tab-button" onclick="switchTab('vote')">⚖️ Vote</button> 
-      <button class="tab-button" onclick="switchTab('connexion')">🤝 Connexion</button> 
-    </div> 
-
-    <section id="fiche" class="tab-content active fiche-personnage"> 
-      <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2> 
-      <img src="image-personnage.jpg" alt="Image du Personnage"> 
-      <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble...</p> 
-      <p><strong>Pouvoir :</strong> Interrogez deux joueurs à chaque tour...</p> 
-    </section> 
-
-    <section id="indices" class="tab-content"> 
-      <h3>Vos indices :</h3> 
-      <div id="listeIndices"></div> 
-    </section> 
-
-    <section id="vote" class="tab-content"> 
-      <h3>Votez pour un suspect :</h3> 
-      <form id="voteForm"> 
-        <select id="suspect"></select> 
-        <button type="submit">Voter</button> 
-      </form> 
-      <div id="voteResult" style="margin-top: 10px;"></div> 
-    </section> 
-
-    <section id="connexion" class="tab-content"> 
-      <h3>Connexion entre joueurs :</h3> 
-      <div class="connexion-joueur" id="joueursList"></div> 
-      <button onclick="validerConnexion()">Valider la connexion</button> 
-    </section> 
-
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
-
-  <script> 
-    const joueurs = [ 
-      { nom: 'Violette', image: 'violette.jpg', indices: ["A été vue avec la victime peu avant le crime.", "Semblait nerveuse lors du dîner."], fiabilite: "fiable" }, 
-      { nom: 'Brume', image: 'brume.jpg', indices: ["Possède une clé suspecte.", "A disparu 10 minutes pendant la soirée."], fiabilite: "suspect" } 
-    ]; 
-    let connexionsRestantes = 5; 
-    let joueurSelectionne = null; 
-
-    function switchTab(tabName) { 
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
-      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active')); 
-      document.getElementById(tabName).classList.add('active'); 
-      document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active'); 
-    } 
-
-    function initialiserJoueurs() { 
-      const select = document.getElementById('suspect'); 
-      const joueursDiv = document.getElementById('joueursList'); 
-      joueurs.forEach(j => { 
-        select.innerHTML += `<option value="${j.nom}">${j.nom}</option>`; 
-        const div = document.createElement('div'); 
-        div.innerHTML = `<img src="${j.image}" alt="${j.nom}"><br>${j.nom}`; 
-        div.onclick = () => joueurSelectionne = j; 
-        joueursDiv.appendChild(div); 
-      }); 
-    } 
-
-    function validerConnexion() { 
-      if (!joueurSelectionne || connexionsRestantes <= 0) return alert("Connexion impossible."); 
-      connexionsRestantes--; 
-      document.getElementById("connexionRestantes").textContent = connexionsRestantes; 
-
-      const indice = joueurSelectionne.indices[Math.floor(Math.random() * joueurSelectionne.indices.length)]; 
-      const estFiable = joueurSelectionne.fiabilite === "fiable"; 
-      const fiabiliteTexte = estFiable ? "Haute" : "Douteuse"; 
-      const fiabiliteClasse = estFiable ? "fiable" : "suspect"; 
-
-      const indiceDiv = document.createElement('div'); 
-      indiceDiv.className = 'indice'; 
-      indiceDiv.innerHTML = `<p>🔍 "${indice}"</p><p><span class="fiabilite ${fiabiliteClasse}">Fiabilité : ${fiabiliteTexte}</span></p>`; 
-      document.getElementById('listeIndices').appendChild(indiceDiv); 
-
-      // Bonus spécial aléatoire 
-      if (Math.random() < 0.25) { 
-        alert("Vous ressentez une connexion étrange... un souvenir refait surface !"); 
-        const bonus = document.createElement('div'); 
-        bonus.className = 'indice'; 
-        bonus.innerHTML = `<p>🎁 Un indice bonus vous traverse l'esprit : "Un allié secret pourrait être proche..."</p>`; 
-        document.getElementById('listeIndices').appendChild(bonus); 
-      } 
-    } 
-
-    document.getElementById('voteForm').addEventListener('submit', function(e) { 
-      e.preventDefault(); 
-      const suspect = document.getElementById('suspect').value; 
-      document.getElementById('voteResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${suspect}</strong> a été scellé...</p>`; 
-      // Effet visuel d'élimination 
-      const effet = document.getElementById("effetElimination"); 
-      effet.classList.add("visible"); 
-      setTimeout(() => effet.classList.remove("visible"), 2000); 
-    }); 
-
-    // Chronomètre 
-    let secondes = 1800; 
-    function updateChrono() { 
-      const minutes = Math.floor(secondes / 60); 
-      const sec = secondes % 60; 
-      document.getElementById("tempsRestant").textContent = `${minutes}:${sec < 10 ? '0' : ''}${sec}`; 
-      if (secondes > 0) secondes--; 
-    } 
-    setInterval(updateChrono, 1000); 
-
-    initialiserJoueurs(); 
-  </script> 
-
-</body> 
-
+    initialiserJoueurs();
+  </script>
+</body>
 </html>
