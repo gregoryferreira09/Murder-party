@@ -57,16 +57,16 @@ function setupActionTab(type) {
   // Affichage des joueurs
   const joueursDiv = document.getElementById('action-joueurs');
   joueursDiv.innerHTML = '';
-  joueurs.forEach(j => {
-    // Empêcher de voter pour soi-même
-    if (type === "vote" && j.nom === "Inspecteur Alaric") return;
-    const div = document.createElement('div');
-    div.className = 'joueur-avatar';
-    div.innerHTML = `<img src="${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
-    div.onclick = () => selectJoueur(div, j);
-    div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") selectJoueur(div, j); };
-    joueursDiv.appendChild(div);
-  });
+joueurs.forEach(j => {
+  if (type === "vote" && j.nom === "Inspecteur Alaric") return;
+  const div = document.createElement('div');
+  div.className = 'joueur-avatar';
+  div.innerHTML = `<img src="${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
+  // div.tabIndex = 0; // <-- retire cette ligne pour éviter le bug de scroll/focus
+  div.onclick = () => selectJoueur(div, j);
+  div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") selectJoueur(div, j); };
+  joueursDiv.appendChild(div);
+});
 
   // Désactiver bouton si aucune sélection ou plus de connexions
   document.getElementById('action-btn').disabled = (type === "connexion" && connexionsRestantes <= 0);
