@@ -1,3 +1,9 @@
+// Ajoute cette fonction tout en haut du fichier
+function imageAleatoire() {
+  const n = Math.floor(Math.random() * 15) + 1; // 1 à 15 inclus
+  return `Public/images/personnage${n}.png`;
+}
+
 // SRC/JS/personnages.js
 
 const personnagesParEpoque = {
