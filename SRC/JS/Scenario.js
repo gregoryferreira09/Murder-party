@@ -594,7 +594,7 @@ function genererScenario() {
 const launchBtn = document.getElementById("launchBtn");
 let timeLeft = 30;
 if (launchBtn) {
-  launchBtn.textContent = `Lancement dans ${timeLeft}s`;
+  launchBtn.textContent =${timeLeft}s`;
   launchBtn.style.pointerEvents = "none";
   launchBtn.style.opacity = "0.6";
   const interval = setInterval(() => {
