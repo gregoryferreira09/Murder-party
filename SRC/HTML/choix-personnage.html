@@ -92,6 +92,16 @@
   <script src="personnages.js"></script>
 
   <script>
+
+    function getRandomElements(array, n) {
+  const copy = [...array];
+  const result = [];
+  for (let i = 0; i < n && copy.length > 0; i++) {
+    const idx = Math.floor(Math.random() * copy.length);
+    result.push(copy.splice(idx, 1)[0]);
+  }
+  return result;
+}
     function afficherPersonnages() {
       const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
       if (!scenarioData) {
@@ -103,7 +113,7 @@
       const galeriePersonnages = document.getElementById("galeriePersonnages");
 
       // Récupère les n premiers personnages de la liste
-      const personnages = listeDesPersonnages.slice(0, nombreJoueurs);
+     const personnages = getRandomElements(listeDesPersonnages, nombreJoueurs);
 
       // Affichage dynamique
       galeriePersonnages.innerHTML = personnages.map(perso => `
