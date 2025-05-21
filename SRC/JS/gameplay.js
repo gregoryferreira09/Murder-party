@@ -173,8 +173,37 @@ function showToast(msg) {
   setTimeout(() => { toast.className = "toast"; }, 2500);
 }
 
-document.body.classList.add('modal-open'); // Quand tu ouvres la modale
-document.body.classList.remove('modal-open'); // Quand tu la fermes
+function showConnexionModal(nomCible) {
+  document.getElementById('modal-connexion-text').textContent = `Voulez-vous vous connecter avec ${nomCible} ?`;
+  document.getElementById('modal-connexion').classList.add('show');
+  document.body.classList.add('modal-open'); // Ajoute ici
+}
+
+function accepterConnexion() {
+  document.getElementById('modal-connexion').classList.remove('show');
+  document.body.classList.remove('modal-open'); // Ajoute ici
+  // ... reste du code ...
+}
+
+function refuserConnexion() {
+  document.getElementById('modal-connexion').classList.remove('show');
+  document.body.classList.remove('modal-open'); // Ajoute ici
+  showToast("Connexion refusée.");
+}
+
+// Fermer la modale avec Escape ou clic hors contenu :
+document.addEventListener('keydown', function(e) {
+  if (e.key === "Escape") {
+    document.getElementById('modal-connexion').classList.remove('show');
+    document.body.classList.remove('modal-open'); // Ajoute ici
+  }
+});
+document.getElementById('modal-connexion').addEventListener('click', function(e) {
+  if (e.target === this) {
+    this.classList.remove('show');
+    document.body.classList.remove('modal-open'); // Ajoute ici
+  }
+});
 
 // --- Accessibilité : fermer modale avec Échap ou clic hors contenu ---
 document.addEventListener('keydown', function(e) {
