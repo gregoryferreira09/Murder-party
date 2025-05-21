@@ -151,6 +151,31 @@
       }
     };
 
+    // À l'endroit où tu traites la validation de connexion :
+function validerConnexion() {
+  if (!joueurSelectionAction || connexionsRestantes <= 0) return alert("Connexion impossible.");
+  // Ouvre la modale sur le "téléphone" du joueur ciblé (simulation locale)
+  showConnexionModal(joueurSelectionAction.nom);
+}
+
+function showConnexionModal(nomCible) {
+  document.getElementById('modal-connexion-text').textContent =
+    `Voulez-vous vous connecter avec ${nomCible} ?`;
+  document.getElementById('modal-connexion').style.display = 'flex';
+}
+
+function accepterConnexion() {
+  document.getElementById('modal-connexion').style.display = 'none';
+  // Ici tu ajoutes la logique de connexion effective, succès, etc.
+  alert("Connexion acceptée ! 🎉");
+}
+
+function refuserConnexion() {
+  document.getElementById('modal-connexion').style.display = 'none';
+  // Ici tu ajoutes la logique pour refus, message, etc.
+  alert("Connexion refusée.");
+}
+
     // Chronomètre
     let secondes = 1800;
     function updateChrono() {
@@ -165,6 +190,19 @@
     document.addEventListener('DOMContentLoaded', function() {
       switchTab('fiche');
     });
+
+    <!-- Modale de connexion -->
+<div id="modal-connexion" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2000;background:rgba(0,0,0,0.5);justify-content:center;align-items:center;">
+  <div style="background:#1a1a1a;border:2px solid #e0c185;border-radius:18px;padding:32px 24px;max-width:350px;text-align:center;color:#f4e4c1;">
+    <h2>Connexion</h2>
+    <p id="modal-connexion-text" style="margin-bottom:24px;"></p>
+    <div style="display:flex;gap:18px;justify-content:center;">
+      <button class="gold-btn" onclick="accepterConnexion()">Accepter</button>
+      <button class="gold-btn" onclick="refuserConnexion()">Refuser</button>
+    </div>
+  </div>
+</div>
+    
   </script>
 </body>
 </html>
