@@ -416,3 +416,69 @@ button {
   width: 100%;
   display: block;
 }
+/* --- Pour les avatars des joueurs dans Vote/Connexion --- */
+.joueur-avatar {
+  display: inline-block;
+  cursor: pointer;
+  background: rgba(44,27,27,0.85);
+  border-radius: 12px;
+  margin: 10px;
+  padding: 10px 16px;
+  transition: box-shadow 0.2s, outline 0.2s;
+  text-align: center;
+  min-width: 110px;
+  user-select: none;
+}
+.joueur-avatar.selected {
+  outline: 3px solid #e0c185;
+  box-shadow: 0 0 12px #e0c185;
+}
+.avatar {
+  width: 80px;
+  border-radius: 50%;
+  border: 3px solid #e9c78c;
+  margin-bottom: 7px;
+}
+
+/* --- Pour la modale de connexion --- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+}
+.modal.show {
+  display: flex;
+}
+.modal-content {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 0 22px #e0c18577;
+  color: #e0c185;
+  min-width: 300px;
+  max-width: 90vw;
+  text-align: center;
+}
+.modal-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}
+
+/* --- Pour les indices révélés dynamiquement --- */
+.indice {
+  background: #221911;
+  border-left: 4px solid #e0c185;
+  border-radius: 8px;
+  padding: 12px 18px;
+  margin: 14px 0;
+  color: #f4e4c1;
+  font-size: 1.1em;
+}
+.fiabilite.fiable { color: #6be985; font-weight: bold; }
+.fiabilite.suspect { color: #e86d6d; font-weight: bold; }
