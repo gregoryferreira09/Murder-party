@@ -586,7 +586,7 @@ function genererScenario() {
       <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
       <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
   <div class="boutons-actions">
-  <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">30s</a>
+  <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
   <a class="gold-btn" href="creer-partie.html">Retour</a>
 </div>
 `;
@@ -594,13 +594,13 @@ function genererScenario() {
 const launchBtn = document.getElementById("launchBtn");
 let timeLeft = 30;
 if (launchBtn) {
-  launchBtn.textContent =${timeLeft}s`;
+  launchBtn.textContent =`Disnopible dans ${timeLeft}s`;
   launchBtn.style.pointerEvents = "none";
   launchBtn.style.opacity = "0.6";
   const interval = setInterval(() => {
     timeLeft--;
     if (timeLeft > 0) {
-      launchBtn.textContent = `Lancement dans ${timeLeft}s`;
+      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
     } else {
       clearInterval(interval);
       launchBtn.textContent = "Lancement";
