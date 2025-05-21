@@ -44,31 +44,27 @@ document.addEventListener('DOMContentLoaded', function() {
   updateChrono();
 });
 
-// --- Onglets Vote / Connexion ---
 function setupActionTab(type) {
   actionType = type;
   joueurSelectionAction = null;
   document.getElementById('actionResult').innerHTML = "";
 
-  // Titre et bouton
-  document.getElementById('action-titre').textContent = (type === "vote") ? "Votez pour un suspect :" : "Connexion entre joueurs :";
-  document.getElementById('action-btn').textContent = (type === "vote") ? "Valider le vote" : "Valider la connexion";
-
-  // Affichage des joueurs
+  // On ne regénère les avatars QUE si le type d'action a changé
   const joueursDiv = document.getElementById('action-joueurs');
-  joueursDiv.innerHTML = '';
-joueurs.forEach(j => {
-  if (type === "vote" && j.nom === "Inspecteur Alaric") return;
-  const div = document.createElement('div');
-  div.className = 'joueur-avatar';
-  div.innerHTML = `<img src="${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
-  // div.tabIndex = 0; // <-- retire cette ligne pour éviter le bug de scroll/focus
-  div.onclick = () => selectJoueur(div, j);
-  div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") selectJoueur(div, j); };
-  joueursDiv.appendChild(div);
-});
+  joueursDiv.innerHTML = ''; // OK, mais fais-le une seule fois par changement
 
-  // Désactiver bouton si aucune sélection ou plus de connexions
+  joueurs.forEach(j => {
+    if (type === "vote" && j.nom === "Inspecteur Alaric") return;
+    const div = document.createElement('div');
+    div.className = 'joueur-avatar';
+    div.innerHTML = `<img src="${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
+    // div.tabIndex = 0; // Désactive le focus clavier si tu ne veux pas de scroll auto
+    div.onclick = () => selectJoueur(div, j);
+    div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") selectJoueur(div, j); };
+    joueursDiv.appendChild(div);
+  });
+
+  // Désactive le bouton si aucune sélection ou plus de connexions
   document.getElementById('action-btn').disabled = (type === "connexion" && connexionsRestantes <= 0);
 
   document.getElementById('action-btn').onclick = function() {
@@ -78,7 +74,7 @@ joueurs.forEach(j => {
       showToast("Vote enregistré !");
       const effet = document.getElementById("effetElimination");
       effet.classList.add("visible");
-      try { document.getElementById('sound-vote').play(); } catch(e){}
+      try { document.getElementById('sound-vote').play(); } catch (e) { }
       setTimeout(() => effet.classList.remove("visible"), 2000);
     } else {
       validerConnexion();
