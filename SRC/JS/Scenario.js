@@ -41,6 +41,25 @@ function addScenarioToHistory(scenario) {
   localStorage.setItem("scenarioHistory", JSON.stringify(history));
 }
 
+const launchBtn = document.getElementById("launchBtn");
+let timeLeft = 30;
+if (launchBtn) {
+  launchBtn.textContent = `Lancement dans ${timeLeft}s`;
+  launchBtn.style.pointerEvents = "none";
+  launchBtn.style.opacity = "0.6";
+  const interval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      launchBtn.textContent = `Lancement dans ${timeLeft}s`;
+    } else {
+      clearInterval(interval);
+      launchBtn.textContent = "Lancement";
+      launchBtn.style.pointerEvents = "auto";
+      launchBtn.style.opacity = "1";
+    }
+  }, 1000);
+}
+
 // === UNIVERS COHÉRENTS & ÉLARGIS ===
 const univers = {
   victorien: {
