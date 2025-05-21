@@ -92,7 +92,11 @@
   <script src="personnages.js"></script>
 
   <script>
-
+    
+const periode = scenarioData.periode;
+const listeDesPersonnages = personnagesParEpoque[periode];
+const personnages = getRandomElements(listeDesPersonnages, nombreJoueurs);
+    
     function getRandomElements(array, n) {
   const copy = [...array];
   const result = [];
