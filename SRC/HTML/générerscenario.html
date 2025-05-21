@@ -87,147 +87,40 @@
     <button id="regenBtn">Générer un scénario pour chaque époque</button>
     <div id="scenarios"></div>
   </div>
-  <script>
-function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  <script type="module">
+import univers from '../JS/univers.js';
 
-// Données simplifiées et fictives pour chaque époque
-const univers = {
-  medieval: {
-    intro: [
-      "Le banquet bat son plein dans {lieu}. Soudain, un cri interrompt la fête.",
-      "Une tempête gronde dehors, et la tension monte dans {lieu}."
-    ],
-    ambiances: [
-      "La cloche du village résonne", "Les flammes vacillent dans la cheminée"
-    ],
-    lieux: ["La grande salle", "Le donjon", "La cuisine du château"],
-    personnages: ["Sir Gauvain", "Dame Aliénor", "Le ménestrel", "Le cuisinier"],
-    armes: ["épée rouillée", "poison dans le vin", "dague d'argent"],
-    indices: ["une plume ensanglantée", "une coupe brisée", "une empreinte boueuse"],
-    mobiles: ["la jalousie", "la vengeance", "l'ambition"],
-    secrets: ["un amour caché", "une trahison envers le roi"]
-  },
-  renaissance: {
-    intro: [
-      "Les lanternes illuminent la cour. Un cri retentit dans {lieu}.",
-      "Un bal masqué agite la noblesse, mais un drame se prépare dans {lieu}."
-    ],
-    ambiances: [
-      "Un bal masqué agite la noblesse", "Les artistes rivalisent de talent"
-    ],
-    lieux: ["Le palais", "La galerie d'art", "Les jardins"],
-    personnages: ["Le duc Lorenzo", "La duchesse Bianca", "Le peintre", "Le jardinier"],
-    armes: ["stylet décoré", "fiole de poison", "cordelette"],
-    indices: ["un masque taché de sang", "un gant oublié", "un croquis étrange"],
-    mobiles: ["l'honneur", "une dette", "une passion interdite"],
-    secrets: ["une œuvre volée", "un faux testament"]
-  },
-  victorien: {
-    intro: [
-      "Le manoir vibre d'une excitation étrange. Un drame a eu lieu dans {lieu}.",
-      "Le brouillard étreint {lieu}. Un crime vient d'être découvert."
-    ],
-    ambiances: [
-      "Le tonnerre gronde au loin", "Les invités masqués se perdent dans la fête"
-    ],
-    lieux: ["Le salon", "La bibliothèque", "L'orangerie"],
-    personnages: ["Lord Blackwood", "Miss Holmes", "Le majordome", "Lady Violet"],
-    armes: ["canne-épée", "couteau à lettres", "poison dans le thé"],
-    indices: ["un mouchoir brodé", "des traces de chaussures boueuses", "un carnet déchiré"],
-    mobiles: ["un héritage", "une rivalité amoureuse", "un secret de famille"],
-    secrets: ["une double vie", "un enfant caché"]
-  },
-  western: {
-    intro: [
-      "Le saloon est agité. Un coup de feu retentit dans {lieu}!",
-      "Tout le monde surveille tout le monde dans {lieu} ce soir."
-    ],
-    ambiances: [
-      "Le vent soulève la poussière", "La nuit tombe sur la prairie"
-    ],
-    lieux: ["Le saloon", "L'écurie", "La rue principale"],
-    personnages: ["Billy le Kid", "Miss Liza", "Le shérif", "Le barman"],
-    armes: ["colt", "la carafe de whisky", "corde de lasso"],
-    indices: ["un chapeau troué", "des balles usagées", "un bandana ensanglanté"],
-    mobiles: ["la vengeance", "un vol de bétail", "la jalousie"],
-    secrets: ["un trésor caché", "une fausse identité"]
-  },
-  contemporain: {
-    intro: [
-      "La fête au bureau bat son plein dans {lieu}, puis tout bascule.",
-      "Une panne d'électricité plonge {lieu} dans l'obscurité et un cri retentit."
-    ],
-    ambiances: [
-      "La musique s’élève", "Un silence pesant s’installe"
-    ],
-    lieux: ["La salle de réunion", "La cafétéria", "Le parking"],
-    personnages: ["Julie la RH", "Marc le comptable", "Le stagiaire", "La directrice"],
-    armes: ["agrafeuse lourde", "câble électrique", "poison dans le café"],
-    indices: ["un badge oublié", "un mug cassé", "des traces de talons"],
-    mobiles: ["une promotion ratée", "un adultère", "un licenciement"],
-    secrets: ["un détournement de fonds", "une liaison cachée"]
-  },
-  futuriste: {
-    intro: [
-      "L’alarme retentit dans {lieu}, un équipier est retrouvé sans vie.",
-      "Les écrans clignotent, l’IA détecte un incident dans {lieu}."
-    ],
-    ambiances: [
-      "L’alerte rouge retentit", "Le sas grince"
-    ],
-    lieux: ["La salle de contrôle", "Le laboratoire", "La capsule de sommeil"],
-    personnages: ["Capitaine Nova", "L'ingénieur K42", "Le médecin synthétique", "La pilote"],
-    armes: ["laser portatif", "nanovirus", "clé à plasma"],
-    indices: ["un gant brûlé", "un accès refusé", "des circuits fondus"],
-    mobiles: ["sabotage", "jalousie scientifique", "rivalité pour le commandement"],
-    secrets: ["un programme caché", "une identité usurpée"]
-  },
-  historique: {
-    intro: [
-      "Un grand bal débute dans {lieu}, mais la fête tourne au drame.",
-      "Les chroniqueurs prennent des notes, il y aura matière à scandale dans {lieu}."
-    ],
-    ambiances: [
-      "Les tambours de guerre résonnent", "Les chandelles vacillent"
-    ],
-    lieux: ["La salle du trône", "La place publique", "Les cuisines royales"],
-    personnages: ["Le roi Louis", "La reine Anne", "Le bouffon", "Le conseiller"],
-    armes: ["épée royale", "poison dans le banquet", "corde de rideau"],
-    indices: ["un bijou perdu", "des traces de pas dans la cire", "un message codé"],
-    mobiles: ["la succession", "la trahison", "l'amour interdit"],
-    secrets: ["un complot contre la couronne", "un enfant illégitime"]
-  }
-};
+function getRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 function genererScenario(epoque, data) {
-  // Prend un élément différent pour chaque placeholder, sans doublon pour les persos
-  let persos = [...data.personnages];
-  let suspect1 = persos.splice(Math.floor(Math.random()*persos.length),1)[0];
-  let suspect2 = persos.splice(Math.floor(Math.random()*persos.length),1)[0];
-  let temoin = persos.length ? persos[Math.floor(Math.random()*persos.length)] : suspect2;
-  let intro = getRandom(data.intro)
-    .replace('{lieu}', getRandom(data.lieux));
-  let ambiance = getRandom(data.ambiances);
-  let victime = suspect2;
-  let arme = getRandom(data.armes);
-  let lieu = getRandom(data.lieux);
-  let indice = getRandom(data.indices);
-  let mobile = getRandom(data.mobiles);
-  let secret = getRandom(data.secrets);
+  // Sélectionne les éléments aléatoires
+  const intro = getRandom(data.intro)
+    .replace('{ambiance}', getRandom(data.ambiances))
+    .replace('{la_lieu}', getRandom(data.lieux))
+    .replace('{suspect1}', getRandom(data.personnages))
+    .replace('{suspect2}', getRandom(data.personnages))
+    .replace('{motif}', getRandom(data.mobiles))
+    .replace('{indice}', getRandom(data.indices))
+    .replace('{temoin}', getRandom(data.personnages));
+  const victime = getRandom(data.personnages);
+  const arme = getRandom(data.armes);
+  const lieu = getRandom(data.lieux);
+  const suspect = getRandom(data.personnages);
+  const indice = getRandom(data.indices);
 
   return `
     <div class="scenario-block">
       <h2>${epoque.charAt(0).toUpperCase() + epoque.slice(1)}</h2>
-      <p><span class="label">Ambiance :</span> ${ambiance}</p>
       <p><span class="label">Introduction :</span> ${intro}</p>
       <p><span class="label">Victime :</span> ${victime}</p>
       <p><span class="label">Lieu du crime :</span> ${lieu}</p>
       <p><span class="label">Arme du crime :</span> ${arme}</p>
-      <p><span class="label">Suspect principal :</span> ${suspect1}</p>
+      <p><span class="label">Suspect principal :</span> ${suspect}</p>
       <p><span class="label">Indice clé :</span> ${indice}</p>
-      <p><span class="label">Mobile probable :</span> ${mobile}</p>
-      <p><span class="label">Secret découvert :</span> ${secret}</p>
-      <p><span class="label">Témoin important :</span> ${temoin}</p>
+      <p><span class="label">Mobile probable :</span> ${getRandom(data.mobiles)}</p>
+      <p><span class="label">Secret découvert :</span> ${getRandom(data.secrets)}</p>
     </div>
   `;
 }
@@ -241,7 +134,9 @@ function afficherScenarios() {
 }
 
 document.getElementById('regenBtn').addEventListener('click', afficherScenarios);
+
+// Génère à l'ouverture
 afficherScenarios();
-  </script>
+</script>
 </body>
 </html>
