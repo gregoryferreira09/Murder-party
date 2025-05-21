@@ -308,7 +308,7 @@ historique: [
 ],
 };
 
-export { personnagesParEpoque };
+window.personnagesParEpoque = personnagesParEpoque;
 
 // Pour une utilisation en module ES :
 // export default personnagesParEpoque;
