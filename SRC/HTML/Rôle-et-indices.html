@@ -37,15 +37,15 @@
         <div id="listeIndices"></div>
       </section>
 
+      <!-- SECTION VOTE présentée comme CONNEXION -->
       <section id="vote" class="tab-content" style="display:none;">
         <h3>Votez pour un suspect :</h3>
-        <form id="voteForm">
-          <select id="suspect"></select>
-          <button type="submit" class="gold-btn">Voter</button>
-        </form>
+        <div class="connexion-joueur" id="voteJoueursList"></div>
+        <button class="gold-btn" onclick="validerVote()">Valider le vote</button>
         <div id="voteResult" style="margin-top: 10px;"></div>
       </section>
 
+      <!-- SECTION CONNEXION -->
       <section id="connexion" class="tab-content" style="display:none;">
         <h3>Connexion entre joueurs :</h3>
         <div class="connexion-joueur" id="joueursList"></div>
@@ -73,7 +73,6 @@
       document.getElementById(tabName).classList.add('active');
       document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
     }
-    // Initialisation de l'état d'affichage
     document.addEventListener('DOMContentLoaded', function() {
       switchTab('fiche');
     });
@@ -85,19 +84,34 @@
     ];
     let connexionsRestantes = 5;
     let joueurSelectionne = null;
+    let joueurVoteSelectionne = null;
 
     function initialiserJoueurs() {
-      const select = document.getElementById('suspect');
+      // Connexion
       const joueursDiv = document.getElementById('joueursList');
-      select.innerHTML = '';
       joueursDiv.innerHTML = '';
       joueurs.forEach(j => {
-        select.innerHTML += `<option value="${j.nom}">${j.nom}</option>`;
         const div = document.createElement('div');
         div.innerHTML = `<img src="${j.image}" alt="${j.nom}" style="width:80px; border-radius:50%; border:3px solid #e9c78c;"><br>${j.nom}`;
         div.style.cursor = "pointer";
         div.onclick = () => joueurSelectionne = j;
         joueursDiv.appendChild(div);
+      });
+
+      // Vote (présentation identique)
+      const voteDiv = document.getElementById('voteJoueursList');
+      voteDiv.innerHTML = '';
+      joueurs.forEach(j => {
+        const div = document.createElement('div');
+        div.innerHTML = `<img src="${j.image}" alt="${j.nom}" style="width:80px; border-radius:50%; border:3px solid #e9c78c;"><br>${j.nom}`;
+        div.style.cursor = "pointer";
+        div.onclick = function() {
+          joueurVoteSelectionne = j;
+          // Visuel sélection
+          voteDiv.querySelectorAll('div').forEach(d => d.style.boxShadow = "");
+          div.style.boxShadow = "0 0 8px 3px #e9c78c";
+        };
+        voteDiv.appendChild(div);
       });
     }
 
@@ -126,15 +140,14 @@
       }
     }
 
-    document.getElementById('voteForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const suspect = document.getElementById('suspect').value;
-      document.getElementById('voteResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${suspect}</strong> a été scellé...</p>`;
+    function validerVote() {
+      if (!joueurVoteSelectionne) return alert("Merci de sélectionner un joueur à voter !");
+      document.getElementById('voteResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${joueurVoteSelectionne.nom}</strong> a été scellé...</p>`;
       // Effet visuel d'élimination
       const effet = document.getElementById("effetElimination");
       effet.classList.add("visible");
       setTimeout(() => effet.classList.remove("visible"), 2000);
-    });
+    }
 
     // Chronomètre
     let secondes = 1800;
