@@ -490,6 +490,13 @@ button {
 }
 
 /* --- Pour avatars joueurs --- */
+/* --- Accessibilité focus sur avatars --- */
+.joueur-avatar:focus {
+  outline: 2px solid #ffd700;
+  box-shadow: 0 0 8px #e0c18588;
+}
+
+/* --- Pour avatars joueurs --- */
 .joueur-avatar {
   display: inline-block;
   cursor: pointer;
