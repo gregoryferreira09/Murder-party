@@ -5,26 +5,28 @@
   <title>Rôle et Indices - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-  <!-- Cinzel Decorative est déjà utilisée pour les titres dans style.css -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="effet-elimination" id="effetElimination"></div>
   <header>
-    <h1>🕵️ Murder Party - Rôle & Indices</h1>
+    <div class="bandeau-dore">
+      <h1>🕵️ Murder Party - Rôle & Indices</h1>
+    </div>
   </header>
-  <main>
+
+  <div class="bandeau-dore" style="margin-top: 30px;">
     <div id="chrono">Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span></div>
 
-    <div class="tabs">
-      <button class="tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
-      <button class="tab-button" onclick="switchTab('indices')">🧩 Indices</button>
-      <button class="tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
-      <button class="tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
+    <div class="tabs" style="margin-bottom:20px;">
+      <button class="gold-btn tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
+      <button class="gold-btn tab-button" onclick="switchTab('indices')">🧩 Indices</button>
+      <button class="gold-btn tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
+      <button class="gold-btn tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
     </div>
 
     <section id="fiche" class="tab-content active fiche-personnage">
       <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
-      <img src="image-personnage.jpg" alt="Image du Personnage">
+      <img src="image-personnage.jpg" alt="Image du Personnage" style="width:80px; border-radius:50%; border:3px solid #e9c78c;">
       <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble...</p>
       <p><strong>Pouvoir :</strong> Interrogez deux joueurs à chaque tour...</p>
     </section>
@@ -38,7 +40,7 @@
       <h3>Votez pour un suspect :</h3>
       <form id="voteForm">
         <select id="suspect"></select>
-        <button type="submit">Voter</button>
+        <button type="submit" class="gold-btn">Voter</button>
       </form>
       <div id="voteResult" style="margin-top: 10px;"></div>
     </section>
@@ -46,14 +48,16 @@
     <section id="connexion" class="tab-content">
       <h3>Connexion entre joueurs :</h3>
       <div class="connexion-joueur" id="joueursList"></div>
-      <button onclick="validerConnexion()">Valider la connexion</button>
+      <button class="gold-btn" onclick="validerConnexion()">Valider la connexion</button>
     </section>
+  </div>
 
-    <footer class="footer">
-      <p>© 2025 Murder Party. Tous droits réservés.</p>
-      <a href="mentions-legales.html">Mentions légales</a>
-    </footer>
-  </main>
+  <footer class="footer">
+    <button class="btn-retour" onclick="window.location.href='accueil.html'">🏠 Accueil</button><br>
+    <p>© 2025 Murder Party. Tous droits réservés. <a href="mentions-legales.html">Mentions légales</a></p>
+  </footer>
+
+  <div class="effet-elimination" id="effetElimination"></div>
 
   <script>
     const joueurs = [
