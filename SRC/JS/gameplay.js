@@ -77,7 +77,7 @@ function setupActionTab(type) {
     if (type === "vote" && j.nom === "Inspecteur Alaric") return;
     const div = document.createElement('div');
     div.className = 'joueur-avatar';
-    div.innerHTML = `<img src="${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
+  div.innerHTML = `<img src="../../Public/images/${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
     div.tabIndex = 0; // accessibilité clavier
     div.onclick = () => selectJoueur(div, j);
     div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") selectJoueur(div, j); };
