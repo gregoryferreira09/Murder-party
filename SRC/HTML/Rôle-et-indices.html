@@ -10,7 +10,7 @@
 <body>
   <header>
     <div class="bandeau-dore">
-      <h1>🕵️ Murder Party - Rôle & Indices</h1>
+      <h1>🕵️ Enquête</h1>
     </div>
   </header>
 
@@ -24,8 +24,9 @@
         <button class="gold-btn tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
         <button class="gold-btn tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
       </div>
-      
-      <section id="fiche" class="tab-content active fiche-personnage">
+
+      <!-- Contenu dynamique sous-onglet dans un seul cadre doré -->
+      <section id="fiche" class="tab-content active">
         <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
         <img src="image-personnage.jpg" alt="Image du Personnage" style="width:80px; border-radius:50%; border:3px solid #e9c78c;">
         <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble...</p>
@@ -37,19 +38,12 @@
         <div id="listeIndices"></div>
       </section>
 
-      <!-- SECTION VOTE présentée comme CONNEXION -->
-      <section id="vote" class="tab-content" style="display:none;">
-        <h3>Votez pour un suspect :</h3>
-        <div class="connexion-joueur" id="voteJoueursList"></div>
-        <button class="gold-btn" onclick="validerVote()">Valider le vote</button>
-        <div id="voteResult" style="margin-top: 10px;"></div>
-      </section>
-
-      <!-- SECTION CONNEXION -->
-      <section id="connexion" class="tab-content" style="display:none;">
-        <h3>Connexion entre joueurs :</h3>
-        <div class="connexion-joueur" id="joueursList"></div>
-        <button class="gold-btn" onclick="validerConnexion()">Valider la connexion</button>
+      <!-- Bloc unique pour vote/connexion -->
+      <section id="action" class="tab-content" style="display:none;">
+        <h3 id="action-titre"></h3>
+        <div class="connexion-joueur" id="action-joueurs"></div>
+        <button class="gold-btn" id="action-btn"></button>
+        <div id="actionResult" style="margin-top:10px;"></div>
       </section>
     </div>
   </main>
@@ -62,15 +56,22 @@
   <div class="effet-elimination" id="effetElimination"></div>
 
   <script>
-    // Fonctionnement des onglets
+    // Tabs
     function switchTab(tabName) {
       document.querySelectorAll('.tab-content').forEach(c => {
         c.style.display = 'none';
         c.classList.remove('active');
       });
       document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-      document.getElementById(tabName).style.display = 'block';
-      document.getElementById(tabName).classList.add('active');
+
+      if(tabName === 'vote' || tabName === 'connexion') {
+        document.getElementById('action').style.display = 'block';
+        document.getElementById('action').classList.add('active');
+        setupActionTab(tabName);
+      } else {
+        document.getElementById(tabName).style.display = 'block';
+        document.getElementById(tabName).classList.add('active');
+      }
       document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
     }
     document.addEventListener('DOMContentLoaded', function() {
@@ -84,70 +85,73 @@
     ];
     let connexionsRestantes = 5;
     let joueurSelectionne = null;
-    let joueurVoteSelectionne = null;
 
-    function initialiserJoueurs() {
-      // Connexion
-      const joueursDiv = document.getElementById('joueursList');
+    // Pour le vote/connexion
+    let actionType = null; // "vote" ou "connexion"
+    let joueurSelectionAction = null;
+
+    function setupActionTab(type) {
+      actionType = type;
+      joueurSelectionAction = null;
+      document.getElementById('actionResult').innerHTML = "";
+
+      // Titre et bouton
+      if (type === "vote") {
+        document.getElementById('action-titre').textContent = "Votez pour un suspect :";
+        document.getElementById('action-btn').textContent = "Valider le vote";
+      } else {
+        document.getElementById('action-titre').textContent = "Connexion entre joueurs :";
+        document.getElementById('action-btn').textContent = "Valider la connexion";
+      }
+
+      // Liste des joueurs
+      const joueursDiv = document.getElementById('action-joueurs');
       joueursDiv.innerHTML = '';
       joueurs.forEach(j => {
         const div = document.createElement('div');
         div.innerHTML = `<img src="${j.image}" alt="${j.nom}" style="width:80px; border-radius:50%; border:3px solid #e9c78c;"><br>${j.nom}`;
         div.style.cursor = "pointer";
-        div.onclick = () => joueurSelectionne = j;
-        joueursDiv.appendChild(div);
-      });
-
-      // Vote (présentation identique)
-      const voteDiv = document.getElementById('voteJoueursList');
-      voteDiv.innerHTML = '';
-      joueurs.forEach(j => {
-        const div = document.createElement('div');
-        div.innerHTML = `<img src="${j.image}" alt="${j.nom}" style="width:80px; border-radius:50%; border:3px solid #e9c78c;"><br>${j.nom}`;
-        div.style.cursor = "pointer";
         div.onclick = function() {
-          joueurVoteSelectionne = j;
-          // Visuel sélection
-          voteDiv.querySelectorAll('div').forEach(d => d.style.boxShadow = "");
+          joueurSelectionAction = j;
+          joueursDiv.querySelectorAll('div').forEach(d => d.style.boxShadow = "");
           div.style.boxShadow = "0 0 8px 3px #e9c78c";
         };
-        voteDiv.appendChild(div);
+        joueursDiv.appendChild(div);
       });
     }
 
-    function validerConnexion() {
-      if (!joueurSelectionne || connexionsRestantes <= 0) return alert("Connexion impossible.");
-      connexionsRestantes--;
-      document.getElementById("connexionRestantes").textContent = connexionsRestantes;
+    document.getElementById('action-btn').onclick = function() {
+      if (!joueurSelectionAction) return alert("Merci de sélectionner un joueur !");
+      if (actionType === "vote") {
+        document.getElementById('actionResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${joueurSelectionAction.nom}</strong> a été scellé...</p>`;
+        const effet = document.getElementById("effetElimination");
+        effet.classList.add("visible");
+        setTimeout(() => effet.classList.remove("visible"), 2000);
+      } else {
+        if (connexionsRestantes <= 0) return alert("Connexion impossible.");
+        connexionsRestantes--;
+        document.getElementById("connexionRestantes").textContent = connexionsRestantes;
 
-      const indice = joueurSelectionne.indices[Math.floor(Math.random() * joueurSelectionne.indices.length)];
-      const estFiable = joueurSelectionne.fiabilite === "fiable";
-      const fiabiliteTexte = estFiable ? "Haute" : "Douteuse";
-      const fiabiliteClasse = estFiable ? "fiable" : "suspect";
+        const indice = joueurSelectionAction.indices[Math.floor(Math.random() * joueurSelectionAction.indices.length)];
+        const estFiable = joueurSelectionAction.fiabilite === "fiable";
+        const fiabiliteTexte = estFiable ? "Haute" : "Douteuse";
+        const fiabiliteClasse = estFiable ? "fiable" : "suspect";
 
-      const indiceDiv = document.createElement('div');
-      indiceDiv.className = 'indice';
-      indiceDiv.innerHTML = `<p>🔍 "${indice}"</p><p><span class="fiabilite ${fiabiliteClasse}">Fiabilité : ${fiabiliteTexte}</span></p>`;
-      document.getElementById('listeIndices').appendChild(indiceDiv);
+        const indiceDiv = document.createElement('div');
+        indiceDiv.className = 'indice';
+        indiceDiv.innerHTML = `<p>🔍 "${indice}"</p><p><span class="fiabilite ${fiabiliteClasse}">Fiabilité : ${fiabiliteTexte}</span></p>`;
+        document.getElementById('listeIndices').appendChild(indiceDiv);
 
-      // Bonus spécial aléatoire
-      if (Math.random() < 0.25) {
-        alert("Vous ressentez une connexion étrange... un souvenir refait surface !");
-        const bonus = document.createElement('div');
-        bonus.className = 'indice';
-        bonus.innerHTML = `<p>🎁 Un indice bonus vous traverse l'esprit : "Un allié secret pourrait être proche..."</p>`;
-        document.getElementById('listeIndices').appendChild(bonus);
+        // Bonus spécial aléatoire
+        if (Math.random() < 0.25) {
+          alert("Vous ressentez une connexion étrange... un souvenir refait surface !");
+          const bonus = document.createElement('div');
+          bonus.className = 'indice';
+          bonus.innerHTML = `<p>🎁 Un indice bonus vous traverse l'esprit : "Un allié secret pourrait être proche..."</p>`;
+          document.getElementById('listeIndices').appendChild(bonus);
+        }
       }
-    }
-
-    function validerVote() {
-      if (!joueurVoteSelectionne) return alert("Merci de sélectionner un joueur à voter !");
-      document.getElementById('voteResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${joueurVoteSelectionne.nom}</strong> a été scellé...</p>`;
-      // Effet visuel d'élimination
-      const effet = document.getElementById("effetElimination");
-      effet.classList.add("visible");
-      setTimeout(() => effet.classList.remove("visible"), 2000);
-    }
+    };
 
     // Chronomètre
     let secondes = 1800;
@@ -161,7 +165,6 @@
 
     // Initialisation au chargement
     document.addEventListener('DOMContentLoaded', function() {
-      initialiserJoueurs();
       switchTab('fiche');
     });
   </script>
