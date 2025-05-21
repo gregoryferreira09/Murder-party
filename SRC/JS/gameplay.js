@@ -173,6 +173,9 @@ function showToast(msg) {
   setTimeout(() => { toast.className = "toast"; }, 2500);
 }
 
+document.body.classList.add('modal-open'); // Quand tu ouvres la modale
+document.body.classList.remove('modal-open'); // Quand tu la fermes
+
 // --- Accessibilité : fermer modale avec Échap ou clic hors contenu ---
 document.addEventListener('keydown', function(e) {
   if (e.key === "Escape") {
