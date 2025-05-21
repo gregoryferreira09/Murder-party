@@ -1,17 +1,32 @@
 // --- Données de jeu ---
 const joueurs = [
-  { nom: 'Inspecteur Alaric', image: 'image-personnage.jpg', indices: [
-    "Tu es prêt à résoudre le mystère.",
-    "Ta réputation te précède dans le domaine des enquêtes."
-  ], fiabilite: "fiable" }, // Ton personnage
-  { nom: 'Violette', image: 'violette.jpg', indices: [
-    "A été vue avec la victime peu avant le crime.",
-    "Semblait nerveuse lors du dîner."
-  ], fiabilite: "fiable" },
-  { nom: 'Brume', image: 'brume.jpg', indices: [
-    "Possède une clé suspecte.",
-    "A disparu 10 minutes pendant la soirée."
-  ], fiabilite: "suspect" }
+  { 
+    nom: 'Inspecteur Alaric', 
+    image: 'avatar-1.png',
+    indices: [
+      "Tu es prêt à résoudre le mystère.",
+      "Ta réputation te précède dans le domaine des enquêtes."
+    ], 
+    fiabilite: "fiable" 
+  },
+  { 
+    nom: 'Violette', 
+    image: 'avatar-1.png',
+    indices: [
+      "A été vue avec la victime peu avant le crime.",
+      "Semblait nerveuse lors du dîner."
+    ], 
+    fiabilite: "fiable" 
+  },
+  { 
+    nom: 'Brume', 
+    image: 'avatar-1.png',
+    indices: [
+      "Possède une clé suspecte.",
+      "A disparu 10 minutes pendant la soirée."
+    ], 
+    fiabilite: "suspect" 
+  }
 ];
 
 // --- Variables d'état ---
