@@ -306,3 +306,9 @@ export { personnagesParEpoque };
 
 // Pour une utilisation en module ES :
 // export default personnagesParEpoque;
+
+Object.values(personnagesParEpoque).forEach(liste => {
+  liste.forEach(perso => {
+    perso.image = imageAleatoire();
+  });
+});
