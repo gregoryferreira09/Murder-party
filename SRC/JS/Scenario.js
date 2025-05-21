@@ -507,7 +507,14 @@ function genererScenario() {
       if (temoin) variables["{temoin}"] = temoin;
       if (indice) variables["{indice}"] = indice;
 
+      console.log('Victime tirée:', victimeObj);
+      console.log('Suspect1 tiré:', suspect1);
+      console.log('Variables utilisées:', variables);
+      console.log('Variables pour replaceVars:', variables);
+      
       const introduction = replaceVars(introTpl, variables);
+      console.log('Texte intro généré:', introduction);
+      
       const crime = replaceVars(crimeTpl, variables);
 
       // Objectif/temps
