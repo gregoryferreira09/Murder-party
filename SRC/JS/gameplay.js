@@ -1,4 +1,4 @@
-// --- Données de jeu ---
+// --- Données de jeu (adaptées pour la logique JS uniquement, plus de génération avatars) ---
 const joueurs = [
   { nom: 'Inspecteur Alaric', image: 'image-personnage.jpg', indices: [
     "Tu es prêt à résoudre le mystère.",
@@ -14,11 +14,10 @@ const joueurs = [
   ], fiabilite: "suspect" }
 ];
 
-// --- Variables d'état ---
 let connexionsRestantes = 5;
 let actionType = null; // "vote" ou "connexion"
 let joueurSelectionAction = null;
-let indicesGagnes = []; // Pour synchroniser l'onglet indices
+let indicesGagnes = [];
 
 // --- Gestion des onglets ---
 function switchTab(tabName) {
@@ -26,6 +25,7 @@ function switchTab(tabName) {
     c.style.display = 'none'; c.classList.remove('active');
   });
   document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+
   if(tabName === 'vote' || tabName === 'connexion') {
     document.getElementById('action').style.display = 'block';
     document.getElementById('action').classList.add('active');
@@ -36,37 +36,51 @@ function switchTab(tabName) {
     if(tabName === 'indices') updateOngletIndices();
   }
   document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: "auto" });
 }
 
 // --- Initialisation ---
 document.addEventListener('DOMContentLoaded', function() {
+  setupAvatarClicks(); // Attach handlers to static avatars
   switchTab('fiche');
   updateChrono();
 });
 
+// --- Onglets Vote / Connexion : gestion de l'état du bouton et du titre ---
 function setupActionTab(type) {
   actionType = type;
   joueurSelectionAction = null;
   document.getElementById('actionResult').innerHTML = "";
 
-  // On ne regénère les avatars QUE si le type d'action a changé
-  const joueursDiv = document.getElementById('action-joueurs');
-  joueursDiv.innerHTML = ''; // OK, mais fais-le une seule fois par changement
+  document.getElementById('action-titre').textContent = (type === "vote") ? "Votez pour un suspect :" : "Connexion entre joueurs :";
+  document.getElementById('action-btn').textContent = (type === "vote") ? "Valider le vote" : "Valider la connexion";
+  document.getElementById('action-btn').disabled = true;
 
-  joueurs.forEach(j => {
-    if (type === "vote" && j.nom === "Inspecteur Alaric") return;
-    const div = document.createElement('div');
-    div.className = 'joueur-avatar';
-    div.innerHTML = `<img src="${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
-    // div.tabIndex = 0; // Désactive le focus clavier si tu ne veux pas de scroll auto
-    div.onclick = () => selectJoueur(div, j);
-    div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") selectJoueur(div, j); };
-    joueursDiv.appendChild(div);
+  // Désélectionne tous les avatars
+  document.querySelectorAll('.joueur-avatar').forEach(d => d.classList.remove('selected'));
+}
+
+// --- Sélection d'un joueur (statique) ---
+function setupAvatarClicks() {
+  document.querySelectorAll('.joueur-avatar').forEach(div => {
+    div.onclick = () => {
+      document.querySelectorAll('.joueur-avatar').forEach(d => d.classList.remove('selected'));
+      div.classList.add('selected');
+      joueurSelectionAction = {
+        nom: div.getAttribute('data-nom'),
+        fiabilite: div.getAttribute('data-fiabilite'),
+        indices: div.getAttribute('data-indices').split('|')
+      };
+      document.getElementById('action-btn').disabled = false;
+    };
+    // Accessibilité clavier
+    div.tabIndex = 0;
+    div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") div.click(); };
   });
+}
 
-  // Désactive le bouton si aucune sélection ou plus de connexions
-  document.getElementById('action-btn').disabled = (type === "connexion" && connexionsRestantes <= 0);
-
+// --- Bouton Vote/Connexion ---
+document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('action-btn').onclick = function() {
     if (!joueurSelectionAction) return;
     if (actionType === "vote") {
@@ -74,21 +88,13 @@ function setupActionTab(type) {
       showToast("Vote enregistré !");
       const effet = document.getElementById("effetElimination");
       effet.classList.add("visible");
-      try { document.getElementById('sound-vote').play(); } catch (e) { }
+      try { document.getElementById('sound-vote').play(); } catch(e){}
       setTimeout(() => effet.classList.remove("visible"), 2000);
     } else {
       validerConnexion();
     }
   }
-}
-
-// --- Sélection d'un joueur ---
-function selectJoueur(div, joueur) {
-  document.querySelectorAll('.joueur-avatar').forEach(d => d.classList.remove('selected'));
-  div.classList.add('selected');
-  joueurSelectionAction = joueur;
-  document.getElementById('action-btn').disabled = false;
-}
+});
 
 // --- Modale Connexion ---
 function validerConnexion() {
@@ -98,17 +104,18 @@ function validerConnexion() {
 function showConnexionModal(nomCible) {
   document.getElementById('modal-connexion-text').textContent = `Voulez-vous vous connecter avec ${nomCible} ?`;
   document.getElementById('modal-connexion').classList.add('show');
-  document.body.classList.add('modal-open'); // Empêche le scroll du body quand la modale est ouverte
+  document.body.classList.add('modal-open');
 }
 function accepterConnexion() {
   document.getElementById('modal-connexion').classList.remove('show');
-  document.body.classList.remove('modal-open'); // Rétablit le scroll du body
+  document.body.classList.remove('modal-open');
   connexionsRestantes--;
   document.getElementById("connexionRestantes").textContent = connexionsRestantes;
   showToast("Connexion acceptée !");
   try { document.getElementById('sound-connexion').play(); } catch(e){}
   // Affichage d'indice
-  const indice = joueurSelectionAction.indices[Math.floor(Math.random() * joueurSelectionAction.indices.length)];
+  const indices = joueurSelectionAction.indices;
+  const indice = indices[Math.floor(Math.random() * indices.length)];
   indicesGagnes.push({
     indice,
     fiabilite: joueurSelectionAction.fiabilite
@@ -129,7 +136,7 @@ function accepterConnexion() {
 }
 function refuserConnexion() {
   document.getElementById('modal-connexion').classList.remove('show');
-  document.body.classList.remove('modal-open'); // Rétablit le scroll du body
+  document.body.classList.remove('modal-open');
   showToast("Connexion refusée.");
 }
 
