@@ -586,7 +586,7 @@ function genererScenario() {
       <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
       <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
   <div class="boutons-actions">
-  <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Lancement dans 30s</a>
+  <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">30s</a>
   <a class="gold-btn" href="creer-partie.html">Retour</a>
 </div>
 `;
