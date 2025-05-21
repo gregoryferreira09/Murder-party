@@ -404,3 +404,15 @@ button {
   color: #f4e4c1;
   text-decoration: none;
 }
+
+/* Spécifique à la zone chrono sur la page enquête */
+#chrono {
+  font-size: 2rem;              /* agrandit le texte */
+  font-weight: bold;
+  color: #e0c185;               /* couleur dorée */
+  margin: 32px 0 32px 0;        /* espace au-dessus et en-dessous */
+  text-align: center;
+  letter-spacing: 0.5px;
+  width: 100%;
+  display: block;
+}
