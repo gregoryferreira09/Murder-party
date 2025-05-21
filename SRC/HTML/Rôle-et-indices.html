@@ -14,43 +14,45 @@
     </div>
   </header>
 
-  <div class="bandeau-dore" style="margin-top: 30px;">
-    <div id="chrono">Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span></div>
+  <main>
+    <div class="bandeau-dore" style="margin-top:30px;">
+      <div id="chrono">Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span></div>
+      
+      <div class="tabs" style="margin-bottom:20px; display:flex; justify-content:center;">
+        <button class="gold-btn tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
+        <button class="gold-btn tab-button" onclick="switchTab('indices')">🧩 Indices</button>
+        <button class="gold-btn tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
+        <button class="gold-btn tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
+      </div>
+      
+      <section id="fiche" class="tab-content active fiche-personnage">
+        <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
+        <img src="image-personnage.jpg" alt="Image du Personnage" style="width:80px; border-radius:50%; border:3px solid #e9c78c;">
+        <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble...</p>
+        <p><strong>Pouvoir :</strong> Interrogez deux joueurs à chaque tour...</p>
+      </section>
 
-    <div class="tabs" style="margin-bottom:20px;">
-      <button class="gold-btn tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
-      <button class="gold-btn tab-button" onclick="switchTab('indices')">🧩 Indices</button>
-      <button class="gold-btn tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
-      <button class="gold-btn tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
+      <section id="indices" class="tab-content" style="display:none;">
+        <h3>Vos indices :</h3>
+        <div id="listeIndices"></div>
+      </section>
+
+      <section id="vote" class="tab-content" style="display:none;">
+        <h3>Votez pour un suspect :</h3>
+        <form id="voteForm">
+          <select id="suspect"></select>
+          <button type="submit" class="gold-btn">Voter</button>
+        </form>
+        <div id="voteResult" style="margin-top: 10px;"></div>
+      </section>
+
+      <section id="connexion" class="tab-content" style="display:none;">
+        <h3>Connexion entre joueurs :</h3>
+        <div class="connexion-joueur" id="joueursList"></div>
+        <button class="gold-btn" onclick="validerConnexion()">Valider la connexion</button>
+      </section>
     </div>
-
-    <section id="fiche" class="tab-content active fiche-personnage">
-      <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
-      <img src="image-personnage.jpg" alt="Image du Personnage" style="width:80px; border-radius:50%; border:3px solid #e9c78c;">
-      <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble...</p>
-      <p><strong>Pouvoir :</strong> Interrogez deux joueurs à chaque tour...</p>
-    </section>
-
-    <section id="indices" class="tab-content">
-      <h3>Vos indices :</h3>
-      <div id="listeIndices"></div>
-    </section>
-
-    <section id="vote" class="tab-content">
-      <h3>Votez pour un suspect :</h3>
-      <form id="voteForm">
-        <select id="suspect"></select>
-        <button type="submit" class="gold-btn">Voter</button>
-      </form>
-      <div id="voteResult" style="margin-top: 10px;"></div>
-    </section>
-
-    <section id="connexion" class="tab-content">
-      <h3>Connexion entre joueurs :</h3>
-      <div class="connexion-joueur" id="joueursList"></div>
-      <button class="gold-btn" onclick="validerConnexion()">Valider la connexion</button>
-    </section>
-  </div>
+  </main>
 
   <footer class="footer">
     <button class="btn-retour" onclick="window.location.href='accueil.html'">🏠 Accueil</button><br>
@@ -60,6 +62,23 @@
   <div class="effet-elimination" id="effetElimination"></div>
 
   <script>
+    // Fonctionnement des onglets
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(c => {
+        c.style.display = 'none';
+        c.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabName).style.display = 'block';
+      document.getElementById(tabName).classList.add('active');
+      document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+    }
+    // Initialisation de l'état d'affichage
+    document.addEventListener('DOMContentLoaded', function() {
+      switchTab('fiche');
+    });
+
+    // Données de joueurs
     const joueurs = [
       { nom: 'Violette', image: 'violette.jpg', indices: ["A été vue avec la victime peu avant le crime.", "Semblait nerveuse lors du dîner."], fiabilite: "fiable" },
       { nom: 'Brume', image: 'brume.jpg', indices: ["Possède une clé suspecte.", "A disparu 10 minutes pendant la soirée."], fiabilite: "suspect" }
@@ -67,20 +86,16 @@
     let connexionsRestantes = 5;
     let joueurSelectionne = null;
 
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-      document.getElementById(tabName).classList.add('active');
-      document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
-    }
-
     function initialiserJoueurs() {
       const select = document.getElementById('suspect');
       const joueursDiv = document.getElementById('joueursList');
+      select.innerHTML = '';
+      joueursDiv.innerHTML = '';
       joueurs.forEach(j => {
         select.innerHTML += `<option value="${j.nom}">${j.nom}</option>`;
         const div = document.createElement('div');
-        div.innerHTML = `<img src="${j.image}" alt="${j.nom}"><br>${j.nom}`;
+        div.innerHTML = `<img src="${j.image}" alt="${j.nom}" style="width:80px; border-radius:50%; border:3px solid #e9c78c;"><br>${j.nom}`;
+        div.style.cursor = "pointer";
         div.onclick = () => joueurSelectionne = j;
         joueursDiv.appendChild(div);
       });
@@ -131,7 +146,11 @@
     }
     setInterval(updateChrono, 1000);
 
-    initialiserJoueurs();
+    // Initialisation au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+      initialiserJoueurs();
+      switchTab('fiche');
+    });
   </script>
 </body>
 </html>
