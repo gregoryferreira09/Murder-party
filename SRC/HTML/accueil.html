@@ -2,16 +2,49 @@
 <html lang="fr">
 
 <head>
-  <!-- ... tout ton head inchangé ... -->
+  <meta charset="UTF-8">
+  <title>Accueil - Murder Party</title>
+  
+  <!-- ✅ Optimisation mobile + encoche -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta name="description" content="Bienvenue dans Murder Party, un jeu de mystère et d’enquête à vivre entre amis. Créez, rejoignez, et résolvez le crime.">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/848/848043.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- ✅ Préchargement image de fond -->
+  <link rel="preload" href="https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg" as="image">
+
+  <!-- Lien vers ton fichier CSS externe -->
+  <link rel="stylesheet" href="../../Public/styles/style.css">
+
+  <!-- Service Worker (optionnel) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('Service Worker enregistré:', reg.scope))
+          .catch(err => console.error('Erreur Service Worker:', err));
+      });
+    }
+  </script>
+
+  <!-- Inclusion utils.js et application des paramètres -->
+  <script type="module">
+    import { applyUserSettings } from "../../Public/scripts/utils.js";
+    applyUserSettings();
+  </script>
 </head>
 
 <body>
+
   <header>
     <h1>Murder Party</h1>
   </header>
 
   <main>
     <div class="bandeau-dore">
+      <!-- Message de bienvenue -->
       <p id="bienvenuePseudo"></p>
       <div class="scenario">
         <section class="menu-buttons">
@@ -20,8 +53,6 @@
           <button onclick="window.location.href='profil-joueur.html'" aria-label="Voir le profil">👤 Profil</button>
           <button onclick="window.location.href='boutique.html'" aria-label="Accéder à la boutique">🛍️ Boutique</button>
           <button onclick="window.location.href='parametres.html'" aria-label="Paramètres du jeu">⚙️ Paramètres</button>
-          <!-- Bouton Quitter salon, affiché si dans un salon -->
-          <button id="btnQuitterSalon" style="display:none" aria-label="Quitter le salon">🚪 Quitter le salon</button>
         </section>
       </div>
     </div>
@@ -32,36 +63,16 @@
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
-  <!-- Fenêtre flottante de confirmation -->
-  <div id="modalQuitterSalon" class="modal" style="display:none;">
-    <div class="modal-content">
-      <p>Voulez-vous vraiment quitter le salon ?</p>
-      <button id="confirmQuitterSalon">Oui, quitter</button>
-      <button id="cancelQuitterSalon">Annuler</button>
-    </div>
-  </div>
-
-  <!-- Styles pour la fenêtre flottante (simplifié, à adapter à ton CSS) -->
-  <style>
-    .modal {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 1000;
-    }
-    .modal-content {
-      background: #fff; padding: 2em 1.5em; border-radius: 12px; box-shadow: 0 2px 20px #0008; text-align: center;
-    }
-    .modal-content button { margin: 0 0.5em; }
-  </style>
-
-  <!-- JS pour la logique de confirmation -->
+  <!-- ✅ Affichage du pseudo de bienvenue -->
   <script>
-    // Affiche pseudo
     document.addEventListener("DOMContentLoaded", function() {
       const pseudo = localStorage.getItem("pseudo") || "Anonyme";
       document.getElementById("bienvenuePseudo").textContent = `Bienvenue, ${pseudo} !`;
     });
+  </script>
 
-    // Vibration
+  <!-- ✅ Ajout vibration au clic -->
+  <script>
     document.addEventListener("DOMContentLoaded", function() {
       const buttons = document.querySelectorAll('button');
       buttons.forEach(btn => {
@@ -70,30 +81,7 @@
         });
       });
     });
-
-    // Affiche bouton "Quitter le salon" si l'utilisateur est dans un salon
-    document.addEventListener("DOMContentLoaded", function() {
-      // Par exemple, on teste la présence d'un idSalon dans le localStorage
-      if(localStorage.getItem("idSalon")) {
-        document.getElementById("btnQuitterSalon").style.display = "inline-block";
-      }
-    });
-
-    // Gestion de la fenêtre flottante
-    document.getElementById("btnQuitterSalon").addEventListener("click", function() {
-      document.getElementById("modalQuitterSalon").style.display = "flex";
-    });
-
-    document.getElementById("cancelQuitterSalon").addEventListener("click", function() {
-      document.getElementById("modalQuitterSalon").style.display = "none";
-    });
-
-    document.getElementById("confirmQuitterSalon").addEventListener("click", function() {
-      // Ici, tu retires l'utilisateur du salon sans supprimer le salon (ex: suppression idSalon)
-      localStorage.removeItem("idSalon");
-      // Redirige vers rejoindre-partie.html
-      window.location.href = "rejoindre-partie.html";
-    });
   </script>
+
 </body>
 </html>
