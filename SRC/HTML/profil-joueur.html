@@ -159,6 +159,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // Affiche le pseudo dans le champ, ou Anonyme si vide
   pseudoInput.value = pseudo;
 
+  const playerId = localStorage.getItem("pseudo") || "Anonyme";
+  
   // Lorsque l'utilisateur clique sur "Valider"
   document.getElementById("btn-save-pseudo").addEventListener("click", function() {
     let newPseudo = pseudoInput.value.trim();
