@@ -21,6 +21,7 @@
     .badges-section { margin-top: 2rem; }
     .badges-section ul {
       display: flex; gap: 1rem; flex-wrap: wrap; list-style: none; padding: 0;
+      justify-content: center; /* Correction pour centrer les badges */
     }
     .badges-section li img { width: 60px; height: 60px; object-fit: contain; }
     .visually-hidden {
@@ -39,7 +40,6 @@
     }
     .historique-section { margin-top: 2rem; }
     .historique-section ul { padding-left: 1rem; }
-    /* Harmonisation stricte du fond avec .bandeau-dore */
     .profil-container {
       background: linear-gradient(145deg, #2c1b1b, #1f1313);
       border: 2px solid #e0c185;
@@ -54,14 +54,12 @@
       color: #f4e4c1;
       font-family: 'Cormorant Garamond', serif;
     }
-    /* Pour uniformiser la largeur max du contenu, comme sur les autres pages */
-    /* Ajuste le bouton retour comme sur accueil */
-    .return-btn {
+    .return-btn, .btn-retour {
       display: inline-block;
       margin: 2em 0 0 0;
       padding: 0.7em 2.2em;
-      background: #d4af37;
-      color: #5c4326;
+      background: #4f3423;
+      color: #f4e4c1;
       border: none;
       border-radius: 8px;
       font-family: 'Cinzel Decorative',cursive;
@@ -72,7 +70,7 @@
       transition: background 0.15s;
       cursor: pointer;
     }
-    .return-btn:hover { background: #b6952f; }
+    .return-btn:hover, .btn-retour:hover { background: #362113; }
     main { display: flex; flex-direction: column; align-items: center; }
     .profil-container { width: 100%; max-width: 650px; }
   </style>
@@ -134,7 +132,7 @@
         </ul>
       </section>
 
-      <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
+      <a class="btn-retour" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
 
       <!-- Avatar Modal -->
       <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"
