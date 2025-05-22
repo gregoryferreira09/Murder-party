@@ -15,6 +15,11 @@ if (typeof firebase !== "undefined" && !firebase.apps.length) {
 }
 const db = typeof firebase !== "undefined" ? firebase.database() : null;
 
+// GESTION AVANCÉE DE LA SYNCHRONISATION ET DES ERREURS
+document.addEventListener("DOMContentLoaded", function() {
+  const container = document.getElementById("scenarioContainer");
+  const salonCode = localStorage.getItem('salonCode');
+
   // Si pas de code de salon : erreur
   if (!salonCode) {
     container.innerHTML = "<p>Aucun salon trouvé. Veuillez créer ou rejoindre une partie.</p>";
@@ -45,6 +50,23 @@ const db = typeof firebase !== "undefined" ? firebase.database() : null;
 });
 
 // --- CHARGEMENT DES PARAMÈTRES DEPUIS FIREBASE AVANT DE GÉNÉRER ---
+document.addEventListener("DOMContentLoaded", function() {
+  const salonCode = localStorage.getItem('salonCode');
+  if (salonCode && db) {
+    db.ref('parties/' + salonCode + '/parametres').once('value').then((snap) => {
+      const params = snap.val();
+      if (params) {
+        localStorage.setItem('parametresPartie', JSON.stringify(params));
+      }
+      genererScenario(); // appelle la génération du scénario APRÈS la lecture Firebase
+    }).catch(() => {
+      genererScenario();
+    });
+  } else {
+    genererScenario();
+  }
+});
+
 document.addEventListener("DOMContentLoaded", function() {
   const salonCode = localStorage.getItem('salonCode');
   console.log("SalonCode utilisé pour la génération du scénario :", salonCode);
@@ -502,13 +524,7 @@ function genererScenario() {
   } catch {
     scenarioData = null;
   }
-  console.log("parametresPartie utilisés :", scenarioData); // <-- Ajout du log debug
   const container = document.getElementById("scenarioContainer");
-
-  if (!scenarioData) {
-    container.innerHTML = "<p>Aucun paramètre de partie trouvé.<br>Veuillez créer ou rejoindre une partie.</p>";
-    return;
-  }
 
   if (scenarioData) {
     let periodeCle = scenarioData.periode;
