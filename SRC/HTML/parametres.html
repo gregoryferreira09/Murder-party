@@ -16,7 +16,7 @@
   </header>
 
   <main>
-    <div class="bandeau-dore scenario fade-in">
+    <div class="bandeau-dore scenario">
       <section class="parametres">
         <label class="param-option">
           <input type="checkbox" id="toggleSound" />
@@ -43,7 +43,6 @@
         <button class="btn-secondary" onclick="window.location.href='accueil.html'">Retour</button>
       </section>
     </div>
-
   </main>
 
 <footer class="footer">
@@ -52,17 +51,5 @@
 </footer>
 
   <script type="module" src="../JS/parametres.js"></script>
-
-  <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const fade = document.querySelector('.fade-in');
-  if (fade) {
-    fade.classList.remove('fade-in');
-    void fade.offsetWidth; // force le reflow
-    fade.classList.add('fade-in');
-  }
-});
-</script>
-  
 </body>
 </html>
