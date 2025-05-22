@@ -17,7 +17,7 @@
       font-weight: bold;
       letter-spacing: 2px;
     }
-    /* Modale de confirmation */
+    /* Modale de confirmation stylée façon bandeau-dore */
     #confirmationModal {
       display: none;
       position: fixed;
@@ -28,11 +28,31 @@
       align-items: center;
     }
     #confirmationModal .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      min-width: 300px;
+      background: #f9e8c9;
+      border: 4px solid #d4af37;
+      color: #5c4326;
+      font-family: 'Cinzel Decorative', 'Cormorant Garamond', serif;
+      padding: 36px 42px 30px 42px;
+      border-radius: 16px;
+      min-width: 340px;
       text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.20);
+    }
+    #confirmationModal .modal-content .modal-question {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 32px;
+    }
+    #confirmationModal .modal-btns {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin-top: 0;
+    }
+    #confirmationModal .gold-btn {
+      min-width: 120px;
+      font-size: 1.15em;
+      padding: 12px 0;
     }
   </style>
 </head>
@@ -59,9 +79,11 @@
     <!-- Modale de confirmation pour le créateur -->
     <div id="confirmationModal">
       <div class="modal-content">
-        <p>Es-tu sûr de vouloir clôturer le salon ?</p>
-        <button id="confirmCloture" class="gold-btn" style="margin-right: 20px;">Oui</button>
-        <button id="cancelCloture" class="gold-btn">Non</button>
+        <div class="modal-question">Es-tu sûr de vouloir clôturer le salon ?</div>
+        <div class="modal-btns">
+          <button id="confirmCloture" class="gold-btn">Oui</button>
+          <button id="cancelCloture" class="gold-btn">Non</button>
+        </div>
       </div>
     </div>
   </main>
