@@ -42,7 +42,6 @@ document.getElementById("genererBtn").addEventListener("click", async function(e
     const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
     const inactifs = document.getElementById("inactifs").checked;
 
-    const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
     const parametresPartie = {
       mode,
       duree,
@@ -53,7 +52,8 @@ document.getElementById("genererBtn").addEventListener("click", async function(e
       criminelFantome,
       avatarsLegendaires,
       inactifs,
-      createur: monPseudo // Stockage du créateur
+      // Stockage du créateur
+      createur: localStorage.getItem("pseudo") || "Anonyme"
     };
 
     // Générer un code de salon unique
@@ -62,7 +62,8 @@ document.getElementById("genererBtn").addEventListener("click", async function(e
     // Enregistrer les paramètres dans Firebase
     await db.ref('parties/' + salonCode + '/parametres').set(parametresPartie);
 
-    // Ajoute le créateur comme premier joueur
+    // Ajoute le créateur comme premier joueur (pseudo unique)
+    const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
     await db.ref('parties/' + salonCode + '/joueurs').push({
       pseudo: monPseudo
     });
