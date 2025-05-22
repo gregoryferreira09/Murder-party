@@ -17,7 +17,6 @@
       font-weight: bold;
       letter-spacing: 2px;
     }
-    /* Modale de confirmation stylée façon bandeau-dore */
     #confirmationModal {
       display: none;
       position: fixed;
@@ -76,13 +75,13 @@
       <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px;">Salon supprimé par le créateur.</div>
     </div>
 
-    <!-- Modale de confirmation pour le créateur -->
+    <!-- Modale de confirmation commune -->
     <div id="confirmationModal">
       <div class="modal-content">
-        <div class="modal-question">Es-tu sûr de vouloir clôturer le salon ?</div>
+        <div class="modal-question" id="modalQuestion">Es-tu sûr de vouloir clôturer le salon ?</div>
         <div class="modal-btns">
-          <button id="confirmCloture" class="gold-btn">Oui</button>
-          <button id="cancelCloture" class="gold-btn">Non</button>
+          <button id="confirmModalBtn" class="gold-btn">Oui</button>
+          <button id="cancelModalBtn" class="gold-btn">Non</button>
         </div>
       </div>
     </div>
@@ -115,8 +114,11 @@
     const cloturerSalonBtn = document.getElementById("cloturerSalonBtn");
     const quitterSalonBtn = document.getElementById("quitterSalonBtn");
     const confirmationModal = document.getElementById("confirmationModal");
-    const confirmCloture = document.getElementById("confirmCloture");
-    const cancelCloture = document.getElementById("cancelCloture");
+    const confirmModalBtn = document.getElementById("confirmModalBtn");
+    const cancelModalBtn = document.getElementById("cancelModalBtn");
+    const modalQuestion = document.getElementById("modalQuestion");
+
+    let currentAction = null; // "cloture" ou "quitter"
 
     // --- Vérifier qui est le créateur et afficher les bons boutons ---
     db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
@@ -132,26 +134,50 @@
     });
 
     // --- Actions boutons ---
-    // Créateur : ouvrir la modale de confirmation
+    // Créateur : ouvrir la modale de confirmation pour clôturer
     cloturerSalonBtn.addEventListener("click", function() {
+      modalQuestion.textContent = "Es-tu sûr de vouloir clôturer le salon ?";
+      currentAction = "cloture";
       confirmationModal.style.display = "flex";
     });
 
-    // Confirmer clôture
-    confirmCloture.addEventListener("click", function() {
-      db.ref('parties/' + salonCode).remove().then(() => {
-        window.location.href = "creer-partie.html";
-      });
-    });
-
-    // Annuler clôture
-    cancelCloture.addEventListener("click", function() {
-      confirmationModal.style.display = "none";
-    });
-
-    // Joueur : quitter le salon
+    // Participant : ouvrir la modale de confirmation pour quitter
     quitterSalonBtn.addEventListener("click", function() {
-      window.location.href = "rejoindre-partie.html";
+      modalQuestion.textContent = "Es-tu sûr de vouloir quitter le salon ?";
+      currentAction = "quitter";
+      confirmationModal.style.display = "flex";
+    });
+
+    // Confirmer l'action sur la modale
+    confirmModalBtn.addEventListener("click", function() {
+      if(currentAction === "cloture") {
+        db.ref('parties/' + salonCode).remove().then(() => {
+          window.location.href = "creer-partie.html";
+        });
+      } else if(currentAction === "quitter") {
+        // Retirer le joueur de la liste des joueurs
+        // Recherche du joueur par pseudo puis suppression de son entrée
+        const joueursRef = db.ref('parties/' + salonCode + '/joueurs');
+        joueursRef.once('value', snap => {
+          snap.forEach(child => {
+            if(child.val().pseudo === monPseudo) {
+              joueursRef.child(child.key).remove();
+            }
+          });
+        });
+        // Redirection après un petit délai pour s'assurer de la suppression
+        setTimeout(() => {
+          window.location.href = "rejoindre-partie.html";
+        }, 300);
+      }
+      confirmationModal.style.display = "none";
+      currentAction = null;
+    });
+
+    // Annuler dans la modale
+    cancelModalBtn.addEventListener("click", function() {
+      confirmationModal.style.display = "none";
+      currentAction = null;
     });
 
     // --- Affichage des joueurs en temps réel + état du salon ---
@@ -208,9 +234,7 @@
 
     // --- Suppression automatique si le créateur ferme l'onglet ou recharge ---
     window.addEventListener("beforeunload", function (e) {
-      // Important : n'utilise pas de promesse asynchrone ici, ce sera annulé par le navigateur
       if (jeSuisCreateur) {
-        // Suppression "en fire-and-forget"
         db.ref('parties/' + salonCode).remove();
       }
     });
