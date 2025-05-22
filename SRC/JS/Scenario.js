@@ -1,68 +1,4 @@
-// --- Configuration et initialisation Firebase ---
-// (NE PAS utiliser type="module" pour ce fichier dans le HTML !)
-const firebaseConfig = {
-  apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-  authDomain: "murder-party-ba8d1.firebaseapp.com",
-  databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "murder-party-ba8d1",
-  storageBucket: "murder-party-ba8d1.firebasestorage.app",
-  messagingSenderId: "20295055805",
-  appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-  measurementId: "G-KSBMBB7KMJ"
-};
-if (typeof firebase !== "undefined" && !firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = typeof firebase !== "undefined" ? firebase.database() : null;
-
-  // Si pas de code de salon : erreur
-  if (!salonCode) {
-    container.innerHTML = "<p>Aucun salon trouvé. Veuillez créer ou rejoindre une partie.</p>";
-    return;
-  }
-
-  // Sync entre onglets : si le salon change ailleurs, on recharge ici
-  window.addEventListener('storage', (event) => {
-    if (event.key === 'salonCode') window.location.reload();
-  });
-
-  // Lecture des paramètres dans Firebase (sécurisé)
-  db.ref('parties/' + salonCode + '/parametres').once('value')
-    .then((snap) => {
-      const params = snap.val();
-      if (!params) {
-        container.innerHTML = "<p>La partie n'existe plus ou a expiré. Veuillez en créer une nouvelle.</p>";
-        localStorage.removeItem('salonCode');
-        localStorage.removeItem('parametresPartie');
-        return;
-      }
-      localStorage.setItem('parametresPartie', JSON.stringify(params));
-      genererScenario();
-    })
-    .catch((error) => {
-      container.innerHTML = `<p>Erreur lors de la connexion à la base de données : ${error.message}</p>`;
-    });
-});
-
-// --- CHARGEMENT DES PARAMÈTRES DEPUIS FIREBASE AVANT DE GÉNÉRER ---
-document.addEventListener("DOMContentLoaded", function() {
-  const salonCode = localStorage.getItem('salonCode');
-  console.log("SalonCode utilisé pour la génération du scénario :", salonCode);
-  if (salonCode && db) {
-    db.ref('parties/' + salonCode + '/parametres').once('value').then((snap) => {
-      const params = snap.val();
-      console.log("Paramètres récupérés depuis Firebase :", params);
-      if (params) {
-        localStorage.setItem('parametresPartie', JSON.stringify(params));
-      }
-      genererScenario();
-    }).catch(() => {
-      document.getElementById("scenarioContainer").innerHTML = "<p>Erreur lors du chargement des paramètres Firebase.</p>";
-    });
-  } else {
-    document.getElementById("scenarioContainer").innerHTML = "<p>Aucun code de salon trouvé, veuillez (re)créer une partie.</p>";
-  }
-});
+// SRC/JS/Scenario.js
 
 const ANTI_REPEAT_HISTORY_SIZE = 5;
 
@@ -502,192 +438,182 @@ function genererScenario() {
   } catch {
     scenarioData = null;
   }
-  console.log("parametresPartie utilisés :", scenarioData);
   const container = document.getElementById("scenarioContainer");
 
-  if (!scenarioData) {
-    container.innerHTML = "<p>Aucun paramètre de partie trouvé.<br>Veuillez créer ou rejoindre une partie.</p>";
-    return;
-  }
-
-  let periodeCle = scenarioData.periode;
-  if (periodeCle === "autre" && scenarioData.periodeAutre) {
-    periodeCle = "autre";
-  }
-  if (!univers[periodeCle]) periodeCle = "autre";
-  const periodeData = univers[periodeCle];
-  const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
-
-  // Historique long pour antirépétition stricte
-  let history = getScenarioHistory();
-  let maxTry = 15, tryCount = 0, scenarioOk = false, scenarioObj;
-
-  while (!scenarioOk && tryCount < maxTry) {
-    tryCount++;
-
-    // Tirages uniques sur chaque champ
-    const lieuObj = tirageUnique(periodeData.lieux, "nom", history, "lieu");
-    const victimeObj = tirageUnique(periodeData.victimes, "nom", history, "victime");
-    const arme = tirageUnique(periodeData.armes, null, history, "arme");
-    const ambiance = tirageUnique(periodeData.ambiances, null, history, "ambiance");
-    const traitVictime = tirageUnique(periodeData.traitsVictimes, null, history, "traitVictime");
-    const motif = tirageUnique(periodeData.motifs, null, history, "motif");
-
-    // Suspects, témoins, indices
-    const suspects = shuffleArray(periodeData.suspects.filter(sus => !victimeObj.nom.toLowerCase().includes(sus.toLowerCase())));
-    const suspect1 = tirageUnique(suspects, null, history, "suspect1");
-    const suspect2 = tirageUnique(suspects.filter(sus => sus !== suspect1), null, history, "suspect2");
-
-    let temoinObj, temoin;
-    if (nbJoueurs >= 4 && periodeData.temoins) {
-      temoinObj = tirageUnique(periodeData.temoins, "nom", history, "temoin");
-      temoin = temoinObj ? temoinObj.nom : undefined;
+  if (scenarioData) {
+    let periodeCle = scenarioData.periode;
+    if (periodeCle === "autre" && scenarioData.periodeAutre) {
+      periodeCle = "autre";
     }
-    let indice = (nbJoueurs >= 3 && periodeData.indices) ? tirageUnique(periodeData.indices, null, history, "indice") : undefined;
+    if (!univers[periodeCle]) periodeCle = "autre";
+    const periodeData = univers[periodeCle];
+    const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
 
-    // Templates intro/crime uniques
-    let introCandidates = periodeData.intro.filter((tpl) => {
-      if (tpl.startsWith("[TEMOIN]")) return temoin;
-      if (tpl.startsWith("[INDICE]")) return indice;
-      return true;
-    });
-    const introTpl = tirageTemplateUnique(introCandidates, history, "introTpl").replace(/^\[(INDICE|TEMOIN)\]\s?/, "");
+    // Historique long pour antirépétition stricte
+    let history = getScenarioHistory();
+    let maxTry = 15, tryCount = 0, scenarioOk = false, scenarioObj;
 
-    let modeCrime = scenarioData.mode;
-    if (!periodeData.crimes[modeCrime]) modeCrime = "classique";
-    const crimeTemplates = periodeData.crimes[modeCrime].filter(tpl => {
-      if (tpl.includes("{temoin}") && !temoin) return false;
-      if (tpl.includes("{indice}") && !indice) return false;
-      if (tpl.includes("{suspect2}") && !suspect2) return false;
-      return true;
-    });
-    const crimeTpl = tirageTemplateUnique(crimeTemplates, history, "crimeTpl");
+    while (!scenarioOk && tryCount < maxTry) {
+      tryCount++;
 
-    const artLieu = getArticle(lieuObj.nom, { m: 'le', f: 'la' });
-    const artDansLieu = articleDans(lieuObj.nom, artLieu);
-    const artVictime = getArticle(victimeObj.nom, { m: 'le', f: 'la' });
+      // Tirages uniques sur chaque champ
+      const lieuObj = tirageUnique(periodeData.lieux, "nom", history, "lieu");
+      const victimeObj = tirageUnique(periodeData.victimes, "nom", history, "victime");
+      const arme = tirageUnique(periodeData.armes, null, history, "arme");
+      const ambiance = tirageUnique(periodeData.ambiances, null, history, "ambiance");
+      const traitVictime = tirageUnique(periodeData.traitsVictimes, null, history, "traitVictime");
+      const motif = tirageUnique(periodeData.motifs, null, history, "motif");
 
-    const variables = {
-      "{lieu}": lieuObj.nom,
-      "{la_lieu}": artLieu + (artLieu.endsWith("'") ? "" : " ") + lieuObj.nom,
-      "{dans_la_lieu}": artDansLieu + " " + lieuObj.nom,
-      "{victime}": victimeObj.nom,
-      "{le_victime}": artVictime + (artVictime.endsWith("'") ? "" : " ") + victimeObj.nom,
-      "{traitVictime}": traitVictime,
-      "{motif}": motif,
-      "{arme}": arme,
-      "{ambiance}": ambiance,
-      "{suspect1}": suspect1,
-      "{suspect2}": suspect2
-    };
-    if (temoin) variables["{temoin}"] = temoin;
-    if (indice) variables["{indice}"] = indice;
+      // Suspects, témoins, indices
+      const suspects = shuffleArray(periodeData.suspects.filter(sus => !victimeObj.nom.toLowerCase().includes(sus.toLowerCase())));
+      const suspect1 = tirageUnique(suspects, null, history, "suspect1");
+      const suspect2 = tirageUnique(suspects.filter(sus => sus !== suspect1), null, history, "suspect2");
 
-    const introduction = replaceVars(introTpl, variables);
-    const crime = replaceVars(crimeTpl, variables);
+      let temoinObj, temoin;
+      if (nbJoueurs >= 4 && periodeData.temoins) {
+        temoinObj = tirageUnique(periodeData.temoins, "nom", history, "temoin");
+        temoin = temoinObj ? temoinObj.nom : undefined;
+      }
+      let indice = (nbJoueurs >= 3 && periodeData.indices) ? tirageUnique(periodeData.indices, null, history, "indice") : undefined;
 
-    // Objectif/temps
-    const objectif = tirageUnique(scenarioLibrary.objectifs[scenarioData.criminels] || scenarioLibrary.objectifs[1], null, history, "objectif");
-    const dureeCat = categoriseDuree(scenarioData.duree);
-    const detailsDuree = tirageUnique(scenarioLibrary.durees[dureeCat], null, history, "detailsDuree");
+      // Templates intro/crime uniques
+      let introCandidates = periodeData.intro.filter((tpl) => {
+        if (tpl.startsWith("[TEMOIN]")) return temoin;
+        if (tpl.startsWith("[INDICE]")) return indice;
+        return true;
+      });
+      const introTpl = tirageTemplateUnique(introCandidates, history, "introTpl").replace(/^\[(INDICE|TEMOIN)\]\s?/, "");
 
-    // Vérification stricte : tout doit être différent
-    scenarioObj = {
-      lieu: lieuObj.nom,
-      victime: victimeObj.nom,
-      arme,
-      ambiance,
-      traitVictime,
-      motif,
-      suspect1,
-      suspect2,
-      temoin: temoin || "",
-      indice: indice || "",
-      introTpl,
-      crimeTpl,
-      introduction,
-      crime,
-      objectif,
-      detailsDuree
-    };
+      let modeCrime = scenarioData.mode;
+      if (!periodeData.crimes[modeCrime]) modeCrime = "classique";
+      const crimeTemplates = periodeData.crimes[modeCrime].filter(tpl => {
+        if (tpl.includes("{temoin}") && !temoin) return false;
+        if (tpl.includes("{indice}") && !indice) return false;
+        if (tpl.includes("{suspect2}") && !suspect2) return false;
+        return true;
+      });
+      const crimeTpl = tirageTemplateUnique(crimeTemplates, history, "crimeTpl");
 
-    scenarioOk = !history.some(h =>
-      h.lieu === scenarioObj.lieu ||
-      h.victime === scenarioObj.victime ||
-      h.arme === scenarioObj.arme ||
-      h.ambiance === scenarioObj.ambiance ||
-      h.traitVictime === scenarioObj.traitVictime ||
-      h.motif === scenarioObj.motif ||
-      h.suspect1 === scenarioObj.suspect1 ||
-      h.suspect2 === scenarioObj.suspect2 ||
-      h.temoin === scenarioObj.temoin ||
-      h.indice === scenarioObj.indice ||
-      h.introTpl === scenarioObj.introTpl ||
-      h.crimeTpl === scenarioObj.crimeTpl ||
-      h.objectif === scenarioObj.objectif ||
-      h.detailsDuree === scenarioObj.detailsDuree
-    );
+      const artLieu = getArticle(lieuObj.nom, { m: 'le', f: 'la' });
+      const artDansLieu = articleDans(lieuObj.nom, artLieu);
+      const artVictime = getArticle(victimeObj.nom, { m: 'le', f: 'la' });
 
-    if (!scenarioOk && tryCount === maxTry) {
-      // On purge l'historique pour retrouver de la diversité
-      history = [];
-      tryCount = 0;
+      const variables = {
+        "{lieu}": lieuObj.nom,
+        "{la_lieu}": artLieu + (artLieu.endsWith("'") ? "" : " ") + lieuObj.nom,
+        "{dans_la_lieu}": artDansLieu + " " + lieuObj.nom,
+        "{victime}": victimeObj.nom,
+        "{le_victime}": artVictime + (artVictime.endsWith("'") ? "" : " ") + victimeObj.nom,
+        "{traitVictime}": traitVictime,
+        "{motif}": motif,
+        "{arme}": arme,
+        "{ambiance}": ambiance,
+        "{suspect1}": suspect1,
+        "{suspect2}": suspect2
+      };
+      if (temoin) variables["{temoin}"] = temoin;
+      if (indice) variables["{indice}"] = indice;
+
+      const introduction = replaceVars(introTpl, variables);
+      const crime = replaceVars(crimeTpl, variables);
+
+      // Objectif/temps
+      const objectif = tirageUnique(scenarioLibrary.objectifs[scenarioData.criminels] || scenarioLibrary.objectifs[1], null, history, "objectif");
+      const dureeCat = categoriseDuree(scenarioData.duree);
+      const detailsDuree = tirageUnique(scenarioLibrary.durees[dureeCat], null, history, "detailsDuree");
+
+      // Vérification stricte : tout doit être différent
+      scenarioObj = {
+        lieu: lieuObj.nom,
+        victime: victimeObj.nom,
+        arme,
+        ambiance,
+        traitVictime,
+        motif,
+        suspect1,
+        suspect2,
+        temoin: temoin || "",
+        indice: indice || "",
+        introTpl,
+        crimeTpl,
+        introduction,
+        crime,
+        objectif,
+        detailsDuree
+      };
+
+      scenarioOk = !history.some(h =>
+        h.lieu === scenarioObj.lieu ||
+        h.victime === scenarioObj.victime ||
+        h.arme === scenarioObj.arme ||
+        h.ambiance === scenarioObj.ambiance ||
+        h.traitVictime === scenarioObj.traitVictime ||
+        h.motif === scenarioObj.motif ||
+        h.suspect1 === scenarioObj.suspect1 ||
+        h.suspect2 === scenarioObj.suspect2 ||
+        h.temoin === scenarioObj.temoin ||
+        h.indice === scenarioObj.indice ||
+        h.introTpl === scenarioObj.introTpl ||
+        h.crimeTpl === scenarioObj.crimeTpl ||
+        h.objectif === scenarioObj.objectif ||
+        h.detailsDuree === scenarioObj.detailsDuree
+      );
+
+      if (!scenarioOk && tryCount === maxTry) {
+        // On purge l'historique pour retrouver de la diversité
+        history = [];
+        tryCount = 0;
+      }
     }
-  }
 
-  // Ajout à l'historique
-  addScenarioToHistory(scenarioObj);
+    // Ajout à l'historique
+    addScenarioToHistory(scenarioObj);
 
-  container.innerHTML = `
-    <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
-    <h2>Introduction</h2>
-    <p>${scenarioObj.introduction}</p>
-    <h2>Le crime</h2>
-    <p>${scenarioObj.crime}</p>
-    <h2>Objectif général</h2>
-    <p>${scenarioObj.objectif}</p>
-    <h2>Détails du jeu</h2>
-    <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p>
-    <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${scenarioObj.detailsDuree}</p>
-    <p>Période : ${escapeHtml(scenarioData.periode)}</p>
-    <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p>
-    <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p>
-    <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
-    <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
-<div class="boutons-actions">
-<a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
-<a class="gold-btn" href="creer-partie.html">Retour</a>
+    container.innerHTML = `
+      <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
+      <h2>Introduction</h2>
+      <p>${scenarioObj.introduction}</p>
+      <h2>Le crime</h2>
+      <p>${scenarioObj.crime}</p>
+      <h2>Objectif général</h2>
+      <p>${scenarioObj.objectif}</p>
+      <h2>Détails du jeu</h2>
+      <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p>
+      <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${scenarioObj.detailsDuree}</p>
+      <p>Période : ${escapeHtml(scenarioData.periode)}</p>
+      <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p>
+      <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p>
+      <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
+      <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
+  <div class="boutons-actions">
+  <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
+  <a class="gold-btn" href="creer-partie.html">Retour</a>
 </div>
 `;
-
-  const launchBtn = document.getElementById("launchBtn");
-  let timeLeft = 30;
-  if (launchBtn) {
-    launchBtn.textContent =`Disponible dans ${timeLeft}s`;
-    launchBtn.style.pointerEvents = "none";
-    launchBtn.style.opacity = "0.6";
-    const interval = setInterval(() => {
-      timeLeft--;
-      if (timeLeft > 0) {
-        launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-      } else {
-        clearInterval(interval);
-        launchBtn.textContent = "Lancement";
-        launchBtn.style.pointerEvents = "auto";
-        launchBtn.style.opacity = "1";
-      }
-    }, 1000);
-  }
-  const regenBtn = document.getElementById("regenScenarioBtn");
-  if (regenBtn) regenBtn.onclick = genererScenario;
+    
+const launchBtn = document.getElementById("launchBtn");
+let timeLeft = 30;
+if (launchBtn) {
+  launchBtn.textContent =`Disnopible dans ${timeLeft}s`;
+  launchBtn.style.pointerEvents = "none";
+  launchBtn.style.opacity = "0.6";
+  const interval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+    } else {
+      clearInterval(interval);
+      launchBtn.textContent = "Lancement";
+      launchBtn.style.pointerEvents = "auto";
+      launchBtn.style.opacity = "1";
+    }
+  }, 1000);
 }
+    const regenBtn = document.getElementById("regenScenarioBtn");
+    if (regenBtn) regenBtn.onclick = genererScenario;
   } else {
     document.getElementById("scenarioContainer").innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
 }
 
-window.addEventListener('storage', (event) => {
-  if (event.key === 'salonCode') {
-    location.reload();
-  }
-});
+document.addEventListener("DOMContentLoaded", genererScenario);
