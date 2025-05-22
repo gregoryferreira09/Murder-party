@@ -13,7 +13,6 @@
   
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  
 </head>
 <body>
 
@@ -22,30 +21,35 @@
   </header>
 
   <main class="bandeau-dore">
-
     <h1>🔑 Connexion</h1>
-
     <div class="form-container">
       <label for="codeInput">Entrez le code de salon reçu :</label>
-      <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" aria-label="Code de salon" />
+      <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" aria-label="Code de salon" autofocus />
 
       <div class="boutons-actions">
-        <button class="gold-btn" onclick="rejoindreSalon()">Valider</button>
-        <button class="gold-btn" onclick="retourAccueil()">Retour</button>
+        <button class="gold-btn" id="validerBtn" onclick="rejoindreSalon()" aria-label="Valider">Valider</button>
+        <button class="gold-btn" onclick="retourAccueil()" aria-label="Retour">Retour</button>
       </div>
 
-      <div class="message" id="message"></div>
-      <div class="compteur" id="compteur"></div>
+      <div class="message" id="message" role="alert"></div>
+      <div class="loader" id="loader" style="display:none;">Connexion...</div>
     </div>
-
   </main>
 
   <script src="../JS/rejoindre-partie.js"></script>
-
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
-
+  <script>
+    // Focus automatique sur le champ dès chargement
+    window.onload = () => {
+      document.getElementById("codeInput").focus();
+    };
+    // Optionnel: fonction retour accueil
+    function retourAccueil() {
+      window.location.href = "accueil.html";
+    }
+  </script>
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 </body>
 </html>
