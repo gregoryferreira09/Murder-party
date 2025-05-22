@@ -10,7 +10,6 @@
 
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  
 </head>
 <body>
 
@@ -19,72 +18,79 @@
   </header>
 
   <main>
-  <div class="bandeau-dore">
-    <p>Partagez ce code avec les autres joueurs :</p>
-    <div class="code" id="codeSalon">------</div>
-    <div class="status" id="etatSalon">
-      En attente de joueurs...
+    <div class="bandeau-dore">
+      <p>Partagez ce code avec les autres joueurs :</p>
+      <div class="code" id="codeSalon">------</div>
+      <div class="status" id="etatSalon">
+        En attente de joueurs...
+      </div>
+      <ul id="listeJoueurs"></ul>
+      <div class="menu-buttons">
+        <a href="creer-partie.html" class="gold-btn">Retour</a>
+      </div>
     </div>
-    <ul id="listeJoueurs"></ul> <!-- <--- DÉPLACE ICI -->
-    <div class="menu-buttons">
-      <a href="creer-partie.html" class="gold-btn">Retour</a>
-    </div>
-  </div>
-</main>
+  </main>
 
   <script>
-  // Récupère le code du salon déjà stocké lors de la création/rejoint
-  const salonCode = localStorage.getItem("salonCode");
-  document.getElementById("codeSalon").textContent = salonCode;
+    // Récupère le code du salon déjà stocké lors de la création/rejoint
+    const salonCode = localStorage.getItem("salonCode");
+    document.getElementById("codeSalon").textContent = salonCode;
 
-  // Initialisation Firebase (si pas déjà fait)
-  const firebaseConfig = {
-    // ...mets ici TA config...
-  };
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.database();
-
-  // Écoute la liste des joueurs en temps réel
-  const joueursDiv = document.getElementById("listeJoueurs");
-  const etatSalon = document.getElementById("etatSalon");
-  let totalJoueurs = 1;
-
-  // Récupère les paramètres pour savoir combien de joueurs on attend
-  db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
-    if (snap.exists()) {
-      const parametres = snap.val();
-      totalJoueurs = parseInt(parametres.nombreJoueurs) || 1;
+    // Initialisation Firebase (si pas déjà fait)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+      authDomain: "murder-party-ba8d1.firebaseapp.com",
+      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "murder-party-ba8d1",
+      storageBucket: "murder-party-ba8d1.firebasestorage.app",
+      messagingSenderId: "20295055805",
+      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+      measurementId: "G-KSBMBB7KMJ"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
-  });
+    const db = firebase.database();
 
-  // Affiche les joueurs en temps réel
-  db.ref('parties/' + salonCode + '/joueurs').on('value', snapshot => {
-    joueursDiv.innerHTML = "";
-    let nbJoueurs = 0;
-    snapshot.forEach(joueurSnap => {
-      const pseudo = joueurSnap.val().pseudo;
-      const li = document.createElement("li");
-      li.textContent = pseudo;
-      joueursDiv.appendChild(li);
-      nbJoueurs++;
+    // Écoute la liste des joueurs en temps réel
+    const joueursDiv = document.getElementById("listeJoueurs");
+    const etatSalon = document.getElementById("etatSalon");
+    let totalJoueurs = 1;
+
+    // Récupère les paramètres pour savoir combien de joueurs on attend
+    db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
+      if (snap.exists()) {
+        const parametres = snap.val();
+        totalJoueurs = parseInt(parametres.nombreJoueurs) || 1;
+      }
     });
-    etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
 
-    if (nbJoueurs >= totalJoueurs) {
-      etatSalon.textContent = "Tous les joueurs sont connectés ! La partie va commencer.";
-      setTimeout(() => {
-        window.location.href = "lancement-partie.html";
-      }, 2000);
-    }
-  });
-</script>
+    // Affiche les joueurs en temps réel
+    db.ref('parties/' + salonCode + '/joueurs').on('value', snapshot => {
+      joueursDiv.innerHTML = "";
+      let nbJoueurs = 0;
+      snapshot.forEach(joueurSnap => {
+        const pseudo = joueurSnap.val().pseudo;
+        const li = document.createElement("li");
+        li.textContent = pseudo;
+        joueursDiv.appendChild(li);
+        nbJoueurs++;
+      });
+      etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
 
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
+      if (nbJoueurs >= totalJoueurs) {
+        etatSalon.textContent = "Tous les joueurs sont connectés ! La partie va commencer.";
+        setTimeout(() => {
+          window.location.href = "lancement-partie.html";
+        }, 2000);
+      }
+    });
+  </script>
+
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
 </body>
 </html>
