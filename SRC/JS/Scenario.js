@@ -503,16 +503,12 @@ function genererScenario() {
     scenarioData = null;
   }
   console.log("parametresPartie utilisés :", scenarioData); // <-- Ajout du log debug
-  
   const container = document.getElementById("scenarioContainer");
 
     container.innerHTML = "<p>Aucun paramètre de partie trouvé.<br>Veuillez créer ou rejoindre une partie.</p>";
     return;
 
-  if (scenarioData) {(!scenarioData) {
-    container.innerHTML = "<p>Aucun paramètre de partie trouvé.<br>Veuillez créer ou rejoindre une partie.</p>";
-    return;
-}
+  if (scenarioData) {
     let periodeCle = scenarioData.periode;
     if (periodeCle === "autre" && scenarioData.periodeAutre) {
       periodeCle = "autre";
