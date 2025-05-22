@@ -103,6 +103,8 @@ retourAccueil = function() {
   retourAccueilOriginal();
 };
 
+const playerId = localStorage.getItem("pseudo") || "Anonyme";
+
 // 2) Ajout d'une fonction robuste pour parseInt avec fallback
 function parseIntSafe(valeur, defaut) {
   const n = parseInt(valeur);
