@@ -78,12 +78,20 @@
       });
       etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
 
-      if (nbJoueurs >= totalJoueurs) {
-        etatSalon.textContent = "Tous les joueurs sont connectés ! La partie va commencer.";
-        setTimeout(() => {
-          window.location.href = "lancement-partie.html";
-        }, 2000);
-      }
+     if (nbJoueurs >= totalJoueurs) {
+  let countdown = 5;
+  etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
+  const interval = setInterval(() => {
+    countdown--;
+    if (countdown > 0) {
+      etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
+    } else {
+      clearInterval(interval);
+      etatSalon.textContent = "La partie commence !";
+      window.location.href = "lancement-partie.html";
+    }
+  }, 1000);
+}
     });
   </script>
 
