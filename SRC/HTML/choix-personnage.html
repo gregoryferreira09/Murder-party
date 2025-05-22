@@ -39,12 +39,6 @@
       transition: transform 0.3s ease;
     }
 
-    <footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
-
-
     .carte-personnage img {
       width: 100%;
       height: auto;
@@ -87,6 +81,11 @@
 
     <button id="valider-choix" disabled>Valider mon personnage</button>
   </main>
+
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
@@ -220,73 +219,6 @@
     startRealtimeSync();
   }
 </script>
-
-  // 5. Synchro temps réel (Firebase)
-  function startRealtimeSync() {
-    db.ref(partieID + '/validations').on('value', snap => {
-      const valids = snap.val() || {};
-      // Grise les personnages déjà pris
-      document.querySelectorAll('.carte-personnage').forEach(div => {
-        const id = div.getAttribute('data-id');
-        const dejaPris = Object.values(valids).some(v => v.personnageId == id);
-        if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
-          div.style.opacity = 0.5;
-          div.style.pointerEvents = 'none';
-        } else {
-          div.style.opacity = 1;
-          div.style.pointerEvents = '';
-        }
-      });
-      // Compteur validés/total
-      const nbValid = Object.keys(valids).length;
-      const btnValider = document.getElementById('valider-choix');
-      btnValider.textContent =
-        (valids[playerId] ? 'En attente des autres joueurs (' : '') +
-        nbValid + '/' + nombreJoueurs +
-        (valids[playerId] ? ')' : ' Valider mon personnage');
-      // Redirige si tout le monde a validé
-      if(nbValid === nombreJoueurs) {
-        window.location.href = "gameplay.html";
-      }
-      // Affiche le bouton annuler si validé
-      if (valids[playerId] && !document.getElementById('annuler-choix')) {
-        ajouterBoutonAnnuler();
-        btnValider.disabled = true;
-      }
-      if (!valids[playerId] && document.getElementById('annuler-choix')) {
-        document.getElementById('annuler-choix').remove();
-        btnValider.disabled = false;
-      }
-    });
-
-    // Quand tu valides
-    document.getElementById("valider-choix").onclick = function() {
-      const personnageId = localStorage.getItem("personnageSelectionne");
-      if (personnageId && !this.disabled) {
-        db.ref(partieID + '/validations/' + playerId).set({ personnageId });
-        this.disabled = true;
-      }
-    };
-  }
-
-  // 6. Bouton annuler
-  function ajouterBoutonAnnuler() {
-    const btn = document.createElement('button');
-    btn.id = 'annuler-choix';
-    btn.textContent = "Annuler";
-    btn.onclick = function() {
-      db.ref(partieID + '/validations/' + playerId).remove();
-    };
-    document.getElementById('valider-choix').parentNode.appendChild(btn);
-  }
-</script>
-
-  
-window.onload = afficherPersonnages;
-</script>
-  
-</body>
-</html>
 
 </body>
 </html>
