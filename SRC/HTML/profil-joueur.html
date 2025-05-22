@@ -10,35 +10,6 @@
   <link rel="stylesheet" href="../../Public/styles/style.css" />
 
   <style>
-    /* ---- Gold button style from salon ---- */
-    .gold-btn {
-      background: #d4af37;
-      color: #5c4326;
-      font-family: 'Cinzel Decorative', 'Cormorant Garamond', serif;
-      font-size: 1.2em;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px #0002;
-      padding: 0.7em 2.2em;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      margin: 1em 0 0 0;
-      min-width: 120px;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .gold-btn:active, .gold-btn.active {
-      background: #b6952f !important;
-      color: #fffbe5 !important;
-    }
-    .gold-btn:disabled {
-      background: #cfcfcf;
-      color: #8d8d8d;
-      cursor: not-allowed;
-    }
-
-    /* ---- Profil specific styles ---- */
     .fade-in {
       opacity: 0;
       transform: translateY(20px);
@@ -85,17 +56,14 @@
     }
     main { display: flex; flex-direction: column; align-items: center; }
     .profil-container { width: 100%; max-width: 650px; }
-
-    /* Pour l'affichage côte à côte des boutons dans la modale */
     .modal-buttons {
       display: flex;
       gap: 1.2em;
       justify-content: center;
       margin-top: 1em;
     }
-    /* Optionnel: effet visuel au clic sur l'avatar */
     #avatar:active {
-      filter: brightness(1.15) drop-shadow(0 0 5px #d4af37);
+      filter: brightness(1.15) drop-shadow(0 0 5px #e0c185);
     }
   </style>
 </head>
@@ -123,7 +91,7 @@
         <label for="pseudo-input" class="visually-hidden">Saisir votre pseudo</label>
         <input id="pseudo-input" type="text" maxlength="20" aria-label="Saisir votre pseudo"
           aria-describedby="pseudo-feedback" aria-invalid="false" placeholder="Votre pseudo ici" />
-        <button type="button" id="btn-save-pseudo" class="gold-btn">Valider</button>
+        <button type="button" id="btn-save-pseudo">Valider</button>
         <div id="pseudo-feedback" class="feedback-message visually-hidden" role="alert" aria-live="polite"></div>
       </section>
 
@@ -156,7 +124,8 @@
         </ul>
       </section>
 
-      <a class="gold-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
+      <!-- Utilise un bouton pour garder le style général -->
+      <button class="btn-retour" onclick="location.href='accueil.html'">Retour à l'accueil</button>
 
       <!-- Avatar Modal -->
       <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"
@@ -165,8 +134,8 @@
           <h3 id="modal-title">Choisissez votre avatar</h3>
           <div id="avatar-list" class="avatar-list" role="list" aria-label="Liste des avatars disponibles"></div>
           <div class="modal-buttons">
-            <button type="button" id="btn-valider-avatar" class="gold-btn" disabled>Valider</button>
-            <button type="button" class="gold-btn" onclick="fermerModal()">Retour</button>
+            <button type="button" id="btn-valider-avatar" disabled>Valider</button>
+            <button type="button" class="btn-retour" onclick="fermerModal()">Retour</button>
           </div>
           <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
         </div>
@@ -184,14 +153,7 @@
       // Affiche le pseudo dans le champ, ou Anonyme si vide
       pseudoInput.value = pseudo;
 
-      const playerId = localStorage.getItem("pseudo") || "Anonyme";
-      
-      // Lorsque l'utilisateur clique sur "Valider"
       document.getElementById("btn-save-pseudo").addEventListener("click", function(event) {
-        // Ajoute la classe active pour l'effet doré au clic
-        event.target.classList.add('active');
-        setTimeout(() => event.target.classList.remove('active'), 180);
-
         let newPseudo = pseudoInput.value.trim();
         if (newPseudo === "") {
           newPseudo = "Anonyme";
@@ -206,37 +168,6 @@
         localStorage.setItem("pseudo", newPseudo);
         pseudoInput.value = newPseudo; // Mise à jour pour l'utilisateur
       });
-
-      // Ajoute l'effet doré au clic sur les boutons de la modale
-      ["btn-valider-avatar"].forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) {
-          btn.addEventListener("click", function(event) {
-            btn.classList.add('active');
-            setTimeout(() => btn.classList.remove('active'), 180);
-          });
-        }
-      });
-      // Pour le bouton retour de la modale
-      document.querySelectorAll('.modal-buttons .gold-btn').forEach(btn => {
-        btn.addEventListener("click", function(event) {
-          btn.classList.add('active');
-          setTimeout(() => btn.classList.remove('active'), 180);
-        });
-      });
-      // Pour le bouton retour à l'accueil
-      const retourAccueil = document.querySelector("a.gold-btn[href='accueil.html']");
-      if (retourAccueil) {
-        retourAccueil.addEventListener("mousedown", function(event) {
-          retourAccueil.classList.add('active');
-        });
-        retourAccueil.addEventListener("mouseup", function(event) {
-          retourAccueil.classList.remove('active');
-        });
-        retourAccueil.addEventListener("mouseleave", function(event) {
-          retourAccueil.classList.remove('active');
-        });
-      }
     });
   </script>
   
