@@ -649,3 +649,9 @@ document.addEventListener("DOMContentLoaded", function() {
     genererScenario();
   }
 });
+
+window.addEventListener('storage', (event) => {
+  if (event.key === 'salonCode') {
+    location.reload();
+  }
+});
