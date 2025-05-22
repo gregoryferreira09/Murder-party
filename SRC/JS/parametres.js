@@ -68,3 +68,12 @@ function saveParams() {
   notifCheckbox.addEventListener("change", saveParams);
   langueSelect.addEventListener("change", saveParams);
 });
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('button').forEach((btn, i) => {
+    setTimeout(() => {
+      btn.style.opacity = '0';
+      btn.style.animation = `fadeUp 1s ease-out forwards`;
+    }, i * 120);
+  });
+});
