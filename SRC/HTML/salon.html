@@ -10,7 +10,6 @@
 
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  <ul id="listeJoueurs"></ul>
   
 </head>
 <body>
@@ -20,19 +19,18 @@
   </header>
 
   <main>
-    <div class="bandeau-dore">
-      <p>Partagez ce code avec les autres joueurs :</p>
-      <div class="code" id="codeSalon">------</div>
-
-      <div class="status" id="etatSalon">
-        En attente de joueurs...
-      </div>
-
-      <div class="menu-buttons">
-        <a href="creer-partie.html" class="gold-btn">Retour</a>
-      </div>
+  <div class="bandeau-dore">
+    <p>Partagez ce code avec les autres joueurs :</p>
+    <div class="code" id="codeSalon">------</div>
+    <div class="status" id="etatSalon">
+      En attente de joueurs...
     </div>
-  </main>
+    <ul id="listeJoueurs"></ul> <!-- <--- DÉPLACE ICI -->
+    <div class="menu-buttons">
+      <a href="creer-partie.html" class="gold-btn">Retour</a>
+    </div>
+  </div>
+</main>
 
   <script>
   // Récupère le code du salon déjà stocké lors de la création/rejoint
