@@ -124,8 +124,7 @@
         </ul>
       </section>
 
-      <!-- Utilise un bouton pour garder le style général -->
-      <button class="btn-retour" onclick="location.href='accueil.html'">Retour à l'accueil</button>
+      <button type="button" onclick="location.href='accueil.html'">Retour à l'accueil</button>
 
       <!-- Avatar Modal -->
       <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"
@@ -135,7 +134,7 @@
           <div id="avatar-list" class="avatar-list" role="list" aria-label="Liste des avatars disponibles"></div>
           <div class="modal-buttons">
             <button type="button" id="btn-valider-avatar" disabled>Valider</button>
-            <button type="button" class="btn-retour" onclick="fermerModal()">Retour</button>
+            <button type="button" onclick="fermerModal()">Retour</button>
           </div>
           <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
         </div>
