@@ -233,11 +233,12 @@
     });
 
     // --- Suppression automatique si le créateur ferme l'onglet ou recharge ---
-    window.addEventListener("beforeunload", function (e) {
-      if (jeSuisCreateur) {
-        db.ref('parties/' + salonCode).remove();
-      }
-    });
+    // *** SUPPRIMÉ/COMMENTÉ POUR ÉVITER LA SUPPRESSION INOPPORTUNE ***
+    // window.addEventListener("beforeunload", function (e) {
+    //   if (jeSuisCreateur) {
+    //     db.ref('parties/' + salonCode).remove();
+    //   }
+    // });
   </script>
 
   <footer class="footer">
