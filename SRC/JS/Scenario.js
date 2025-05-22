@@ -505,6 +505,7 @@ function genererScenario() {
   console.log("parametresPartie utilisés :", scenarioData); // <-- Ajout du log debug
   const container = document.getElementById("scenarioContainer");
 
+  if (!scenarioData) {
     container.innerHTML = "<p>Aucun paramètre de partie trouvé.<br>Veuillez créer ou rejoindre une partie.</p>";
     return;
 
