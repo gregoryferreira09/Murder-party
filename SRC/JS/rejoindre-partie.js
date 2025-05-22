@@ -39,6 +39,17 @@ function rejoindreSalon() {
   }
 }
 
+function getUniquePseudo(monPseudo, pseudosExistants) {
+  let uniquePseudo = monPseudo;
+  let suffix = 0;
+  // On s'assure que le pseudo n'est pas déjà pris
+  while (pseudosExistants.includes(uniquePseudo)) {
+    suffix++;
+    uniquePseudo = monPseudo + suffix;
+  }
+  return uniquePseudo;
+}
+
 function afficherCompteur() {
   const compteurDiv = document.getElementById("compteur");
   const connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
