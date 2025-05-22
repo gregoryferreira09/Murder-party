@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Profil - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Préchargement des polices Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
@@ -16,169 +15,169 @@
       transform: translateY(20px);
       animation: fadeIn 0.8s ease-in forwards;
     }
-
     @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: none;
-      }
+      to { opacity: 1; transform: none; }
     }
-
-    .badges-section {
-      margin-top: 2rem;
-    }
-
+    .badges-section { margin-top: 2rem; }
     .badges-section ul {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      list-style: none;
-      padding: 0;
+      display: flex; gap: 1rem; flex-wrap: wrap; list-style: none; padding: 0;
     }
-
-    .badges-section li img {
-      width: 60px;
-      height: 60px;
-      object-fit: contain;
-    }
-
+    .badges-section li img { width: 60px; height: 60px; object-fit: contain; }
     .visually-hidden {
       position: absolute;
       clip: rect(0 0 0 0);
       clip-path: inset(100%);
-      height: 1px;
-      width: 1px;
-      overflow: hidden;
-      white-space: nowrap;
-      border: 0;
+      height: 1px; width: 1px;
+      overflow: hidden; white-space: nowrap; border: 0;
     }
-
     .feedback-message.error,
     .feedback-message.erreur {
-      color: #c00;
-      font-weight: bold;
-      margin-top: 0.5rem;
+      color: #c00; font-weight: bold; margin-top: 0.5rem;
     }
-
     .feedback-message.succes {
-      color: green;
+      color: green; font-weight: bold; margin-top: 0.5rem;
+    }
+    .historique-section { margin-top: 2rem; }
+    .historique-section ul { padding-left: 1rem; }
+    /* Pour uniformiser la largeur max du contenu, comme sur les autres pages */
+    .bandeau-dore {
+      max-width: 650px;
+      margin: 30px auto 30px auto;
+      padding: 30px 24px 24px 24px;
+      border-radius: 18px;
+      background: linear-gradient(90deg,#fffcd8 0,#f9e8c9 100%);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      border: 4px solid #d4af37;
+    }
+    /* Ajuste le bouton retour comme sur accueil */
+    .return-btn {
+      display: inline-block;
+      margin: 2em 0 0 0;
+      padding: 0.7em 2.2em;
+      background: #d4af37;
+      color: #5c4326;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Cinzel Decorative',cursive;
+      font-size: 1.2em;
       font-weight: bold;
-      margin-top: 0.5rem;
+      text-decoration: none;
+      box-shadow: 0 2px 8px #0002;
+      transition: background 0.15s;
+      cursor: pointer;
     }
-
-    .historique-section {
-      margin-top: 2rem;
-    }
-
-    .historique-section ul {
-      padding-left: 1rem;
-    }
+    .return-btn:hover { background: #b6952f; }
+    /* Centrage du main sur mobile/déco */
+    main { display: flex; flex-direction: column; align-items: center; }
+    /* Pour éviter un trop grand main sur desktop */
+    .profil-container { width: 100%; max-width: 650px; }
   </style>
 </head>
 
 <body>
   <header role="banner">
-    <h1 class="visually-hidden">Murder Party - Profil du joueur</h1>
+    <h1>Murder Party</h1>
   </header>
 
-  <main class="profil-container fade-in">
-    <h1>Mon profil</h1>
+  <main>
+    <div class="bandeau-dore fade-in profil-container">
+      <h1>Mon profil</h1>
 
-    <!-- Section Avatar -->
-    <section class="avatar-section" aria-labelledby="avatar-heading">
-      <h2 id="avatar-heading">Mon avatar</h2>
-      <img id="avatar" src="/Public/images/avatar-1.png" alt="Avatar actuel" tabindex="0" role="button"
-        aria-pressed="false" aria-haspopup="dialog" aria-controls="modal" onclick="ouvrirModal()"
-        onerror="this.onerror=null; this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';" />
+      <!-- Section Avatar -->
+      <section class="avatar-section" aria-labelledby="avatar-heading">
+        <h2 id="avatar-heading">Mon avatar</h2>
+        <img id="avatar" src="/Public/images/avatar-1.png" alt="Avatar actuel" tabindex="0" role="button"
+          aria-pressed="false" aria-haspopup="dialog" aria-controls="modal" onclick="ouvrirModal()"
+          onerror="this.onerror=null; this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';" />
+      </section>
 
-    </section>
+      <!-- Section Pseudo -->
+      <section class="pseudo-section" aria-labelledby="pseudo-heading">
+        <h2 id="pseudo-heading">Mon Pseudo</h2>
+        <label for="pseudo-input" class="visually-hidden">Saisir votre pseudo</label>
+        <input id="pseudo-input" type="text" maxlength="20" aria-label="Saisir votre pseudo"
+          aria-describedby="pseudo-feedback" aria-invalid="false" placeholder="Votre pseudo ici" />
+        <button type="button" id="btn-save-pseudo">Valider</button>
+        <div id="pseudo-feedback" class="feedback-message visually-hidden" role="alert" aria-live="polite"></div>
+      </section>
 
-    <!-- Section Pseudo -->
-    <section class="pseudo-section" aria-labelledby="pseudo-heading">
-      <h2 id="pseudo-heading">Mon Pseudo</h2>
-      <label for="pseudo-input" class="visually-hidden">Saisir votre pseudo</label>
-      <input id="pseudo-input" type="text" maxlength="20" aria-label="Saisir votre pseudo"
-        aria-describedby="pseudo-feedback" aria-invalid="false" placeholder="Votre pseudo ici" />
-      <button type="button" id="btn-save-pseudo">Valider</button>
-      <div id="pseudo-feedback" class="feedback-message visually-hidden" role="alert" aria-live="polite"></div>
-    </section>
+      <!-- Section Statistiques -->
+      <section class="statistiques" aria-labelledby="stats-heading">
+        <h2 id="stats-heading">Statistiques</h2>
+        <p>Parties jouées : <strong id="stat-parties">0</strong></p>
+        <p>Parties gagnées : <strong id="stat-victoires">0</strong></p>
+        <p>→ En tant qu'enquêteur : <strong id="stat-enqueteur">0</strong></p>
+        <p>→ En tant que criminel : <strong id="stat-criminel">0</strong></p>
+        <p>Record de durée d'une victoire : <strong id="stat-record">—</strong></p>
+        <p>Note : <strong id="grade">—</strong></p>
+      </section>
 
-    <!-- Section Statistiques -->
-    <section class="statistiques" aria-labelledby="stats-heading">
-      <h2 id="stats-heading">Statistiques</h2>
-      <p>Parties jouées : <strong id="stat-parties">0</strong></p>
-      <p>Parties gagnées : <strong id="stat-victoires">0</strong></p>
-      <p>→ En tant qu'enquêteur : <strong id="stat-enqueteur">0</strong></p>
-      <p>→ En tant que criminel : <strong id="stat-criminel">0</strong></p>
-      <p>Record de durée d'une victoire : <strong id="stat-record">—</strong></p>
-      <p>Note : <strong id="grade">—</strong></p>
-    </section>
+      <!-- Section Historique des parties -->
+      <section class="historique-section" aria-labelledby="historique-heading">
+        <h2 id="historique-heading">Historique des dernières parties</h2>
+        <ul id="historique-liste">
+          <li>Aucune partie jouée pour le moment.</li>
+        </ul>
+      </section>
 
-    <!-- Section Historique des parties -->
-    <section class="historique-section" aria-labelledby="historique-heading">
-      <h2 id="historique-heading">Historique des dernières parties</h2>
-      <ul id="historique-liste">
-        <li>Aucune partie jouée pour le moment.</li>
-      </ul>
-    </section>
+      <!-- Badges -->
+      <section class="badges-section" aria-labelledby="badges-heading">
+        <h2 id="badges-heading">Mes Badges</h2>
+        <ul role="list">
+          <li><img src="/Public/images/badges/detective.png" alt="Badge Détective" /></li>
+          <li><img src="/Public/images/badges/furtif.png" alt="Badge Furtif" /></li>
+          <li><img src="/Public/images/badges/veteran.png" alt="Badge Vétéran" /></li>
+        </ul>
+      </section>
 
-    <!-- Badges -->
-    <section class="badges-section" aria-labelledby="badges-heading">
-      <h2 id="badges-heading">Mes Badges</h2>
-      <ul role="list">
-        <li><img src="/Public/images/badges/detective.png" alt="Badge Détective" /></li>
-        <li><img src="/Public/images/badges/furtif.png" alt="Badge Furtif" /></li>
-        <li><img src="/Public/images/badges/veteran.png" alt="Badge Vétéran" /></li>
-      </ul>
-    </section>
+      <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
 
-    <a class="return-btn" href="accueil.html" title="Retour à la page d'accueil">Retour à l'accueil</a>
-
-    <!-- Avatar Modal -->
-    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"
-      aria-describedby="avatar-list" tabindex="-1">
-      <div class="modal-content" role="document">
-        <h3 id="modal-title">Choisissez votre avatar</h3>
-        <div id="avatar-list" class="avatar-list" role="list" aria-label="Liste des avatars disponibles"></div>
-        <div class="modal-buttons">
-          <button type="button" id="btn-valider-avatar" disabled>Valider</button>
-          <button type="button" class="btn-retour" onclick="fermerModal()">Retour</button>
+      <!-- Avatar Modal -->
+      <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"
+        aria-describedby="avatar-list" tabindex="-1">
+        <div class="modal-content" role="document">
+          <h3 id="modal-title">Choisissez votre avatar</h3>
+          <div id="avatar-list" class="avatar-list" role="list" aria-label="Liste des avatars disponibles"></div>
+          <div class="modal-buttons">
+            <button type="button" id="btn-valider-avatar" disabled>Valider</button>
+            <button type="button" class="btn-retour" onclick="fermerModal()">Retour</button>
+          </div>
+          <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
         </div>
-        <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
       </div>
     </div>
   </main>
 
   <script>
-document.addEventListener("DOMContentLoaded", function() {
-  // Récupère le pseudo depuis le localStorage, sinon "Anonyme"
-  let pseudo = localStorage.getItem("pseudo") || "Anonyme";
-  const pseudoInput = document.getElementById("pseudo-input");
-  const pseudoFeedback = document.getElementById("pseudo-feedback");
+    document.addEventListener("DOMContentLoaded", function() {
+      // Récupère le pseudo depuis le localStorage, sinon "Anonyme"
+      let pseudo = localStorage.getItem("pseudo") || "Anonyme";
+      const pseudoInput = document.getElementById("pseudo-input");
+      const pseudoFeedback = document.getElementById("pseudo-feedback");
 
-  // Affiche le pseudo dans le champ, ou Anonyme si vide
-  pseudoInput.value = pseudo;
+      // Affiche le pseudo dans le champ, ou Anonyme si vide
+      pseudoInput.value = pseudo;
 
-  const playerId = localStorage.getItem("pseudo") || "Anonyme";
-  
-  // Lorsque l'utilisateur clique sur "Valider"
-  document.getElementById("btn-save-pseudo").addEventListener("click", function() {
-    let newPseudo = pseudoInput.value.trim();
-    if (newPseudo === "") {
-      newPseudo = "Anonyme";
-      pseudoFeedback.textContent = "Aucun pseudo renseigné, vous êtes Anonyme.";
-      pseudoFeedback.className = "feedback-message erreur";
-      pseudoFeedback.classList.remove("visually-hidden");
-    } else {
-      pseudoFeedback.textContent = "Pseudo enregistré !";
-      pseudoFeedback.className = "feedback-message succes";
-      pseudoFeedback.classList.remove("visually-hidden");
-    }
-    localStorage.setItem("pseudo", newPseudo);
-    pseudoInput.value = newPseudo; // Mise à jour pour l'utilisateur
-  });
-});
-</script>
+      const playerId = localStorage.getItem("pseudo") || "Anonyme";
+      
+      // Lorsque l'utilisateur clique sur "Valider"
+      document.getElementById("btn-save-pseudo").addEventListener("click", function() {
+        let newPseudo = pseudoInput.value.trim();
+        if (newPseudo === "") {
+          newPseudo = "Anonyme";
+          pseudoFeedback.textContent = "Aucun pseudo renseigné, vous êtes Anonyme.";
+          pseudoFeedback.className = "feedback-message erreur";
+          pseudoFeedback.classList.remove("visually-hidden");
+        } else {
+          pseudoFeedback.textContent = "Pseudo enregistré !";
+          pseudoFeedback.className = "feedback-message succes";
+          pseudoFeedback.classList.remove("visually-hidden");
+        }
+        localStorage.setItem("pseudo", newPseudo);
+        pseudoInput.value = newPseudo; // Mise à jour pour l'utilisateur
+      });
+    });
+  </script>
   
   <script src="../JS/script.js"></script>
 
@@ -188,10 +187,9 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
   </noscript>
 
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
-
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 </body>
 </html>
