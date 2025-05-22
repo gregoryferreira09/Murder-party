@@ -1,5 +1,5 @@
 // --- CONSTANTES --- //
-const IMAGE_PATH = "/Public/images/";
+const IMAGE_PATH = "../../Public/images/";
 
 // --- GESTION DES STATS UTILISATEUR --- //
 const getStats = () => {
