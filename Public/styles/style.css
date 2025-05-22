@@ -580,3 +580,8 @@ button {
 body.modal-open {
   overflow: hidden;
 }
+
+.joueur-avatar.valide {
+  border: 3px solid red !important;
+  box-shadow: 0 0 10px red;
+}
