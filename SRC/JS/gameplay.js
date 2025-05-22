@@ -109,6 +109,8 @@ function setupActionTab(type) {
   }
 }
 
+const playerId = localStorage.getItem("pseudo") || "Anonyme";
+
 // --- Sélection d'un joueur ---
 function selectJoueur(div, joueur) {
   document.querySelectorAll('.joueur-avatar').forEach(d => d.classList.remove('selected'));
