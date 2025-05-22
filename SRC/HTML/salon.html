@@ -8,7 +8,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  <!-- Suppression du style spécifique qui doublait la taille et soulignait le code -->
+  <style>
+    /* Ajout du style spécifique salon */
+    .salon-texte, .code, .status, #listeJoueurs li {
+      font-size: 2em !important;
+    }
+    .code {
+      text-decoration: underline;
+      text-decoration-color: #d4af37; /* couleur dorée */
+      text-underline-offset: 4px;
+      font-weight: bold;
+    }
+    #listeJoueurs li {
+      margin-bottom: 0.2em;
+      list-style-type: disc;
+      padding-left: 0.5em;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -17,7 +33,7 @@
 
   <main>
     <div class="bandeau-dore">
-      <p>Partagez ce code avec les autres joueurs :</p>
+      <p class="salon-texte">Partagez ce code avec les autres joueurs :</p>
       <div class="code" id="codeSalon">------</div>
       <div class="status" id="etatSalon">
         En attente de joueurs...
@@ -38,7 +54,7 @@
       authDomain: "murder-party-ba8d1.firebaseapp.com",
       databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "murder-party-ba8d1",
-      storageBucket: "murder-party-ba8d1.firebasedstorage.app",
+      storageBucket: "murder-party-ba8d1.firebasestorage.app",
       messagingSenderId: "20295055805",
       appId: "1:20295055805:web:0963719c3f23ab7752fad4",
       measurementId: "G-KSBMBB7KMJ"
@@ -90,6 +106,7 @@
         joueursSnap.forEach(joueurSnap => {
           const pseudo = joueurSnap.val().pseudo;
           const li = document.createElement("li");
+          li.className = "salon-joueur";
           li.textContent = pseudo;
           joueursDiv.appendChild(li);
           nbJoueurs++;
