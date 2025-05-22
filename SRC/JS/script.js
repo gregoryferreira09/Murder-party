@@ -37,8 +37,6 @@ const saveStats = (stats) => {
   localStorage.setItem("stats", JSON.stringify(stats));
 };
 
-// (fonctions ajouterVictoire et ajouterDefaite inchangées)
-
 // --- PROFIL UTILISATEUR --- //
 
 const initialiserProfil = () => {
@@ -114,7 +112,6 @@ const initialiserProfil = () => {
   };
 
   const fermerModal = (event) => {
-    // Fermeture si clic en dehors ou sur fond
     if (!event || event.target === modal) {
       modal.style.display = "none";
       modal.setAttribute("aria-hidden", "true");
@@ -205,6 +202,10 @@ const initialiserProfil = () => {
       statsSection.appendChild(badge);
     }
   }
+
+  // <-- Ajoute ceci pour exposer les fonctions globalement
+  window.ouvrirModal = ouvrirModal;
+  window.fermerModal = fermerModal;
 };
 
 window.addEventListener('DOMContentLoaded', initialiserProfil);
@@ -214,14 +215,6 @@ function formatDuree(seconds) {
   const min = Math.floor(seconds / 60);
   const sec = seconds % 60;
   return `${min} min ${sec}s`;
-}
-
-function fermerModal() {
-  const modal = document.getElementById("modal");
-  if (modal) {
-    modal.style.display = "none";
-    modal.setAttribute("aria-hidden", "true");
-  }
 }
 
 function genererScenario() {
