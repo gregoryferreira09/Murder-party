@@ -34,3 +34,14 @@ document.getElementById("genererBtn").addEventListener("click", function(e) {
   // Redirection vers la page salon
   window.location.href = "salon.html";
 });
+
+function getUniquePseudo(monPseudo, pseudosExistants) {
+  let uniquePseudo = monPseudo;
+  let suffix = 0;
+  // On s'assure que le pseudo n'est pas déjà pris
+  while (pseudosExistants.includes(uniquePseudo)) {
+    suffix++;
+    uniquePseudo = monPseudo + suffix;
+  }
+  return uniquePseudo;
+}
