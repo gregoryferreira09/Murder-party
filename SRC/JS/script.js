@@ -1,5 +1,6 @@
 // --- CONSTANTES --- //
-const IMAGE_PATH = "../../Public/images/";
+const IMAGE_PATH = 
+  window.location.hostname === "localhost" ? "../../Public/images/" : "/Public/images/";
 
 // --- GESTION DES STATS UTILISATEUR --- //
 const getStats = () => {
