@@ -26,7 +26,6 @@
         <a href="creer-partie.html" class="gold-btn">Retour</a>
         <button class="gold-btn" id="quitterSalonBtn">Quitter le salon</button>
       </div>
-      <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px;">Salon supprimé par le créateur.</div>
     </div>
   </main>
 
@@ -75,10 +74,9 @@
     // --- Ecoute la suppression du salon ---
     db.ref('parties/' + salonCode).on('value', snapshot => {
       if (!snapshot.exists()) {
-        document.getElementById("alertSalonSupprime").style.display = "block";
-        setTimeout(() => {
-          window.location.href = "rejoindre-partie.html";
-        }, 2000);
+        // Stocke le flag pour affichage du message sur rejoindre-partie
+        localStorage.setItem("salonSupprime", "oui");
+        window.location.href = "rejoindre-partie.html";
         return;
       }
       // Sinon, affichage normal
@@ -117,10 +115,10 @@
       db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
         if (snap.exists() && snap.val() === monPseudo) {
           db.ref('parties/' + salonCode).remove().then(() => {
+            localStorage.setItem("salonSupprime", "oui");
             window.location.href = "rejoindre-partie.html";
           });
         } else {
-          // Juste quitter le salon (si ce n'est pas le créateur)
           window.location.href = "rejoindre-partie.html";
         }
       });
@@ -130,10 +128,9 @@
 
     // --- Suppression automatique si le créateur ferme l'onglet ou recharge ---
     window.addEventListener("beforeunload", function (e) {
-      // Important : n'utilise pas de promesse asynchrone ici, ce sera annulé par le navigateur
       if (jeSuisCreateur) {
-        // Suppression "en fire-and-forget"
         db.ref('parties/' + salonCode).remove();
+        localStorage.setItem("salonSupprime", "oui");
       }
     });
   </script>
