@@ -66,6 +66,13 @@
       }
     });
 
+    function quitterSalon() {
+  const monPseudo = localStorage.getItem("pseudo");
+  db.ref('parties/' + salonCode + '/joueurs').orderByChild('pseudo').equalTo(monPseudo).once('value', snapshot => {
+    snapshot.forEach(child => child.ref.remove());
+    window.location.href = "accueil.html";
+  });
+}
     // Affiche les joueurs en temps réel
     db.ref('parties/' + salonCode + '/joueurs').on('value', snapshot => {
       joueursDiv.innerHTML = "";
