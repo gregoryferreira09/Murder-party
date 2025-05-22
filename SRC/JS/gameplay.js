@@ -87,18 +87,24 @@ function setupActionTab(type) {
   // Désactiver bouton si aucune sélection ou plus de connexions
   document.getElementById('action-btn').disabled = (type === "connexion" && connexionsRestantes <= 0);
 
-  document.getElementById('action-btn').onclick = function() {
-    if (!joueurSelectionAction) return;
-    if (actionType === "vote") {
-      document.getElementById('actionResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${joueurSelectionAction.nom}</strong> a été scellé...</p>`;
-      showToast("Vote enregistré !");
-      const effet = document.getElementById("effetElimination");
-      effet.classList.add("visible");
-      try { document.getElementById('sound-vote').play(); } catch(e){}
-      setTimeout(() => effet.classList.remove("visible"), 2000);
-    } else {
-      validerConnexion();
+document.getElementById('action-btn').onclick = function() {
+  if (!joueurSelectionAction) return;
+  if (actionType === "vote") {
+    // Ajoute le cadre rouge sur le joueur sélectionné
+    document.querySelectorAll('.joueur-avatar').forEach(d => d.classList.remove('valide'));
+    const selectedDiv = document.querySelector('.joueur-avatar.selected');
+    if (selectedDiv) {
+      selectedDiv.classList.add('valide');
     }
+
+    document.getElementById('actionResult').innerHTML = `<p>🕯️ Votre vote pour <strong>${joueurSelectionAction.nom}</strong> a été scellé...</p>`;
+    showToast("Vote enregistré !");
+    const effet = document.getElementById("effetElimination");
+    effet.classList.add("visible");
+    try { document.getElementById('sound-vote').play(); } catch(e){}
+    setTimeout(() => effet.classList.remove("visible"), 2000);
+  } else {
+    validerConnexion();
   }
 }
 
