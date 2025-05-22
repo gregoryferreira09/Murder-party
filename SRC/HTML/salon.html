@@ -8,6 +8,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <style>
+    .texte-x2 {
+      font-size: 2em;
+    }
+    .code-x2 {
+      font-size: 2em;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -16,8 +26,8 @@
 
   <main>
     <div class="bandeau-dore">
-      <p>Partagez ce code avec les autres joueurs :</p>
-      <div class="code" id="codeSalon">------</div>
+      <p class="texte-x2">Partagez ce code avec les autres joueurs :</p>
+      <div class="code code-x2" id="codeSalon">------</div>
       <div class="status" id="etatSalon">
         En attente de joueurs...
       </div>
