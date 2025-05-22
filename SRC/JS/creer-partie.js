@@ -24,20 +24,9 @@ function generateCode(length) {
   return result;
 }
 
-function getUniquePseudo(monPseudo, pseudosExistants) {
-  let uniquePseudo = monPseudo;
-  let suffix = 0;
-  while (pseudosExistants.includes(uniquePseudo)) {
-    suffix++;
-    uniquePseudo = monPseudo + suffix;
-  }
-  return uniquePseudo;
-}
-
 document.getElementById("genererBtn").addEventListener("click", async function(e) {
   e.preventDefault();
 
-  // Désactivation du bouton pour éviter le multi-clic
   const btn = document.getElementById("genererBtn");
   btn.disabled = true;
 
@@ -62,7 +51,9 @@ document.getElementById("genererBtn").addEventListener("click", async function(e
       criminels,
       criminelFantome,
       avatarsLegendaires,
-      inactifs
+      inactifs,
+      // Stockage du créateur
+      createur: localStorage.getItem("pseudo") || "Anonyme"
     };
 
     // Générer un code de salon unique
