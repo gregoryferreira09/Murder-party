@@ -88,11 +88,11 @@
     <button id="valider-choix" disabled>Valider mon personnage</button>
   </main>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
-  <script>
-  // Remplace ici par TES paramètres firebase (copie/colle ceux de ton projet)
+<script src="../JS/personnages.js"></script>
+<script>
+  // 1. CONFIG FIREBASE (à personnaliser)
   const firebaseConfig = {
     apiKey: "...",
     authDomain: "...",
@@ -103,113 +103,122 @@
     appId: "..."
   };
   firebase.initializeApp(firebaseConfig);
-
-  // Le chemin pour stocker la partie (par ex. "partie1", tu peux l'améliorer pour plusieurs parties)
   const partieID = "partie1";
   const db = firebase.database();
-</script>
-  
-  <!-- Fichier JS contenant les données des personnages -->
-  <script src="../JS/personnages.js"></script>
-<script>
-function getRandomElements(array, n) {
-  const copy = [...array];
-  const result = [];
-  for (let i = 0; i < n && copy.length > 0; i++) {
-    const idx = Math.floor(Math.random() * copy.length);
-    result.push(copy.splice(idx, 1)[0]);
-  }
-  return result;
-}
 
-function afficherPersonnages() {
-  const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-  if (!scenarioData) {
-    alert("Aucune donnée de scénario trouvée.");
-    return;
+  // 2. Variables globales
+  let nombreJoueurs = 0;
+  let personnages = [];
+  let playerId = "";
+
+  // 3. Génère la galerie de personnages
+  function getRandomElements(array, n) {
+    const copy = [...array];
+    const result = [];
+    for (let i = 0; i < n && copy.length > 0; i++) {
+      const idx = Math.floor(Math.random() * copy.length);
+      result.push(copy.splice(idx, 1)[0]);
+    }
+    return result;
   }
 
-  const nombreJoueurs = scenarioData.nombreJoueurs;
-  const periode = scenarioData.periode;
-  const galeriePersonnages = document.getElementById("galeriePersonnages");
+  function afficherPersonnages() {
+    const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+    if (!scenarioData) {
+      alert("Aucune donnée de scénario trouvée.");
+      return;
+    }
+    nombreJoueurs = scenarioData.nombreJoueurs;
+    const periode = scenarioData.periode;
+    const galeriePersonnages = document.getElementById("galeriePersonnages");
+    // Liste des personnages
+    personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
 
-  // Récupère la bonne liste selon la période
-  const listeDesPersonnages = window.personnagesParEpoque[periode];
+    galeriePersonnages.innerHTML = personnages.map((perso, i) => `
+      <div class="carte-personnage" data-id="${i}">
+        <img src="${perso.image}" alt="${perso.nom}">
+        <p>${perso.nom}</p>
+      </div>
+    `).join("");
 
-  // Prend des personnages différents au hasard
-  const personnages = getRandomElements(listeDesPersonnages, nombreJoueurs);
-
-  galeriePersonnages.innerHTML = personnages.map((perso, i) => `
-    <div class="carte-personnage" data-id="${i}">
-      <img src="${perso.image}" alt="${perso.nom}">
-      <p>${perso.nom}</p>
-    </div>
-  `).join("");
-
-  // Gestion de la sélection
-  const cartes = document.querySelectorAll(".carte-personnage");
-  cartes.forEach(carte => {
-    carte.addEventListener("click", () => {
-      cartes.forEach(card => card.style.border = "2px solid #e9c78c");
-      carte.style.border = "2px solid #4CAF50"; // vert
-      localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
-      document.getElementById("valider-choix").disabled = false;
+    // Sélection d'un personnage
+    const cartes = document.querySelectorAll(".carte-personnage");
+    cartes.forEach(carte => {
+      carte.addEventListener("click", () => {
+        cartes.forEach(card => card.style.border = "2px solid #e9c78c");
+        carte.style.border = "2px solid #4CAF50";
+        localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
+        document.getElementById("valider-choix").disabled = false;
+      });
     });
-  });
-}
-
-document.getElementById("valider-choix").addEventListener("click", () => {
-  const personnageId = localStorage.getItem("personnageSelectionne");
-  if (personnageId) {
-    window.location.href = "Rôle-et-indices.html";
-  }
-});
-
-  // Id joueur (à personnaliser selon ton appli, ici on fait simple pour tester)
-const playerId = prompt("Ton prénom ou pseudo ?");
-
-// On écoute les validations en temps réel
-db.ref(partieID + '/validations').on('value', snap => {
-  const valids = snap.val() || {};
-  // Grise les personnages déjà pris
-  document.querySelectorAll('.carte-personnage').forEach(div => {
-    const id = div.getAttribute('data-id');
-    const dejaPris = Object.values(valids).some(v => v.personnageId == id);
-    if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
-      div.style.opacity = 0.5;
-      div.style.pointerEvents = 'none';
-    } else {
-      div.style.opacity = 1;
-      div.style.pointerEvents = '';
-    }
-  });
-  // Affiche le compteur validés/total
-  const nbValid = Object.keys(valids).length;
-  document.getElementById('valider-choix').textContent =
-    nbValid + '/' + nombreJoueurs + (valids[playerId] ? ' (En attente des autres joueurs)' : ' Valider mon personnage');
-  // Redirige tout le monde si fini
-  if(nbValid === nombreJoueurs) {
-    window.location.href = "gameplay.html";
   }
 
-// Quand tu valides
-document.getElementById("valider-choix").onclick = function() {
-  const personnageId = localStorage.getItem("personnageSelectionne");
-  if (personnageId && !this.disabled) {
-    db.ref(partieID + '/validations/' + playerId).set({ personnageId });
-    // Affiche le bouton annuler
-    if(!document.getElementById('annuler-choix')) {
-      const btn = document.createElement('button');
-      btn.id = 'annuler-choix';
-      btn.textContent = "Annuler";
-      btn.onclick = function() {
-        db.ref(partieID + '/validations/' + playerId).remove();
-      };
-      this.parentNode.appendChild(btn);
-    }
-    this.disabled = true;
+  // 4. Saisie du pseudo
+  window.onload = function() {
+    playerId = prompt("Ton prénom ou pseudo ?");
+    afficherPersonnages();
+    startRealtimeSync();
   }
-});
+
+  // 5. Synchro temps réel (Firebase)
+  function startRealtimeSync() {
+    db.ref(partieID + '/validations').on('value', snap => {
+      const valids = snap.val() || {};
+      // Grise les personnages déjà pris
+      document.querySelectorAll('.carte-personnage').forEach(div => {
+        const id = div.getAttribute('data-id');
+        const dejaPris = Object.values(valids).some(v => v.personnageId == id);
+        if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
+          div.style.opacity = 0.5;
+          div.style.pointerEvents = 'none';
+        } else {
+          div.style.opacity = 1;
+          div.style.pointerEvents = '';
+        }
+      });
+      // Compteur validés/total
+      const nbValid = Object.keys(valids).length;
+      const btnValider = document.getElementById('valider-choix');
+      btnValider.textContent =
+        (valids[playerId] ? 'En attente des autres joueurs (' : '') +
+        nbValid + '/' + nombreJoueurs +
+        (valids[playerId] ? ')' : ' Valider mon personnage');
+      // Redirige si tout le monde a validé
+      if(nbValid === nombreJoueurs) {
+        window.location.href = "gameplay.html";
+      }
+      // Affiche le bouton annuler si validé
+      if (valids[playerId] && !document.getElementById('annuler-choix')) {
+        ajouterBoutonAnnuler();
+        btnValider.disabled = true;
+      }
+      if (!valids[playerId] && document.getElementById('annuler-choix')) {
+        document.getElementById('annuler-choix').remove();
+        btnValider.disabled = false;
+      }
+    });
+
+    // Quand tu valides
+    document.getElementById("valider-choix").onclick = function() {
+      const personnageId = localStorage.getItem("personnageSelectionne");
+      if (personnageId && !this.disabled) {
+        db.ref(partieID + '/validations/' + playerId).set({ personnageId });
+        this.disabled = true;
+      }
+    };
+  }
+
+  // 6. Bouton annuler
+  function ajouterBoutonAnnuler() {
+    const btn = document.createElement('button');
+    btn.id = 'annuler-choix';
+    btn.textContent = "Annuler";
+    btn.onclick = function() {
+      db.ref(partieID + '/validations/' + playerId).remove();
+    };
+    document.getElementById('valider-choix').parentNode.appendChild(btn);
+  }
+</script>
 
   
 window.onload = afficherPersonnages;
