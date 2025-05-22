@@ -34,6 +34,25 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+  const salonCode = localStorage.getItem('salonCode');
+  console.log("SalonCode utilisé pour la génération du scénario :", salonCode);
+  if (salonCode && db) {
+    db.ref('parties/' + salonCode + '/parametres').once('value').then((snap) => {
+      const params = snap.val();
+      console.log("Paramètres récupérés depuis Firebase :", params);
+      if (params) {
+        localStorage.setItem('parametresPartie', JSON.stringify(params));
+      }
+      genererScenario();
+    }).catch(() => {
+      document.getElementById("scenarioContainer").innerHTML = "<p>Erreur lors du chargement des paramètres Firebase.</p>";
+    });
+  } else {
+    document.getElementById("scenarioContainer").innerHTML = "<p>Aucun code de salon trouvé, veuillez (re)créer une partie.</p>";
+  }
+});
+
 const ANTI_REPEAT_HISTORY_SIZE = 5;
 
 // === OUTILS FRANÇAIS ===
