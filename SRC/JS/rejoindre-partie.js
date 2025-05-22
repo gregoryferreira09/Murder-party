@@ -27,48 +27,86 @@ function getUniquePseudo(monPseudo, pseudosExistants) {
 async function rejoindreSalon() {
   const codeEntre = document.getElementById("codeInput").value.trim().toUpperCase();
   const messageDiv = document.getElementById("message");
+  const loader = document.getElementById("loader");
+  const validerBtn = document.getElementById("validerBtn");
 
-  // Vérifier que le salon existe
-  const salonSnap = await db.ref('parties/' + codeEntre).get();
-  if (!salonSnap.exists()) {
-    messageDiv.textContent = "Ce salon n'existe pas.";
+  messageDiv.textContent = ""; // reset message
+  loader.style.display = "block";
+  validerBtn.disabled = true;
+
+  // Validation format code
+  if (!/^[A-Z0-9]{6}$/.test(codeEntre)) {
+    loader.style.display = "none";
+    validerBtn.disabled = false;
+    messageDiv.textContent = "Code salon invalide (6 caractères, lettres ou chiffres).";
     messageDiv.style.color = "#ff6b6b";
     return;
   }
 
-  // Récupérer les pseudos déjà présents
-  const joueursSnap = await db.ref('parties/' + codeEntre + '/joueurs').get();
-  let pseudosExistants = [];
-  joueursSnap.forEach(joueurSnap => {
-    pseudosExistants.push(joueurSnap.val().pseudo);
-  });
+  try {
+    // Vérifier que le salon existe
+    const salonSnap = await db.ref('parties/' + codeEntre).get();
+    if (!salonSnap.exists()) {
+      loader.style.display = "none";
+      validerBtn.disabled = false;
+      messageDiv.textContent = "Ce salon n'existe pas.";
+      messageDiv.style.color = "#ff6b6b";
+      return;
+    }
 
-  // Vérifier le nombre max de joueurs
-  const paramSnap = await db.ref('parties/' + codeEntre + '/parametres').get();
-  const maxJoueurs = paramSnap.exists() ? parseInt(paramSnap.val().nombreJoueurs) : 1;
-  if (pseudosExistants.length >= maxJoueurs) {
-    messageDiv.textContent = "Ce salon est déjà complet.";
+    // Récupérer les pseudos déjà présents
+    const joueursSnap = await db.ref('parties/' + codeEntre + '/joueurs').get();
+    let pseudosExistants = [];
+    joueursSnap.forEach(joueurSnap => {
+      pseudosExistants.push(joueurSnap.val().pseudo);
+    });
+
+    // Vérifier le nombre max de joueurs
+    const paramSnap = await db.ref('parties/' + codeEntre + '/parametres').get();
+    const maxJoueurs = paramSnap.exists() ? parseInt(paramSnap.val().nombreJoueurs) : 1;
+    if (pseudosExistants.length >= maxJoueurs) {
+      loader.style.display = "none";
+      validerBtn.disabled = false;
+      messageDiv.textContent = "Ce salon est déjà complet.";
+      messageDiv.style.color = "#ff6b6b";
+      return;
+    }
+
+    // Empêcher de rejoindre deux fois le même salon (bonus)
+    let monPseudo = localStorage.getItem("pseudo") || "Anonyme";
+    if (pseudosExistants.includes(monPseudo)) {
+      loader.style.display = "none";
+      validerBtn.disabled = false;
+      messageDiv.textContent = "Vous êtes déjà dans ce salon.";
+      messageDiv.style.color = "#ff6b6b";
+      return;
+    }
+
+    // Générer pseudo unique
+    let pseudoFinal = getUniquePseudo(monPseudo, pseudosExistants);
+
+    // Ajouter le joueur dans la base
+    await db.ref('parties/' + codeEntre + '/joueurs').push({
+      pseudo: pseudoFinal
+    });
+
+    // Stocker le code du salon côté joueur
+    localStorage.setItem("salonCode", codeEntre);
+
+    loader.style.display = "none";
+    validerBtn.disabled = false;
+    messageDiv.textContent = `Connexion réussie ! Votre pseudo : ${pseudoFinal}`;
+    messageDiv.style.color = "#90ee90";
+    setTimeout(() => {
+      window.location.href = "salon.html";
+    }, 1200);
+
+  } catch (err) {
+    loader.style.display = "none";
+    validerBtn.disabled = false;
+    messageDiv.textContent = "Erreur de connexion. Veuillez réessayer.";
     messageDiv.style.color = "#ff6b6b";
-    return;
   }
-
-  // Générer pseudo unique
-  let monPseudo = localStorage.getItem("pseudo") || "Anonyme";
-  let pseudoFinal = getUniquePseudo(monPseudo, pseudosExistants);
-
-  // Ajouter le joueur dans la base
-  await db.ref('parties/' + codeEntre + '/joueurs').push({
-    pseudo: pseudoFinal
-  });
-
-  // Stocker le code du salon côté joueur
-  localStorage.setItem("salonCode", codeEntre);
-
-  messageDiv.textContent = "Connexion réussie !";
-  messageDiv.style.color = "#90ee90";
-  setTimeout(() => {
-    window.location.href = "salon.html";
-  }, 1200);
 }
 
 // Pour la touche Entrée sur l'input
