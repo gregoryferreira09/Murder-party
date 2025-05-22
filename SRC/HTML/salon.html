@@ -4,15 +4,12 @@
   <meta charset="UTF-8">
   <title>Salon de la Partie</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Lien vers votre feuille de style principale -->
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
-
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body>
-
   <header>
     <h1>Salon de la partie</h1>
   </header>
@@ -27,17 +24,14 @@
       <ul id="listeJoueurs"></ul>
       <div class="menu-buttons">
         <a href="creer-partie.html" class="gold-btn">Retour</a>
+        <button class="gold-btn" id="quitterSalonBtn">Quitter le salon</button>
       </div>
-      <button class="gold-btn" onclick="quitterSalon()">Quitter le salon</button>
+      <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px;">Salon supprimé par le créateur.</div>
     </div>
   </main>
 
   <script>
-    // Récupère le code du salon déjà stocké lors de la création/rejoint
-    const salonCode = localStorage.getItem("salonCode");
-    document.getElementById("codeSalon").textContent = salonCode;
-
-    // Initialisation Firebase (si pas déjà fait)
+    // --- Initialisation Firebase ---
     const firebaseConfig = {
       apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
       authDomain: "murder-party-ba8d1.firebaseapp.com",
@@ -53,12 +47,24 @@
     }
     const db = firebase.database();
 
-    // Écoute la liste des joueurs en temps réel
+    // --- Variables utiles ---
+    const salonCode = localStorage.getItem("salonCode");
+    const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
+    let jeSuisCreateur = false;
+    document.getElementById("codeSalon").textContent = salonCode;
+
+    // --- Vérifier qui est le créateur ---
+    db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
+      if (snap.exists() && snap.val() === monPseudo) {
+        jeSuisCreateur = true;
+      }
+    });
+
+    // --- Affichage des joueurs en temps réel + état du salon ---
     const joueursDiv = document.getElementById("listeJoueurs");
     const etatSalon = document.getElementById("etatSalon");
     let totalJoueurs = 1;
 
-    // Récupère les paramètres pour savoir combien de joueurs on attend
     db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
       if (snap.exists()) {
         const parametres = snap.val();
@@ -66,40 +72,69 @@
       }
     });
 
-    function quitterSalon() {
-  const monPseudo = localStorage.getItem("pseudo");
-  db.ref('parties/' + salonCode + '/joueurs').orderByChild('pseudo').equalTo(monPseudo).once('value', snapshot => {
-    snapshot.forEach(child => child.ref.remove());
-    window.location.href = "accueil.html";
-  });
-}
-    // Affiche les joueurs en temps réel
-    db.ref('parties/' + salonCode + '/joueurs').on('value', snapshot => {
+    // --- Ecoute la suppression du salon ---
+    db.ref('parties/' + salonCode).on('value', snapshot => {
+      if (!snapshot.exists()) {
+        document.getElementById("alertSalonSupprime").style.display = "block";
+        setTimeout(() => {
+          window.location.href = "rejoindre-partie.html";
+        }, 2000);
+        return;
+      }
+      // Sinon, affichage normal
       joueursDiv.innerHTML = "";
       let nbJoueurs = 0;
-      snapshot.forEach(joueurSnap => {
-        const pseudo = joueurSnap.val().pseudo;
-        const li = document.createElement("li");
-        li.textContent = pseudo;
-        joueursDiv.appendChild(li);
-        nbJoueurs++;
-      });
+      const joueursSnap = snapshot.child('joueurs');
+      if(joueursSnap && joueursSnap.forEach) {
+        joueursSnap.forEach(joueurSnap => {
+          const pseudo = joueurSnap.val().pseudo;
+          const li = document.createElement("li");
+          li.textContent = pseudo;
+          joueursDiv.appendChild(li);
+          nbJoueurs++;
+        });
+      }
       etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
 
-     if (nbJoueurs >= totalJoueurs) {
-  let countdown = 5;
-  etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
-  const interval = setInterval(() => {
-    countdown--;
-    if (countdown > 0) {
-      etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
-    } else {
-      clearInterval(interval);
-      etatSalon.textContent = "La partie commence !";
-      window.location.href = "lancement-partie.html";
+      if (nbJoueurs >= totalJoueurs) {
+        let countdown = 5;
+        etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
+        const interval = setInterval(() => {
+          countdown--;
+          if (countdown > 0) {
+            etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
+          } else {
+            clearInterval(interval);
+            etatSalon.textContent = "La partie commence !";
+            window.location.href = "lancement-partie.html";
+          }
+        }, 1000);
+      }
+    });
+
+    // --- Suppression du salon si le créateur quitte ---
+    function supprimerSalonSiCreateurEtQuitter() {
+      db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
+        if (snap.exists() && snap.val() === monPseudo) {
+          db.ref('parties/' + salonCode).remove().then(() => {
+            window.location.href = "rejoindre-partie.html";
+          });
+        } else {
+          // Juste quitter le salon (si ce n'est pas le créateur)
+          window.location.href = "rejoindre-partie.html";
+        }
+      });
     }
-  }, 1000);
-}
+
+    document.getElementById("quitterSalonBtn").addEventListener("click", supprimerSalonSiCreateurEtQuitter);
+
+    // --- Suppression automatique si le créateur ferme l'onglet ou recharge ---
+    window.addEventListener("beforeunload", function (e) {
+      // Important : n'utilise pas de promesse asynchrone ici, ce sera annulé par le navigateur
+      if (jeSuisCreateur) {
+        // Suppression "en fire-and-forget"
+        db.ref('parties/' + salonCode).remove();
+      }
     });
   </script>
 
@@ -107,6 +142,5 @@
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
-
 </body>
 </html>
