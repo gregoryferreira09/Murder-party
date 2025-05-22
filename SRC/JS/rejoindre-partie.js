@@ -1,5 +1,14 @@
-// === Code existant ===
 let aDejaRejoint = false;
+
+function getUniquePseudo(monPseudo, pseudosExistants) {
+  let uniquePseudo = monPseudo;
+  let suffix = 0;
+  while (pseudosExistants.includes(uniquePseudo)) {
+    suffix++;
+    uniquePseudo = monPseudo + suffix;
+  }
+  return uniquePseudo;
+}
 
 function rejoindreSalon() {
   if (aDejaRejoint) return;
@@ -15,6 +24,20 @@ function rejoindreSalon() {
   }
 
   if (codeEntre === codeSalon) {
+    // --- Gestion de l'unicité du pseudo ---
+    // Récupère la liste des pseudos déjà présents (simulation localStorage, à remplacer par Firebase)
+    let pseudosExistants = [];
+    for (let key in localStorage) {
+      if (key.startsWith("joueurPseudo_")) {
+        pseudosExistants.push(localStorage.getItem(key));
+      }
+    }
+    let monPseudo = localStorage.getItem("pseudo") || "Anonyme";
+    let pseudoFinal = getUniquePseudo(monPseudo, pseudosExistants);
+    localStorage.setItem("joueurPseudo_" + Date.now(), pseudoFinal);
+
+    // --- Fin unicité ---
+
     let connectes = parseInt(localStorage.getItem("joueursConnectes") || "0");
     let maxJoueurs = parseInt(localStorage.getItem("nombreJoueurs") || "6");
 
@@ -37,17 +60,6 @@ function rejoindreSalon() {
     messageDiv.textContent = "Code invalide. Vérifiez et réessayez.";
     messageDiv.style.color = "#ff6b6b";
   }
-}
-
-function getUniquePseudo(monPseudo, pseudosExistants) {
-  let uniquePseudo = monPseudo;
-  let suffix = 0;
-  // On s'assure que le pseudo n'est pas déjà pris
-  while (pseudosExistants.includes(uniquePseudo)) {
-    suffix++;
-    uniquePseudo = monPseudo + suffix;
-  }
-  return uniquePseudo;
 }
 
 function afficherCompteur() {
