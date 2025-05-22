@@ -8,31 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  <style>
-    /* Ajout du style spécifique salon */
-    .salon-texte, .code, .status, #listeJoueurs li {
-      font-size: 2em !important;
-    }
-    .code {
-      text-decoration: underline;
-      text-decoration-color: #d4af37; /* couleur dorée */
-      text-underline-offset: 4px;
-      font-weight: bold;
-    }
-    #listeJoueurs li {
-      margin-bottom: 0.2em;
-      list-style-type: disc;
-      padding-left: 0.5em;
-    }
-    
-    #etatSalon {
-  font-size: 1.5em !important;
-}
-.salon-joueur {
-  font-size: 1.5em !important;
-}
-    
-  </style>
 </head>
 <body>
   <header>
@@ -41,7 +16,7 @@
 
   <main>
     <div class="bandeau-dore">
-      <p class="salon-texte">Partagez ce code avec les autres joueurs :</p>
+      <p>Partagez ce code avec les autres joueurs :</p>
       <div class="code" id="codeSalon">------</div>
       <div class="status" id="etatSalon">
         En attente de joueurs...
@@ -54,7 +29,7 @@
       <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px;">Salon supprimé par le créateur.</div>
     </div>
   </main>
-  
+
   <script>
     // --- Initialisation Firebase ---
     const firebaseConfig = {
@@ -114,7 +89,6 @@
         joueursSnap.forEach(joueurSnap => {
           const pseudo = joueurSnap.val().pseudo;
           const li = document.createElement("li");
-          li.className = "salon-joueur";
           li.textContent = pseudo;
           joueursDiv.appendChild(li);
           nbJoueurs++;
