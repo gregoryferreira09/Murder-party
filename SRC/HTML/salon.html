@@ -17,6 +17,23 @@
       font-weight: bold;
       letter-spacing: 2px;
     }
+    /* Modale de confirmation */
+    #confirmationModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    #confirmationModal .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      min-width: 300px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -33,10 +50,19 @@
       </div>
       <ul id="listeJoueurs"></ul>
       <div class="menu-buttons">
-        <a href="creer-partie.html" class="gold-btn">Retour</a>
-        <button class="gold-btn" id="quitterSalonBtn">Quitter le salon</button>
+        <button class="gold-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
+        <button class="gold-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
       </div>
       <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px;">Salon supprimé par le créateur.</div>
+    </div>
+
+    <!-- Modale de confirmation pour le créateur -->
+    <div id="confirmationModal">
+      <div class="modal-content">
+        <p>Es-tu sûr de vouloir clôturer le salon ?</p>
+        <button id="confirmCloture" class="gold-btn" style="margin-right: 20px;">Oui</button>
+        <button id="cancelCloture" class="gold-btn">Non</button>
+      </div>
     </div>
   </main>
 
@@ -63,11 +89,47 @@
     let jeSuisCreateur = false;
     document.getElementById("codeSalon").textContent = salonCode;
 
-    // --- Vérifier qui est le créateur ---
+    // --- Affichage conditionnel des boutons ---
+    const cloturerSalonBtn = document.getElementById("cloturerSalonBtn");
+    const quitterSalonBtn = document.getElementById("quitterSalonBtn");
+    const confirmationModal = document.getElementById("confirmationModal");
+    const confirmCloture = document.getElementById("confirmCloture");
+    const cancelCloture = document.getElementById("cancelCloture");
+
+    // --- Vérifier qui est le créateur et afficher les bons boutons ---
     db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
       if (snap.exists() && snap.val() === monPseudo) {
         jeSuisCreateur = true;
+        cloturerSalonBtn.style.display = "inline-block";
+        quitterSalonBtn.style.display = "none";
+      } else {
+        jeSuisCreateur = false;
+        cloturerSalonBtn.style.display = "none";
+        quitterSalonBtn.style.display = "inline-block";
       }
+    });
+
+    // --- Actions boutons ---
+    // Créateur : ouvrir la modale de confirmation
+    cloturerSalonBtn.addEventListener("click", function() {
+      confirmationModal.style.display = "flex";
+    });
+
+    // Confirmer clôture
+    confirmCloture.addEventListener("click", function() {
+      db.ref('parties/' + salonCode).remove().then(() => {
+        window.location.href = "creer-partie.html";
+      });
+    });
+
+    // Annuler clôture
+    cancelCloture.addEventListener("click", function() {
+      confirmationModal.style.display = "none";
+    });
+
+    // Joueur : quitter le salon
+    quitterSalonBtn.addEventListener("click", function() {
+      window.location.href = "rejoindre-partie.html";
     });
 
     // --- Affichage des joueurs en temps réel + état du salon ---
@@ -121,22 +183,6 @@
         }, 1000);
       }
     });
-
-    // --- Suppression du salon si le créateur quitte ---
-    function supprimerSalonSiCreateurEtQuitter() {
-      db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
-        if (snap.exists() && snap.val() === monPseudo) {
-          db.ref('parties/' + salonCode).remove().then(() => {
-            window.location.href = "rejoindre-partie.html";
-          });
-        } else {
-          // Juste quitter le salon (si ce n'est pas le créateur)
-          window.location.href = "rejoindre-partie.html";
-        }
-      });
-    }
-
-    document.getElementById("quitterSalonBtn").addEventListener("click", supprimerSalonSiCreateurEtQuitter);
 
     // --- Suppression automatique si le créateur ferme l'onglet ou recharge ---
     window.addEventListener("beforeunload", function (e) {
