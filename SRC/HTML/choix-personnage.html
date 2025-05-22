@@ -165,6 +165,53 @@ document.getElementById("valider-choix").addEventListener("click", () => {
   }
 });
 
+  // Id joueur (à personnaliser selon ton appli, ici on fait simple pour tester)
+const playerId = prompt("Ton prénom ou pseudo ?");
+
+// On écoute les validations en temps réel
+db.ref(partieID + '/validations').on('value', snap => {
+  const valids = snap.val() || {};
+  // Grise les personnages déjà pris
+  document.querySelectorAll('.carte-personnage').forEach(div => {
+    const id = div.getAttribute('data-id');
+    const dejaPris = Object.values(valids).some(v => v.personnageId == id);
+    if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
+      div.style.opacity = 0.5;
+      div.style.pointerEvents = 'none';
+    } else {
+      div.style.opacity = 1;
+      div.style.pointerEvents = '';
+    }
+  });
+  // Affiche le compteur validés/total
+  const nbValid = Object.keys(valids).length;
+  document.getElementById('valider-choix').textContent =
+    nbValid + '/' + nombreJoueurs + (valids[playerId] ? ' (En attente des autres joueurs)' : ' Valider mon personnage');
+  // Redirige tout le monde si fini
+  if(nbValid === nombreJoueurs) {
+    window.location.href = "gameplay.html";
+  }
+
+// Quand tu valides
+document.getElementById("valider-choix").onclick = function() {
+  const personnageId = localStorage.getItem("personnageSelectionne");
+  if (personnageId && !this.disabled) {
+    db.ref(partieID + '/validations/' + playerId).set({ personnageId });
+    // Affiche le bouton annuler
+    if(!document.getElementById('annuler-choix')) {
+      const btn = document.createElement('button');
+      btn.id = 'annuler-choix';
+      btn.textContent = "Annuler";
+      btn.onclick = function() {
+        db.ref(partieID + '/validations/' + playerId).remove();
+      };
+      this.parentNode.appendChild(btn);
+    }
+    this.disabled = true;
+  }
+});
+
+  
 window.onload = afficherPersonnages;
 </script>
   
