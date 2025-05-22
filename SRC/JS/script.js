@@ -50,11 +50,6 @@ const initialiserProfil = () => {
   const statElems = document.querySelectorAll(".statistiques p strong");
   const avatarFeedback = document.getElementById("avatar-feedback");
 
-  if (!avatarImg || !modal || !avatarList || !pseudoInput || !pseudoValiderBtn || !validerAvatarBtn || !gradeElem) {
-    console.warn("[initialiserProfil] Certains éléments HTML requis sont manquants.");
-    return;
-  }
-
   // Liste des avatars disponibles
   const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png", "avatar-4.png"];
   let selectedAvatar = localStorage.getItem("avatar") || avatars[0];
