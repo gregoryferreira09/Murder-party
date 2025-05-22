@@ -508,6 +508,7 @@ function genererScenario() {
   if (!scenarioData) {
     container.innerHTML = "<p>Aucun paramètre de partie trouvé.<br>Veuillez créer ou rejoindre une partie.</p>";
     return;
+  }
 
   if (scenarioData) {
     let periodeCle = scenarioData.periode;
