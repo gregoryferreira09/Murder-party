@@ -43,6 +43,15 @@ async function rejoindreSalon() {
     pseudosExistants.push(joueurSnap.val().pseudo);
   });
 
+  // Vérifier le nombre max de joueurs
+  const paramSnap = await db.ref('parties/' + codeEntre + '/parametres').get();
+  const maxJoueurs = paramSnap.exists() ? parseInt(paramSnap.val().nombreJoueurs) : 1;
+  if (pseudosExistants.length >= maxJoueurs) {
+    messageDiv.textContent = "Ce salon est déjà complet.";
+    messageDiv.style.color = "#ff6b6b";
+    return;
+  }
+
   // Générer pseudo unique
   let monPseudo = localStorage.getItem("pseudo") || "Anonyme";
   let pseudoFinal = getUniquePseudo(monPseudo, pseudosExistants);
@@ -69,14 +78,3 @@ document.getElementById("codeInput").addEventListener("keypress", function(e) {
     rejoindreSalon();
   }
 });
-// Charger l’état aDejaRejoint au chargement
-window.addEventListener("load", chargerEtatRejoint);
-
-// Après avoir récupéré les joueurs déjà présents et les paramètres
-const paramSnap = await db.ref('parties/' + codeEntre + '/parametres').get();
-const maxJoueurs = paramSnap.exists() ? parseInt(paramSnap.val().nombreJoueurs) : 1;
-if (pseudosExistants.length >= maxJoueurs) {
-  messageDiv.textContent = "Ce salon est déjà complet.";
-  messageDiv.style.color = "#ff6b6b";
-  return;
-}
