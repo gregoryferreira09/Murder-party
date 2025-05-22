@@ -616,4 +616,36 @@ if (launchBtn) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", genererScenario);
+// --- Configuration et initialisation Firebase (ajoute ceci si ce n'est pas déjà fait dans ce fichier) ---
+const firebaseConfig = {
+  apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+  authDomain: "murder-party-ba8d1.firebaseapp.com",
+  databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "murder-party-ba8d1",
+  storageBucket: "murder-party-ba8d1.firebasestorage.app",
+  messagingSenderId: "20295055805",
+  appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+  measurementId: "G-KSBMBB7KMJ"
+};
+if (typeof firebase !== "undefined" && !firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = typeof firebase !== "undefined" ? firebase.database() : null;
+
+// --- NOUVELLE FONCTION POUR CHARGER LES PARAMÈTRES À PARTIR DE FIREBASE ---
+document.addEventListener("DOMContentLoaded", function() {
+  const salonCode = localStorage.getItem('salonCode');
+  if (salonCode && db) {
+    db.ref('parties/' + salonCode + '/parametres').once('value').then((snap) => {
+      const params = snap.val();
+      if (params) {
+        localStorage.setItem('parametresPartie', JSON.stringify(params));
+      }
+      genererScenario();
+    }).catch(() => {
+      genererScenario();
+    });
+  } else {
+    genererScenario();
+  }
+});
