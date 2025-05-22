@@ -73,6 +73,7 @@
     });
   </script>
 
+
   <!-- ✅ Ajout vibration au clic -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -83,6 +84,58 @@
         });
       });
     });
+    
+    // --- Configuration et initialisation Firebase ---
+const firebaseConfig = {
+  apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+  authDomain: "murder-party-ba8d1.firebaseapp.com",
+  databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "murder-party-ba8d1",
+  storageBucket: "murder-party-ba8d1.firebasestorage.app",
+  messagingSenderId: "20295055805",
+  appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+  measurementId: "G-KSBMBB7KMJ"
+};
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.database();
+
+const salonCode = localStorage.getItem("salonCode");
+document.getElementById("codeSalon").textContent = salonCode;
+
+const joueursDiv = document.getElementById("listeJoueurs");
+const etatSalon = document.getElementById("etatSalon");
+let totalJoueurs = 1;
+
+// Récupère le nombre de joueurs attendus
+db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
+  if (snap.exists()) {
+    const parametres = snap.val();
+    totalJoueurs = parseInt(parametres.nombreJoueurs) || 1;
+  }
+});
+
+// Affiche les joueurs en temps réel
+db.ref('parties/' + salonCode + '/joueurs').on('value', snapshot => {
+  joueursDiv.innerHTML = "";
+  let nbJoueurs = 0;
+  snapshot.forEach(joueurSnap => {
+    const pseudo = joueurSnap.val().pseudo;
+    const li = document.createElement("li");
+    li.textContent = pseudo;
+    joueursDiv.appendChild(li);
+    nbJoueurs++;
+  });
+  etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
+
+  if (nbJoueurs >= totalJoueurs) {
+    etatSalon.textContent = "Tous les joueurs sont connectés ! La partie va commencer.";
+    setTimeout(() => {
+      window.location.href = "lancement-partie.html";
+    }, 2000);
+  }
+});
   </script>
 
 </body>
