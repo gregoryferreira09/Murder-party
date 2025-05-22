@@ -10,6 +10,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <ul id="listeJoueurs"></ul>
   
 </head>
 <body>
@@ -34,44 +35,53 @@
   </main>
 
   <script>
-    const salonCode = generateCode(6);
-    const parametres = JSON.parse(localStorage.getItem("parametresPartie"));
-    const totalJoueurs = parametres ? parseInt(parametres.nombreJoueurs) : 1;
-    const joueursAttendus = totalJoueurs - 1;
+  // Récupère le code du salon déjà stocké lors de la création/rejoint
+  const salonCode = localStorage.getItem("salonCode");
+  document.getElementById("codeSalon").textContent = salonCode;
 
-    localStorage.setItem("salonCode", salonCode);
-    localStorage.setItem("joueursConnectes", "1");
+  // Initialisation Firebase (si pas déjà fait)
+  const firebaseConfig = {
+    // ...mets ici TA config...
+  };
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.database();
 
-    document.getElementById("codeSalon").textContent = salonCode;
+  // Écoute la liste des joueurs en temps réel
+  const joueursDiv = document.getElementById("listeJoueurs");
+  const etatSalon = document.getElementById("etatSalon");
+  let totalJoueurs = 1;
 
-    setInterval(() => {
-      const connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
-      const etat = document.getElementById("etatSalon");
-      etat.textContent = `${connectes} / ${totalJoueurs} joueurs connectés`;
-
-      if (connectes >= totalJoueurs) {
-        etat.textContent = "Tous les joueurs sont connectés ! La partie va commencer.";
-        window.location.href = "lancement-partie.html";
-      }
-    }, 1000);
-
-    setTimeout(() => {
-      let connectes = parseInt(localStorage.getItem("joueursConnectes") || "1");
-      connectes++;
-      localStorage.setItem("joueursConnectes", connectes.toString());
-    }, 5000);
-
-    const playerId = localStorage.getItem("pseudo") || "Anonyme";
-
-    function generateCode(length) {
-      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-      let result = "";
-      for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return result;
+  // Récupère les paramètres pour savoir combien de joueurs on attend
+  db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
+    if (snap.exists()) {
+      const parametres = snap.val();
+      totalJoueurs = parseInt(parametres.nombreJoueurs) || 1;
     }
-  </script>
+  });
+
+  // Affiche les joueurs en temps réel
+  db.ref('parties/' + salonCode + '/joueurs').on('value', snapshot => {
+    joueursDiv.innerHTML = "";
+    let nbJoueurs = 0;
+    snapshot.forEach(joueurSnap => {
+      const pseudo = joueurSnap.val().pseudo;
+      const li = document.createElement("li");
+      li.textContent = pseudo;
+      joueursDiv.appendChild(li);
+      nbJoueurs++;
+    });
+    etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
+
+    if (nbJoueurs >= totalJoueurs) {
+      etatSalon.textContent = "Tous les joueurs sont connectés ! La partie va commencer.";
+      setTimeout(() => {
+        window.location.href = "lancement-partie.html";
+      }, 2000);
+    }
+  });
+</script>
 
 <footer class="footer">
   <p>© 2025 Murder Party. Tous droits réservés.</p>
