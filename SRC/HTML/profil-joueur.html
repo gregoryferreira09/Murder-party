@@ -15,9 +15,10 @@
       transform: translateY(20px);
       animation: fadeIn 0.8s ease-in forwards;
     }
-    @keyframes fadeIn {
-      to { opacity: 1; transform: none; }
-    }
+  @keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px);}
+  to { opacity: 1; transform: none; }
+}
     .badges-section { margin-top: 2rem; }
     .badges-section ul {
       display: flex; gap: 1rem; flex-wrap: wrap; list-style: none; padding: 0;
