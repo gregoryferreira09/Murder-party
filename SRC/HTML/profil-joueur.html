@@ -132,31 +132,33 @@
       </section>
 
       <!-- Section Pseudo -->
-      <section class="pseudo-section" aria-labelledby="pseudo-heading" style="text-align: center;">
-        <h2 id="pseudo-heading" class="visually-hidden">Mon Pseudo</h2>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom:10px;">
-          <span id="pseudo-display"
-                class="pseudo-cally"
-                contenteditable="true"
-                spellcheck="false"
-                tabindex="0"
-                aria-label="Votre pseudo"
-                onfocus="this.style.boxShadow='0 0 8px #e0c18588';"
-                onblur="this.style.boxShadow='none';"
-                oninput="document.getElementById('pseudo-input').value=this.textContent.trim(); localStorage.setItem('pseudo', this.textContent.trim());">
-            <!-- Le pseudo sera injecté ici par JS -->
-          </span>
-          <span onclick="document.getElementById('pseudo-display').focus();"
-                title="Modifier le pseudo"
-                class="pseudo-crayon"
-                tabindex="0"
-                role="button"
-                aria-label="Modifier le pseudo">🖋️</span>
-        </div>
-        <!-- Champ caché pour compatibilité JS/localStorage -->
-        <input id="pseudo-input" type="text" maxlength="20" aria-label="Saisir votre pseudo" style="display:none;" />
-        <div id="pseudo-feedback" class="feedback-message visually-hidden" role="alert" aria-live="polite"></div>
-      </section>
+     <section class="pseudo-section" aria-labelledby="pseudo-heading" style="text-align: center;">
+  <h2 id="pseudo-heading" class="visually-hidden">Mon Pseudo</h2>
+  <div style="display: flex; justify-content: center;">
+    <div style="display: inline-flex; align-items: center;">
+      <span id="pseudo-display"
+            class="pseudo-cally"
+            contenteditable="true"
+            spellcheck="false"
+            tabindex="0"
+            aria-label="Votre pseudo"
+            onfocus="this.style.boxShadow='0 0 8px #e0c18588';"
+            onblur="this.style.boxShadow='none';"
+            oninput="document.getElementById('pseudo-input').value=this.textContent.trim(); localStorage.setItem('pseudo', this.textContent.trim());">
+        <!-- Le pseudo sera injecté ici par JS -->
+      </span>
+      <span onclick="document.getElementById('pseudo-display').focus();"
+            title="Modifier le pseudo"
+            class="pseudo-crayon"
+            tabindex="0"
+            role="button"
+            aria-label="Modifier le pseudo"
+            style="margin-left: 8px;">🖋️</span>
+    </div>
+  </div>
+  <input id="pseudo-input" type="text" maxlength="20" aria-label="Saisir votre pseudo" style="display:none;" />
+  <div id="pseudo-feedback" class="feedback-message visually-hidden" role="alert" aria-live="polite"></div>
+</section>
 
       <!-- Section Statistiques -->
       <section class="statistiques" aria-labelledby="stats-heading">
