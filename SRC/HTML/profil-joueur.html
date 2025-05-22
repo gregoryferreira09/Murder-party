@@ -149,6 +149,35 @@
     </div>
   </main>
 
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Récupère le pseudo depuis le localStorage, sinon "Anonyme"
+  let pseudo = localStorage.getItem("pseudo") || "Anonyme";
+  const pseudoInput = document.getElementById("pseudo-input");
+  const pseudoFeedback = document.getElementById("pseudo-feedback");
+
+  // Affiche le pseudo dans le champ, ou Anonyme si vide
+  pseudoInput.value = pseudo;
+
+  // Lorsque l'utilisateur clique sur "Valider"
+  document.getElementById("btn-save-pseudo").addEventListener("click", function() {
+    let newPseudo = pseudoInput.value.trim();
+    if (newPseudo === "") {
+      newPseudo = "Anonyme";
+      pseudoFeedback.textContent = "Aucun pseudo renseigné, vous êtes Anonyme.";
+      pseudoFeedback.className = "feedback-message erreur";
+      pseudoFeedback.classList.remove("visually-hidden");
+    } else {
+      pseudoFeedback.textContent = "Pseudo enregistré !";
+      pseudoFeedback.className = "feedback-message succes";
+      pseudoFeedback.classList.remove("visually-hidden");
+    }
+    localStorage.setItem("pseudo", newPseudo);
+    pseudoInput.value = newPseudo; // Mise à jour pour l'utilisateur
+  });
+});
+</script>
+  
   <script src="../JS/script.js"></script>
 
   <noscript>
