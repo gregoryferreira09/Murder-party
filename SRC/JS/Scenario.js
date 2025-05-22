@@ -1,4 +1,68 @@
-// SRC/JS/Scenario.js
+// --- Configuration et initialisation Firebase ---
+// (NE PAS utiliser type="module" pour ce fichier dans le HTML !)
+const firebaseConfig = {
+  apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+  authDomain: "murder-party-ba8d1.firebaseapp.com",
+  databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "murder-party-ba8d1",
+  storageBucket: "murder-party-ba8d1.firebasestorage.app",
+  messagingSenderId: "20295055805",
+  appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+  measurementId: "G-KSBMBB7KMJ"
+};
+if (typeof firebase !== "undefined" && !firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = typeof firebase !== "undefined" ? firebase.database() : null;
+
+  // Si pas de code de salon : erreur
+  if (!salonCode) {
+    container.innerHTML = "<p>Aucun salon trouvé. Veuillez créer ou rejoindre une partie.</p>";
+    return;
+  }
+
+  // Sync entre onglets : si le salon change ailleurs, on recharge ici
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'salonCode') window.location.reload();
+  });
+
+  // Lecture des paramètres dans Firebase (sécurisé)
+  db.ref('parties/' + salonCode + '/parametres').once('value')
+    .then((snap) => {
+      const params = snap.val();
+      if (!params) {
+        container.innerHTML = "<p>La partie n'existe plus ou a expiré. Veuillez en créer une nouvelle.</p>";
+        localStorage.removeItem('salonCode');
+        localStorage.removeItem('parametresPartie');
+        return;
+      }
+      localStorage.setItem('parametresPartie', JSON.stringify(params));
+      genererScenario();
+    })
+    .catch((error) => {
+      container.innerHTML = `<p>Erreur lors de la connexion à la base de données : ${error.message}</p>`;
+    });
+});
+
+// --- CHARGEMENT DES PARAMÈTRES DEPUIS FIREBASE AVANT DE GÉNÉRER ---
+document.addEventListener("DOMContentLoaded", function() {
+  const salonCode = localStorage.getItem('salonCode');
+  console.log("SalonCode utilisé pour la génération du scénario :", salonCode);
+  if (salonCode && db) {
+    db.ref('parties/' + salonCode + '/parametres').once('value').then((snap) => {
+      const params = snap.val();
+      console.log("Paramètres récupérés depuis Firebase :", params);
+      if (params) {
+        localStorage.setItem('parametresPartie', JSON.stringify(params));
+      }
+      genererScenario();
+    }).catch(() => {
+      document.getElementById("scenarioContainer").innerHTML = "<p>Erreur lors du chargement des paramètres Firebase.</p>";
+    });
+  } else {
+    document.getElementById("scenarioContainer").innerHTML = "<p>Aucun code de salon trouvé, veuillez (re)créer une partie.</p>";
+  }
+});
 
 const ANTI_REPEAT_HISTORY_SIZE = 5;
 
@@ -438,9 +502,17 @@ function genererScenario() {
   } catch {
     scenarioData = null;
   }
+  console.log("parametresPartie utilisés :", scenarioData); // <-- Ajout du log debug
+  
   const container = document.getElementById("scenarioContainer");
 
-  if (scenarioData) {
+    container.innerHTML = "<p>Aucun paramètre de partie trouvé.<br>Veuillez créer ou rejoindre une partie.</p>";
+    return;
+
+  if (scenarioData) {(!scenarioData) {
+    container.innerHTML = "<p>Aucun paramètre de partie trouvé.<br>Veuillez créer ou rejoindre une partie.</p>";
+    return;
+}
     let periodeCle = scenarioData.periode;
     if (periodeCle === "autre" && scenarioData.periodeAutre) {
       periodeCle = "autre";
@@ -616,4 +688,8 @@ if (launchBtn) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", genererScenario);
+window.addEventListener('storage', (event) => {
+  if (event.key === 'salonCode') {
+    location.reload();
+  }
+});
