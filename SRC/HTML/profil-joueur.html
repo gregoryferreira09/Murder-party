@@ -39,16 +39,22 @@
     }
     .historique-section { margin-top: 2rem; }
     .historique-section ul { padding-left: 1rem; }
-    /* Pour uniformiser la largeur max du contenu, comme sur les autres pages */
-    .bandeau-dore {
-      max-width: 650px;
-      margin: 30px auto 30px auto;
-      padding: 30px 24px 24px 24px;
-      border-radius: 18px;
-      background: linear-gradient(90deg,#fffcd8 0,#f9e8c9 100%);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-      border: 4px solid #d4af37;
+    /* Harmonisation stricte du fond avec .bandeau-dore */
+    .profil-container {
+      background: linear-gradient(145deg, #2c1b1b, #1f1313);
+      border: 2px solid #e0c185;
+      border-radius: 16px;
+      padding: 30px 40px;
+      margin: 40px auto;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 0 20px rgba(224, 193, 133, 0.15);
+      animation: fadeUp 0.8s ease-out;
+      text-align: center;
+      color: #f4e4c1;
+      font-family: 'Cormorant Garamond', serif;
     }
+    /* Pour uniformiser la largeur max du contenu, comme sur les autres pages */
     /* Ajuste le bouton retour comme sur accueil */
     .return-btn {
       display: inline-block;
@@ -67,9 +73,7 @@
       cursor: pointer;
     }
     .return-btn:hover { background: #b6952f; }
-    /* Centrage du main sur mobile/déco */
     main { display: flex; flex-direction: column; align-items: center; }
-    /* Pour éviter un trop grand main sur desktop */
     .profil-container { width: 100%; max-width: 650px; }
   </style>
 </head>
