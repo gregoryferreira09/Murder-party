@@ -75,39 +75,17 @@
       min-width: 40px;
       transition: box-shadow 0.2s;
       display: inline-block;
+      text-align: center;
+      margin: 0 auto;
     }
     .pseudo-cally:focus {
       box-shadow: 0 0 8px #e0c18588;
-    }
-    .pseudo-crayon {
-      cursor: pointer;
-      font-size: 1.2em;
-      vertical-align: middle;
-      user-select: none;
-      color: #e0c185;
-      margin-left: 6px;
-      transition: filter 0.2s;
-    }
-    .pseudo-crayon:hover, .pseudo-crayon:focus {
-      filter: drop-shadow(0 0 4px #e0c185) brightness(1.2);
     }
     .avatar-section {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
       margin-bottom: 24px;
-    }
-    .avatar-crayon {
-      cursor: pointer;
-      font-size: 1.6em;
-      vertical-align: middle;
-      user-select: none;
-      color: #e0c185;
-      transition: filter 0.2s;
-    }
-    .avatar-crayon:hover, .avatar-crayon:focus {
-      filter: drop-shadow(0 0 4px #e0c185) brightness(1.2);
     }
   </style>
 </head>
@@ -123,51 +101,26 @@
 
       <!-- Section Avatar -->
       <section class="avatar-section" aria-labelledby="avatar-heading" style="margin-top: 24px;">
-  <div style="display: flex; justify-content: center; align-items: center; gap: 16px;">
-    <div style="flex: none;">
-      <img id="avatar" src="/Public/images/avatar-1.png" alt="Avatar actuel" tabindex="0" role="button"
-        aria-pressed="false" aria-haspopup="dialog" aria-controls="modal" onclick="ouvrirModal()"
-        onerror="this.onerror=null; this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';"
-        style="cursor:pointer; width:96px; height:96px; border-radius:50%; border:2px solid #e0c185; display: block; margin: 0 auto;" />
-    </div>
-    <div style="flex: none;">
-      <span onclick="ouvrirModal()" title="Changer l'avatar"
-            class="avatar-crayon"
-            tabindex="0"
-            role="button"
-            aria-label="Changer l'avatar"
-            style="display: block; cursor: pointer; font-size: 1.6em; color: #e0c185;">🖋️</span>
-    </div>
-  </div>
-</section>
+        <img id="avatar" src="/Public/images/avatar-1.png" alt="Avatar actuel" tabindex="0" role="button"
+          aria-pressed="false" aria-haspopup="dialog" aria-controls="modal" onclick="ouvrirModal()"
+          onerror="this.onerror=null; this.src='/Public/images/default-avatar.png'; this.alt='Avatar par défaut';"
+          style="cursor:pointer; width:96px; height:96px; border-radius:50%; border:2px solid #e0c185; display: block; margin: 0 auto;" />
+      </section>
 
       <!-- Section Pseudo -->
-     <section class="pseudo-section" style="margin-top: 16px;">
-  <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-    <div style="flex: none;">
-      <span id="pseudo-display"
-            class="pseudo-cally"
-            contenteditable="true"
-            spellcheck="false"
-            tabindex="0"
-            aria-label="Votre pseudo"
-            style="display: block; min-width: 60px; text-align: center;">
-        <!-- Ton pseudo ici (injecté par JS) -->
-      </span>
-    </div>
-    <div style="flex: none;">
-      <span onclick="document.getElementById('pseudo-display').focus();"
-            title="Modifier le pseudo"
-            class="pseudo-crayon"
-            tabindex="0"
-            role="button"
-            aria-label="Modifier le pseudo"
-            style="display: block; cursor: pointer; font-size: 1.2em; color: #e0c185;">🖋️</span>
-    </div>
-  </div>
-  <input id="pseudo-input" type="text" maxlength="20" aria-label="Saisir votre pseudo" style="display:none;" />
-  <div id="pseudo-feedback" class="feedback-message visually-hidden" role="alert" aria-live="polite"></div>
-</section>
+      <section class="pseudo-section" style="margin-top: 16px;">
+        <span id="pseudo-display"
+              class="pseudo-cally"
+              contenteditable="true"
+              spellcheck="false"
+              tabindex="0"
+              aria-label="Votre pseudo"
+              style="display: block; min-width: 60px;">
+          <!-- Ton pseudo ici (injecté par JS) -->
+        </span>
+        <input id="pseudo-input" type="text" maxlength="20" aria-label="Saisir votre pseudo" style="display:none;" />
+        <div id="pseudo-feedback" class="feedback-message visually-hidden" role="alert" aria-live="polite"></div>
+      </section>
 
       <!-- Section Statistiques -->
       <section class="statistiques" aria-labelledby="stats-heading">
@@ -245,23 +198,6 @@
       pseudoDisplay.addEventListener("touchstart", function() {
         pseudoDisplay.focus();
       });
-
-      // Ancien code pour compatibilité (si besoin ailleurs)
-      // document.getElementById("btn-save-pseudo").addEventListener("click", function(event) {
-      //   let newPseudo = pseudoInput.value.trim();
-      //   if (newPseudo === "") {
-      //     newPseudo = "Anonyme";
-      //     pseudoFeedback.textContent = "Aucun pseudo renseigné, vous êtes Anonyme.";
-      //     pseudoFeedback.className = "feedback-message erreur";
-      //     pseudoFeedback.classList.remove("visually-hidden");
-      //   } else {
-      //     pseudoFeedback.textContent = "Pseudo enregistré !";
-      //     pseudoFeedback.className = "feedback-message succes";
-      //     pseudoFeedback.classList.remove("visually-hidden");
-      //   }
-      //   localStorage.setItem("pseudo", newPseudo);
-      //   pseudoInput.value = newPseudo;
-      // });
     });
   </script>
   
