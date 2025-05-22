@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Accueil - Murder Party</title>
+  <p id="bienvenuePseudo"></p>
 
   <!-- ✅ Optimisation mobile + encoche -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -27,6 +28,11 @@
       });
     }
   </script>
+  
+  document.addEventListener("DOMContentLoaded", function() {
+  const pseudo = localStorage.getItem("pseudo") || "Anonyme";
+  document.getElementById("bienvenuePseudo").textContent = `Bienvenue, ${pseudo} !`;
+});
 
   <!-- Inclusion utils.js et application des paramètres -->
   <script type="module">
