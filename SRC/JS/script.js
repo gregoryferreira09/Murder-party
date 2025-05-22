@@ -216,12 +216,3 @@ function formatDuree(seconds) {
 function genererScenario() {
   window.location.href = "./lancement-partie.html";
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('button').forEach((btn, i) => {
-    setTimeout(() => {
-      btn.style.opacity = '0';
-      btn.style.animation = `fadeUp 1s ease-out forwards`;
-    }, i * 120);
-  });
-});
