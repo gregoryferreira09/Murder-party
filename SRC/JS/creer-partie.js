@@ -34,49 +34,57 @@ function getUniquePseudo(monPseudo, pseudosExistants) {
   return uniquePseudo;
 }
 
-// --- Gestion du clic sur "Créer une partie" ---
 document.getElementById("genererBtn").addEventListener("click", async function(e) {
   e.preventDefault();
 
-  // Récupération des valeurs du formulaire
-  const mode = document.getElementById("mode").value;
-  const duree = document.getElementById("duree").value;
-  const periode = document.getElementById("periode").value.trim().toLowerCase();
-  const periodeAutre = (periode === "autre") ? document.getElementById("periode_autre").value : "";
-  const nombreJoueurs = document.getElementById("nombreJoueurs").value;
-  const criminels = document.getElementById("criminels").value;
-  const criminelFantome = document.getElementById("criminel_fantome").checked;
-  const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
-  const inactifs = document.getElementById("inactifs").checked;
+  // Désactivation du bouton pour éviter le multi-clic
+  const btn = document.getElementById("genererBtn");
+  btn.disabled = true;
 
-  const parametresPartie = {
-    mode,
-    duree,
-    periode,
-    periodeAutre,
-    nombreJoueurs,
-    criminels,
-    criminelFantome,
-    avatarsLegendaires,
-    inactifs
-  };
+  try {
+    // Récupération des valeurs du formulaire
+    const mode = document.getElementById("mode").value;
+    const duree = document.getElementById("duree").value;
+    const periode = document.getElementById("periode").value.trim().toLowerCase();
+    const periodeAutre = (periode === "autre") ? document.getElementById("periode_autre").value : "";
+    const nombreJoueurs = document.getElementById("nombreJoueurs").value;
+    const criminels = document.getElementById("criminels").value;
+    const criminelFantome = document.getElementById("criminel_fantome").checked;
+    const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
+    const inactifs = document.getElementById("inactifs").checked;
 
-  // Générer un code de salon unique
-  const salonCode = generateCode(6);
+    const parametresPartie = {
+      mode,
+      duree,
+      periode,
+      periodeAutre,
+      nombreJoueurs,
+      criminels,
+      criminelFantome,
+      avatarsLegendaires,
+      inactifs
+    };
 
-  // Enregistrer les paramètres dans Firebase
-  await db.ref('parties/' + salonCode + '/parametres').set(parametresPartie);
+    // Générer un code de salon unique
+    const salonCode = generateCode(6);
 
-  // Ajoute le créateur comme premier joueur (pseudo unique)
-  const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
-  // Ici, pas besoin de pseudo unique car c'est le premier joueur
-  await db.ref('parties/' + salonCode + '/joueurs').push({
-    pseudo: monPseudo
-  });
+    // Enregistrer les paramètres dans Firebase
+    await db.ref('parties/' + salonCode + '/parametres').set(parametresPartie);
 
-  // Stocker le code du salon côté joueur pour la suite
-  localStorage.setItem("salonCode", salonCode);
+    // Ajoute le créateur comme premier joueur (pseudo unique)
+    const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
+    await db.ref('parties/' + salonCode + '/joueurs').push({
+      pseudo: monPseudo
+    });
 
-  // Redirection vers la page salon
-  window.location.href = "salon.html";
+    // Stocker le code du salon côté joueur pour la suite
+    localStorage.setItem("salonCode", salonCode);
+
+    // Redirection vers la page salon
+    window.location.href = "salon.html";
+  } catch (error) {
+    alert("Erreur lors de la création de la partie : " + error.message);
+    console.error(error);
+    btn.disabled = false;
+  }
 });
