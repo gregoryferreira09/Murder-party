@@ -107,6 +107,8 @@ const firebaseConfig = {
   const partieID = "partie1";
   const db = firebase.database();
 
+  const playerId = localStorage.getItem("pseudo") || "Anonyme";
+  
   // 2. Variables globales
   let nombreJoueurs = 0;
   let personnages = [];
