@@ -1,6 +1,28 @@
-document.getElementById("periode").addEventListener("change", function () {
-  document.getElementById("autrePeriode").style.display = (this.value === "autre") ? "block" : "none";
-});
+// --- Configuration et initialisation Firebase ---
+const firebaseConfig = {
+  apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+  authDomain: "murder-party-ba8d1.firebaseapp.com",
+  databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "murder-party-ba8d1",
+  storageBucket: "murder-party-ba8d1.firebasestorage.app",
+  messagingSenderId: "20295055805",
+  appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+  measurementId: "G-KSBMBB7KMJ"
+};
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.database();
+
+// --- Génération du code (6 lettres/chiffres) ---
+function generateCode(length) {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
 
 function getUniquePseudo(monPseudo, pseudosExistants) {
   let uniquePseudo = monPseudo;
@@ -12,7 +34,8 @@ function getUniquePseudo(monPseudo, pseudosExistants) {
   return uniquePseudo;
 }
 
-document.getElementById("genererBtn").addEventListener("click", function(e) {
+// --- Gestion du clic sur "Créer une partie" ---
+document.getElementById("genererBtn").addEventListener("click", async function(e) {
   e.preventDefault();
 
   // Récupération des valeurs du formulaire
@@ -26,7 +49,6 @@ document.getElementById("genererBtn").addEventListener("click", function(e) {
   const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
   const inactifs = document.getElementById("inactifs").checked;
 
-  // Stockage dans le localStorage
   const parametresPartie = {
     mode,
     duree,
@@ -38,13 +60,22 @@ document.getElementById("genererBtn").addEventListener("click", function(e) {
     avatarsLegendaires,
     inactifs
   };
-  localStorage.setItem("parametresPartie", JSON.stringify(parametresPartie));
 
-  // --- Créateur ajouté à la partie avec pseudo unique ---
-  let pseudosExistants = []; // Pour l’instant vide en création de partie
-  let monPseudo = localStorage.getItem("pseudo") || "Anonyme";
-  let pseudoFinal = getUniquePseudo(monPseudo, pseudosExistants);
-  localStorage.setItem("joueurPseudo_createur", pseudoFinal);
+  // Générer un code de salon unique
+  const salonCode = generateCode(6);
+
+  // Enregistrer les paramètres dans Firebase
+  await db.ref('parties/' + salonCode + '/parametres').set(parametresPartie);
+
+  // Ajoute le créateur comme premier joueur (pseudo unique)
+  const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
+  // Ici, pas besoin de pseudo unique car c'est le premier joueur
+  await db.ref('parties/' + salonCode + '/joueurs').push({
+    pseudo: monPseudo
+  });
+
+  // Stocker le code du salon côté joueur pour la suite
+  localStorage.setItem("salonCode", salonCode);
 
   // Redirection vers la page salon
   window.location.href = "salon.html";
