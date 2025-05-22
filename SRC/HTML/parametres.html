@@ -52,5 +52,17 @@
 </footer>
 
   <script type="module" src="../JS/parametres.js"></script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+  const fade = document.querySelector('.fade-in');
+  if (fade) {
+    fade.classList.remove('fade-in');
+    void fade.offsetWidth; // force le reflow
+    fade.classList.add('fade-in');
+  }
+});
+</script>
+  
 </body>
 </html>
