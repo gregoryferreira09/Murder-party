@@ -130,7 +130,7 @@ function afficherPersonnages() {
   cartes.forEach(carte => {
     carte.addEventListener("click", () => {
       cartes.forEach(card => card.style.border = "2px solid #e9c78c");
-      carte.style.border = "2px solid #f44336";
+      carte.style.border = "2px solid #4CAF50"; // vert
       localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
       document.getElementById("valider-choix").disabled = false;
     });
