@@ -219,3 +219,22 @@ button:focus, a:focus, input:focus {
   outline: 2px solid #e0c185;
   outline-offset: 3px;
 }
+
+.form-container select,
+.form-container input[type="text"] {
+  background: #fff !important;   /* Fond blanc */
+  color: #2c1b1b !important;     /* Texte sombre */
+  border: 2px solid #e0c185;     /* Bordure dorée */
+  font-size: 1.1em;
+  border-radius: 7px;
+  font-family: inherit;
+  outline: none;
+  transition: border .18s, background .18s, color .18s;
+}
+
+.form-container select:focus,
+.form-container input[type="text"]:focus {
+  border: 2px solid #d4af37;
+  background: #fff;
+  color: #2c1b1b;
+}
