@@ -130,3 +130,9 @@ document.getElementById("validerBtn").addEventListener("click", rejoindreSalon);
 document.getElementById("codeInput").addEventListener("keydown", e => {
   if (e.key === "Enter") rejoindreSalon();
 });
+
+// Soumission du formulaire : clic bouton ou touche Entrée
+document.getElementById("joinForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  rejoindreSalon();
+});
