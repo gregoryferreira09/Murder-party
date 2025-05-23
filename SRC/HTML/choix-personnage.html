@@ -90,6 +90,24 @@
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+  // Remplace ici par TES paramètres firebase (copie/colle ceux de ton projet)
+  const firebaseConfig = {
+    apiKey: "...",
+    authDomain: "...",
+    databaseURL: "...",
+    projectId: "...",
+    storageBucket: "...",
+    messagingSenderId: "...",
+    appId: "..."
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  // Le chemin pour stocker la partie (par ex. "partie1", tu peux l'améliorer pour plusieurs parties)
+  const partieID = "partie1";
+  const db = firebase.database();
+</script>
   
   <!-- Fichier JS contenant les données des personnages -->
   <script src="../JS/personnages.js"></script>
