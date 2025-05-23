@@ -1,87 +1,114 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
-  <title>Accueil - Murder Party</title>
-  
-  <!-- ✅ Optimisation mobile + encoche -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-  <meta name="description" content="Bienvenue dans Murder Party, un jeu de mystère et d’enquête à vivre entre amis. Créez, rejoignez, et résolvez le crime.">
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/848/848043.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- ✅ Préchargement image de fond -->
-  <link rel="preload" href="https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg" as="image">
-
-  <!-- Lien vers ton fichier CSS externe -->
+  <title>Accueil – Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-
-  <!-- Service Worker (optionnel) -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => console.log('Service Worker enregistré:', reg.scope))
-          .catch(err => console.error('Erreur Service Worker:', err));
-      });
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    .main-accueil { max-width: 520px; margin: 40px auto 0 auto; background: #fff7e3; border-radius: 18px; box-shadow: 0 4px 20px #0001; padding: 32px 28px; }
+    .main-accueil h1 { text-align: center; font-family: 'Cinzel Decorative', serif; font-size: 2.3em; margin-bottom: 8px; }
+    .main-accueil h2 { text-align: center; font-family: 'Cormorant Garamond', serif; margin-top: 0; margin-bottom: 16px; font-size: 1.3em; font-weight: 400; }
+    .main-accueil label { display: block; margin-top: 18px; font-weight: bold; }
+    .main-accueil input[type="text"] { width: 100%; font-size: 1.15em; padding: 8px; border-radius: 5px; border: 1px solid #d4af37; box-sizing: border-box; margin-bottom: 18px; }
+    .main-accueil .actions { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+    .main-accueil .gold-btn { font-size: 1.13em; }
+    .main-accueil .or-divider { text-align: center; color: #ac9e7a; font-style: italic; margin: 14px 0 10px 0; }
+    .main-accueil .info { margin: 20px 0 0 0; font-size: 0.97em; color: #665536; }
+    button:focus, a:focus, input:focus { outline: 2px solid #d4af37; outline-offset: 3px; }
+    @media (max-width: 650px) {
+      .main-accueil { padding: 14px 3vw; }
     }
-  </script>
-
- 
-  <!-- Inclusion utils.js et application des paramètres -->
-<script type="module">
-  import { applyUserSettings } from "../JS/utils.js";
-  applyUserSettings();
-</script>
-
+  </style>
+</head>
 <body>
-
-  <header>
+  <main class="main-accueil" role="main">
     <h1>Murder Party</h1>
-  </header>
+    <h2>Enquête collaborative en ligne</h2>
+    <form id="accueilForm" autocomplete="off">
+      <label for="pseudoInput">Ton pseudo</label>
+      <input id="pseudoInput" name="pseudo" type="text" autocomplete="username" maxlength="20" required aria-required="true" aria-label="Ton pseudo" />
 
-  <main>
-    <div class="bandeau-dore">
-      <!-- Message de bienvenue -->
-      <p id="bienvenuePseudo"></p>
-      <div class="scenario">
-        <section class="menu-buttons">
-          <button onclick="window.location.href='creer-partie.html'" aria-label="Créer une partie">🎮 Créer une partie</button>
-          <button onclick="window.location.href='rejoindre-partie.html'" aria-label="Rejoindre une partie">👥 Rejoindre une partie</button>
-          <button onclick="window.location.href='profil-joueur.html'" aria-label="Voir le profil">👤 Profil</button>
-          <button onclick="window.location.href='boutique.html'" aria-label="Accéder à la boutique">🛍️ Boutique</button>
-          <button onclick="window.location.href='parametres.html'" aria-label="Paramètres du jeu">⚙️ Paramètres</button>
-        </section>
+      <div class="actions">
+        <button type="submit" class="gold-btn" id="btnCreerPartie" aria-label="Créer une partie">Créer une partie</button>
+        <div class="or-divider" aria-hidden="true">ou</div>
+        <button type="button" class="gold-btn" id="btnRejoindrePartie" aria-label="Rejoindre une partie">Rejoindre une partie</button>
       </div>
+    </form>
+    <div class="info">
+      <p><strong>Bienvenue&nbsp;!</strong> Organise une Murder Party ou rejoins une partie existante grâce à un code partagé.</p>
     </div>
   </main>
-
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
-
-  <!-- ✅ Affichage du pseudo de bienvenue -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const pseudo = localStorage.getItem("pseudo") || "Anonyme";
-      document.getElementById("bienvenuePseudo").textContent = `Bienvenue, ${pseudo} !`;
-    });
-  </script>
+    // --- Initialisation Firebase (lecture seule, pas d'écriture sur cette page) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+      authDomain: "murder-party-ba8d1.firebaseapp.com",
+      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "murder-party-ba8d1",
+      storageBucket: "murder-party-ba8d1.firebasestorage.app",
+      messagingSenderId: "20295055805",
+      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+      measurementId: "G-KSBMBB7KMJ"
+    };
+    if (typeof firebase !== "undefined" && !firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
-  <!-- ✅ Ajout vibration au clic -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const buttons = document.querySelectorAll('button');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (navigator.vibrate) navigator.vibrate(15);
-        });
-      });
-    });
-  </script>
+    // --- Formulaire principal ---
+    const pseudoInput = document.getElementById("pseudoInput");
+    const accueilForm = document.getElementById("accueilForm");
+    const btnCreerPartie = document.getElementById("btnCreerPartie");
+    const btnRejoindrePartie = document.getElementById("btnRejoindrePartie");
 
+    // Pré-remplissage éventuel
+    if (localStorage.getItem("pseudo")) {
+      pseudoInput.value = localStorage.getItem("pseudo");
+    }
+    pseudoInput.addEventListener("input", () => {
+      pseudoInput.value = pseudoInput.value.replace(/[<>]/g, ""); // anti XSS simple
+    });
+
+    // Actions
+    btnCreerPartie.addEventListener("click", function(e) {
+      e.preventDefault();
+      if (pseudoInput.value.trim().length < 1) {
+        pseudoInput.focus();
+        pseudoInput.setCustomValidity("Le pseudo est obligatoire.");
+        pseudoInput.reportValidity();
+        return;
+      }
+      localStorage.setItem("pseudo", pseudoInput.value.trim());
+      window.location.href = "creer-partie.html";
+    });
+
+    btnRejoindrePartie.addEventListener("click", function() {
+      if (pseudoInput.value.trim().length < 1) {
+        pseudoInput.focus();
+        pseudoInput.setCustomValidity("Le pseudo est obligatoire.");
+        pseudoInput.reportValidity();
+        return;
+      }
+      localStorage.setItem("pseudo", pseudoInput.value.trim());
+      window.location.href = "rejoindre-partie.html";
+    });
+
+    accueilForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      btnCreerPartie.click();
+    });
+
+    // Accessibilité : focus sur le champ pseudo au chargement
+    window.onload = () => { pseudoInput.focus(); };
+
+    // Si déjà en partie, nettoyage code salon
+    localStorage.removeItem("salonCode");
+  </script>
 </body>
 </html>
