@@ -230,3 +230,23 @@ button:focus, a:focus, input:focus {
   outline: 2px solid #e0c185;
   outline-offset: 3px;
 }
+
+.main-accueil {
+  max-width: 520px;
+  margin: 40px auto;
+  background: #2c1b1b;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px #0001;
+  padding: 32px 28px;
+  border: 2px solid #e0c185;
+  color: #f4e4c1;
+  font-family: 'Cormorant Garamond', serif;
+}
+@media (max-width: 650px) {
+  .main-accueil {
+    max-width: 98vw;
+    margin: 10px auto;
+    padding: 12px 2vw;
+    border-radius: 12px;
+  }
+}
