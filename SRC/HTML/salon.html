@@ -7,130 +7,205 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    body { background: #181212; color: #f4e4c1; font-family: 'Cormorant Garamond', serif; }
-    header h1 { text-align: center; margin-top: 1.4em; }
+    .salon-titre {
+      text-align: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2em;
+      color: #e0c185;
+      margin-bottom: 1em;
+      margin-top: 0.5em;
+    }
     .salon-container {
-      max-width: 560px; margin: 2.5em auto 2em auto; padding: 2.1em 2em 1.8em 2em;
-      border-radius: 14px; border: 2px solid #e0c185; box-shadow: 0 0 16px #e0c18533;
-      background: linear-gradient(135deg, #2c1b1b, #1f1313);
-      color: #ffe5b4; font-size: 1.14em;
+      max-width: 520px;
+      margin: 0 auto;
+      background: #2c1b1b;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #0001;
+      padding: 32px 28px;
+      border: 2px solid #e0c185;
+      color: #f4e4c1;
+      font-family: 'Cormorant Garamond', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
     }
-    .code-salon { font-size: 1.5em; font-weight: bold; letter-spacing: 0.1em; color: #e0c185; margin-bottom: 1em;}
-    .joueurs-liste { list-style: none; padding: 0; margin: 1em 0 2em 0;}
-    .joueurs-liste li { padding: 0.3em 0; border-bottom: 1px solid #e0c18533;}
-    .demarrer-btn { background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
-      color: #3d2b1f; border: 2px solid #e0c185; border-radius: 8px;
-      padding: 12px 30px; font-size: 1.04em; font-family: 'Cinzel Decorative', cursive;
-      cursor: pointer; box-shadow: 0 1px 8px #e0c18544; margin-top: 1.5em;}
-    .demarrer-btn:focus, .demarrer-btn:hover {
-      background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none;
+    .code-salon {
+      font-size: 1.5em;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      color: #e0c185;
+      margin-bottom: 1em;
+      margin-top: 0.6em;
     }
-    .footer { margin-top: 2em; text-align: center; color: #e0c185;}
-    @media (max-width: 700px) {
-      .salon-container { padding: 1.2em 2vw 1.2em 2vw; min-width: 0; max-width: 99vw;}
-      .demarrer-btn { font-size: 1em; padding: 10px 12vw;}
+    .joueurs-liste {
+      list-style: none;
+      padding: 0;
+      margin: 1em 0 2em 0;
+      width: 100%;
+      max-width: 360px;
+    }
+    .joueurs-liste li {
+      padding: 0.5em 0;
+      border-bottom: 1px solid #e0c18533;
+      color: #f4e4c1;
+      font-size: 1.08em;
+      text-align: left;
+    }
+    .joueurs-liste li:last-child {
+      border-bottom: none;
+    }
+    .demarrer-btn {
+      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+      color: #3d2b1f;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
+      padding: 14px 30px;
+      font-size: 1.15em;
+      font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer;
+      box-shadow: 0 1px 8px #e0c18544;
+      margin-top: 1.4em;
+      margin-bottom: 0.6em;
+      transition: box-shadow .2s, background .2s, color .2s;
+      min-width: 170px;
+    }
+    .demarrer-btn:focus, .demarrer-btn:hover {
+      background: #e0c185;
+      color: #1a1a1a;
+      box-shadow: 0 0 10px #e0c18588;
+      outline: none;
+    }
+    .infoSalon {
+      color: #e0c185;
+      margin-top: 0.9em;
+      font-size: 1em;
+      min-height: 1.2em;
+    }
+    .quit-link {
+      margin-top: 1.6em;
+      color: #e0c185;
+      text-decoration: underline;
+      font-size: 1em;
+      display: inline-block;
+      transition: color 0.18s;
+    }
+    .quit-link:hover, .quit-link:focus {
+      color: #f4e4c1;
+      text-decoration: none;
+    }
+    @media (max-width: 650px) {
+      .salon-container {
+        max-width: 98vw;
+        margin: 10px auto;
+        padding: 12px 2vw;
+        border-radius: 12px;
+      }
+      .salon-titre { font-size: 1.3em; }
+      .code-salon { font-size: 1.14em; }
+      .demarrer-btn { font-size: 1em; padding: 14px 10px; min-width: 0; }
+      .joueurs-liste { max-width: 98vw; }
     }
   </style>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <!-- Firebase V8: même version que sur creer-partie.html -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
-<header>
-  <h1>Salon d'attente</h1>
-</header>
+  <header>
+    <h1 class="salon-titre">Salon d'attente</h1>
+  </header>
+  <div class="center-wrapper">
+    <main>
+      <section class="salon-container" aria-labelledby="salon-heading">
+        <div class="code-salon">
+          Code du salon : <span id="codeSalon"></span>
+        </div>
+        <div style="width:100%;">
+          <strong>Joueurs connectés :</strong>
+          <ul class="joueurs-liste" id="joueursListe">
+            <li>Chargement...</li>
+          </ul>
+        </div>
+        <button class="demarrer-btn" id="demarrerBtn" style="display:none;">Démarrer la partie</button>
+        <div class="infoSalon" id="infoSalon"></div>
+        <a href="accueil.html" class="quit-link">Quitter le salon</a>
+      </section>
+    </main>
+  </div>
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
+  <script>
+    // --- Firebase config ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+      authDomain: "murder-party-ba8d1.firebaseapp.com",
+      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "murder-party-ba8d1",
+      storageBucket: "murder-party-ba8d1.appspot.com",
+      messagingSenderId: "20295055805",
+      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+      measurementId: "G-KSBMBB7KMJ"
+    };
+    if (typeof firebase !== "undefined" && !firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
 
-<main>
-  <section class="salon-container" aria-labelledby="salon-heading">
-    <div class="code-salon">
-      Code du salon : <span id="codeSalon"></span>
-    </div>
-    <div>
-      <strong>Joueurs connectés :</strong>
-      <ul class="joueurs-liste" id="joueursListe">
-        <li>Chargement...</li>
-      </ul>
-    </div>
-    <button class="demarrer-btn" id="demarrerBtn" style="display:none;">Démarrer la partie</button>
-    <div id="infoSalon" style="margin-top:1em; color:#e0c185;"></div>
-    <div style="margin-top:1em;"><a href="accueil.html" style="color:#e0c185;">Quitter le salon</a></div>
-  </section>
-</main>
+    // --- Récupérer le code salon et l'afficher ---
+    const codeSalon = localStorage.getItem("salonCode") || "";
+    document.getElementById("codeSalon").textContent = codeSalon;
 
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
+    // --- Afficher la liste des joueurs en temps réel ---
+    const joueursListe = document.getElementById("joueursListe");
+    const btnDemarrer = document.getElementById("demarrerBtn");
+    const infoSalon = document.getElementById("infoSalon");
 
-<script>
-  // --- Firebase config ---
-  const firebaseConfig = {
-    apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-    authDomain: "murder-party-ba8d1.firebaseapp.com",
-    databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "murder-party-ba8d1",
-    storageBucket: "murder-party-ba8d1.appspot.com",
-    messagingSenderId: "20295055805",
-    appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-    measurementId: "G-KSBMBB7KMJ"
-  };
-  if (typeof firebase !== "undefined" && !firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.database();
-
-  // --- Récupérer le code salon et l'afficher ---
-  const codeSalon = localStorage.getItem("salonCode") || "";
-  document.getElementById("codeSalon").textContent = codeSalon;
-
-  // --- Afficher la liste des joueurs en temps réel ---
-  const joueursListe = document.getElementById("joueursListe");
-  const btnDemarrer = document.getElementById("demarrerBtn");
-  const infoSalon = document.getElementById("infoSalon");
-
-  if (!codeSalon) {
-    window.location.href = "accueil.html";
-  } else {
-    db.ref('parties/' + codeSalon + '/joueurs').on('value', snapshot => {
-      joueursListe.innerHTML = "";
-      const joueurs = [];
-      snapshot.forEach(childSnap => {
-        joueurs.push(childSnap.val().pseudo || "???");
-      });
-      if (joueurs.length === 0) {
-        joueursListe.innerHTML = "<li>Aucun joueur encore connecté.</li>";
-      } else {
-        joueurs.forEach(pseudo => {
-          const li = document.createElement("li");
-          li.textContent = pseudo;
-          joueursListe.appendChild(li);
+    if (!codeSalon) {
+      window.location.href = "accueil.html";
+    } else {
+      db.ref('parties/' + codeSalon + '/joueurs').on('value', snapshot => {
+        joueursListe.innerHTML = "";
+        const joueurs = [];
+        snapshot.forEach(childSnap => {
+          joueurs.push(childSnap.val().pseudo || "???");
         });
-      }
-    });
+        if (joueurs.length === 0) {
+          joueursListe.innerHTML = "<li>Aucun joueur encore connecté.</li>";
+        } else {
+          joueurs.forEach(pseudo => {
+            const li = document.createElement("li");
+            li.textContent = pseudo;
+            joueursListe.appendChild(li);
+          });
+        }
+      });
 
-    // Afficher le bouton "Démarrer" uniquement pour le créateur du salon
-    db.ref('parties/' + codeSalon + '/parametres/createur').get().then(snap => {
-      const uuidCreateur = snap.exists() ? snap.val().uuid : null;
-      if (uuidCreateur && uuidCreateur === localStorage.getItem("uuid")) {
-        btnDemarrer.style.display = "";
-      } else {
-        btnDemarrer.style.display = "none";
-      }
-    });
+      // Afficher le bouton "Démarrer" uniquement pour le créateur du salon
+      db.ref('parties/' + codeSalon + '/parametres/createur').get().then(snap => {
+        const uuidCreateur = snap.exists() ? snap.val().uuid : null;
+        if (uuidCreateur && uuidCreateur === localStorage.getItem("uuid")) {
+          btnDemarrer.style.display = "";
+        } else {
+          btnDemarrer.style.display = "none";
+        }
+      });
 
-    // Afficher le nombre max de joueurs
-    db.ref('parties/' + codeSalon + '/parametres/nombreJoueurs').get().then(snap => {
-      if (snap.exists()) {
-        infoSalon.textContent = "En attente de joueurs... (" + snap.val() + " maximum)";
-      }
-    });
-  }
+      // Afficher le nombre max de joueurs
+      db.ref('parties/' + codeSalon + '/parametres/nombreJoueurs').get().then(snap => {
+        if (snap.exists()) {
+          infoSalon.textContent = "En attente de joueurs... (" + snap.val() + " maximum)";
+        }
+      });
+    }
 
-  // (Exemple) Action du bouton Démarrer, à adapter selon ta logique de lancement
-  btnDemarrer.addEventListener("click", function() {
-    // Ici tu peux lancer le jeu (changer l'état dans la BDD, puis rediriger)
-    window.location.href = "lancement-partie.html";
-  });
-</script>
+    // Action du bouton Démarrer
+    btnDemarrer.addEventListener("click", function() {
+      // Ici tu peux lancer le jeu (changer l'état dans la BDD, puis rediriger)
+      window.location.href = "lancement-partie.html";
+    });
+  </script>
 </body>
 </html>
