@@ -1,5 +1,3 @@
-// SRC/JS/creer-partie.js
-
 // --- Configuration Firebase ---
 const firebaseConfig = {
   apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
@@ -23,8 +21,9 @@ function generateUUID() {
   );
 }
 
-async function creerPartie(formData) {
-  // Utilise formData pour lire les valeurs
+// Fonction globale accessible depuis l'extérieur
+window.creerPartie = async function(formData) {
+  // Utilise formData pour lire les valeurs du formulaire
   const mode = formData.get("mode");
   const duree = formData.get("duree");
   const periode = formData.get("periode");
@@ -52,19 +51,19 @@ async function creerPartie(formData) {
   let pseudo = localStorage.getItem("pseudo") || "Anonyme";
   pseudo = pseudo.replace(/[<>\/\\'"`]/g, "").trim().substring(0, 30);
 
-  // Paramètres partie
+  // Paramètres de la partie
   const parametresPartie = {
-  mode,
-  duree,
-  periode,
-  periodeAutre,
-  nombreJoueurs,
-  criminels,
-  criminel_fantome,
-  avatars_legendaires,
-  inactifs,
-  createur: { uuid, pseudo }
-};
+    mode,
+    duree,
+    periode,
+    periodeAutre,
+    nombreJoueurs,
+    criminels,
+    criminel_fantome,
+    avatars_legendaires,
+    inactifs,
+    createur: { uuid, pseudo }
+  };
 
   // Générer code salon unique
   const salonCode = (Math.random().toString(36).substr(2, 6)).toUpperCase();
@@ -90,6 +89,7 @@ async function creerPartie(formData) {
   localStorage.setItem("salonCode", salonCode);
 
   window.location.href = "salon.html";
+};
 
 // Fonction utilitaire pour tirer N éléments aléatoires d'un tableau, sans doublons
 function getRandomElements(arr, n) {
@@ -98,7 +98,8 @@ function getRandomElements(arr, n) {
   return shuffled.slice(0, n);
 }
 
-document.getElementById("genererBtn").addEventListener("click", function(e) {
-  e.preventDefault();
-  creerPartie();
-});
+// SUPPRIMER ce bloc inutile :
+// document.getElementById("genererBtn").addEventListener("click", function(e) {
+//   e.preventDefault();
+//   creerPartie();
+// });
