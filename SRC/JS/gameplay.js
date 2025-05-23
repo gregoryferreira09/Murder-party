@@ -1,8 +1,10 @@
-// --- Données de jeu ---
+// --- Données de jeu par défaut ---
 const joueurs = [
   { 
     nom: 'Inspecteur Alaric', 
     image: 'avatar-1.png',
+    histoire: "Ancien détective de Scotland Yard, rongé par un passé trouble...",
+    pouvoir: "Interrogez deux joueurs à chaque tour...",
     indices: [
       "Tu es prêt à résoudre le mystère.",
       "Ta réputation te précède dans le domaine des enquêtes."
@@ -12,6 +14,8 @@ const joueurs = [
   { 
     nom: 'Violette', 
     image: 'avatar-1.png',
+    histoire: "Une héritière mystérieuse, toujours vêtue de violet.",
+    pouvoir: "Peut détourner les soupçons une fois par partie.",
     indices: [
       "A été vue avec la victime peu avant le crime.",
       "Semblait nerveuse lors du dîner."
@@ -21,6 +25,8 @@ const joueurs = [
   { 
     nom: 'Brume', 
     image: 'avatar-1.png',
+    histoire: "Personne ne sait d'où il sort... mais il sait tout sur tout le monde.",
+    pouvoir: "Peut se cacher un tour.",
     indices: [
       "Possède une clé suspecte.",
       "A disparu 10 minutes pendant la soirée."
@@ -30,10 +36,35 @@ const joueurs = [
 ];
 
 // --- Variables d'état ---
+let persoActif = null;
 let connexionsRestantes = 5;
 let actionType = null; // "vote" ou "connexion"
 let joueurSelectionAction = null;
 let indicesGagnes = []; // Pour synchroniser l'onglet indices
+
+// --- Initialisation ---
+document.addEventListener('DOMContentLoaded', function() {
+  // Récupération du personnage choisi
+  const persoStocke = localStorage.getItem("persoChoisi");
+  if (persoStocke) {
+    persoActif = JSON.parse(persoStocke);
+  } else {
+    // Par défaut, Inspecteur Alaric
+    persoActif = joueurs[0];
+  }
+
+  // Affichage dynamique des infos du personnage
+  document.getElementById("nomPersonnage").textContent = persoActif.nom;
+  document.getElementById("avatarPersonnage").src = "../../Public/images/" + persoActif.image;
+  // Si histoire/pouvoir existe, affiche-les
+  if (persoActif.histoire)
+    document.querySelector("#fiche p:nth-of-type(1)").innerHTML = "<strong>Histoire :</strong> " + persoActif.histoire;
+  if (persoActif.pouvoir)
+    document.querySelector("#fiche p:nth-of-type(2)").innerHTML = "<strong>Pouvoir :</strong> " + persoActif.pouvoir;
+
+  switchTab('fiche');
+  updateChrono();
+});
 
 // --- Gestion des onglets ---
 function switchTab(tabName) {
@@ -53,12 +84,6 @@ function switchTab(tabName) {
   document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
 }
 
-// --- Initialisation ---
-document.addEventListener('DOMContentLoaded', function() {
-  switchTab('fiche');
-  updateChrono();
-});
-
 // --- Onglets Vote / Connexion ---
 function setupActionTab(type) {
   actionType = type;
@@ -73,8 +98,8 @@ function setupActionTab(type) {
   const joueursDiv = document.getElementById('action-joueurs');
   joueursDiv.innerHTML = '';
   joueurs.forEach(j => {
-    // Empêcher de voter pour soi-même
-    if (type === "vote" && j.nom === "Inspecteur Alaric") return;
+    // Empêcher de voter pour soi-même : utiliser le nom du personnage actif
+    if (type === "vote" && j.nom === persoActif.nom) return;
     const div = document.createElement('div');
     div.className = 'joueur-avatar';
     div.innerHTML = `<img src="../../Public/images/${j.image}" alt="${j.nom}" class="avatar" onerror="this.src='https://via.placeholder.com/80?text=Avatar';"><br>${j.nom}`;
