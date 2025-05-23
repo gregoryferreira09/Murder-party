@@ -7,14 +7,8 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    /* Fade-in harmonisé */
-    .main-join {
-      opacity: 0;
-      transition: opacity 0.5s;
-    }
-    .main-join.visible {
-      opacity: 1;
-    }
+    .main-join { opacity: 0; transition: opacity 0.5s; }
+    .main-join.visible { opacity: 1; }
     .error-message {
       min-height: 20px;
       color: #c00;
@@ -24,12 +18,7 @@
       animation: fadeInMessage 0.5s ease forwards;
     }
     @media (max-width: 650px) {
-      .main-join {
-        max-width: 98vw;
-        margin: 10px auto;
-        padding: 12px 2vw;
-        border-radius: 12px;
-      }
+      .main-join { max-width: 98vw; margin: 10px auto; padding: 12px 2vw; border-radius: 12px; }
     }
   </style>
 </head>
@@ -58,7 +47,7 @@
           <div class="error-message" id="errorMessage" aria-live="polite"></div>
           <div id="loader" style="display:none;"></div>
           <div id="message"></div>
-          <button class="main-btn" id="validerBtn" type="button">Rejoindre</button>
+          <button class="main-btn" id="validerBtn" type="submit">Rejoindre</button>
         </form>
       </div>
       <div class="info" style="margin-top:24px;">
@@ -74,7 +63,6 @@
   </footer>
   <script src="../../JS/rejoindre-partie.js"></script>
   <script>
-    // Fade-in harmonisé
     document.addEventListener("DOMContentLoaded", function() {
       document.querySelector('.main-join').classList.add('visible');
     });
