@@ -53,10 +53,10 @@ header {
   text-decoration: none;
 }
 
-/* === Cadre principal harmonisé (BANDEAU DORÉ) === */
+/* === Cadre principal harmonisé (BANDEAU DORÉ, même que accueil) === */
 .bandeau-dore {
-  width: 520px;              /* largeur fixe sur desktop */
-  max-width: 98vw;           /* ne dépasse pas l'écran */
+  max-width: 520px;
+  width: 100%;
   margin: 40px auto;
   padding: 32px 28px;
   border-radius: 18px;
@@ -73,34 +73,34 @@ header {
   opacity: 1;
 }
 
-/* Responsive : largeur s'adapte sur petits écrans */
-@media (max-width: 600px) {
+/* Responsive largeur du bandeau principal */
+@media (max-width: 650px) {
   .bandeau-dore {
-    width: 98vw;
     max-width: 98vw;
-    padding: 10px 2vw;
+    margin: 10px auto;
+    padding: 12px 2vw;
+    border-radius: 12px;
   }
 }
 
-/* === Formulaire harmonisé === */
+/* === Formulaire harmonisé (largeur 100% du bandeau) === */
 .form-container,
 .boutons-actions {
   width: 100%;
-  max-width: 480px;   /* même largeur pour formulaire et boutons */
+  max-width: none;
   margin: 0 auto;
   box-sizing: border-box;
-  /* .boutons-actions prendra aussi ces propriétés */
 }
 
 .form-container {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 15px 10px;
+  padding: 0;
   align-items: stretch;
-  background: rgba(44, 27, 27, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 0 8px #e9c78c33;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 /* Étiquettes */
@@ -124,6 +124,8 @@ header {
   font-family: inherit;
   outline: none;
   transition: border .18s, background .18s, color .18s;
+  width: 100%;
+  box-sizing: border-box;
 }
 .form-container select:focus,
 .form-container input[type="text"]:focus {
@@ -160,14 +162,14 @@ header {
 .boutons-actions .main-btn {
   background: #1b1b1b;
   color: #fdf3df;
-  border: 2px solid #e9c78c;
+  border: 2px solid #e0c185;
   border-radius: 8px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4em;
-  padding: 20px 40px;
+  font-size: 1.15em;
+  padding: 14px 30px;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 100%;            /* prend toute la largeur de .boutons-actions */
+  width: 100%;
   margin: 0 0 8px 0;
   display: block;
   box-sizing: border-box;
@@ -179,8 +181,7 @@ header {
 .main-btn:focus {
   background-color: #3d2b1f;
   color: #e0c185;
-  transform: scale(1.05);
-  box-shadow: 0 0 10px #e0c18588;
+  box-shadow: 0 0 8px #e0c18588;
   outline: 2px solid #e0c185;
   outline-offset: 4px;
 }
@@ -195,11 +196,11 @@ header {
   flex-wrap: wrap;
 }
 
-/* Responsive cadre */
-@media (max-width: 600px) {
+/* Responsive (formulaire et boutons) */
+@media (max-width: 650px) {
   .form-container, .boutons-actions {
-    max-width: 98vw;
-    padding: 8px 2px;
+    max-width: 99vw;
+    padding: 0;
   }
   .main-btn, .form-container .main-btn, .boutons-actions .main-btn {
     font-size: 1em;
