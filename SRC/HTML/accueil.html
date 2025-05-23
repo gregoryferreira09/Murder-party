@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    /* Styles PC : NE PAS TOUCHER */
+    /* Styles principaux - NE PAS TOUCHER pour garder design identique */
     .main-accueil {
       max-width: 520px;
       margin: 40px auto;
@@ -100,7 +100,8 @@
       outline: 2px solid #e0c185;
       outline-offset: 3px;
     }
-    /* --- ADAPTATION MOBILE SANS CHANGEMENT DE DESIGN --- */
+
+    /* --- ADAPTATION MOBILE : seulement largeur, padding, gap --- */
     @media (max-width: 650px) {
       html { font-size: 16px; }
       body { overflow-x: hidden; }
@@ -113,11 +114,11 @@
       .menu-buttons {
         gap: 12px;
       }
-      .gold-btn, button {
+      .gold-btn {
         width: 98vw;
         max-width: 350px;
         min-width: 0;
-        box-sizing: border-box;
+        /* on ne touche pas au background, color, border ! */
       }
     }
   </style>
