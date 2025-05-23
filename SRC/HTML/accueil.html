@@ -1,87 +1,251 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
-  <title>Accueil - Murder Party</title>
-  
-  <!-- ✅ Optimisation mobile + encoche -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-  <meta name="description" content="Bienvenue dans Murder Party, un jeu de mystère et d’enquête à vivre entre amis. Créez, rejoignez, et résolvez le crime.">
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/848/848043.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- ✅ Préchargement image de fond -->
-  <link rel="preload" href="https://cdn.pixabay.com/photo/2017/01/19/19/12/chandelier-1992930_960_720.jpg" as="image">
-
-  <!-- Lien vers ton fichier CSS externe -->
+  <title>Salon de la Partie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-
-  <!-- Service Worker (optionnel) -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => console.log('Service Worker enregistré:', reg.scope))
-          .catch(err => console.error('Erreur Service Worker:', err));
-      });
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <style>
+    .texte-x2 { font-size: 2em; }
+    .code-x2 { font-size: 2em; font-weight: bold; letter-spacing: 2px; }
+    #confirmationModal {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.4); z-index: 100; justify-content: center; align-items: center;
     }
-  </script>
-
- 
-  <!-- Inclusion utils.js et application des paramètres -->
-<script type="module">
-  import { applyUserSettings } from "../JS/utils.js";
-  applyUserSettings();
-</script>
-
+    #confirmationModal .modal-content {
+      background: #f9e8c9; border: 4px solid #d4af37; color: #5c4326;
+      font-family: 'Cinzel Decorative', 'Cormorant Garamond', serif;
+      padding: 36px 42px 30px 42px; border-radius: 16px; min-width: 340px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.20);
+    }
+    #confirmationModal .modal-content .modal-question {
+      font-size: 2em; font-weight: bold; margin-bottom: 32px;
+    }
+    #confirmationModal .modal-btns {
+      display: flex; justify-content: center; gap: 36px; margin-top: 0;
+    }
+    #confirmationModal .gold-btn {
+      min-width: 120px; font-size: 1.15em; padding: 12px 0;
+    }
+    /* Accessibilité : focus visible */
+    button:focus, a:focus { outline: 2px solid #d4af37; outline-offset: 3px; }
+    ul#listeJoueurs { padding-left: 1.5em; }
+    .status { margin: 12px 0; font-weight: bold; }
+    #alertSalonSupprime { color:#ff6b6b; margin-top:10px; font-weight: bold; }
+  </style>
+</head>
 <body>
-
   <header>
-    <h1>Murder Party</h1>
+    <h1>Salon de la partie</h1>
   </header>
 
   <main>
-    <div class="bandeau-dore">
-      <!-- Message de bienvenue -->
-      <p id="bienvenuePseudo"></p>
-      <div class="scenario">
-        <section class="menu-buttons">
-          <button onclick="window.location.href='creer-partie.html'" aria-label="Créer une partie">🎮 Créer une partie</button>
-          <button onclick="window.location.href='rejoindre-partie.html'" aria-label="Rejoindre une partie">👥 Rejoindre une partie</button>
-          <button onclick="window.location.href='profil-joueur.html'" aria-label="Voir le profil">👤 Profil</button>
-          <button onclick="window.location.href='boutique.html'" aria-label="Accéder à la boutique">🛍️ Boutique</button>
-          <button onclick="window.location.href='parametres.html'" aria-label="Paramètres du jeu">⚙️ Paramètres</button>
-        </section>
+    <div class="bandeau-dore" role="region" aria-label="Salon de jeu">
+      <p class="texte-x2">Partagez ce code avec les autres joueurs :</p>
+      <div class="code code-x2" id="codeSalon" aria-live="polite">------</div>
+      <div class="status" id="etatSalon" aria-live="polite">
+        En attente de joueurs...
+      </div>
+      <ul id="listeJoueurs" aria-label="Liste des joueurs connectés"></ul>
+      <div class="menu-buttons">
+        <button class="gold-btn" id="cloturerSalonBtn" style="display:none;" tabindex="0">Clôturer le salon</button>
+        <button class="gold-btn" id="quitterSalonBtn" style="display:none;" tabindex="0">Quitter le salon</button>
+      </div>
+      <div id="alertSalonSupprime" style="display:none;">Salon supprimé par le créateur.</div>
+    </div>
+
+    <!-- Modale de confirmation commune -->
+    <div id="confirmationModal" role="dialog" aria-modal="true" aria-labelledby="modalQuestion">
+      <div class="modal-content">
+        <div class="modal-question" id="modalQuestion">Es-tu sûr de vouloir clôturer le salon ?</div>
+        <div class="modal-btns">
+          <button id="confirmModalBtn" class="gold-btn" tabindex="0">Oui</button>
+          <button id="cancelModalBtn" class="gold-btn" tabindex="0">Non</button>
+        </div>
       </div>
     </div>
   </main>
+
+  <script>
+    // --- Initialisation Firebase ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+      authDomain: "murder-party-ba8d1.firebaseapp.com",
+      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "murder-party-ba8d1",
+      storageBucket: "murder-party-ba8d1.firebasestorage.app",
+      messagingSenderId: "20295055805",
+      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+      measurementId: "G-KSBMBB7KMJ"
+    };
+    if (typeof firebase !== "undefined" && !firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = typeof firebase !== "undefined" ? firebase.database() : null;
+
+    // --- Variables utiles ---
+    const salonCode = localStorage.getItem("salonCode");
+    const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
+    let jeSuisCreateur = false;
+    document.getElementById("codeSalon").textContent = salonCode || "------";
+
+    // --- Sécurité : si pas de salonCode, redirige vers accueil ---
+    if (!salonCode) {
+      window.location.href = "accueil.html";
+    }
+
+    // --- Affichage conditionnel des boutons ---
+    const cloturerSalonBtn = document.getElementById("cloturerSalonBtn");
+    const quitterSalonBtn = document.getElementById("quitterSalonBtn");
+    const confirmationModal = document.getElementById("confirmationModal");
+    const confirmModalBtn = document.getElementById("confirmModalBtn");
+    const cancelModalBtn = document.getElementById("cancelModalBtn");
+    const modalQuestion = document.getElementById("modalQuestion");
+
+    let currentAction = null; // "cloture" ou "quitter"
+
+    // --- Vérifier qui est le créateur et afficher les bons boutons ---
+    db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
+      if (snap.exists() && snap.val() === monPseudo) {
+        jeSuisCreateur = true;
+        cloturerSalonBtn.style.display = "inline-block";
+        quitterSalonBtn.style.display = "none";
+      } else {
+        jeSuisCreateur = false;
+        cloturerSalonBtn.style.display = "none";
+        quitterSalonBtn.style.display = "inline-block";
+      }
+    });
+
+    // --- Accessibilité : ouverture/fermeture modale clavier ---
+    function openModal(question, action) {
+      modalQuestion.textContent = question;
+      currentAction = action;
+      confirmationModal.style.display = "flex";
+      confirmModalBtn.focus();
+    }
+    function closeModal() {
+      confirmationModal.style.display = "none";
+      currentAction = null;
+      document.activeElement.blur();
+    }
+    cloturerSalonBtn.addEventListener("click", function() {
+      openModal("Es-tu sûr de vouloir clôturer le salon ?", "cloture");
+    });
+    cloturerSalonBtn.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" || e.key === " ") openModal("Es-tu sûr de vouloir clôturer le salon ?", "cloture");
+    });
+    quitterSalonBtn.addEventListener("click", function() {
+      openModal("Es-tu sûr de vouloir quitter le salon ?", "quitter");
+    });
+    quitterSalonBtn.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" || e.key === " ") openModal("Es-tu sûr de vouloir quitter le salon ?", "quitter");
+    });
+
+    confirmModalBtn.addEventListener("click", function() {
+      if(currentAction === "cloture") {
+        db.ref('parties/' + salonCode).remove().then(() => {
+          window.location.href = "creer-partie.html";
+        });
+      } else if(currentAction === "quitter") {
+        // Retirer le joueur de la liste des joueurs
+        const joueursRef = db.ref('parties/' + salonCode + '/joueurs');
+        joueursRef.once('value', snap => {
+          snap.forEach(child => {
+            if(child.val().pseudo === monPseudo) {
+              joueursRef.child(child.key).remove();
+            }
+          });
+        });
+        setTimeout(() => {
+          window.location.href = "rejoindre-partie.html";
+        }, 300);
+      }
+      closeModal();
+    });
+
+    cancelModalBtn.addEventListener("click", closeModal);
+    cancelModalBtn.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" || e.key === " ") closeModal();
+    });
+
+    // --- Fermer la modale avec Echap ---
+    window.addEventListener("keydown", function(e) {
+      if (e.key === "Escape" && confirmationModal.style.display === "flex") {
+        closeModal();
+      }
+    });
+
+    // --- Affichage des joueurs en temps réel + état du salon ---
+    const joueursDiv = document.getElementById("listeJoueurs");
+    const etatSalon = document.getElementById("etatSalon");
+    let totalJoueurs = 1;
+
+    db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
+      if (snap.exists()) {
+        const parametres = snap.val();
+        totalJoueurs = parseInt(parametres.nombreJoueurs) || 1;
+      }
+    });
+
+    // --- Ecoute la suppression du salon ---
+    db.ref('parties/' + salonCode).on('value', snapshot => {
+      if (!snapshot.exists()) {
+        document.getElementById("alertSalonSupprime").style.display = "block";
+        setTimeout(() => {
+          window.location.href = "rejoindre-partie.html";
+        }, 2000);
+        return;
+      }
+      // Sinon, affichage normal
+      joueursDiv.innerHTML = "";
+      let nbJoueurs = 0;
+      const joueursSnap = snapshot.child('joueurs');
+      if(joueursSnap && joueursSnap.forEach) {
+        joueursSnap.forEach(joueurSnap => {
+          const pseudo = joueurSnap.val().pseudo;
+          const li = document.createElement("li");
+          li.textContent = pseudo;
+          joueursDiv.appendChild(li);
+          nbJoueurs++;
+        });
+      }
+      etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
+
+      if (nbJoueurs >= totalJoueurs) {
+        let countdown = 5;
+        etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
+        const interval = setInterval(() => {
+          countdown--;
+          if (countdown > 0) {
+            etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
+          } else {
+            clearInterval(interval);
+            etatSalon.textContent = "La partie commence !";
+            window.location.href = "lancement-partie.html";
+          }
+        }, 1000);
+      }
+    });
+
+    // --- Gestion offline/online ---
+    window.addEventListener('offline', () => {
+      etatSalon.textContent = "Vous êtes hors ligne.";
+    });
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'salonCode') window.location.reload();
+    });
+  </script>
 
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
-
-  <!-- ✅ Affichage du pseudo de bienvenue -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const pseudo = localStorage.getItem("pseudo") || "Anonyme";
-      document.getElementById("bienvenuePseudo").textContent = `Bienvenue, ${pseudo} !`;
-    });
-  </script>
-
-  <!-- ✅ Ajout vibration au clic -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const buttons = document.querySelectorAll('button');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (navigator.vibrate) navigator.vibrate(15);
-        });
-      });
-    });
-  </script>
-
 </body>
 </html>
