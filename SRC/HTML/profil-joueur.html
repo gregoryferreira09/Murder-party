@@ -328,6 +328,16 @@
       });
     });
 
+    // Afficher le pseudo sauvegardé (depuis profil-joueur) dans le message de bienvenue
+document.addEventListener("DOMContentLoaded", function() {
+  var pseudo = localStorage.getItem("pseudo");
+  if (pseudo && pseudo.trim().length > 0) {
+    document.getElementById("pseudoAffiche").textContent = pseudo;
+  } else {
+    document.getElementById("pseudoAffiche").textContent = "invité";
+  }
+});
+
     // -- Accessibilité : focus champ pseudo au chargement
     window.onload = () => {
       document.getElementById("pseudo-display").focus();
@@ -339,5 +349,6 @@
       ⚠️ JavaScript est désactivé. Vous ne pourrez pas modifier votre avatar ou pseudo.
     </div>
   </noscript>
+  
 </body>
 </html>
