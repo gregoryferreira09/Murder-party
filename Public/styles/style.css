@@ -224,3 +224,42 @@ button:focus, a:focus, input:focus {
     border-radius: 12px;
   }
 }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Wrapper pour centrage vertical horizontal du main */
+.center-wrapper {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+/* Harmonisation du cadre principal */
+.main-accueil,
+.main-join {
+  max-width: 520px;
+  margin: 0 auto;
+  background: #2c1b1b;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px #0001;
+  padding: 32px 28px;
+  border: 2px solid #e0c185;
+  color: #f4e4c1;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+@media (max-width: 650px) {
+  .main-accueil,
+  .main-join {
+    max-width: 98vw;
+    margin: 10px auto;
+    padding: 12px 2vw;
+    border-radius: 12px;
+  }
+}
