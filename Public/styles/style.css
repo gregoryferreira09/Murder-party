@@ -1,33 +1,33 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Cormorant Garamond', serif;
-  background-color: #000;
-  color: #f4e4c1;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: center;
-  scroll-behavior: smooth;
-}
-
-/* Conteneur principal avec effet doré et encadrement élégant */
+/* === Cadre principal harmonisé (bandeau-dore pour toutes pages) === */
 .bandeau-dore {
-  background: linear-gradient(145deg, #2c1b1b, #1f1313);
-  border: 2px solid #e9c78c;
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 900px;
+  max-width: 520px;
   margin: 40px auto;
-  box-shadow: 0 0 15px rgba(233, 199, 140, 0.2);
+  padding: 32px 28px;
+  border-radius: 18px;
+  border: 2px solid #e0c185;
+  box-shadow: 0 4px 20px #0001;
+  background: linear-gradient(145deg, #2c1b1b, #1f1313);
+  color: #f4e4c1;
   text-align: center;
   width: 90%;
-  box-sizing: border-box;
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+.bandeau-dore.visible {
+  opacity: 1;
 }
 
-/* Bloc de formulaire stylisé et centré */
+/* Pour fade-in général sur tous les cadres principaux */
+@media (max-width: 650px) {
+  .bandeau-dore {
+    max-width: 98vw;
+    margin: 10px auto;
+    padding: 12px 2vw;
+    border-radius: 12px;
+  }
+}
+
+/* === Formulaire harmonisé === */
 .form-container {
   display: flex;
   flex-direction: column;
@@ -42,15 +42,15 @@ body {
   box-sizing: border-box;
 }
 
-/* Style des étiquettes de champs */
+/* Étiquettes */
 .form-container label {
   text-align: left;
   margin-bottom: 6px;
   font-weight: 600;
-  color: #e9c78c;
+  color: #e0c185;
 }
 
-/* Champs de texte et listes déroulantes avec fond sombre */
+/* Champs input et select */
 .form-container select,
 .form-container input[type="text"] {
   padding: 10px 8px;
@@ -62,8 +62,6 @@ body {
   margin-bottom: 10px;
   transition: border-color 0.3s;
 }
-
-/* Effet de surbrillance sur focus */
 .form-container select:focus,
 .form-container input[type="text"]:focus {
   border-color: #e9c78c;
@@ -76,495 +74,27 @@ body {
   accent-color: #e9c78c;
 }
 
-/* Regroupement horizontal des boutons d'action */
-.boutons-actions {
-  display: flex;
-  gap: 18px;
-  justify-content: center;
-  margin-top: 18px;
-  flex-wrap: wrap;
+/* Message */
+.message {
+  min-height: 22px;
+  margin-top: 4px;
+  font-weight: bold;
+  font-size: 1em;
+  color: #c00;
+  animation: fadeInMessage 0.5s ease forwards;
 }
+.message.succes { color: #2ecc40; }
 
-/* Boutons au style luxueux doré */
-.gold-btn {
-  background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
-  color: #3d2b1f;
-  border: 2px solid #e0c185;
-  border-radius: 8px;
-  padding: 12px 30px;
-  font-size: 1.2em;
-  font-family: 'Cinzel Decorative', cursive;
-  cursor: pointer;
-  margin: 0 4px;
-  transition: box-shadow .2s, background .2s, color .2s;
-  text-decoration: none;
-  display: inline-block;
-  min-width: 120px;
-}
-
-/* Survol et focus des boutons dorés */
-.gold-btn:hover,
-.gold-btn:focus {
-  background: #e0c185;
-  color: #1a1a1a;
-  box-shadow: 0 0 8px #e0c18588;
-  outline: none;
-}
-
-/* Style générique pour autres boutons */
-button {
-  background: #2c1b1b;
-  border: 2px solid #e9c78c;
-  color: #fdf3df;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4em;
-  padding: 20px 40px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 350px;
-}
-
-/* Survol et focus sur boutons classiques */
-button:hover {
-  background-color: #3d2b1f;
-  transform: scale(1.05);
-  box-shadow: 0 0 10px #e0c18588;
-}
-
-button:focus {
-  outline: 2px solid #e0c185;
-  outline-offset: 4px;
-}
-
-/* Bouton retour avec style unifié */
-.btn-retour {
-  background: #2c1b1b;
-  border: 2px solid #e9c78c;
-  color: #fdf3df;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4em;
-  padding: 20px 40px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 350px;
-  display: inline-block;
-  text-align: center;
-}
-
-.btn-retour:hover {
-  background-color: #3d2b1f;
-  transform: scale(1.05);
-  box-shadow: 0 0 10px #e0c18588;
-}
-
-.btn-retour:focus {
-  outline: 2px solid #e0c185;
-  outline-offset: 4px;
-}
-
-/* En-tête de page discret et ombré */
-header {
-  background: rgba(0, 0, 0, 0.6);
-  width: 100%;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* Zone principale centrée */
-main {
-  flex: 1;
-  width: 100%;
-  max-width: 900px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Bloc de scénario et options */
-.scenario {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-/* SUPPRESSION DE L'ANIMATION SUR menu-buttons */
-.menu-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin: 24px 0 0 0;
-  align-items: center;
-}
-
-/* Pied de page sobre */
-footer {
-  background: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  padding: 15px;
-  text-align: center;
-  font-size: 0.9em;
-  color: #c9b49a;
-  margin-top: auto;
-}
-
-/* Style des liens */
-a {
-  color: #d1c5a3;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  text-decoration: underline;
-  color: #f4e4c1;
-}
-
-/* Responsive pour mobiles */
-@media (max-width: 600px) {
-  .form-container {
-    padding: 8px 2px;
-    max-width: 98vw;
-  }
-  .bandeau-dore {
-    padding: 10px;
-  }
-  .gold-btn,
-  button {
-    width: 100%;
-    max-width: 330px;
-    padding: 14px 10px;
-    font-size: 1em;
-  }
-  .boutons-actions {
-    flex-direction: column;
-    gap: 12px;
-  }
-  .menu-buttons {
-    gap: 10px;
-  }
-}
-
-/* Adaptation pour thème sombre système */
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #121212;
-    color: #f4e4c1;
-  }
-
-  button, .gold-btn {
-    background: #1a1a1a;
-    color: #fdf3df;
-  }
-
-  footer {
-    background-color: #1a1a1a;
-  }
-}
-
-/* Meilleure accessibilité du focus */
-.gold-btn:focus {
-  outline: 3px solid #ffd700;
-  outline-offset: 2px;
-}
-
-/* Apparition douce des messages */
 @keyframes fadeInMessage {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-.message {
-  animation: fadeInMessage 0.5s ease forwards;
-  min-height: 24px;
-  word-break: break-word;
-}
-
-/* Paramètres de configuration */
-.parametres {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-bottom: 40px;
-  width: 100%;
-  max-width: 600px;
-}
-
-.parametres label {
-  margin-top: 10px;
-  font-weight: 600;
-  text-align: left;
-}
-
-.parametres input[type="text"],
-.parametres select {
-  padding: 10px;
-  font-size: 1rem;
-  width: 100%;
-  border-radius: 6px;
-  border: 1px solid #c2a97c;
-  background-color: #1a1a1a;
-  color: #f4e4c1;
-  transition: border-color 0.3s ease;
-}
-
-.parametres input:focus,
-.parametres select:focus {
-  outline: none;
-  border-color: #e0c185;
-}
-
-.param-option {
-  margin-bottom: 20px;
-}
-
-.parametres button {
-  margin-top: 30px;
-  align-self: center;
-  max-width: 300px;
-}
-
-/* Actions centrales sous les paramètres */
-.actions {
-  text-align: center;
-  margin-top: 30px;
-}
-
-/* Encadré du profil utilisateur */
-.profil-container {
-  background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-  border: 2px solid #e0c185;
-  border-radius: 16px;
-  padding: 30px 40px;
-  margin: 40px auto;
-  width: 90%;
-  max-width: 800px;
-  box-shadow: 0 0 20px rgba(224, 193, 133, 0.15);
-  /* animation: fadeUp 0.8s ease-out; SUPPRIMÉ */
-  text-align: center;
-  color: #f4e4c1;
-  font-family: 'Cormorant Garamond', serif;
-}
-
-/* Unification des titres */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Cinzel Decorative', cursive;
-  color: #e0c185;
-  margin-bottom: 0.6em;
-}
-
-/* Police uniforme pour les éléments interactifs */
-label,
-input,
-select,
-textarea,
-button {
-  font-family: 'Cormorant Garamond', serif;
-}
-
-/* Message de statut utilisateur */
-.status {
-  margin: 20px 0;
-  font-size: 1.2em;
-  color: #f4e4c1;
-  font-style: italic;
-}
-
-/* Pied de page */
-.footer {
-  background: #000;
-  color: #e0c185;
-  text-align: center;
-  padding: 15px 0;
-  font-family: 'Cormorant Garamond', serif;
-}
-
-.footer a {
-  color: #e0c185;
-  text-decoration: underline;
-}
-
-.footer a:hover {
-  color: #f4e4c1;
-  text-decoration: none;
-}
-
-/* Spécifique à la zone chrono sur la page enquête */
-#chrono {
-  font-size: 2rem;              /* agrandit le texte */
-  font-weight: bold;
-  color: #e0c185;               /* couleur dorée */
-  margin: 32px 0 32px 0;        /* espace au-dessus et en-dessous */
-  text-align: center;
-  letter-spacing: 0.5px;
-  width: 100%;
-  display: block;
-}
-/* --- Pour les avatars des joueurs dans Vote/Connexion --- */
-.joueur-avatar {
-  display: inline-block;
-  cursor: pointer;
-  background: rgba(44,27,27,0.85);
-  border-radius: 12px;
-  margin: 10px;
-  padding: 10px 16px;
-  transition: box-shadow 0.2s, outline 0.2s;
-  text-align: center;
-  min-width: 110px;
-  user-select: none;
-}
-.joueur-avatar.selected {
-  outline: 3px solid #e0c185;
-  box-shadow: 0 0 12px #e0c185;
-}
-.avatar {
-  width: 80px;
-  border-radius: 50%;
-  border: 3px solid #e9c78c;
-  margin-bottom: 7px;
-}
-
-/* --- Pour la modale de connexion --- */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.6);
-  align-items: center;
-  justify-content: center;
-}
-.modal.show {
-  display: flex;
-}
-.modal-content {
-  background: #1a1a1a;
-  border-radius: 12px;
-  padding: 32px 24px;
-  box-shadow: 0 0 22px #e0c18577;
-  color: #e0c185;
-  min-width: 300px;
-  max-width: 90vw;
-  text-align: center;
-}
-.modal-actions {
-  margin-top: 24px;
-  display: flex;
-  gap: 18px;
-  justify-content: center;
-}
-
-body.modal-open {
-  overflow: hidden;
-}
-
-.joueur-avatar.valide {
-  border: 3px solid red !important;
-  box-shadow: 0 0 10px red;
-}
-
-.annuler-btn {
-  background-color: #1a1a1a;
-  color: #ffffff;
-  border: 2px solid #e9c78c;
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 1.1em;
-  cursor: pointer;
-  margin-top: 20px;
-  font-family: 'Cinzel Decorative', serif;
-  transition: all 0.3s ease;
-  margin-left: 10px; /* espace entre les boutons si besoin */
-}
-.annuler-btn:hover {
-  background-color: #e9c78c;
-  color: #000000;
-}
-
-.menu-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin: 24px 0 0 0;
-  align-items: center;
-}
-
-/* --- Responsive avatars --- */
-@media (max-width: 600px) {
-  .joueur-avatar { min-width: 75px; padding: 6px 5px; }
-  .avatar { width: 48px; }
-}
-
-/* --- Indices dynamiques --- */
-.indice {
-  background: #221911;
-  border-left: 4px solid #e0c185;
-  border-radius: 8px;
-  padding: 12px 18px;
-  margin: 14px 0;
-  color: #f4e4c1;
-  font-size: 1.1em;
-}
-.fiabilite.fiable { color: #6be985; font-weight: bold; }
-.fiabilite.suspect { color: #e86d6d; font-weight: bold; }
-
-/* --- Effet elimination vote --- */
-.effet-elimination.visible {
-  animation: flashElim 0.9s;
-}
-@keyframes flashElim {
-  0% { background: rgba(233,199,140,0.0);}
-  40% { background: rgba(233,199,140,0.25);}
-  100% { background: rgba(233,199,140,0.0);}
-}
-
-/* Animation d'apparition douce uniquement pour la page d'accueil */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.accueil .profil-container {
-  animation: fadeUp 0.8s ease-out;
-}
-
-.accueil .menu-buttons {
-  animation: fadeUp 1s ease-out forwards;
-}
-
-@media (max-width: 650px) {
-  html { font-size: 16px; }
-  body { overflow-x: hidden; }
-  .main-accueil {
-    padding: 10px 2vw;
-    margin: 10px auto;
-    border-radius: 10px;
-  }
-  .main-accueil h1 { font-size: 1.6em; }
-  .main-accueil h2 { font-size: 1.1em; }
-  .main-accueil label { margin-top: 10px; }
-  .gold-btn, button, .btn-bleu {
-    width: 100%;
-    max-width: 330px;
-    padding: 14px 10px;
-    font-size: 1em;
-  }
-  .menu-buttons { gap: 10px; }
-  .info { margin: 12px 0 0 0; }
-}
-
-.main-btn {
+/* Boutons principaux */
+.main-btn,
+.form-container .main-btn,
+.boutons-actions .main-btn,
+.boutons-actions button {
   background: #1b1b1b;
   color: #fdf3df;
   border: 2px solid #e9c78c;
@@ -580,11 +110,44 @@ body.modal-open {
   display: inline-block;
 }
 .main-btn:hover,
-.main-btn:focus {
+.main-btn:focus,
+.form-container .main-btn:hover,
+.boutons-actions .main-btn:hover,
+.boutons-actions button:hover {
   background-color: #3d2b1f;
   color: #e0c185;
   transform: scale(1.05);
   box-shadow: 0 0 10px #e0c18588;
   outline: 2px solid #e0c185;
   outline-offset: 4px;
+}
+
+/* Boutons actions (groupe) */
+.boutons-actions {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .boutons-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .main-btn,
+  .form-container .main-btn,
+  .boutons-actions .main-btn,
+  .boutons-actions button {
+    width: 100%;
+    max-width: 330px;
+    padding: 14px 10px;
+    font-size: 1em;
+  }
+}
+
+/* Responsive cadre */
+@media (max-width: 600px) {
+  .bandeau-dore { padding: 10px; }
+  .form-container { padding: 8px 2px; max-width: 98vw; }
 }
