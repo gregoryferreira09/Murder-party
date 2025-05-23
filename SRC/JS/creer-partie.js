@@ -23,16 +23,17 @@ function generateUUID() {
   );
 }
 
-async function creerPartie() {
-  const mode = document.getElementById("mode").value;
-  const duree = document.getElementById("duree").value;
-  const periode = document.getElementById("periode").value;
-  const periodeAutre = document.getElementById("periodeAutre")?.value || "";
-  const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value, 10);
-  const criminels = parseInt(document.getElementById("criminels").value, 10); // select
-  const criminel_fantome = document.getElementById("criminel_fantome")?.checked || false;
-  const avatars_legendaires = document.getElementById("avatars_legendaires")?.checked || false;
-  const inactifs = document.getElementById("inactifs")?.checked || false;
+async function creerPartie(formData) {
+  // Utilise formData pour lire les valeurs
+  const mode = formData.get("mode");
+  const duree = formData.get("duree");
+  const periode = formData.get("periode");
+  const periodeAutre = formData.get("periode_autre") || "";
+  const nombreJoueurs = parseInt(formData.get("nombreJoueurs"), 10);
+  const criminels = parseInt(formData.get("criminels"), 10);
+  const criminel_fantome = !!formData.get("criminel_fantome");
+  const avatars_legendaires = !!formData.get("avatars_legendaires");
+  const inactifs = !!formData.get("inactifs");
 
   // Validation des champs
   if (!mode || !duree || !periode || isNaN(nombreJoueurs) || nombreJoueurs < 1 || nombreJoueurs > 12) {
