@@ -197,7 +197,7 @@
       // Quand tu valides
 document.getElementById("valider-choix").onclick = function() {
   if (personnageSelectionne && !this.disabled) {
-    // <-- Ici tu dois ajouter la ligne pour le localStorage !
+    localStorage.setItem("persoChoisi", JSON.stringify(personnages[personnageSelectionne]));
     db.ref(partieID + '/validations/' + playerId).set({ personnageId: personnageSelectionne });
     this.disabled = true;
   }
