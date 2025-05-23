@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <title>Rejoindre une partie – Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Feuille de style commune -->
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    /* Effet fade-in harmonisé */
+    /* Fade-in harmonisé */
     .main-join {
       opacity: 0;
       transition: opacity 0.5s;
@@ -16,7 +15,6 @@
     .main-join.visible {
       opacity: 1;
     }
-    /* Harmonisation des messages d'erreur */
     .error-message {
       min-height: 20px;
       color: #c00;
@@ -39,33 +37,35 @@
   <header>
     <h1 class="site-title">Murder Party</h1>
   </header>
-  <main class="main-accueil main-join" role="main" aria-labelledby="titre-main">
-    <h2 id="titre-main" style="margin-top:0;">Rejoindre une partie</h2>
-    <div>
-      <form class="form-container" id="joinForm" autocomplete="off" novalidate>
-        <label for="code">Code de la partie</label>
-        <input
-          id="code"
-          name="code"
-          type="text"
-          maxlength="8"
-          minlength="4"
-          placeholder="Code à 4 ou 8 lettres/chiffres"
-          required
-          autofocus
-          aria-label="Code de la partie"
-          autocomplete="off"
-        />
-        <div class="error-message" id="errorMessage" aria-live="polite"></div>
-        <button class="main-btn" type="submit">Rejoindre</button>
-      </form>
-    </div>
-    <div class="info" style="margin-top:24px;">
-      <p>Demande le code à l'organisateur.<br>
-      <a href="creer-partie.html" class="main-link">Créer une nouvelle partie</a></p>
-      <button class="main-btn" type="button" onclick="location.href='accueil.html'" style="margin-top:10px;">Retour à l'accueil</button>
-    </div>
-  </main>
+  <div class="center-wrapper">
+    <main class="main-accueil main-join" role="main" aria-labelledby="titre-main">
+      <h2 id="titre-main" style="margin-top:0;">Rejoindre une partie</h2>
+      <div>
+        <form class="form-container" id="joinForm" autocomplete="off" novalidate>
+          <label for="code">Code de la partie</label>
+          <input
+            id="code"
+            name="code"
+            type="text"
+            maxlength="8"
+            minlength="4"
+            placeholder="Code à 4 ou 8 lettres/chiffres"
+            required
+            autofocus
+            aria-label="Code de la partie"
+            autocomplete="off"
+          />
+          <div class="error-message" id="errorMessage" aria-live="polite"></div>
+          <button class="main-btn" type="submit">Rejoindre</button>
+        </form>
+      </div>
+      <div class="info" style="margin-top:24px;">
+        <p>Demande le code à l'organisateur.<br>
+        <a href="creer-partie.html" class="main-link">Créer une nouvelle partie</a></p>
+        <button class="main-btn" type="button" onclick="location.href='accueil.html'" style="margin-top:10px;">Retour à l'accueil</button>
+      </div>
+    </main>
+  </div>
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
