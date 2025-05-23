@@ -13,21 +13,18 @@
       padding: 20px;
       text-align: center;
     }
-
     h1 {
       font-family: 'Cinzel Decorative', serif;
       font-size: 2.8em;
       margin-bottom: 30px;
       color: #e9c78c;
     }
-
     .galerie-personnages {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
     }
-
     .carte-personnage {
       background-color: #2c1b1b;
       border: 2px solid #e9c78c;
@@ -38,17 +35,14 @@
       cursor: pointer;
       transition: transform 0.3s ease;
     }
-
     .carte-personnage img {
       width: 100%;
       height: auto;
       border-radius: 8px;
     }
-
     .carte-personnage:hover {
       transform: scale(1.05);
     }
-
     #valider-choix {
       background-color: #000000;
       color: #ffffff;
@@ -61,7 +55,6 @@
       font-family: 'Cinzel Decorative', serif;
       transition: all 0.3s ease;
     }
-
     #valider-choix:hover {
       background-color: #e9c78c;
       color: #000000;
@@ -74,18 +67,14 @@
     <h1>Choisissez votre personnage</h1>
   </header>
 
-  <main>
+<main>
+  <div class="bandeau-dore">
     <section class="galerie-personnages" id="galeriePersonnages">
       <!-- Les personnages seront ajoutés dynamiquement ici -->
     </section>
-
     <button id="valider-choix" disabled>Valider mon personnage</button>
-  </main>
-
-  <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
+  </div>
+</main>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
@@ -219,6 +208,11 @@
     startRealtimeSync();
   }
 </script>
+
+<footer class="footer">
+  <p>© 2025 Murder Party. Tous droits réservés.</p>
+  <a href="mentions-legales.html">Mentions légales</a>
+</footer>
 
 </body>
 </html>
