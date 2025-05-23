@@ -7,121 +7,6 @@
   <!-- Polices Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-  <style>
-    .main-accueil {
-      max-width: 520px;
-      margin: 40px auto;
-      background: #2c1b1b;
-      border-radius: 18px;
-      box-shadow: 0 4px 20px #0001;
-      padding: 32px 28px;
-      border: 2px solid #e0c185;
-      color: #f4e4c1;
-      font-family: 'Cormorant Garamond', serif;
-    }
-    @media (max-width: 650px) {
-      .main-accueil {
-        max-width: 98vw;
-        margin: 10px auto;
-        padding: 12px 2vw;
-        border-radius: 12px;
-      }
-    }
-    /* Harmonise la largeur pour que tout prenne la largeur du cadre */
-    .form-container,
-    .boutons-actions {
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      box-sizing: border-box;
-      background: none;
-      border: none;
-      box-shadow: none;
-      padding: 0;
-    }
-    /* Rendu des labels, champs, boutons identique à l'accueil */
-    .form-container label {
-      text-align: left;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #e0c185;
-      display:block;
-    }
-    .form-container select,
-    .form-container input[type="text"] {
-      width: 100%;
-      padding: 10px 8px;
-      border-radius: 7px;
-      border: 2px solid #e0c185;
-      background-color: #fff;
-      color: #2c1b1b;
-      font-size: 1.1em;
-      margin-bottom: 10px;
-      font-family: inherit;
-      outline: none;
-      transition: border .18s, background .18s, color .18s;
-      box-sizing: border-box;
-    }
-    .form-container select:focus,
-    .form-container input[type="text"]:focus {
-      border: 2px solid #d4af37;
-      background: #fff;
-      color: #2c1b1b;
-    }
-    .form-container input[type="checkbox"] {
-      margin-right: 8px;
-      accent-color: #e9c78c;
-    }
-    .boutons-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 18px;
-      flex-wrap: wrap;
-    }
-    .main-btn {
-      background: #1b1b1b;
-      color: #fdf3df;
-      border: 2px solid #e9c78c;
-      border-radius: 8px;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15em;
-      padding: 14px 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 100%;
-      margin: 0 0 8px 0;
-      display: block;
-      box-sizing: border-box;
-      text-align: center;
-      text-decoration: none;
-    }
-    .main-btn:last-child {
-      margin-bottom: 0;
-    }
-    .main-btn:hover,
-    .main-btn:focus {
-      background-color: #3d2b1f;
-      color: #e0c185;
-      box-shadow: 0 0 8px #e0c18588;
-      outline: 2px solid #e0c185;
-      outline-offset: 4px;
-    }
-    .message {
-      min-height: 22px;
-      margin-top: 4px;
-      font-weight: bold;
-      font-size: 1em;
-      color: #c00;
-      animation: fadeInMessage 0.5s ease forwards;
-    }
-    .message.succes { color: #2ecc40; }
-    @keyframes fadeInMessage {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
 </head>
 <body>
 <header>
@@ -130,7 +15,7 @@
 
 <main class="main-accueil" role="main">
   <h2 id="creer-partie-heading" style="text-align:center; margin-bottom: 1.3em;">Créer une Partie</h2>
-  <form id="creerPartieForm" class="form-container" autocomplete="off" spellcheck="false">
+  <form id="creerPartieForm" autocomplete="off" spellcheck="false">
     <label for="mode">Choisissez le mode de jeu :</label>
     <select id="mode" name="mode" required>
       <option value="classique">Classique</option>
@@ -245,7 +130,6 @@
         .then(() => {
           message.textContent = "Partie créée avec succès !";
           message.className = "message succes";
-          // Redirection ou suite gérée dans creer-partie.js
         })
         .catch(err => {
           message.textContent = err && err.message ? err.message : "Erreur lors de la création.";
@@ -254,11 +138,6 @@
     } else {
       message.textContent = "Fonction de création absente.";
     }
-  });
-
-  // Fade-in du cadre principal si tu veux une animation douce
-  document.addEventListener("DOMContentLoaded", function() {
-    document.querySelector('.main-accueil').classList.add('visible');
   });
 </script>
 <noscript>
