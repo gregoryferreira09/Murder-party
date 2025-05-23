@@ -14,6 +14,17 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
+// Utilitaire pour tirage aléatoire
+function getRandomElements(array, n) {
+  const copy = [...array];
+  const result = [];
+  for (let i = 0; i < n && copy.length > 0; i++) {
+    const idx = Math.floor(Math.random() * copy.length);
+    result.push(copy.splice(idx, 1)[0]);
+  }
+  return result;
+}
+
 // --- Génération du code (6 lettres/chiffres) ---
 function generateCode(length) {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -36,7 +47,7 @@ document.getElementById("genererBtn").addEventListener("click", async function(e
     const duree = document.getElementById("duree").value;
     const periode = document.getElementById("periode").value.trim().toLowerCase();
     const periodeAutre = (periode === "autre") ? document.getElementById("periode_autre").value : "";
-    const nombreJoueurs = document.getElementById("nombreJoueurs").value;
+    const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value, 10);
     const criminels = document.getElementById("criminels").value;
     const criminelFantome = document.getElementById("criminel_fantome").checked;
     const avatarsLegendaires = document.getElementById("avatars_legendaires").checked;
@@ -52,7 +63,6 @@ document.getElementById("genererBtn").addEventListener("click", async function(e
       criminelFantome,
       avatarsLegendaires,
       inactifs,
-      // Stockage du créateur
       createur: localStorage.getItem("pseudo") || "Anonyme"
     };
 
@@ -62,6 +72,20 @@ document.getElementById("genererBtn").addEventListener("click", async function(e
     // Enregistrer les paramètres dans Firebase
     await db.ref('parties/' + salonCode + '/parametres').set(parametresPartie);
 
+    // --- TIRAGE UNIQUE DES PERSONNAGES ET STOCKAGE EN BASE ---
+    // 1. Récupère la bonne liste de personnages selon la période
+    // 2. Tire au sort la liste unique pour la partie
+    // 3. Stocke la liste dans Firebase
+    let listePersos;
+    if (periode === "autre" && periodeAutre) {
+      // Pour "autre", adapte selon ta logique ou choisis une liste par défaut
+      // Ici, on prend la liste "contemporain" par défaut
+      listePersos = getRandomElements(window.personnagesParEpoque["contemporain"], nombreJoueurs);
+    } else {
+      listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
+    }
+    await db.ref('parties/' + salonCode + '/personnages').set(listePersos);
+
     // Ajoute le créateur comme premier joueur (pseudo unique)
     const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
     await db.ref('parties/' + salonCode + '/joueurs').push({
@@ -70,6 +94,9 @@ document.getElementById("genererBtn").addEventListener("click", async function(e
 
     // Stocker le code du salon côté joueur pour la suite
     localStorage.setItem("salonCode", salonCode);
+
+    // Stocker les paramètres en local
+    localStorage.setItem("parametresPartie", JSON.stringify(parametresPartie));
 
     // Redirection vers la page salon
     window.location.href = "salon.html";
