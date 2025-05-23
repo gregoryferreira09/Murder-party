@@ -6,16 +6,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    /* ... garde ton style existant ... */
-    h1 { font-family: 'Cinzel Decorative', serif; font-size: 2.8em; margin-bottom: 30px; color: #e9c78c; }
-    .galerie-personnages { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-    .carte-personnage { background-color: #2c1b1b; border: 2px solid #e9c78c; border-radius: 12px; width: 200px; padding: 10px; text-align: center; cursor: pointer; transition: transform 0.3s ease; position: relative; }
-    .carte-personnage img { width: 100%; height: auto; border-radius: 8px; }
-    .carte-personnage:hover { transform: scale(1.05); }
-    .carte-personnage.indisponible { opacity: 0.5; pointer-events: none; }
-    .carte-personnage .pris-label { position: absolute; top: 8px; right: 8px; background: #e74c3c; color: #fff; padding: 2px 8px; border-radius: 5px; font-size: 0.9em; z-index: 2; }
-    #valider-choix { background-color: #000000; color: #ffffff; border: 2px solid #e9c78c; border-radius: 8px; padding: 12px 24px; font-size: 1.1em; cursor: pointer; margin-top: 20px; font-family: 'Cinzel Decorative', serif; transition: all 0.3s ease; }
-    #valider-choix:hover { background-color: #e9c78c; color: #000000; }
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      color: #e9c78c;
+    }
+    .galerie-personnages {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .carte-personnage {
+      background-color: #2c1b1b;
+      border: 2px solid #e9c78c;
+      border-radius: 12px;
+      width: 200px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    .carte-personnage img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .carte-personnage:hover {
+      transform: scale(1.05);
+    }
+    .carte-personnage.indisponible {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .carte-personnage .pris-label {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #e74c3c;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 0.9em;
+      z-index: 2;
+    }
+    #valider-choix {
+      background-color: #000000;
+      color: #ffffff;
+      border: 2px solid #e9c78c;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1.1em;
+      cursor: pointer;
+      margin-top: 20px;
+      font-family: 'Cinzel Decorative', serif;
+      transition: all 0.3s ease;
+    }
+    #valider-choix:hover {
+      background-color: #e9c78c;
+      color: #000000;
+    }
     main { min-height: 60vh; }
   </style>
 </head>
@@ -27,7 +79,9 @@
 
   <main>
     <div class="bandeau-dore">
-      <section class="galerie-personnages" id="galeriePersonnages"></section>
+      <section class="galerie-personnages" id="galeriePersonnages">
+        <!-- Les personnages seront ajoutés dynamiquement ici -->
+      </section>
       <button id="valider-choix" disabled>Valider mon personnage</button>
     </div>
   </main>
@@ -37,16 +91,29 @@
   <script src="../JS/personnages.js"></script>
   <script>
     // 1. CONFIG FIREBASE
-    const firebaseConfig = { /* ... tes clés ... */ };
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+      authDomain: "murder-party-ba8d1.firebaseapp.com",
+      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "murder-party-ba8d1",
+      storageBucket: "murder-party-ba8d1.firebasestorage.app",
+      messagingSenderId: "20295055805",
+      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+      measurementId: "G-KSBMBB7KMJ"
+    };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const partieID = "parties/" + (localStorage.getItem("salonCode") || "partie1");
+   const partieID = "parties/" + (localStorage.getItem("salonCode") || "partie1");
+
+    // 2. Utilisation du pseudo profil ou "Anonyme"
     const playerId = localStorage.getItem("pseudo") || "Anonyme";
+
+    // 3. Variables globales
     let nombreJoueurs = 0;
     let personnages = [];
     let personnageSelectionne = null;
 
-    // 2. Affiche les personnages
+    // 4. Affiche les personnages tirés au sort pour cette partie (tirage unique partagé)
     function afficherPersonnagesPourLaPartie(liste) {
       const galeriePersonnages = document.getElementById("galeriePersonnages");
       personnages = liste;
@@ -56,25 +123,30 @@
           <p>${perso.nom}</p>
         </div>
       `).join("");
-      // Sélection
+
+      // Sélection d'un personnage
       const cartes = document.querySelectorAll(".carte-personnage");
       cartes.forEach(carte => {
         carte.addEventListener("click", () => {
           if (carte.classList.contains("indisponible")) return;
           cartes.forEach(card => card.style.border = "2px solid #e9c78c");
           carte.style.border = "2px solid #4CAF50";
-          personnageSelectionne = parseInt(carte.getAttribute("data-id"), 10);
+          personnageSelectionne = carte.getAttribute("data-id");
+          localStorage.setItem("personnageSelectionne", personnageSelectionne);
           document.getElementById("valider-choix").disabled = false;
         });
       });
     }
 
-    // 3. Temps réel pour les validations et gestion du bouton
+    // 5. Synchro temps réel (Firebase)
     function startRealtimeSync() {
+      // Met à jour l'affichage des personnages selon la validation de chacun
       db.ref(partieID + '/validations').on('value', snap => {
         const valids = snap.val() || {};
+
         document.querySelectorAll('.carte-personnage').forEach(div => {
           const id = div.getAttribute('data-id');
+          // Cherche si ce personnage est déjà pris
           let prisPar = null;
           for (const pseudo in valids) {
             if (valids[pseudo].personnageId == id) {
@@ -82,8 +154,10 @@
               break;
             }
           }
+          // Si pris par un autre joueur
           if (prisPar && prisPar !== playerId) {
             div.classList.add("indisponible");
+            // Ajoute le label "Pris"
             if (!div.querySelector('.pris-label')) {
               const pris = document.createElement('span');
               pris.className = "pris-label";
@@ -97,13 +171,18 @@
           }
         });
 
+        // Compteur validés/total
         const nbValid = Object.keys(valids).length;
         const btnValider = document.getElementById('valider-choix');
-        btnValider.textContent = (valids[playerId] ? 'En attente des autres joueurs (' : '') +
+        btnValider.textContent =
+          (valids[playerId] ? 'En attente des autres joueurs (' : '') +
           nbValid + '/' + nombreJoueurs +
           (valids[playerId] ? ')' : ' Valider mon personnage');
+
         // Redirige si tout le monde a validé
-        if(nbValid === nombreJoueurs) window.location.href = "gameplay.html";
+        if(nbValid === nombreJoueurs) {
+          window.location.href = "gameplay.html";
+        }
         // Affiche le bouton annuler si validé
         if (valids[playerId] && !document.getElementById('annuler-choix')) {
           ajouterBoutonAnnuler();
@@ -117,36 +196,42 @@
 
       // Quand tu valides
       document.getElementById("valider-choix").onclick = function() {
-        if (personnageSelectionne !== null && !this.disabled) {
-          // Stocke le personnage sélectionné (objet complet) dans le localStorage
-          localStorage.setItem("persoChoisi", JSON.stringify(personnages[personnageSelectionne]));
-          // Stockage en base pour la synchro
+        if (personnageSelectionne && !this.disabled) {
           db.ref(partieID + '/validations/' + playerId).set({ personnageId: personnageSelectionne });
           this.disabled = true;
         }
       };
     }
 
+    // 6. Bouton annuler
     function ajouterBoutonAnnuler() {
-      const btn = document.createElement('button');
-      btn.id = 'annuler-choix';
-      btn.textContent = "Annuler";
-      btn.className = "annuler-btn";
-      btn.onclick = function() {
-        db.ref(partieID + '/validations/' + playerId).remove();
-        document.getElementById("valider-choix").disabled = false;
-      };
-      document.getElementById('valider-choix').parentNode.appendChild(btn);
-    }
+  const btn = document.createElement('button');
+  btn.id = 'annuler-choix';
+  btn.textContent = "Annuler";
+  btn.className = "annuler-btn"; // Ajoute cette classe
+  btn.onclick = function() {
+    db.ref(partieID + '/validations/' + playerId).remove();
+    document.getElementById("valider-choix").disabled = false;
+  };
+  document.getElementById('valider-choix').parentNode.appendChild(btn);
+}
 
-    // Lancement au chargement
+    // 7. Lancement au chargement
     window.onload = function() {
+      // Charge les paramètres de la partie
       const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-      if (!scenarioData) { alert("Aucune donnée de scénario trouvée."); return; }
+      if (!scenarioData) {
+        alert("Aucune donnée de scénario trouvée.");
+        return;
+      }
       nombreJoueurs = scenarioData.nombreJoueurs;
+      // Récupère la liste de personnages TIRÉE UNE SEULE FOIS pour la partie
       db.ref(partieID + '/personnages').once('value').then(snap => {
         const liste = snap.val();
-        if (!liste) { alert("La liste des personnages n'a pas été générée pour cette partie."); return; }
+        if (!liste) {
+          alert("La liste des personnages n'a pas été générée pour cette partie.");
+          return;
+        }
         afficherPersonnagesPourLaPartie(liste);
         startRealtimeSync();
       });
@@ -157,5 +242,6 @@
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
+
 </body>
 </html>
