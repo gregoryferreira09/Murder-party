@@ -196,12 +196,13 @@
 
       // Quand tu valides
       document.getElementById("valider-choix").onclick = function() {
-        if (personnageSelectionne && !this.disabled) {
-          db.ref(partieID + '/validations/' + playerId).set({ personnageId: personnageSelectionne });
-          this.disabled = true;
-        }
-      };
-    }
+  if (personnageSelectionne && !this.disabled) {
+    // Stocke l'objet complet du personnage choisi dans le localStorage
+    localStorage.setItem("persoChoisi", JSON.stringify(personnages[personnageSelectionne]));
+    db.ref(partieID + '/validations/' + playerId).set({ personnageId: personnageSelectionne });
+    this.disabled = true;
+  }
+};
 
     // 6. Bouton annuler
     function ajouterBoutonAnnuler() {
