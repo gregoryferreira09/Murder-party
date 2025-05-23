@@ -100,4 +100,7 @@ function getRandomElements(arr, n) {
   return shuffled.slice(0, n);
 }
 
-document.getElementById("btn-creer-partie").addEventListener("click", creerPartie);
+document.getElementById("genererBtn").addEventListener("click", function(e) {
+  e.preventDefault();
+  creerPartie();
+});
