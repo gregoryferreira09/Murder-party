@@ -2,62 +2,128 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Rôle et Indices - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partie en cours - Murder Party</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link rel="stylesheet" href="../../Public/styles/gameplay-extra.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    .tab-button:focus {
+      outline: 3px solid #ffd700;
+      outline-offset: 2px;
+      background: #2c1b1b33;
+    }
+    .tab-button.active {
+      font-weight: bold;
+      border-bottom: 3px solid #e0c185;
+      background: #2c1b1b33;
+    }
+    .tab-content {
+      margin-top: 22px;
+    }
+    .modal.show {
+      display: flex !important;
+    }
+    .modal {
+      display: none;
+      background: rgba(0,0,0,0.45);
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #2c1b1b;
+      color: #e0c185;
+      border-radius: 13px;
+      padding: 32px 36px 26px 36px;
+      min-width: 340px;
+      box-shadow: 0 8px 32px #000a;
+      text-align: center;
+      position: relative;
+    }
+    .modal-content button {
+      margin: 14px 12px 0 12px;
+      padding: 12px 26px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 18px; left: 50%;
+      transform: translateX(-50%);
+      min-width: 240px;
+      background: #e0c185;
+      color: #222;
+      border-radius: 6px;
+      padding: 11px 22px;
+      font-size: 1.07em;
+      box-shadow: 0 2px 8px #0005;
+      opacity: 0;
+      z-index: 2000;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .joueur-avatar:focus {
+      outline: 2px solid #ffd700;
+    }
+    .joueur-avatar.selected {
+      border: 2px solid #2ecc40;
+    }
+    .joueur-avatar.valide {
+      border: 2px solid #e86d6d;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>🕵️ Enquête</h1>
+    <h1>Partie en cours</h1>
+    <div id="chrono"><span id="tempsRestant"></span></div>
   </header>
-
   <main>
-    <div class="bandeau-dore" style="margin-top:30px;">
-      <div id="chrono">
-        Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span>
-      </div>
-      <div class="tabs">
-        <button class="gold-btn tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
-        <button class="gold-btn tab-button" onclick="switchTab('indices')">🧩 Indices</button>
-        <button class="gold-btn tab-button" onclick="switchTab('vote')">⚖️ Vote</button>
-        <button class="gold-btn tab-button" onclick="switchTab('connexion')">🤝 Connexion</button>
-      </div>
+    <nav style="margin-bottom: 24px;">
+      <button class="gold-btn tab-button active" onclick="switchTab('fiche')" aria-controls="fiche" tabindex="0">
+        🎭 Personnage
+      </button>
+      <button class="gold-btn tab-button" onclick="switchTab('indices')" aria-controls="indices" tabindex="0">
+        🧩 Indices
+      </button>
+      <button class="gold-btn tab-button" onclick="switchTab('vote')" aria-controls="action" tabindex="0">
+        ⚖️ Vote
+      </button>
+      <button class="gold-btn tab-button" onclick="switchTab('connexion')" aria-controls="action" tabindex="0">
+        🤝 Connexion
+      </button>
+    </nav>
 
-      <section id="fiche" class="tab-content active">
-        <h2>Nom : <span id="nomPersonnage">...</span></h2>
-        <img id="avatarPersonnage" src="" alt="Avatar" class="avatar">
-        <p id="histoirePerso"><strong>Histoire :</strong> ...</p>
-        <p id="pouvoirPerso"><strong>Pouvoir :</strong> ...</p>
-      </section>
+    <section id="fiche" class="tab-content active" aria-label="Fiche personnage">
+      <h2>Nom : <span id="nomPersonnage">...</span></h2>
+      <img id="avatarPersonnage" src="" alt="Avatar" class="avatar">
+      <p id="histoirePerso"><strong>Histoire :</strong> ...</p>
+      <p id="pouvoirPerso"><strong>Pouvoir :</strong> ...</p>
+    </section>
 
-      <section id="indices" class="tab-content" style="display:none;">
-        <h3>Vos indices :</h3>
-        <div id="listeIndices"></div>
-      </section>
+    <section id="indices" class="tab-content" style="display:none;" aria-label="Indices">
+      <h3>Vos indices :</h3>
+      <div id="listeIndices"></div>
+    </section>
 
-      <section id="action" class="tab-content" style="display:none;">
-        <h3 id="action-titre"></h3>
-        <div class="connexion-joueur" id="action-joueurs"></div>
-        <button class="gold-btn" id="action-btn"></button>
-        <div id="actionResult" style="margin-top:10px;"></div>
-      </section>
-    </div>
+    <section id="action" class="tab-content" style="display:none;" aria-label="Action">
+      <h3 id="action-titre"></h3>
+      <div id="action-joueurs" style="display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 24px;"></div>
+      <button id="action-btn" class="gold-btn" disabled>Valider</button>
+      <div id="actionResult" style="margin-top: 18px;"></div>
+      <div id="connexionRestantes" style="margin-top: 8px; color: #e0c185;"></div>
+    </section>
   </main>
 
-  <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés. <a href="mentions-legales.html">Mentions légales</a></p>
-  </footer>
-
-  <div class="effet-elimination" id="effetElimination"></div>
-
-  <!-- Modale de connexion améliorée -->
-  <div id="modal-connexion" class="modal">
+  <!-- Modale Connexion -->
+  <div class="modal" id="modal-connexion" role="dialog" aria-modal="true" aria-labelledby="modal-connexion-text" tabindex="-1">
     <div class="modal-content">
-      <h2>Connexion</h2>
-      <p id="modal-connexion-text"></p>
-      <div class="modal-actions">
+      <span id="modal-connexion-text"></span>
+      <div style="margin-top: 28px;">
         <button class="gold-btn" onclick="accepterConnexion()">Accepter</button>
         <button class="gold-btn" onclick="refuserConnexion()">Refuser</button>
       </div>
@@ -65,8 +131,10 @@
   </div>
 
   <!-- Toast Notification -->
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="toast" aria-live="polite"></div>
 
-<script src="../JS/gameplay.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="../JS/gameplay.js"></script>
 </body>
 </html>
