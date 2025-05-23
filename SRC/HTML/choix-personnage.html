@@ -205,15 +205,16 @@
 
     // 6. Bouton annuler
     function ajouterBoutonAnnuler() {
-      const btn = document.createElement('button');
-      btn.id = 'annuler-choix';
-      btn.textContent = "Annuler";
-      btn.onclick = function() {
-        db.ref(partieID + '/validations/' + playerId).remove();
-        document.getElementById("valider-choix").disabled = false;
-      };
-      document.getElementById('valider-choix').parentNode.appendChild(btn);
-    }
+  const btn = document.createElement('button');
+  btn.id = 'annuler-choix';
+  btn.textContent = "Annuler";
+  btn.className = "annuler-btn"; // Ajoute cette classe
+  btn.onclick = function() {
+    db.ref(partieID + '/validations/' + playerId).remove();
+    document.getElementById("valider-choix").disabled = false;
+  };
+  document.getElementById('valider-choix').parentNode.appendChild(btn);
+}
 
     // 7. Lancement au chargement
     window.onload = function() {
