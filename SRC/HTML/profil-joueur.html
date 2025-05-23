@@ -1,112 +1,334 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Profil Joueur - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../Public/styles/style.css">
-</head>
-<body>
-<header>
-  <h1 class="site-title">Murder Party</h1>
-</header>
-
-<main class="main-accueil" role="main">
-  <h2 style="text-align:center; margin-bottom: 1.3em;">Profil Joueur</h2>
-  <form id="profilForm" class="form-container" autocomplete="off" spellcheck="false">
-    <label for="pseudo">Pseudo :</label>
-    <input type="text" id="pseudo" name="pseudo" maxlength="20" required placeholder="Votre pseudo">
-
-    <label for="avatar">Avatar :</label>
-    <select id="avatar" name="avatar" required>
-      <option value="">Choisissez un avatar</option>
-      <option value="sherlock">Sherlock</option>
-      <option value="missmarple">Miss Marple</option>
-      <option value="hercule">Hercule Poirot</option>
-      <option value="columbo">Columbo</option>
-      <option value="inspecteur">Inspecteur Gadget</option>
-      <option value="autre">Autre</option>
-    </select>
-    <div id="autreAvatarDiv" style="display:none;">
-      <label for="autreAvatar">Précisez le nom de l'avatar :</label>
-      <input type="text" id="autreAvatar" name="autreAvatar" maxlength="20" placeholder="Nom de l'avatar">
-    </div>
-
-    <label>
-      <input type="checkbox" id="modeSombre" name="modeSombre">
-      Activer le mode sombre
-    </label>
-
-    <div class="boutons-actions">
-      <button class="main-btn" type="submit">Enregistrer</button>
-      <a class="main-btn" href="./accueil.html">Retour</a>
-    </div>
-    <div class="message" id="message" role="alert" aria-live="polite"></div>
-  </form>
-
-  <section style="margin-top:32px;">
-    <h3>Historique des parties</h3>
-    <ul id="historiqueParties">
-      <!-- Les parties jouées s'afficheront ici via JS -->
-    </ul>
-  </section>
-</main>
-
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
-
-<script src="../JS/profil-joueur.js"></script>
-<script>
-  // Affichage champ "autre avatar"
-  const avatarSelect = document.getElementById('avatar');
-  const autreAvatarDiv = document.getElementById('autreAvatarDiv');
-  avatarSelect.addEventListener('change', function() {
-    if (this.value === "autre") {
-      autreAvatarDiv.style.display = "block";
-      document.getElementById('autreAvatar').focus();
-    } else {
-      autreAvatarDiv.style.display = "none";
-      document.getElementById('autreAvatar').value = "";
+  <meta charset="UTF-8" />
+  <title>Profil - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../Public/styles/style.css" />
+  <style>
+    main { display: flex; flex-direction: column; align-items: center; }
+    .avatar-section {
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px; margin-top: 24px;
     }
-  });
-
-  // Gestion du submit sécurisé
-  const profilForm = document.getElementById('profilForm');
-  const message = document.getElementById('message');
-  profilForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    message.textContent = "";
-    if (avatarSelect.value === "autre") {
-      const autre = document.getElementById('autreAvatar').value.trim();
-      if (autre.length < 3) {
-        message.textContent = "Merci de préciser le nom de l'avatar.";
-        document.getElementById('autreAvatar').focus();
-        return;
+    #avatar {
+      cursor: pointer; width:96px; height:96px; border-radius:50%; border:2px solid #e0c185;
+      display: block; margin: 0 auto; background: #fff;
+      transition: filter .16s;
+    }
+    #avatar:active, #avatar:focus { filter: brightness(1.15) drop-shadow(0 0 7px #e0c185); outline: 2px solid #d4af37; }
+    .pseudo-cally {
+      font-family: 'Cinzel Decorative', cursive;
+      color: #e0c185;
+      font-size: 2em;
+      outline: none;
+      border: none;
+      background: none;
+      min-width: 40px;
+      transition: box-shadow 0.2s;
+      display: inline-block;
+      text-align: center;
+      margin: 0 auto;
+    }
+    .pseudo-cally:focus { box-shadow: 0 0 8px #e0c18588; outline: 2px solid #d4af37; }
+    .feedback-message { min-height: 22px; margin-top: 0.5rem; }
+    .feedback-message.error { color: #c00; font-weight: bold; }
+    .feedback-message.succes { color: #2ecc40; font-weight: bold; }
+    .statistiques, .historique-section, .badges-section { margin-top: 2rem; }
+    .badges-section ul {
+      display: flex; gap: 1rem; flex-wrap: wrap; list-style: none; padding: 0; justify-content: center;
+    }
+    .badges-section li img { width: 60px; height: 60px; object-fit: contain; }
+    .historique-section ul { padding-left: 1.2em; }
+    .modal {
+      display: none; position: fixed; z-index: 1000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.65); align-items: center; justify-content: center;
+    }
+    .modal.show, .modal[aria-hidden="false"] { display: flex; }
+    .modal-content {
+      background: #18120a; border: 3px solid #e0c185; border-radius: 18px;
+      box-shadow: 0 0 30px #e0c18555; color: #e0c185; min-width: 330px; max-width: 95vw;
+      min-height: 220px; padding: 32px 30px 24px 30px; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    .avatar-list {
+      display: flex; flex-wrap: wrap; gap: 30px 30px; justify-content: center; align-items: center;
+      margin-bottom: 24px; min-width: 240px; min-height: 120px;
+    }
+    .avatar-option {
+      width: 94px; height: 94px; border-radius: 50%;
+      border: 3px solid transparent; background: #221911; cursor: pointer;
+      transition: border 0.2s, box-shadow 0.2s, transform 0.18s;
+      box-shadow: 0 2px 12px #e0c18533;
+      object-fit: cover; outline: none; display: inline-block;
+    }
+    .avatar-option.selected, .avatar-option:focus {
+      border: 3px solid #e0c185; box-shadow: 0 0 12px #e0c185bb, 0 2px 16px #e0c18533;
+      z-index: 2; transform: scale(1.07);
+      outline: 2px solid #d4af37;
+    }
+    .modal-buttons {
+      display: flex; gap: 1.3em; justify-content: center; margin-top: 1em; width: 100%;
+    }
+    .modal-buttons button {
+      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+      color: #3d2b1f; border: 2px solid #e0c185; border-radius: 8px;
+      padding: 13px 30px; font-size: 1.1em; font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer; min-width: 120px; margin: 0 4px; box-shadow: 0 1px 8px #e0c18544;
+      transition: box-shadow .18s, background .18s, color .18s, transform .16s;
+    }
+    .modal-buttons button:disabled {
+      background: #b9a47e; border-color: #d9c8aa; color: #6b5a3c; cursor: not-allowed; opacity: 0.8; box-shadow: none;
+    }
+    .modal-buttons button:focus:not(:disabled), .modal-buttons button:hover:not(:disabled) {
+      background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none; transform: scale(1.06);
+    }
+    button:focus, a:focus { outline: 2px solid #d4af37; outline-offset: 2px; }
+    @media (max-width: 650px) {
+      .main-accueil {
+        max-width: 98vw;
+        margin: 10px auto;
+        padding: 12px 2vw;
+        border-radius: 12px;
       }
     }
-    // Logique JS d'enregistrement (gérée dans profil-joueur.js)
-    if (typeof enregistrerProfil === "function") {
-      enregistrerProfil(new FormData(profilForm))
-        .then(() => {
-          message.textContent = "Profil enregistré avec succès !";
-          message.className = "message succes";
-        })
-        .catch(err => {
-          message.textContent = err && err.message ? err.message : "Erreur lors de l'enregistrement.";
-          message.className = "message";
-        });
-    } else {
-      message.textContent = "Fonction d'enregistrement absente.";
+    @media (max-width: 600px) {
+      .modal-content { min-width: 95vw; padding: 10px 4vw 10px 4vw; }
+      .avatar-option { width: 62px; height: 62px; }
     }
-  });
-</script>
-<noscript>
-  <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
-    ⚠️ JavaScript est désactivé. Vous ne pourrez pas gérer votre profil.
-  </div>
-</noscript>
+  </style>
+</head>
+
+<body>
+  <header role="banner">
+    <h1>Murder Party</h1>
+  </header>
+
+  <main class="main-accueil" role="main">
+    <h1>Mon profil</h1>
+    <!-- Avatar -->
+    <section class="avatar-section" aria-labelledby="avatar-heading">
+      <img id="avatar" src="../../../Public/images/avatar-1.png"
+        alt="Avatar actuel" tabindex="0" role="button"
+        aria-pressed="false" aria-haspopup="dialog" aria-controls="modal"
+        />
+    </section>
+
+    <!-- Pseudo -->
+    <section class="pseudo-section" style="margin-top: 16px;">
+      <span id="pseudo-display"
+            class="pseudo-cally"
+            contenteditable="true"
+            spellcheck="false"
+            tabindex="0"
+            aria-label="Votre pseudo"
+            style="display: block; min-width: 60px;">
+      </span>
+      <div id="pseudo-feedback" class="feedback-message" role="alert" aria-live="polite"></div>
+    </section>
+
+    <!-- Statistiques -->
+    <section class="statistiques" aria-labelledby="stats-heading">
+      <h2 id="stats-heading">Statistiques</h2>
+      <p>Parties jouées : <strong id="stat-parties">0</strong></p>
+      <p>Parties gagnées : <strong id="stat-victoires">0</strong></p>
+      <p>→ En tant qu'enquêteur : <strong id="stat-enqueteur">0</strong></p>
+      <p>→ En tant que criminel : <strong id="stat-criminel">0</strong></p>
+      <p>Record de durée d'une victoire : <strong id="stat-record">—</strong></p>
+      <p>Note : <strong id="grade">—</strong></p>
+    </section>
+
+    <!-- Historique des parties -->
+    <section class="historique-section" aria-labelledby="historique-heading">
+      <h2 id="historique-heading">Historique des dernières parties</h2>
+      <ul id="historique-liste">
+        <li>Aucune partie jouée pour le moment.</li>
+      </ul>
+    </section>
+
+    <!-- Badges -->
+    <section class="badges-section" aria-labelledby="badges-heading">
+      <h2 id="badges-heading">Mes Badges</h2>
+      <ul role="list">
+        <li><img src="../../../Public/images/badges/detective.png" alt="Badge Détective" /></li>
+        <li><img src="../../../Public/images/badges/furtif.png" alt="Badge Furtif" /></li>
+        <li><img src="../../../Public/images/badges/veteran.png" alt="Badge Vétéran" /></li>
+      </ul>
+    </section>
+
+    <button type="button" onclick="location.href='accueil.html'" class="main-btn" style="margin-top:30px;">Retour à l'accueil</button>
+
+    <!-- Avatar Modal -->
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true">
+      <div class="modal-content" role="document">
+        <h3 id="modal-title">Choisissez votre avatar</h3>
+        <div id="avatar-list" class="avatar-list" role="list" aria-label="Liste des avatars disponibles"></div>
+        <div class="modal-buttons">
+          <button type="button" id="btn-valider-avatar" disabled>Valider</button>
+          <button type="button" id="btn-retour-avatar">Retour</button>
+        </div>
+        <div id="avatar-feedback" class="feedback-message" aria-live="polite"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
+
+  <script>
+    // --- CONSTANTES ET DONNÉES LOCALES ---
+    const IMAGE_PATH = "../../../Public/images/";
+    const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png", "avatar-4.png"];
+    const defaultPseudo = "Anonyme";
+
+    // --- AVATAR ---
+    document.addEventListener('DOMContentLoaded', function () {
+      const avatarImg = document.getElementById("avatar");
+      const modal = document.getElementById("modal");
+      const avatarList = document.getElementById("avatar-list");
+      const validerAvatarBtn = document.getElementById("btn-valider-avatar");
+      const retourAvatarBtn = document.getElementById("btn-retour-avatar");
+      const avatarFeedback = document.getElementById("avatar-feedback");
+
+      // Charger avatar depuis localStorage
+      let selectedAvatar = localStorage.getItem("avatar") || avatars[0];
+      avatarImg.src = IMAGE_PATH + selectedAvatar;
+
+      // Affichage de la liste d'avatars
+      function afficherListeAvatars(selected) {
+        avatarList.innerHTML = "";
+        avatars.forEach(file => {
+          const img = document.createElement("img");
+          img.src = IMAGE_PATH + file;
+          img.alt = `Avatar ${file.split('-')[1].split('.')[0]}`;
+          img.className = "avatar-option";
+          img.setAttribute("role", "option");
+          if(selected === file) img.classList.add("selected");
+          img.tabIndex = 0;
+          img.addEventListener("click", () => {
+            avatarList.querySelectorAll(".avatar-option").forEach(a => a.classList.remove("selected"));
+            img.classList.add("selected");
+            selectedAvatar = file;
+            validerAvatarBtn.disabled = false;
+            avatarFeedback.textContent = "";
+          });
+          img.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              img.click();
+            }
+          });
+          avatarList.appendChild(img);
+        });
+      }
+
+      // Ouvre la modale d'avatar
+      function ouvrirModal() {
+        afficherListeAvatars(selectedAvatar);
+        modal.style.display = "flex";
+        modal.setAttribute("aria-hidden", "false");
+        setTimeout(() => { modal.classList.add("show"); modal.focus(); }, 10);
+      }
+      avatarImg.addEventListener("click", ouvrirModal);
+      avatarImg.addEventListener("keydown", function(e) {
+        if (e.key === "Enter" || e.key === " ") ouvrirModal();
+      });
+
+      // Fermer la modale
+      function fermerModal() {
+        modal.classList.remove("show");
+        modal.style.display = "none";
+        modal.setAttribute("aria-hidden", "true");
+        validerAvatarBtn.disabled = true;
+        avatarFeedback.textContent = "";
+        selectedAvatar = localStorage.getItem("avatar") || avatars[0];
+      }
+      retourAvatarBtn.addEventListener("click", fermerModal);
+      modal.addEventListener("click", function(e) {
+        if (e.target === modal) fermerModal();
+      });
+      modal.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") fermerModal();
+      });
+
+      // Validation avatar
+      validerAvatarBtn.addEventListener("click", () => {
+        if (!selectedAvatar) {
+          avatarFeedback.textContent = "Veuillez sélectionner un avatar.";
+          return;
+        }
+        avatarImg.src = IMAGE_PATH + selectedAvatar;
+        localStorage.setItem("avatar", selectedAvatar);
+        fermerModal();
+        setTimeout(() => {
+          avatarFeedback.textContent = "Avatar enregistré avec succès.";
+        }, 120);
+      });
+    });
+
+    // --- PSEUDO ---
+    document.addEventListener("DOMContentLoaded", function() {
+      const pseudoDisplay = document.getElementById("pseudo-display");
+      const pseudoFeedback = document.getElementById("pseudo-feedback");
+      let pseudo = localStorage.getItem("pseudo") || defaultPseudo;
+      pseudoDisplay.textContent = pseudo;
+
+      pseudoDisplay.addEventListener("input", function() {
+        // Nettoyage XSS très basique
+        this.textContent = this.textContent.replace(/[<>]/g, "");
+        if (this.textContent.trim().length < 1) {
+          pseudoFeedback.textContent = "Le pseudo ne peut pas être vide.";
+        } else {
+          pseudoFeedback.textContent = "";
+        }
+      });
+
+      pseudoDisplay.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          pseudoDisplay.blur();
+        }
+      });
+
+      pseudoDisplay.addEventListener("blur", function() {
+        let newPseudo = pseudoDisplay.textContent.trim();
+        if (!newPseudo) {
+          newPseudo = defaultPseudo;
+          pseudoFeedback.textContent = "Le pseudo ne peut pas être vide.";
+        } else {
+          pseudoFeedback.textContent = "Pseudo enregistré.";
+        }
+        localStorage.setItem("pseudo", newPseudo);
+        pseudoDisplay.textContent = newPseudo;
+        setTimeout(()=>{pseudoFeedback.textContent="";}, 1800);
+      });
+
+      pseudoDisplay.addEventListener("focus", function() {
+        pseudoFeedback.textContent = "Appuie sur Entrée pour valider.";
+      });
+      pseudoDisplay.addEventListener("blur", function() {
+        setTimeout(()=>{pseudoFeedback.textContent="";}, 1500);
+      });
+    });
+
+    // -- Accessibilité : focus champ pseudo au chargement
+    window.onload = () => {
+      document.getElementById("pseudo-display").focus();
+    };
+  </script>
+
+  <noscript>
+    <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
+      ⚠️ JavaScript est désactivé. Vous ne pourrez pas modifier votre avatar ou pseudo.
+    </div>
+  </noscript>
+  
 </body>
 </html>
