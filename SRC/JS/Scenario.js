@@ -1,5 +1,4 @@
-// --- Configuration et initialisation Firebase ---
-// (NE PAS utiliser type="module" pour ce fichier dans le HTML !)
+// --- CONFIGURATION ET INITIALISATION FIREBASE ---
 const firebaseConfig = {
   apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
   authDomain: "murder-party-ba8d1.firebaseapp.com",
@@ -15,80 +14,10 @@ if (typeof firebase !== "undefined" && !firebase.apps.length) {
 }
 const db = typeof firebase !== "undefined" ? firebase.database() : null;
 
-// GESTION AVANCÉE DE LA SYNCHRONISATION ET DES ERREURS
-document.addEventListener("DOMContentLoaded", function() {
-  const container = document.getElementById("scenarioContainer");
-  const salonCode = localStorage.getItem('salonCode');
-
-  // Si pas de code de salon : erreur
-  if (!salonCode) {
-    container.innerHTML = "<p>Aucun salon trouvé. Veuillez créer ou rejoindre une partie.</p>";
-    return;
-  }
-
-  // Sync entre onglets : si le salon change ailleurs, on recharge ici
-  window.addEventListener('storage', (event) => {
-    if (event.key === 'salonCode') window.location.reload();
-  });
-
-  // Lecture des paramètres dans Firebase (sécurisé)
-  db.ref('parties/' + salonCode + '/parametres').once('value')
-    .then((snap) => {
-      const params = snap.val();
-      if (!params) {
-        container.innerHTML = "<p>La partie n'existe plus ou a expiré. Veuillez en créer une nouvelle.</p>";
-        localStorage.removeItem('salonCode');
-        localStorage.removeItem('parametresPartie');
-        return;
-      }
-      localStorage.setItem('parametresPartie', JSON.stringify(params));
-      genererScenario();
-    })
-    .catch((error) => {
-      container.innerHTML = `<p>Erreur lors de la connexion à la base de données : ${error.message}</p>`;
-    });
-});
-
-// --- CHARGEMENT DES PARAMÈTRES DEPUIS FIREBASE AVANT DE GÉNÉRER ---
-document.addEventListener("DOMContentLoaded", function() {
-  const salonCode = localStorage.getItem('salonCode');
-  if (salonCode && db) {
-    db.ref('parties/' + salonCode + '/parametres').once('value').then((snap) => {
-      const params = snap.val();
-      if (params) {
-        localStorage.setItem('parametresPartie', JSON.stringify(params));
-      }
-      genererScenario(); // appelle la génération du scénario APRÈS la lecture Firebase
-    }).catch(() => {
-      genererScenario();
-    });
-  } else {
-    genererScenario();
-  }
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-  const salonCode = localStorage.getItem('salonCode');
-  console.log("SalonCode utilisé pour la génération du scénario :", salonCode);
-  if (salonCode && db) {
-    db.ref('parties/' + salonCode + '/parametres').once('value').then((snap) => {
-      const params = snap.val();
-      console.log("Paramètres récupérés depuis Firebase :", params);
-      if (params) {
-        localStorage.setItem('parametresPartie', JSON.stringify(params));
-      }
-      genererScenario();
-    }).catch(() => {
-      document.getElementById("scenarioContainer").innerHTML = "<p>Erreur lors du chargement des paramètres Firebase.</p>";
-    });
-  } else {
-    document.getElementById("scenarioContainer").innerHTML = "<p>Aucun code de salon trouvé, veuillez (re)créer une partie.</p>";
-  }
-});
-
+// --- CONSTANTES ---
 const ANTI_REPEAT_HISTORY_SIZE = 5;
 
-// === OUTILS FRANÇAIS ===
+// === OUTILS FRANÇAIS ET UTILS ===
 function getArticle(word, articles = { m: 'le', f: 'la' }) {
   if (!word) return '';
   word = word.trim();
@@ -114,8 +43,6 @@ function randomItem(array) {
 function shuffleArray(array) {
   return array.sort(() => Math.random() - 0.5);
 }
-
-// === HISTORIQUE localStorage ===
 function getScenarioHistory() {
   let history = localStorage.getItem("scenarioHistory");
   return history ? JSON.parse(history) : [];
@@ -125,6 +52,40 @@ function addScenarioToHistory(scenario) {
   history.unshift(scenario);
   if (history.length > ANTI_REPEAT_HISTORY_SIZE) history = history.slice(0, ANTI_REPEAT_HISTORY_SIZE);
   localStorage.setItem("scenarioHistory", JSON.stringify(history));
+}
+function categoriseDuree(minutes) {
+  if (minutes <= 30) return "court";
+  if (minutes <= 90) return "moyen";
+  return "long";
+}
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+function replaceVars(tpl, variables) {
+  return Object.entries(variables).reduce(
+    (txt, [key, val]) => txt.replaceAll(key, escapeHtml(val)),
+    tpl
+  );
+}
+
+// --- TIRAGES UNIQUES AVEC ANTI-RÉPÉTITION ---
+function tirageUnique(array, key, history, fieldName) {
+  const used = new Set(history.map(s => s[fieldName]));
+  const filtered = array.filter(el => {
+    const val = typeof key === "function" ? key(el) : (el[key] ?? el);
+    return !used.has(val);
+  });
+  return filtered.length ? randomItem(filtered) : randomItem(array);
+}
+function tirageTemplateUnique(array, history, fieldName) {
+  const used = new Set(history.map(s => s[fieldName]));
+  const filtered = array.filter(el => !used.has(el));
+  return filtered.length ? randomItem(filtered) : randomItem(array);
 }
 
 // === UNIVERS COHÉRENTS & ÉLARGIS ===
@@ -517,6 +478,7 @@ function tirageTemplateUnique(array, history, fieldName) {
   return filtered.length ? randomItem(filtered) : randomItem(array);
 }
 
+// --- GÉNÉRATION DU SCÉNARIO ---
 function genererScenario() {
   let scenarioData;
   try {
@@ -525,6 +487,7 @@ function genererScenario() {
     scenarioData = null;
   }
   const container = document.getElementById("scenarioContainer");
+  if (!container) return;
 
   if (scenarioData) {
     let periodeCle = scenarioData.periode;
@@ -535,14 +498,12 @@ function genererScenario() {
     const periodeData = univers[periodeCle];
     const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
 
-    // Historique long pour antirépétition stricte
     let history = getScenarioHistory();
     let maxTry = 15, tryCount = 0, scenarioOk = false, scenarioObj;
 
     while (!scenarioOk && tryCount < maxTry) {
       tryCount++;
 
-      // Tirages uniques sur chaque champ
       const lieuObj = tirageUnique(periodeData.lieux, "nom", history, "lieu");
       const victimeObj = tirageUnique(periodeData.victimes, "nom", history, "victime");
       const arme = tirageUnique(periodeData.armes, null, history, "arme");
@@ -550,7 +511,6 @@ function genererScenario() {
       const traitVictime = tirageUnique(periodeData.traitsVictimes, null, history, "traitVictime");
       const motif = tirageUnique(periodeData.motifs, null, history, "motif");
 
-      // Suspects, témoins, indices
       const suspects = shuffleArray(periodeData.suspects.filter(sus => !victimeObj.nom.toLowerCase().includes(sus.toLowerCase())));
       const suspect1 = tirageUnique(suspects, null, history, "suspect1");
       const suspect2 = tirageUnique(suspects.filter(sus => sus !== suspect1), null, history, "suspect2");
@@ -562,7 +522,6 @@ function genererScenario() {
       }
       let indice = (nbJoueurs >= 3 && periodeData.indices) ? tirageUnique(periodeData.indices, null, history, "indice") : undefined;
 
-      // Templates intro/crime uniques
       let introCandidates = periodeData.intro.filter((tpl) => {
         if (tpl.startsWith("[TEMOIN]")) return temoin;
         if (tpl.startsWith("[INDICE]")) return indice;
@@ -603,12 +562,10 @@ function genererScenario() {
       const introduction = replaceVars(introTpl, variables);
       const crime = replaceVars(crimeTpl, variables);
 
-      // Objectif/temps
       const objectif = tirageUnique(scenarioLibrary.objectifs[scenarioData.criminels] || scenarioLibrary.objectifs[1], null, history, "objectif");
       const dureeCat = categoriseDuree(scenarioData.duree);
       const detailsDuree = tirageUnique(scenarioLibrary.durees[dureeCat], null, history, "detailsDuree");
 
-      // Vérification stricte : tout doit être différent
       scenarioObj = {
         lieu: lieuObj.nom,
         victime: victimeObj.nom,
@@ -646,17 +603,15 @@ function genererScenario() {
       );
 
       if (!scenarioOk && tryCount === maxTry) {
-        // On purge l'historique pour retrouver de la diversité
         history = [];
         tryCount = 0;
       }
     }
 
-    // Ajout à l'historique
     addScenarioToHistory(scenarioObj);
 
     container.innerHTML = `
-      <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario">📜</span>
+      <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario" tabindex="0" aria-label="Générer un autre scénario">📜</span>
       <h2>Introduction</h2>
       <p>${scenarioObj.introduction}</p>
       <h2>Le crime</h2>
@@ -671,39 +626,75 @@ function genererScenario() {
       <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p>
       <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
       <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
-  <div class="boutons-actions">
-  <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
-  <a class="gold-btn" href="creer-partie.html">Retour</a>
-</div>
-`;
-    
-const launchBtn = document.getElementById("launchBtn");
-let timeLeft = 30;
-if (launchBtn) {
-  launchBtn.textContent =`Disnopible dans ${timeLeft}s`;
-  launchBtn.style.pointerEvents = "none";
-  launchBtn.style.opacity = "0.6";
-  const interval = setInterval(() => {
-    timeLeft--;
-    if (timeLeft > 0) {
-      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-    } else {
-      clearInterval(interval);
-      launchBtn.textContent = "Lancement";
-      launchBtn.style.pointerEvents = "auto";
-      launchBtn.style.opacity = "1";
-    }
-  }, 1000);
-}
+      <div class="boutons-actions">
+        <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
+        <a class="gold-btn" href="creer-partie.html">Retour</a>
+      </div>
+    `;
+    // Accessibilité : bouton génération clavier
     const regenBtn = document.getElementById("regenScenarioBtn");
-    if (regenBtn) regenBtn.onclick = genererScenario;
+    if (regenBtn) {
+      regenBtn.onclick = genererScenario;
+      regenBtn.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") genererScenario(); };
+    }
+
+    // Timer bouton lancement
+    const launchBtn = document.getElementById("launchBtn");
+    let timeLeft = 30;
+    if (launchBtn) {
+      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+      launchBtn.style.pointerEvents = "none";
+      launchBtn.style.opacity = "0.6";
+      const interval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+        } else {
+          clearInterval(interval);
+          launchBtn.textContent = "Lancement";
+          launchBtn.style.pointerEvents = "auto";
+          launchBtn.style.opacity = "1";
+        }
+      }, 1000);
+    }
   } else {
-    document.getElementById("scenarioContainer").innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
+    container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
 }
 
-window.addEventListener('storage', (event) => {
-  if (event.key === 'salonCode') {
-    location.reload();
+// --- SYNCHRO ET INIT UNIQUE ---
+document.addEventListener("DOMContentLoaded", function() {
+  const container = document.getElementById("scenarioContainer");
+  const salonCode = localStorage.getItem('salonCode');
+  if (!container) return;
+
+  // Gestion offline/online
+  window.addEventListener('offline', () => {
+    container.innerHTML += `<div style="color:#e86d6d;margin-top:18px;">Vous êtes hors ligne.</div>`;
+  });
+  window.addEventListener('online', () => {
+    window.location.reload();
+  });
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'salonCode') window.location.reload();
+  });
+
+  // Chargement des paramètres via Firebase puis génération du scénario
+  if (salonCode && db) {
+    db.ref('parties/' + salonCode + '/parametres').once('value').then((snap) => {
+      const params = snap.val();
+      if (!params) {
+        container.innerHTML = "<p>La partie n'existe plus ou a expiré. Veuillez en créer une nouvelle.</p>";
+        localStorage.removeItem('salonCode');
+        localStorage.removeItem('parametresPartie');
+        return;
+      }
+      localStorage.setItem('parametresPartie', JSON.stringify(params));
+      genererScenario();
+    }).catch((error) => {
+      container.innerHTML = `<p>Erreur lors de la connexion à la base de données : ${escapeHtml(error.message)}</p>`;
+    });
+  } else {
+    container.innerHTML = "<p>Aucun salon trouvé. Veuillez créer ou rejoindre une partie.</p>";
   }
 });
