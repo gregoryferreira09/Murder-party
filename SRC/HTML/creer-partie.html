@@ -6,55 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Polices Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../Public/styles/creer-partie.css">
-  <style>
-    body { background: #181212; color: #f4e4c1; font-family: 'Cormorant Garamond', serif; }
-    header h1 { text-align:center; margin-top: 1.3em; }
-    .bandeau-dore {
-      max-width: 480px; margin: 2em auto 2em auto; padding: 2.2em 2em 1.8em 2em;
-      border-radius: 14px; border: 2px solid #e0c185; box-shadow: 0 0 16px #e0c18533;
-      background: linear-gradient(135deg, #2c1b1b, #1f1313);
-    }
-    .form-container label { font-weight: 600; color: #e0c185; display: block; margin-top: 1.1em; margin-bottom: .5em;}
-    .form-container select, .form-container input[type="text"] {
-      width: 100%; padding: 10px; margin-bottom: 8px;
-      border: 2px solid #e0c185; border-radius: 7px; font-size: 1.1em;
-      background: #fffaf3; color: #2c1b1b; font-family: inherit;
-      outline: none; transition: border .18s;
-    }
-    .form-container select:focus, .form-container input[type="text"]:focus { border: 2px solid #d4af37; background: #fff; }
-    .form-container input[type="checkbox"] { margin-right: 0.7em; transform: scale(1.2);}
-    .boutons-actions { display: flex; gap: 1.3em; justify-content: center; margin-top: 2em; }
-    .gold-btn {
-      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
-      color: #3d2b1f; border: 2px solid #e0c185; border-radius: 8px;
-      padding: 12px 30px; font-size: 1.04em; font-family: 'Cinzel Decorative', cursive;
-      cursor: pointer; transition: box-shadow .16s, background .16s, color .16s;
-      box-shadow: 0 1px 8px #e0c18544;
-      text-decoration: none; text-align: center;
-    }
-    .gold-btn:focus, .gold-btn:hover {
-      background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none;
-    }
-    .message { min-height: 22px; margin-top: 4px; font-weight: bold; font-size: 1em; color: #c00; }
-    .message.succes { color: #2ecc40; }
-    @media (max-width: 600px) {
-      .bandeau-dore { padding: 1.2em 2vw 1.2em 2vw; max-width: 99vw;}
-      .form-container select, .form-container input[type="text"] { font-size: 1em; }
-    }
-  </style>
+  <link rel="stylesheet" href="../../Public/styles/style.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body>
 <header>
-  <h1>Créer une Partie</h1>
+  <h1 class="site-title">Murder Party</h1>
 </header>
 
 <main>
   <section class="bandeau-dore" aria-labelledby="creer-partie-heading">
+    <h2 id="creer-partie-heading" style="text-align:center; margin-bottom: 1.3em;">Créer une Partie</h2>
     <form id="creerPartieForm" class="form-container" autocomplete="off" spellcheck="false">
-      <h2 id="creer-partie-heading" style="text-align:center; margin-bottom: 1.3em;">Configuration de la partie</h2>
       <label for="mode">Choisissez le mode de jeu :</label>
       <select id="mode" name="mode" required>
         <option value="classique">Classique</option>
@@ -120,8 +84,8 @@
       </label>
 
       <div class="boutons-actions">
-        <button class="gold-btn" type="submit" id="genererBtn">Créer la partie</button>
-        <a class="gold-btn" href="./accueil.html">Retour</a>
+        <button class="main-btn" type="submit" id="genererBtn">Créer la partie</button>
+        <a class="main-btn" href="./accueil.html">Retour</a>
       </div>
       <div class="message" id="message" role="alert" aria-live="polite"></div>
     </form>
@@ -179,6 +143,11 @@
     } else {
       message.textContent = "Fonction de création absente.";
     }
+  });
+
+  // Fade-in du cadre principal
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector('.bandeau-dore').classList.add('visible');
   });
 </script>
 <noscript>
