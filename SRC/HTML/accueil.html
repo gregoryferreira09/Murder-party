@@ -6,6 +6,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    .main-accueil {
+      max-width: 520px;
+      margin: 40px auto;
+      background: #2c1b1b;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #0001;
+      padding: 32px 28px;
+      border: 2px solid #e0c185;
+      color: #f4e4c1;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .main-accueil h1 {
+      text-align: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.3em;
+      margin-bottom: 8px;
+      color: #e0c185;
+    }
+    .main-accueil h2 {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 1.3em;
+      font-weight: 400;
+      color: #f4e4c1;
+    }
+    .bienvenue-message {
+      font-size: 1.25em;
+      color: #e0c185;
+      text-align: center;
+      margin-bottom: 18px;
+      margin-top: 12px;
+    }
+    .menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin: 24px 0 0 0;
+      align-items: center;
+    }
+    .gold-btn {
+      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+      color: #3d2b1f;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
+      padding: 14px 30px;
+      font-size: 1.15em;
+      font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: box-shadow .2s, background .2s, color .2s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 120px;
+      width: 90%;
+      max-width: 350px;
+      box-sizing: border-box;
+    }
+    .gold-btn:hover,
+    .gold-btn:focus {
+      background: #e0c185;
+      color: #1a1a1a;
+      box-shadow: 0 0 8px #e0c18588;
+      outline: none;
+    }
+    .info {
+      margin: 20px 0 0 0;
+      font-size: 0.97em;
+      color: #c9b49a;
+      text-align: center;
+    }
+    button:focus, a:focus, input:focus {
+      outline: 2px solid #e0c185;
+      outline-offset: 3px;
+    }
+    @media (max-width: 650px) {
+      html { font-size: 16px; }
+      body { overflow-x: hidden; }
+      .main-accueil {
+        max-width: 98vw;
+        margin: 10px auto;
+        padding: 12px 2vw;
+        border-radius: 12px;
+      }
+      .main-accueil h1 { font-size: 2em; }
+      .main-accueil h2 { font-size: 1.1em; }
+      .bienvenue-message { font-size: 1.05em; margin-bottom: 10px; }
+      .menu-buttons { gap: 10px; }
+      .gold-btn, button {
+        width: 100%;
+        max-width: 99vw;
+        min-width: 0;
+        padding: 14px 10px;
+        font-size: 1em;
+      }
+      .info { margin: 12px 0 0 0; }
+    }
+  </style>
 </head>
 <body class="accueil">
   <main class="main-accueil" role="main">
