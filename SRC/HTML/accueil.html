@@ -7,20 +7,89 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    .main-accueil { max-width: 520px; margin: 40px auto 40px auto; background: #2c1b1b; border-radius: 18px; box-shadow: 0 4px 20px #0001; padding: 32px 28px; border: 2px solid #e0c185; }
-    .main-accueil h1 { text-align: center; font-family: 'Cinzel Decorative', serif; font-size: 2.3em; margin-bottom: 8px; }
-    .main-accueil h2 { text-align: center; font-family: 'Cormorant Garamond', serif; margin-top: 0; margin-bottom: 16px; font-size: 1.3em; font-weight: 400; }
-    .main-accueil label { display: block; margin-top: 18px; font-weight: bold; }
-    .main-accueil input[type="text"] { width: 100%; font-size: 1.15em; padding: 8px; border-radius: 5px; border: 1px solid #d4af37; box-sizing: border-box; margin-bottom: 18px; }
-    .main-accueil .actions { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
-    .main-accueil .gold-btn { font-size: 1.13em; }
-    .main-accueil .or-divider { text-align: center; color: #ac9e7a; font-style: italic; margin: 14px 0 10px 0; }
-    .main-accueil .info { margin: 20px 0 0 0; font-size: 0.97em; color: #665536; }
-    button:focus, a:focus, input:focus { outline: 2px solid #d4af37; outline-offset: 3px; }
-    @media (max-width: 650px) {
-      .main-accueil { padding: 14px 3vw; }
+    .main-accueil {
+      max-width: 520px;
+      margin: 40px auto;
+      background: #2c1b1b;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #0001;
+      padding: 32px 28px;
+      border: 2px solid #e0c185;
     }
-
+    .main-accueil h1 {
+      text-align: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.3em;
+      margin-bottom: 8px;
+    }
+    .main-accueil h2 {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 1.3em;
+      font-weight: 400;
+    }
+    .main-accueil label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+    }
+    .main-accueil input[type="text"] {
+      width: 100%;
+      font-size: 1.15em;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #d4af37;
+      box-sizing: border-box;
+      margin-bottom: 18px;
+    }
+    .main-accueil .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .main-accueil .gold-btn {
+      font-size: 1.13em;
+    }
+    .main-accueil .or-divider {
+      text-align: center;
+      color: #ac9e7a;
+      font-style: italic;
+      margin: 14px 0 10px 0;
+    }
+    .main-accueil .info {
+      margin: 20px 0 0 0;
+      font-size: 0.97em;
+      color: #665536;
+    }
+    button:focus, a:focus, input:focus {
+      outline: 2px solid #d4af37;
+      outline-offset: 3px;
+    }
+    /* Responsive amélioré pour mobile */
+    @media (max-width: 650px) {
+      html { font-size: 16px; }
+      body { overflow-x: hidden; }
+      .main-accueil {
+        padding: 10px 2vw;
+        margin: 10px auto;
+        border-radius: 10px;
+      }
+      .main-accueil h1 { font-size: 1.6em; }
+      .main-accueil h2 { font-size: 1.1em; }
+      .main-accueil label { margin-top: 10px; }
+      .gold-btn, button, .btn-bleu {
+        width: 100%;
+        max-width: 330px;
+        padding: 14px 10px;
+        font-size: 1em;
+      }
+      .menu-buttons { gap: 10px; }
+      .main-accueil input[type="text"] { font-size: 1em; padding: 8px 6px; }
+      .info { margin: 12px 0 0 0; }
+    }
     /* Ajout pour les 4 boutons bleus */
     .menu-buttons {
       display: flex;
@@ -29,7 +98,6 @@
       margin: 24px 0 0 0;
       align-items: center;
     }
-
     .btn-bleu {
       background: linear-gradient(90deg, #3b82f6, #2563eb 70%);
       color: #fff;
@@ -47,7 +115,6 @@
       width: 90%;
       max-width: 350px;
     }
-
     .btn-bleu:hover,
     .btn-bleu:focus {
       background: #2563eb;
@@ -63,15 +130,25 @@
     <h2>Enquête collaborative en ligne</h2>
     <form id="accueilForm" autocomplete="off">
       <label for="pseudoInput">Ton pseudo</label>
-      <input id="pseudoInput" name="pseudo" type="text" autocomplete="username" maxlength="20" required aria-required="true" aria-label="Ton pseudo" />
-
+      <input
+        id="pseudoInput"
+        name="pseudo"
+        type="text"
+        autocomplete="username"
+        maxlength="20"
+        required
+        aria-required="true"
+        aria-label="Ton pseudo"
+        inputmode="text"
+        pattern=".{2,}"
+        placeholder="Ton pseudo (2 à 20 caractères)" />
     </form>
-    <div class="menu-buttons">
-  <button class="gold-btn" onclick="window.location.href='creer-partie.html'">🎮 Créer une partie</button>
-  <button class="gold-btn" onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
-  <button class="gold-btn" onclick="window.location.href='profil-joueur.html'">👤 Profil</button>
-  <button class="gold-btn" onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
-</div>
+    <div class="menu-buttons" role="group" aria-label="Actions principales">
+      <button class="gold-btn" type="button" onclick="window.location.href='creer-partie.html'">🎮 Créer une partie</button>
+      <button class="gold-btn" type="button" onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
+      <button class="gold-btn" type="button" onclick="window.location.href='profil-joueur.html'">👤 Profil</button>
+      <button class="gold-btn" type="button" onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
+    </div>
     <div class="info">
       <p><strong>Bienvenue&nbsp;!</strong> Organise une Murder Party ou rejoins une partie existante grâce à un code partagé.</p>
     </div>
@@ -100,8 +177,6 @@
     // --- Formulaire principal ---
     const pseudoInput = document.getElementById("pseudoInput");
     const accueilForm = document.getElementById("accueilForm");
-    const btnCreerPartie = document.getElementById("btnCreerPartie");
-    const btnRejoindrePartie = document.getElementById("btnRejoindrePartie");
 
     // Pré-remplissage éventuel
     if (localStorage.getItem("pseudo")) {
@@ -112,32 +187,26 @@
     });
 
     // Actions
-    btnCreerPartie.addEventListener("click", function(e) {
-      e.preventDefault();
-      if (pseudoInput.value.trim().length < 1) {
+    const redirect = (url) => {
+      if (pseudoInput.value.trim().length < 2) {
         pseudoInput.focus();
-        pseudoInput.setCustomValidity("Le pseudo est obligatoire.");
+        pseudoInput.setCustomValidity("Le pseudo est obligatoire (au moins 2 caractères).");
         pseudoInput.reportValidity();
         return;
       }
       localStorage.setItem("pseudo", pseudoInput.value.trim());
-      window.location.href = "creer-partie.html";
-    });
+      window.location.href = url;
+    };
 
-    btnRejoindrePartie.addEventListener("click", function() {
-      if (pseudoInput.value.trim().length < 1) {
-        pseudoInput.focus();
-        pseudoInput.setCustomValidity("Le pseudo est obligatoire.");
-        pseudoInput.reportValidity();
-        return;
-      }
-      localStorage.setItem("pseudo", pseudoInput.value.trim());
-      window.location.href = "rejoindre-partie.html";
+    document.querySelectorAll('.menu-buttons .gold-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        redirect(this.getAttribute('onclick').replace("window.location.href='", "").replace("'", ""));
+      });
     });
 
     accueilForm.addEventListener("submit", function(e) {
       e.preventDefault();
-      btnCreerPartie.click();
+      redirect('creer-partie.html');
     });
 
     // Accessibilité : focus sur le champ pseudo au chargement
