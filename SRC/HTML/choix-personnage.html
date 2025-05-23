@@ -103,7 +103,7 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const partieID = "partie1";
+   const partieID = "parties/" + (localStorage.getItem("salonCode") || "partie1");
 
     // 2. Utilisation du pseudo profil ou "Anonyme"
     const playerId = localStorage.getItem("pseudo") || "Anonyme";
