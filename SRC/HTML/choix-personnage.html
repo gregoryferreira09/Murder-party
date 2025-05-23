@@ -178,15 +178,14 @@
       });
 
       // Quand tu valides
- document.getElementById("valider-choix").onclick = function() {
-  const personnageId = localStorage.getItem("personnageSelectionne");
-  console.log("Tentative de validation:", personnageId); // <-- AJOUTÉ
-  if (personnageId && !this.disabled) {
-    db.ref(partieID + '/validations/' + playerId).set({ personnageId });
-    this.disabled = true;
-    console.log("Validation envoyée à Firebase"); // <-- AJOUTÉ
-  }
-};
+      document.getElementById("valider-choix").onclick = function() {
+        const personnageId = localStorage.getItem("personnageSelectionne");
+        if (personnageId && !this.disabled) {
+          db.ref(partieID + '/validations/' + playerId).set({ personnageId });
+          this.disabled = true;
+        }
+      };
+    }
 
     // 6. Bouton annuler
     function ajouterBoutonAnnuler() {
