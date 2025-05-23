@@ -4,52 +4,120 @@
   <meta charset="UTF-8" />
   <title>Paramètres - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Lien vers style principal -->
   <link rel="stylesheet" href="../../Public/styles/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    .parametres {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 1.6em;
+      align-items: flex-start;
+    }
+    .parametres label,
+    .parametres select {
+      font-size: 1.08em;
+      color: #e0c185;
+      margin-bottom: 2px;
+    }
+    .parametres input[type="checkbox"] {
+      accent-color: #e9c78c;
+      margin-right: 8px;
+    }
+    .parametres select {
+      border-radius: 7px;
+      border: 2px solid #e0c185;
+      padding: 7px 12px;
+      font-size: 1em;
+      background: #fff;
+      color: #2c1b1b;
+      font-family: inherit;
+      margin-top: 2px;
+    }
+    .parametres select:focus {
+      border: 2px solid #d4af37;
+      outline: none;
+    }
+    #saveMessage {
+      min-height: 22px;
+      font-weight: bold;
+      font-size: 1em;
+      color: #2ecc40;
+      margin-top: 0.5em;
+      transition: opacity .15s;
+    }
+    .actions {
+      margin-top: 1.8em;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-
   <header>
-    <h1>⚙️ Paramètres</h1>
+    <h1 class="site-title">⚙️ Paramètres</h1>
   </header>
 
-  <main>
-    <div class="bandeau-dore scenario">
-      <section class="parametres">
-        <label class="param-option">
-          <input type="checkbox" id="toggleSound" />
+  <div class="center-wrapper">
+    <main class="main-accueil" role="main" aria-labelledby="parametres-title">
+      <h2 id="parametres-title" style="margin-bottom:1.2em;">Vos préférences utilisateur</h2>
+      <form class="parametres" id="form-parametres" autocomplete="off" aria-describedby="saveMessage">
+        <label class="param-option" for="toggleSound">
+          <input type="checkbox" id="toggleSound" name="toggleSound" />
           Activer les sons (notifications)
         </label>
 
         <label for="langue">Langue :</label>
-        <select id="langue">
+        <select id="langue" name="langue" aria-label="Choix de la langue">
           <option value="fr">Français</option>
           <option value="en">English</option>
         </select>
 
-        <label class="param-option">
-          <input type="checkbox" id="toggleNotifications" />
+        <label class="param-option" for="toggleNotifications">
+          <input type="checkbox" id="toggleNotifications" name="toggleNotifications" />
           Notifications en jeu
         </label>
 
-        <button class="btn-primary" id="saveParams">Sauvegarder les paramètres</button>
-        <p id="saveMessage" aria-live="polite" style="color: green; margin-top: 0.5em; display: none;"></p>
-
-      </section>
-
+        <button class="main-btn" type="submit" id="saveParams">Sauvegarder les paramètres</button>
+        <p id="saveMessage" aria-live="polite" style="display: none;"></p>
+      </form>
       <section class="actions">
-        <button class="btn-secondary" onclick="window.location.href='accueil.html'">Retour</button>
+        <button class="main-btn" type="button" onclick="window.location.href='accueil.html'">Retour à l'accueil</button>
       </section>
-    </div>
-  </main>
+    </main>
+  </div>
 
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
-  <script type="module" src="../JS/parametres.js"></script>
+  <script>
+    // Pré-remplir les paramètres si déjà en localStorage
+    document.addEventListener("DOMContentLoaded", function() {
+      const sound = localStorage.getItem("toggleSound") === "true";
+      const notif = localStorage.getItem("toggleNotifications") === "true";
+      const langue = localStorage.getItem("langue") || "fr";
+      document.getElementById("toggleSound").checked = sound;
+      document.getElementById("toggleNotifications").checked = notif;
+      document.getElementById("langue").value = langue;
+    });
+
+    // Sécurisation et gestion du formulaire
+    document.getElementById("form-parametres").addEventListener("submit", function(e) {
+      e.preventDefault();
+      // Enregistrer dans le localStorage (tu peux adapter pour backend)
+      localStorage.setItem("toggleSound", document.getElementById("toggleSound").checked);
+      localStorage.setItem("toggleNotifications", document.getElementById("toggleNotifications").checked);
+      localStorage.setItem("langue", document.getElementById("langue").value);
+
+      // Feedback utilisateur
+      const msg = document.getElementById("saveMessage");
+      msg.textContent = "Paramètres enregistrés !";
+      msg.style.display = "block";
+      setTimeout(()=>{ msg.style.display = "none"; }, 1700);
+    });
+  </script>
 </body>
 </html>
