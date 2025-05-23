@@ -565,27 +565,26 @@ body.modal-open {
 }
 
 .main-btn {
-  background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
-  color: #3d2b1f;
-  border: 2px solid #e0c185;
+  background: #2c1b1b;
+  color: #fdf3df;
+  border: 2px solid #e9c78c;
   border-radius: 8px;
-  padding: 14px 30px;
-  font-size: 1.15em;
-  font-family: 'Cinzel Decorative', cursive;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4em;
+  padding: 20px 40px;
   cursor: pointer;
-  margin: 0 4px;
-  transition: box-shadow .2s, background .2s, color .2s;
-  text-decoration: none;
-  display: inline-block;
-  min-width: 120px;
+  transition: all 0.3s ease;
   width: 90%;
   max-width: 350px;
-  box-sizing: border-box;
+  margin: 0 4px;
+  display: inline-block;
 }
 .main-btn:hover,
 .main-btn:focus {
-  background: #e0c185;
-  color: #1a1a1a;
-  box-shadow: 0 0 8px #e0c18588;
-  outline: none;
+  background-color: #3d2b1f;
+  color: #e0c185;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #e0c18588;
+  outline: 2px solid #e0c185;
+  outline-offset: 4px;
 }
