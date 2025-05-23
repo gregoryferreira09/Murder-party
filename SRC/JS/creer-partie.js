@@ -35,7 +35,7 @@ async function creerPartie() {
   const inactifs = document.getElementById("inactifs")?.checked || false;
 
   // Validation des champs
-  if (!mode || !duree || !periode || isNaN(nombreJoueurs) || nombreJoueurs < 3 || nombreJoueurs > 12) {
+  if (!mode || !duree || !periode || isNaN(nombreJoueurs) || nombreJoueurs < 1 || nombreJoueurs > 12) {
     alert("Veuillez remplir tous les champs correctement.");
     return;
   }
