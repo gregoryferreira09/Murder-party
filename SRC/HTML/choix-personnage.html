@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Choix du personnage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Ajout du style global pour le bandeau doré -->
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
     h1 {
@@ -28,6 +27,7 @@
       text-align: center;
       cursor: pointer;
       transition: transform 0.3s ease;
+      position: relative;
     }
     .carte-personnage img {
       width: 100%;
@@ -36,6 +36,21 @@
     }
     .carte-personnage:hover {
       transform: scale(1.05);
+    }
+    .carte-personnage.indisponible {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .carte-personnage .pris-label {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #e74c3c;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 0.9em;
+      z-index: 2;
     }
     #valider-choix {
       background-color: #000000;
@@ -53,7 +68,6 @@
       background-color: #e9c78c;
       color: #000000;
     }
-    /* Pour que le bandeau ne soit pas collé au footer sur petits écrans */
     main { min-height: 60vh; }
   </style>
 </head>
@@ -97,29 +111,12 @@
     // 3. Variables globales
     let nombreJoueurs = 0;
     let personnages = [];
+    let personnageSelectionne = null;
 
-    // 4. Génère la galerie de personnages
-    function getRandomElements(array, n) {
-      const copy = [...array];
-      const result = [];
-      for (let i = 0; i < n && copy.length > 0; i++) {
-        const idx = Math.floor(Math.random() * copy.length);
-        result.push(copy.splice(idx, 1)[0]);
-      }
-      return result;
-    }
-
-    function afficherPersonnages() {
-      const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-      if (!scenarioData) {
-        alert("Aucune donnée de scénario trouvée.");
-        return;
-      }
-      nombreJoueurs = scenarioData.nombreJoueurs;
-      const periode = scenarioData.periode;
+    // 4. Affiche les personnages tirés au sort pour cette partie (tirage unique partagé)
+    function afficherPersonnagesPourLaPartie(liste) {
       const galeriePersonnages = document.getElementById("galeriePersonnages");
-      personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
-
+      personnages = liste;
       galeriePersonnages.innerHTML = personnages.map((perso, i) => `
         <div class="carte-personnage" data-id="${i}">
           <img src="${perso.image}" alt="${perso.nom}">
@@ -131,9 +128,11 @@
       const cartes = document.querySelectorAll(".carte-personnage");
       cartes.forEach(carte => {
         carte.addEventListener("click", () => {
+          if (carte.classList.contains("indisponible")) return;
           cartes.forEach(card => card.style.border = "2px solid #e9c78c");
           carte.style.border = "2px solid #4CAF50";
-          localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
+          personnageSelectionne = carte.getAttribute("data-id");
+          localStorage.setItem("personnageSelectionne", personnageSelectionne);
           document.getElementById("valider-choix").disabled = false;
         });
       });
@@ -141,20 +140,37 @@
 
     // 5. Synchro temps réel (Firebase)
     function startRealtimeSync() {
+      // Met à jour l'affichage des personnages selon la validation de chacun
       db.ref(partieID + '/validations').on('value', snap => {
         const valids = snap.val() || {};
-        // Grise les personnages déjà pris
+
         document.querySelectorAll('.carte-personnage').forEach(div => {
           const id = div.getAttribute('data-id');
-          const dejaPris = Object.values(valids).some(v => v.personnageId == id);
-          if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
-            div.style.opacity = 0.5;
-            div.style.pointerEvents = 'none';
+          // Cherche si ce personnage est déjà pris
+          let prisPar = null;
+          for (const pseudo in valids) {
+            if (valids[pseudo].personnageId == id) {
+              prisPar = pseudo;
+              break;
+            }
+          }
+          // Si pris par un autre joueur
+          if (prisPar && prisPar !== playerId) {
+            div.classList.add("indisponible");
+            // Ajoute le label "Pris"
+            if (!div.querySelector('.pris-label')) {
+              const pris = document.createElement('span');
+              pris.className = "pris-label";
+              pris.textContent = "Pris";
+              div.appendChild(pris);
+            }
           } else {
-            div.style.opacity = 1;
-            div.style.pointerEvents = '';
+            div.classList.remove("indisponible");
+            const label = div.querySelector('.pris-label');
+            if (label) label.remove();
           }
         });
+
         // Compteur validés/total
         const nbValid = Object.keys(valids).length;
         const btnValider = document.getElementById('valider-choix');
@@ -162,6 +178,7 @@
           (valids[playerId] ? 'En attente des autres joueurs (' : '') +
           nbValid + '/' + nombreJoueurs +
           (valids[playerId] ? ')' : ' Valider mon personnage');
+
         // Redirige si tout le monde a validé
         if(nbValid === nombreJoueurs) {
           window.location.href = "gameplay.html";
@@ -179,9 +196,8 @@
 
       // Quand tu valides
       document.getElementById("valider-choix").onclick = function() {
-        const personnageId = localStorage.getItem("personnageSelectionne");
-        if (personnageId && !this.disabled) {
-          db.ref(partieID + '/validations/' + playerId).set({ personnageId });
+        if (personnageSelectionne && !this.disabled) {
+          db.ref(partieID + '/validations/' + playerId).set({ personnageId: personnageSelectionne });
           this.disabled = true;
         }
       };
@@ -194,14 +210,30 @@
       btn.textContent = "Annuler";
       btn.onclick = function() {
         db.ref(partieID + '/validations/' + playerId).remove();
+        document.getElementById("valider-choix").disabled = false;
       };
       document.getElementById('valider-choix').parentNode.appendChild(btn);
     }
 
     // 7. Lancement au chargement
     window.onload = function() {
-      afficherPersonnages();
-      startRealtimeSync();
+      // Charge les paramètres de la partie
+      const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+      if (!scenarioData) {
+        alert("Aucune donnée de scénario trouvée.");
+        return;
+      }
+      nombreJoueurs = scenarioData.nombreJoueurs;
+      // Récupère la liste de personnages TIRÉE UNE SEULE FOIS pour la partie
+      db.ref(partieID + '/personnages').once('value').then(snap => {
+        const liste = snap.val();
+        if (!liste) {
+          alert("La liste des personnages n'a pas été générée pour cette partie.");
+          return;
+        }
+        afficherPersonnagesPourLaPartie(liste);
+        startRealtimeSync();
+      });
     }
   </script>
 
