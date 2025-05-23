@@ -5,7 +5,7 @@
   <title>Rôle et Indices - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link rel="stylesheet" href="../../Public/styles/gameplay-extra.css"><!-- Optionnel, pour tes améliorations -->
+  <link rel="stylesheet" href="../../Public/styles/gameplay-extra.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -15,7 +15,9 @@
 
   <main>
     <div class="bandeau-dore" style="margin-top:30px;">
-      <div id="chrono">Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span></div>
+      <div id="chrono">
+        Temps restant : <span id="tempsRestant">30:00</span> | Connexions restantes : <span id="connexionRestantes">5</span>
+      </div>
       <div class="tabs">
         <button class="gold-btn tab-button active" onclick="switchTab('fiche')">🎭 Personnage</button>
         <button class="gold-btn tab-button" onclick="switchTab('indices')">🧩 Indices</button>
@@ -24,10 +26,10 @@
       </div>
 
       <section id="fiche" class="tab-content active">
-        <h2>Nom : <span id="nomPersonnage">Inspecteur Alaric</span></h2>
-        <img id="avatarPersonnage" src="../../Public/images/avatar-1.png" alt="Avatar" class="avatar">
-        <p><strong>Histoire :</strong> Ancien détective de Scotland Yard, rongé par un passé trouble...</p>
-        <p><strong>Pouvoir :</strong> Interrogez deux joueurs à chaque tour...</p>
+        <h2>Nom : <span id="nomPersonnage">...</span></h2>
+        <img id="avatarPersonnage" src="" alt="Avatar" class="avatar">
+        <p id="histoirePerso"><strong>Histoire :</strong> ...</p>
+        <p id="pouvoirPerso"><strong>Pouvoir :</strong> ...</p>
       </section>
 
       <section id="indices" class="tab-content" style="display:none;">
@@ -62,9 +64,12 @@
     </div>
   </div>
 
-<!-- Toast Notification -->
-<div id="toast" class="toast"></div>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
 
+  <script src="../JS/gameplay.js"></script>
+</body>
+</html>
 <script src="../JS/gameplay.js"></script>
 </body>
 </html>
