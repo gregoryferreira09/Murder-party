@@ -1,4 +1,4 @@
-// --- Données de jeu par défaut ---
+// --- Données de jeu par défaut (pour la liste des autres joueurs) ---
 const joueurs = [
   { 
     nom: 'Inspecteur Alaric', 
@@ -40,11 +40,11 @@ let persoActif = null;
 let connexionsRestantes = 5;
 let actionType = null; // "vote" ou "connexion"
 let joueurSelectionAction = null;
-let indicesGagnes = []; // Pour synchroniser l'onglet indices
+let indicesGagnes = [];
 
 // --- Initialisation ---
 document.addEventListener('DOMContentLoaded', function() {
-  // Récupération du personnage choisi
+  // Récupérer le personnage choisi
   const persoStocke = localStorage.getItem("persoChoisi");
   if (persoStocke) {
     persoActif = JSON.parse(persoStocke);
@@ -53,14 +53,18 @@ document.addEventListener('DOMContentLoaded', function() {
     persoActif = joueurs[0];
   }
 
-  // Affichage dynamique des infos du personnage
+  // Remplir dynamiquement l'interface
   document.getElementById("nomPersonnage").textContent = persoActif.nom;
   document.getElementById("avatarPersonnage").src = "../../Public/images/" + persoActif.image;
-  // Si histoire/pouvoir existe, affiche-les
+  document.getElementById("avatarPersonnage").alt = "Avatar de " + persoActif.nom;
   if (persoActif.histoire)
-    document.querySelector("#fiche p:nth-of-type(1)").innerHTML = "<strong>Histoire :</strong> " + persoActif.histoire;
+    document.getElementById("histoirePerso").innerHTML = "<strong>Histoire :</strong> " + persoActif.histoire;
+  else
+    document.getElementById("histoirePerso").innerHTML = "<strong>Histoire :</strong> ...";
   if (persoActif.pouvoir)
-    document.querySelector("#fiche p:nth-of-type(2)").innerHTML = "<strong>Pouvoir :</strong> " + persoActif.pouvoir;
+    document.getElementById("pouvoirPerso").innerHTML = "<strong>Pouvoir :</strong> " + persoActif.pouvoir;
+  else
+    document.getElementById("pouvoirPerso").innerHTML = "<strong>Pouvoir :</strong> ...";
 
   switchTab('fiche');
   updateChrono();
