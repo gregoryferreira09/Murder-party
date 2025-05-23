@@ -104,19 +104,11 @@
   <main class="main-accueil" role="main">
     <h1>Murder Party</h1>
     <h2>Enquête collaborative en ligne</h2>
-    <form id="accueilForm" autocomplete="off">
-      <label for="pseudoInput">Ton pseudo</label>
-      <input
-        id="pseudoInput"
-        name="pseudo"
-        type="text"
-        autocomplete="username"
-        maxlength="20"
-        required
-        aria-required="true"
-        aria-label="Ton pseudo"
-        placeholder="Ton pseudo (2 à 20 caractères)" />
-    </form>
+
+    <div class="bienvenue-message">
+  Bienvenue <span id="pseudoAffiche"></span>
+</div>
+    
     <div class="menu-buttons" role="group" aria-label="Actions principales">
       <button type="button" onclick="window.location.href='creer-partie.html'">🎮 Créer une partie</button>
       <button type="button" onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
