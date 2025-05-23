@@ -1,10 +1,12 @@
-// --- Configuration et initialisation Firebase ---
+// SRC/JS/rejoindre-partie.js
+
+// --- Configuration Firebase ---
 const firebaseConfig = {
   apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
   authDomain: "murder-party-ba8d1.firebaseapp.com",
   databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "murder-party-ba8d1",
-  storageBucket: "murder-party-ba8d1.firebasestorage.app",
+  storageBucket: "murder-party-ba8d1.appspot.com",
   messagingSenderId: "20295055805",
   appId: "1:20295055805:web:0963719c3f23ab7752fad4",
   measurementId: "G-KSBMBB7KMJ"
@@ -14,14 +16,11 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
-function getUniquePseudo(monPseudo, pseudosExistants) {
-  let uniquePseudo = monPseudo;
-  let suffix = 0;
-  while (pseudosExistants.includes(uniquePseudo)) {
-    suffix++;
-    uniquePseudo = monPseudo + suffix;
-  }
-  return uniquePseudo;
+// Génère un UUID v4
+function generateUUID() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
 }
 
 async function rejoindreSalon() {
@@ -30,11 +29,11 @@ async function rejoindreSalon() {
   const loader = document.getElementById("loader");
   const validerBtn = document.getElementById("validerBtn");
 
-  messageDiv.textContent = ""; // reset message
+  messageDiv.textContent = "";
   loader.style.display = "block";
   validerBtn.disabled = true;
 
-  // Validation format code
+  // Validation du code salon
   if (!/^[A-Z0-9]{6}$/.test(codeEntre)) {
     loader.style.display = "none";
     validerBtn.disabled = false;
@@ -42,6 +41,18 @@ async function rejoindreSalon() {
     messageDiv.style.color = "#ff6b6b";
     return;
   }
+
+  let pseudo = localStorage.getItem("pseudo") || "Anonyme";
+  if (!pseudo.trim()) {
+    loader.style.display = "none";
+    validerBtn.disabled = false;
+    messageDiv.textContent = "Veuillez choisir un pseudo avant de rejoindre.";
+    messageDiv.style.color = "#ff6b6b";
+    return;
+  }
+
+  // Empêche les injections ou caractères spéciaux
+  pseudo = pseudo.replace(/[<>\/\\'"`]/g, "").trim().substring(0, 30);
 
   try {
     // Vérifier que le salon existe
@@ -72,30 +83,35 @@ async function rejoindreSalon() {
       return;
     }
 
-    // Empêcher de rejoindre deux fois le même salon (bonus)
-    let monPseudo = localStorage.getItem("pseudo") || "Anonyme";
-    if (pseudosExistants.includes(monPseudo)) {
+    // Empêcher le même pseudo deux fois dans le même salon
+    if (pseudosExistants.includes(pseudo)) {
       loader.style.display = "none";
       validerBtn.disabled = false;
-      messageDiv.textContent = "Vous êtes déjà dans ce salon.";
+      messageDiv.textContent = "Ce pseudo est déjà utilisé dans ce salon.";
       messageDiv.style.color = "#ff6b6b";
       return;
     }
 
-    // Générer pseudo unique
-    let pseudoFinal = getUniquePseudo(monPseudo, pseudosExistants);
+    // Générer un UUID unique pour ce joueur (stocké localement)
+    let uuid = localStorage.getItem('uuid');
+    if (!uuid) {
+      uuid = generateUUID();
+      localStorage.setItem('uuid', uuid);
+    }
 
-    // Ajouter le joueur dans la base
+    // Ajouter le joueur dans la base (UUID + pseudo)
     await db.ref('parties/' + codeEntre + '/joueurs').push({
-      pseudo: pseudoFinal
+      uuid,
+      pseudo
     });
 
     // Stocker le code du salon côté joueur
     localStorage.setItem("salonCode", codeEntre);
 
+    // Message de succès
     loader.style.display = "none";
     validerBtn.disabled = false;
-    messageDiv.textContent = `Connexion réussie ! Votre pseudo : ${pseudoFinal}`;
+    messageDiv.textContent = `Connexion réussie ! Votre pseudo : ${pseudo}`;
     messageDiv.style.color = "#90ee90";
     setTimeout(() => {
       window.location.href = "salon.html";
@@ -106,13 +122,11 @@ async function rejoindreSalon() {
     validerBtn.disabled = false;
     messageDiv.textContent = "Erreur de connexion. Veuillez réessayer.";
     messageDiv.style.color = "#ff6b6b";
+    console.error(err);
   }
 }
 
-// Pour la touche Entrée sur l'input
-document.getElementById("codeInput").addEventListener("keypress", function(e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    rejoindreSalon();
-  }
+document.getElementById("validerBtn").addEventListener("click", rejoindreSalon);
+document.getElementById("codeInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") rejoindreSalon();
 });
