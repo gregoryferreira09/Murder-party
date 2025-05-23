@@ -29,10 +29,10 @@ async function creerPartie() {
   const periode = document.getElementById("periode").value;
   const periodeAutre = document.getElementById("periodeAutre")?.value || "";
   const nombreJoueurs = parseInt(document.getElementById("nombreJoueurs").value, 10);
-  const criminels = document.getElementById("criminels").checked;
-  const criminelFantome = document.getElementById("criminelFantome").checked;
-  const avatarsLegendaires = document.getElementById("avatarsLegendaires").checked;
-  const inactifs = document.getElementById("inactifs").checked;
+  const criminels = parseInt(document.getElementById("criminels").value, 10); // select
+  const criminel_fantome = document.getElementById("criminel_fantome")?.checked || false;
+  const avatars_legendaires = document.getElementById("avatars_legendaires")?.checked || false;
+  const inactifs = document.getElementById("inactifs")?.checked || false;
 
   // Validation des champs
   if (!mode || !duree || !periode || isNaN(nombreJoueurs) || nombreJoueurs < 3 || nombreJoueurs > 12) {
@@ -53,17 +53,17 @@ async function creerPartie() {
 
   // Paramètres partie
   const parametresPartie = {
-    mode,
-    duree,
-    periode,
-    periodeAutre,
-    nombreJoueurs,
-    criminels,
-    criminelFantome,
-    avatarsLegendaires,
-    inactifs,
-    createur: { uuid, pseudo }
-  };
+  mode,
+  duree,
+  periode,
+  periodeAutre,
+  nombreJoueurs,
+  criminels,
+  criminel_fantome,
+  avatars_legendaires,
+  inactifs,
+  createur: { uuid, pseudo }
+};
 
   // Générer code salon unique
   const salonCode = (Math.random().toString(36).substr(2, 6)).toUpperCase();
