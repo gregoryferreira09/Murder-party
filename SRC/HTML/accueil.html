@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <title>Accueil – Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Lien vers le style principal -->
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
+    /* Styles spécifiques à la page d'accueil */
     .main-accueil {
       max-width: 520px;
       margin: 40px auto;
@@ -15,12 +17,15 @@
       box-shadow: 0 4px 20px #0001;
       padding: 32px 28px;
       border: 2px solid #e0c185;
+      color: #f4e4c1;
+      font-family: 'Cormorant Garamond', serif;
     }
     .main-accueil h1 {
       text-align: center;
       font-family: 'Cinzel Decorative', serif;
       font-size: 2.3em;
       margin-bottom: 8px;
+      color: #e0c185;
     }
     .main-accueil h2 {
       text-align: center;
@@ -29,68 +34,31 @@
       margin-bottom: 16px;
       font-size: 1.3em;
       font-weight: 400;
+      color: #f4e4c1;
     }
     .main-accueil label {
       display: block;
       margin-top: 18px;
       font-weight: bold;
+      color: #e0c185;
+      text-align: left;
     }
     .main-accueil input[type="text"] {
       width: 100%;
       font-size: 1.15em;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #d4af37;
-      box-sizing: border-box;
+      padding: 10px 8px;
+      border-radius: 6px;
+      border: 1px solid #e9c78c;
+      background-color: #1a1a1a;
+      color: #f4e4c1;
       margin-bottom: 18px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
     }
-    .main-accueil .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 16px;
+    .main-accueil input[type="text"]:focus {
+      border-color: #e0c185;
+      outline: none;
     }
-    .main-accueil .gold-btn {
-      font-size: 1.13em;
-    }
-    .main-accueil .or-divider {
-      text-align: center;
-      color: #ac9e7a;
-      font-style: italic;
-      margin: 14px 0 10px 0;
-    }
-    .main-accueil .info {
-      margin: 20px 0 0 0;
-      font-size: 0.97em;
-      color: #665536;
-    }
-    button:focus, a:focus, input:focus {
-      outline: 2px solid #d4af37;
-      outline-offset: 3px;
-    }
-    /* Responsive amélioré pour mobile */
-    @media (max-width: 650px) {
-      html { font-size: 16px; }
-      body { overflow-x: hidden; }
-      .main-accueil {
-        padding: 10px 2vw;
-        margin: 10px auto;
-        border-radius: 10px;
-      }
-      .main-accueil h1 { font-size: 1.6em; }
-      .main-accueil h2 { font-size: 1.1em; }
-      .main-accueil label { margin-top: 10px; }
-      .gold-btn, button, .btn-bleu {
-        width: 100%;
-        max-width: 330px;
-        padding: 14px 10px;
-        font-size: 1em;
-      }
-      .menu-buttons { gap: 10px; }
-      .main-accueil input[type="text"] { font-size: 1em; padding: 8px 6px; }
-      .info { margin: 12px 0 0 0; }
-    }
-    /* Ajout pour les 4 boutons bleus */
     .menu-buttons {
       display: flex;
       flex-direction: column;
@@ -98,14 +66,14 @@
       margin: 24px 0 0 0;
       align-items: center;
     }
-    .btn-bleu {
-      background: linear-gradient(90deg, #3b82f6, #2563eb 70%);
-      color: #fff;
-      border: 2px solid #2563eb;
+    .gold-btn {
+      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+      color: #3d2b1f;
+      border: 2px solid #e0c185;
       border-radius: 8px;
-      padding: 20px 40px;
-      font-size: 1.2em;
-      font-family: 'Cormorant Garamond', serif;
+      padding: 14px 30px;
+      font-size: 1.15em;
+      font-family: 'Cinzel Decorative', cursive;
       cursor: pointer;
       margin: 0 4px;
       transition: box-shadow .2s, background .2s, color .2s;
@@ -114,13 +82,51 @@
       min-width: 120px;
       width: 90%;
       max-width: 350px;
+      box-sizing: border-box;
     }
-    .btn-bleu:hover,
-    .btn-bleu:focus {
-      background: #2563eb;
-      color: #e0c185;
-      box-shadow: 0 0 8px #2563eb88;
+    .gold-btn:hover,
+    .gold-btn:focus {
+      background: #e0c185;
+      color: #1a1a1a;
+      box-shadow: 0 0 8px #e0c18588;
       outline: none;
+    }
+    .info {
+      margin: 20px 0 0 0;
+      font-size: 0.97em;
+      color: #c9b49a;
+      text-align: center;
+    }
+    button:focus, a:focus, input:focus {
+      outline: 2px solid #e0c185;
+      outline-offset: 3px;
+    }
+    /* Responsive : on ajuste juste la taille et les espacements, jamais le style */
+    @media (max-width: 650px) {
+      html { font-size: 16px; }
+      body { overflow-x: hidden; }
+      .main-accueil {
+        max-width: 98vw;
+        margin: 10px auto;
+        padding: 12px 2vw;
+        border-radius: 12px;
+      }
+      .main-accueil h1 { font-size: 2em; }
+      .main-accueil h2 { font-size: 1.1em; }
+      .main-accueil label { margin-top: 12px; }
+      .menu-buttons { gap: 10px; }
+      .gold-btn, button {
+        width: 100%;
+        max-width: 99vw;
+        min-width: 0;
+        padding: 14px 10px;
+        font-size: 1em;
+      }
+      .main-accueil input[type="text"] {
+        font-size: 1em;
+        padding: 10px 8px;
+      }
+      .info { margin: 12px 0 0 0; }
     }
   </style>
 </head>
@@ -139,8 +145,6 @@
         required
         aria-required="true"
         aria-label="Ton pseudo"
-        inputmode="text"
-        pattern=".{2,}"
         placeholder="Ton pseudo (2 à 20 caractères)" />
     </form>
     <div class="menu-buttons" role="group" aria-label="Actions principales">
@@ -187,7 +191,7 @@
     });
 
     // Actions
-    const redirect = (url) => {
+    function goTo(url) {
       if (pseudoInput.value.trim().length < 2) {
         pseudoInput.focus();
         pseudoInput.setCustomValidity("Le pseudo est obligatoire (au moins 2 caractères).");
@@ -196,17 +200,19 @@
       }
       localStorage.setItem("pseudo", pseudoInput.value.trim());
       window.location.href = url;
-    };
+    }
 
     document.querySelectorAll('.menu-buttons .gold-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        redirect(this.getAttribute('onclick').replace("window.location.href='", "").replace("'", ""));
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const url = this.getAttribute('onclick').replace("window.location.href='", "").replace("'", "");
+        goTo(url);
       });
     });
 
     accueilForm.addEventListener("submit", function(e) {
       e.preventDefault();
-      redirect('creer-partie.html');
+      goTo('creer-partie.html');
     });
 
     // Accessibilité : focus sur le champ pseudo au chargement
