@@ -9,17 +9,18 @@
   <style>
     main { display: flex; flex-direction: column; align-items: center; }
     .profil-container {
-      background: linear-gradient(145deg, #2c1b1b, #1f1313);
-      border: 2px solid #e0c185;
-      border-radius: 16px;
-      padding: 30px 40px;
+      max-width: 520px; /* Harmonisé avec accueil.html */
       margin: 40px auto;
-      width: 90%;
-      max-width: 650px;
-      box-shadow: 0 0 20px rgba(224, 193, 133, 0.15);
-      text-align: center;
+      background: linear-gradient(145deg, #2c1b1b, #1f1313);
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #0001;
+      padding: 32px 28px;
+      border: 2px solid #e0c185;
       color: #f4e4c1;
       font-family: 'Cormorant Garamond', serif;
+      text-align: center;
+      transition: box-shadow 0.2s, background 0.2s, border 0.2s, max-width 0.2s, opacity 0.4s;
+      opacity: 1;
     }
     .avatar-section {
       display: flex; align-items: center; justify-content: center;
@@ -65,8 +66,6 @@
       box-shadow: 0 0 30px #e0c18555; color: #e0c185; min-width: 330px; max-width: 95vw;
       min-height: 220px; padding: 32px 30px 24px 30px; text-align: center;
       display: flex; flex-direction: column; align-items: center;
-      /* ANIMATION SUPPRIMÉE */
-      /* Aucune transition ou animation ne doit s'appliquer */
       opacity: 1 !important;
       transform: none !important;
       transition: none !important;
@@ -104,10 +103,17 @@
       background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none; transform: scale(1.06);
     }
     button:focus, a:focus { outline: 2px solid #d4af37; outline-offset: 2px; }
+    @media (max-width: 650px) {
+      .profil-container {
+        max-width: 98vw;
+        margin: 10px auto;
+        padding: 12px 2vw;
+        border-radius: 12px;
+      }
+    }
     @media (max-width: 600px) {
       .modal-content { min-width: 95vw; padding: 10px 4vw 10px 4vw; }
       .avatar-option { width: 62px; height: 62px; }
-      .profil-container { padding: 12px 2vw; }
     }
   </style>
 </head>
@@ -170,7 +176,7 @@
         </ul>
       </section>
 
-      <button type="button" onclick="location.href='accueil.html'" class="gold-btn" style="margin-top:30px;">Retour à l'accueil</button>
+      <button type="button" onclick="location.href='accueil.html'" class="main-btn" style="margin-top:30px;">Retour à l'accueil</button>
 
       <!-- Avatar Modal -->
       <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true">
