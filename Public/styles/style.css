@@ -231,13 +231,22 @@ body {
   flex-direction: column;
 }
 
-/* Wrapper pour centrage vertical horizontal du main */
+/* ===== CENTRAGE VERTICAL AVEC DISTANCE HEADER/FOOTER ===== */
 .center-wrapper {
   flex: 1 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 0;
+  /* Ajoute un espace en haut et en bas entre le cadre et le header/footer */
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+@media (max-width: 650px) {
+  .center-wrapper {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
 }
 
 /* Harmonisation du cadre principal */
