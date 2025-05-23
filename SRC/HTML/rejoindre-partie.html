@@ -5,51 +5,163 @@
   <title>Rejoindre une partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Lien vers ton fichier CSS global -->
+  <!-- CSS principal -->
   <link rel="stylesheet" href="../../Public/styles/style.css" />
-
-  <!-- Police -->
+  <!-- Polices -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
-  
+  <style>
+    main { display: flex; flex-direction: column; align-items: center; }
+    .form-container {
+      background: linear-gradient(135deg, #2c1b1b, #1f1313);
+      border: 2px solid #e0c185;
+      border-radius: 14px;
+      box-shadow: 0 0 16px #e0c18533;
+      padding: 34px 28px 28px 28px;
+      margin: 32px auto;
+      min-width: 270px;
+      max-width: 375px;
+      width: 92vw;
+      color: #f4e4c1;
+      font-family: 'Cormorant Garamond', serif;
+      text-align: center;
+    }
+    label { font-weight: 600; color: #e0c185; display: block; margin-bottom: 9px; }
+    input[type="text"] {
+      padding: 12px 12px;
+      border: 2px solid #e0c185;
+      border-radius: 7px;
+      width: 94%;
+      font-size: 1.17em;
+      margin-bottom: 16px;
+      font-family: inherit;
+      background: #fffaf3;
+      color: #2c1b1b;
+      outline: none;
+      transition: border .18s;
+    }
+    input[type="text"]:focus { border: 2px solid #d4af37; background: #fff; }
+    .boutons-actions {
+      display: flex; gap: 1.3em; justify-content: center; margin-top: 18px; margin-bottom: 10px;
+    }
+    .gold-btn {
+      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+      color: #3d2b1f; border: 2px solid #e0c185; border-radius: 8px;
+      padding: 12px 30px; font-size: 1.04em; font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer; transition: box-shadow .16s, background .16s, color .16s;
+      box-shadow: 0 1px 8px #e0c18544;
+    }
+    .gold-btn:focus, .gold-btn:hover {
+      background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none;
+    }
+    .message {
+      min-height: 22px; margin-top: 4px; font-weight: bold; font-size: 1em;
+      color: #c00; transition: color .18s;
+    }
+    .message.succes { color: #2ecc40; }
+    .loader {
+      margin-top: 8px; color: #e0c185; font-family: 'Cinzel Decorative', cursive; font-size: 1.12em;
+      letter-spacing: .1em;
+    }
+    @media (max-width: 600px) {
+      .form-container { padding: 18px 2vw 12px 2vw; min-width: 0; max-width: 98vw; }
+      input[type="text"] { font-size: 1em; }
+    }
+  </style>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body>
-
   <header>
     <h1>Rejoindre une partie</h1>
   </header>
 
-  <main class="bandeau-dore">
-    <h1>🔑 Connexion</h1>
-    <div class="form-container">
-      <label for="codeInput">Entrez le code de salon reçu :</label>
-      <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" aria-label="Code de salon" autofocus />
-
-      <div class="boutons-actions">
-        <button class="gold-btn" id="validerBtn" onclick="rejoindreSalon()" aria-label="Valider">Valider</button>
-        <button class="gold-btn" onclick="retourAccueil()" aria-label="Retour">Retour</button>
-      </div>
-
-      <div class="message" id="message" role="alert"></div>
-      <div class="loader" id="loader" style="display:none;">Connexion...</div>
-    </div>
+  <main>
+    <section class="bandeau-dore form-container" aria-labelledby="connexion-heading">
+      <h1 id="connexion-heading" style="margin-bottom: 12px;">🔑 Connexion</h1>
+      <form id="codeForm" autocomplete="off" spellcheck="false">
+        <label for="codeInput">Entrez le code de salon reçu :</label>
+        <input type="text"
+               id="codeInput"
+               maxlength="6"
+               placeholder="Ex: ABC123"
+               aria-label="Code de salon"
+               pattern="[A-Za-z0-9]{6}"
+               inputmode="text"
+               required
+               autofocus />
+        <div class="boutons-actions">
+          <button type="submit" class="gold-btn" id="validerBtn" aria-label="Valider">Valider</button>
+          <a class="gold-btn" href="accueil.html" aria-label="Retour">Retour</a>
+        </div>
+        <div class="message" id="message" role="alert" aria-live="polite"></div>
+        <div class="loader" id="loader" style="display:none;" aria-live="polite">Connexion...</div>
+      </form>
+    </section>
   </main>
 
-  <script src="../JS/rejoindre-partie.js"></script>
-  <script>
-    // Focus automatique sur le champ dès chargement
-    window.onload = () => {
-      document.getElementById("codeInput").focus();
-    };
-    // Optionnel: fonction retour accueil
-    function retourAccueil() {
-      window.location.href = "accueil.html";
-    }
-  </script>
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
+
+  <script src="../JS/rejoindre-partie.js"></script>
+  <script>
+    // Focus auto et gestion clavier
+    window.onload = () => {
+      document.getElementById("codeInput").focus();
+    };
+
+    // Gestion du formulaire
+    const codeForm = document.getElementById("codeForm");
+    const codeInput = document.getElementById("codeInput");
+    const message = document.getElementById("message");
+    const loader = document.getElementById("loader");
+
+    codeForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      message.textContent = "";
+      const code = codeInput.value.trim().toUpperCase();
+      // Sécurité : filtre caractères non alphanumériques, limite à 6 chars
+      const safeCode = code.replace(/[^A-Z0-9]/gi, "").slice(0,6);
+
+      if (safeCode.length !== 6) {
+        message.textContent = "Le code doit comporter 6 caractères.";
+        codeInput.focus();
+        return;
+      }
+      loader.style.display = "block";
+      // Appel de la fonction globale si présente
+      if (typeof rejoindreSalon === "function") {
+        rejoindreSalon(safeCode)
+          .then(() => {
+            loader.style.display = "none";
+            message.textContent = "Connexion réussie !";
+            message.className = "message succes";
+            // Redirection ou suite gérée dans rejoindreSalon.js
+          })
+          .catch(err => {
+            loader.style.display = "none";
+            message.textContent = err && err.message ? err.message : "Échec de la connexion.";
+            message.className = "message";
+          });
+      } else {
+        loader.style.display = "none";
+        message.textContent = "Fonction de connexion absente.";
+      }
+    });
+
+    // Accessibilité : validation avec Entrée dans le champ
+    codeInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        codeForm.requestSubmit();
+      }
+    });
+  </script>
+  <noscript>
+    <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
+      ⚠️ JavaScript est désactivé. Vous ne pourrez pas rejoindre de partie.
+    </div>
+  </noscript>
 </body>
 </html>
