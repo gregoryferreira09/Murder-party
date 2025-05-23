@@ -88,10 +88,7 @@ async function creerPartie() {
 
   localStorage.setItem("salonCode", salonCode);
 
-  // Redirection ou message de succès
-  alert(`Partie créée ! Code salon : ${salonCode}`);
   window.location.href = "salon.html";
-}
 
 // Fonction utilitaire pour tirer N éléments aléatoires d'un tableau, sans doublons
 function getRandomElements(arr, n) {
