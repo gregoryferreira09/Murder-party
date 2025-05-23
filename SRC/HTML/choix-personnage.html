@@ -39,12 +39,6 @@
       transition: transform 0.3s ease;
     }
 
-    <footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
-
-
     .carte-personnage img {
       width: 100%;
       height: auto;
@@ -88,31 +82,38 @@
     <button id="valider-choix" disabled>Valider mon personnage</button>
   </main>
 
- <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <script src="../JS/personnages.js"></script>
 <script>
-  // 1. CONFIG FIREBASE (à personnaliser)
-const firebaseConfig = {
-  apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-  authDomain: "murder-party-ba8d1.firebaseapp.com",
-  databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "murder-party-ba8d1",
-  storageBucket: "murder-party-ba8d1.firebasestorage.app",
-  messagingSenderId: "20295055805",
-  appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-  measurementId: "G-KSBMBB7KMJ"
-};
+  // 1. CONFIG FIREBASE
+  const firebaseConfig = {
+    apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+    authDomain: "murder-party-ba8d1.firebaseapp.com",
+    databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "murder-party-ba8d1",
+    storageBucket: "murder-party-ba8d1.firebasestorage.app",
+    messagingSenderId: "20295055805",
+    appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+    measurementId: "G-KSBMBB7KMJ"
+  };
   firebase.initializeApp(firebaseConfig);
-  const partieID = "partie1";
   const db = firebase.database();
+  const partieID = "partie1";
 
-  // 2. Variables globales
+  // 2. Utilisation du pseudo profil ou "Anonyme"
+  const playerId = localStorage.getItem("pseudo") || "Anonyme";
+
+  // 3. Variables globales
   let nombreJoueurs = 0;
   let personnages = [];
-  let playerId = "";
 
-  // 3. Génère la galerie de personnages
+  // 4. Génère la galerie de personnages
   function getRandomElements(array, n) {
     const copy = [...array];
     const result = [];
@@ -132,7 +133,6 @@ const firebaseConfig = {
     nombreJoueurs = scenarioData.nombreJoueurs;
     const periode = scenarioData.periode;
     const galeriePersonnages = document.getElementById("galeriePersonnages");
-    // Liste des personnages
     personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
 
     galeriePersonnages.innerHTML = personnages.map((perso, i) => `
@@ -152,13 +152,6 @@ const firebaseConfig = {
         document.getElementById("valider-choix").disabled = false;
       });
     });
-  }
-
-  // 4. Saisie du pseudo
-  window.onload = function() {
-    playerId = prompt("Ton prénom ou pseudo ?");
-    afficherPersonnages();
-    startRealtimeSync();
   }
 
   // 5. Synchro temps réel (Firebase)
@@ -219,14 +212,13 @@ const firebaseConfig = {
     };
     document.getElementById('valider-choix').parentNode.appendChild(btn);
   }
-</script>
 
-  
-window.onload = afficherPersonnages;
+  // 7. Lancement au chargement
+  window.onload = function() {
+    afficherPersonnages();
+    startRealtimeSync();
+  }
 </script>
-  
-</body>
-</html>
 
 </body>
 </html>
