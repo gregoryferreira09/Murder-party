@@ -20,6 +20,41 @@
     @media (max-width: 650px) {
       .main-accueil { padding: 14px 3vw; }
     }
+
+    /* Ajout pour les 4 boutons bleus */
+    .menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin: 24px 0 0 0;
+      align-items: center;
+    }
+
+    .btn-bleu {
+      background: linear-gradient(90deg, #3b82f6, #2563eb 70%);
+      color: #fff;
+      border: 2px solid #2563eb;
+      border-radius: 8px;
+      padding: 20px 40px;
+      font-size: 1.2em;
+      font-family: 'Cormorant Garamond', serif;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: box-shadow .2s, background .2s, color .2s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 120px;
+      width: 90%;
+      max-width: 350px;
+    }
+
+    .btn-bleu:hover,
+    .btn-bleu:focus {
+      background: #2563eb;
+      color: #e0c185;
+      box-shadow: 0 0 8px #2563eb88;
+      outline: none;
+    }
   </style>
 </head>
 <body>
@@ -36,6 +71,12 @@
         <button type="button" class="gold-btn" id="btnRejoindrePartie" aria-label="Rejoindre une partie">Rejoindre une partie</button>
       </div>
     </form>
+    <div class="menu-buttons">
+      <button class="btn-bleu" onclick="window.location.href='creer-partie.html'" aria-label="Créer une partie">🎮 Créer une partie</button>
+      <button class="btn-bleu" onclick="window.location.href='rejoindre-partie.html'" aria-label="Rejoindre une partie">👥 Rejoindre une partie</button>
+      <button class="btn-bleu" onclick="window.location.href='profil-joueur.html'" aria-label="Voir le profil">👤 Profil</button>
+      <button class="btn-bleu" onclick="window.location.href='boutique.html'" aria-label="Accéder à la boutique">🛍️ Boutique</button>
+    </div>
     <div class="info">
       <p><strong>Bienvenue&nbsp;!</strong> Organise une Murder Party ou rejoins une partie existante grâce à un code partagé.</p>
     </div>
