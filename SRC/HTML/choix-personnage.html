@@ -103,7 +103,7 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-   const partieID = "parties/" + (localStorage.getItem("salonCode") || "partie1");
+    const partieID = "parties/" + (localStorage.getItem("salonCode") || "partie1");
 
     // 2. Utilisation du pseudo profil ou "Anonyme"
     const playerId = localStorage.getItem("pseudo") || "Anonyme";
@@ -195,26 +195,28 @@
       });
 
       // Quand tu valides
-document.getElementById("valider-choix").onclick = function() {
-  if (personnageSelectionne && !this.disabled) {
-    localStorage.setItem("persoChoisi", JSON.stringify(personnages[personnageSelectionne]));
-    db.ref(partieID + '/validations/' + playerId).set({ personnageId: personnageSelectionne });
-    this.disabled = true;
-  }
-};
+      document.getElementById("valider-choix").onclick = function() {
+        if (personnageSelectionne && !this.disabled) {
+          // Stocke l'objet complet du personnage dans le localStorage (ligne essentielle)
+          localStorage.setItem("persoChoisi", JSON.stringify(personnages[personnageSelectionne]));
+          db.ref(partieID + '/validations/' + playerId).set({ personnageId: personnageSelectionne });
+          this.disabled = true;
+        }
+      };
+    } // <-- FIN de startRealtimeSync
 
     // 6. Bouton annuler
     function ajouterBoutonAnnuler() {
-  const btn = document.createElement('button');
-  btn.id = 'annuler-choix';
-  btn.textContent = "Annuler";
-  btn.className = "annuler-btn"; // Ajoute cette classe
-  btn.onclick = function() {
-    db.ref(partieID + '/validations/' + playerId).remove();
-    document.getElementById("valider-choix").disabled = false;
-  };
-  document.getElementById('valider-choix').parentNode.appendChild(btn);
-}
+      const btn = document.createElement('button');
+      btn.id = 'annuler-choix';
+      btn.textContent = "Annuler";
+      btn.className = "annuler-btn";
+      btn.onclick = function() {
+        db.ref(partieID + '/validations/' + playerId).remove();
+        document.getElementById("valider-choix").disabled = false;
+      };
+      document.getElementById('valider-choix').parentNode.appendChild(btn);
+    }
 
     // 7. Lancement au chargement
     window.onload = function() {
