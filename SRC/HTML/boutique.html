@@ -4,71 +4,174 @@
   <meta charset="UTF-8">
   <title>Boutique - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <!-- Chemin relatif corrigé pour le CSS -->
+  <link rel="stylesheet" href="../../Public/styles/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .boutique-categorie {
+      margin-bottom: 2.3em;
+      padding-bottom: 1em;
+      border-bottom: 1px solid #e0c18555;
+    }
+    .boutique-categorie:last-child {
+      border-bottom: none;
+      margin-bottom: 1.2em;
+    }
+    .boutique-categorie h2 {
+      color: #e0c185;
+      margin-bottom: 1em;
+    }
+    .item {
+      background: #231a13;
+      border-radius: 8px;
+      border: 1.5px solid #e0c18544;
+      box-shadow: 0 2px 8px #0002;
+      margin: 0.7em auto 1.1em auto;
+      max-width: 420px;
+      padding: 0.85em 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1em;
+    }
+    .item p {
+      margin: 0;
+      color: #f4e4c1;
+      font-size: 1.09em;
+      flex: 1 1 auto;
+      text-align: left;
+    }
+    .item button {
+      background: #e0c185;
+      color: #2c1b1b;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1em;
+      padding: 9px 18px;
+      cursor: pointer;
+      transition: background .18s, color .18s, box-shadow .18s;
+      font-weight: bold;
+      margin-left: 10px;
+      box-shadow: 0 1px 6px #e0c18533;
+    }
+    .item button:focus,
+    .item button:hover {
+      background: #f4e4c1;
+      color: #2c1b1b;
+      box-shadow: 0 0 9px #e0c185bb;
+      outline: 2px solid #e0c185;
+    }
+    .actions {
+      margin-top: 2em;
+      display: flex;
+      justify-content: center;
+    }
+    .actions button {
+      background: #1b1b1b;
+      color: #e0c185;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1em;
+      padding: 14px 30px;
+      cursor: pointer;
+      margin: 0 8px;
+      transition: background .18s, color .18s, box-shadow .15s;
+    }
+    .actions button:hover,
+    .actions button:focus {
+      background: #3d2b1f;
+      color: #e0c185;
+      box-shadow: 0 0 8px #e0c18588;
+      outline: 2px solid #e0c185;
+    }
+    @media (max-width: 650px) {
+      .boutique-categorie h2 {
+        font-size: 1.08em;
+      }
+      .item {
+        padding: 0.7em 0.7em;
+        max-width: 98vw;
+        font-size: 1em;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6em;
+      }
+      .actions button {
+        width: 100%;
+        margin: 0;
+        font-size: 1em;
+        padding: 14px 10px;
+      }
+    }
+  </style>
 </head>
 <body>
-
   <header>
-    <h1>🛍️ Boutique</h1>
+    <h1 class="site-title">🛍️ Boutique</h1>
   </header>
 
-  <main>
-    <section class="boutique-categorie">
-      <h2>🎭 Avatars légendaires</h2>
-      <div class="item">
-        <p>🕵️ Maître des Ombres</p>
-        <button>Acheter - 500 MP</button>
-      </div>
-      <div class="item">
-        <p>👻 Fantôme</p>
-        <button>Acheter - 500 MP</button>
-      </div>
-      <div class="item">
-        <p>🤐 Muet</p>
-        <button>Acheter - 500 MP</button>
-      </div>
-      <div class="item">
-        <p>🎭 Comédien</p>
-        <button>Acheter - 500 MP</button>
-      </div>
-    </section>
+  <div class="center-wrapper">
+    <main class="main-accueil" role="main" aria-labelledby="boutique-title">
+      <h2 id="boutique-title" style="margin-bottom:1.3em;">Objets à débloquer</h2>
+      <section class="boutique-categorie" aria-labelledby="avatars-leg">
+        <h2 id="avatars-leg">🎭 Avatars légendaires</h2>
+        <div class="item">
+          <p>🕵️ Maître des Ombres</p>
+          <button type="button">Acheter - 500 MP</button>
+        </div>
+        <div class="item">
+          <p>👻 Fantôme</p>
+          <button type="button">Acheter - 500 MP</button>
+        </div>
+        <div class="item">
+          <p>🤐 Muet</p>
+          <button type="button">Acheter - 500 MP</button>
+        </div>
+        <div class="item">
+          <p>🎭 Comédien</p>
+          <button type="button">Acheter - 500 MP</button>
+        </div>
+      </section>
 
-    <section class="boutique-categorie">
-      <h2>🔎 Indices Premium</h2>
-      <div class="item">
-        <p>Indice réel aléatoire pendant la partie</p>
-        <button>Acheter - 200 MP</button>
-      </div>
-    </section>
+      <section class="boutique-categorie" aria-labelledby="indices-premium">
+        <h2 id="indices-premium">🔎 Indices Premium</h2>
+        <div class="item">
+          <p>Indice réel aléatoire pendant la partie</p>
+          <button type="button">Acheter - 200 MP</button>
+        </div>
+      </section>
 
-    <section class="boutique-categorie">
-      <h2>🔓 Pass & Accès</h2>
-      <div class="item">
-        <p>Pass Illimité 1 jour</p>
-        <button>Acheter - 300 MP</button>
-      </div>
-      <div class="item">
-        <p>Pass Illimité 7 jours</p>
-        <button>Acheter - 900 MP</button>
-      </div>
-      <div class="item">
-        <p>Pass Soirée entre amis</p>
-        <button>Acheter - 700 MP</button>
-      </div>
-      <div class="item">
-        <p>Pass Maître du Jeu</p>
-        <button>Acheter - 1200 MP</button>
-      </div>
-    </section>
+      <section class="boutique-categorie" aria-labelledby="pass-acces">
+        <h2 id="pass-acces">🔓 Pass & Accès</h2>
+        <div class="item">
+          <p>Pass Illimité 1 jour</p>
+          <button type="button">Acheter - 300 MP</button>
+        </div>
+        <div class="item">
+          <p>Pass Illimité 7 jours</p>
+          <button type="button">Acheter - 900 MP</button>
+        </div>
+        <div class="item">
+          <p>Pass Soirée entre amis</p>
+          <button type="button">Acheter - 700 MP</button>
+        </div>
+        <div class="item">
+          <p>Pass Maître du Jeu</p>
+          <button type="button">Acheter - 1200 MP</button>
+        </div>
+      </section>
 
-    <section class="actions">
-      <button onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
-    </section>
-  </main>
+      <section class="actions">
+        <button type="button" onclick="window.location.href='accueil.html'">🏠 Retour à l'accueil</button>
+      </section>
+    </main>
+  </div>
 
-<footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 </body>
 </html>
