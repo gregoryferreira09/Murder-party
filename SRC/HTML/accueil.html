@@ -34,28 +34,12 @@
       font-weight: 400;
       color: #f4e4c1;
     }
-    .main-accueil label {
-      display: block;
-      margin-top: 18px;
-      font-weight: bold;
+    .bienvenue-message {
+      font-size: 1.25em;
       color: #e0c185;
-      text-align: left;
-    }
-    .main-accueil input[type="text"] {
-      width: 100%;
-      font-size: 1.15em;
-      padding: 10px 8px;
-      border-radius: 6px;
-      border: 1px solid #e9c78c;
-      background-color: #1a1a1a;
-      color: #f4e4c1;
+      text-align: center;
       margin-bottom: 18px;
-      box-sizing: border-box;
-      transition: border-color 0.3s;
-    }
-    .main-accueil input[type="text"]:focus {
-      border-color: #e0c185;
-      outline: none;
+      margin-top: 12px;
     }
     .menu-buttons {
       display: flex;
@@ -64,7 +48,31 @@
       margin: 24px 0 0 0;
       align-items: center;
     }
-    /* Les boutons utilisent le style global button du site.css */
+    .gold-btn {
+      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+      color: #3d2b1f;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
+      padding: 14px 30px;
+      font-size: 1.15em;
+      font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: box-shadow .2s, background .2s, color .2s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 120px;
+      width: 90%;
+      max-width: 350px;
+      box-sizing: border-box;
+    }
+    .gold-btn:hover,
+    .gold-btn:focus {
+      background: #e0c185;
+      color: #1a1a1a;
+      box-shadow: 0 0 8px #e0c18588;
+      outline: none;
+    }
     .info {
       margin: 20px 0 0 0;
       font-size: 0.97em;
@@ -75,8 +83,6 @@
       outline: 2px solid #e0c185;
       outline-offset: 3px;
     }
-
-    /* --- ADAPTATION MOBILE : AJUSTEMENT LARGEUR/PADDING UNIQUEMENT --- */
     @media (max-width: 650px) {
       html { font-size: 16px; }
       body { overflow-x: hidden; }
@@ -84,19 +90,20 @@
         max-width: 98vw;
         margin: 10px auto;
         padding: 12px 2vw;
-        border-radius: 18px; /* même radius qu'en desktop */
-        /* NE PAS TOUCHER AU FOND, AU CADRE, AUX COULEURS */
+        border-radius: 12px;
       }
-      .menu-buttons {
-        gap: 12px;
-      }
-      button {
+      .main-accueil h1 { font-size: 2em; }
+      .main-accueil h2 { font-size: 1.1em; }
+      .bienvenue-message { font-size: 1.05em; margin-bottom: 10px; }
+      .menu-buttons { gap: 10px; }
+      .gold-btn, button {
         width: 100%;
-        max-width: 330px;
+        max-width: 99vw;
         min-width: 0;
-        box-sizing: border-box;
-        /* NE PAS TOUCHER AU BACKGROUND NI BORDER NI COLOR */
+        padding: 14px 10px;
+        font-size: 1em;
       }
+      .info { margin: 12px 0 0 0; }
     }
   </style>
 </head>
@@ -104,16 +111,14 @@
   <main class="main-accueil" role="main">
     <h1>Murder Party</h1>
     <h2>Enquête collaborative en ligne</h2>
-
     <div class="bienvenue-message">
-  Bienvenue <span id="pseudoAffiche"></span>
-</div>
-    
+      Bienvenue <span id="pseudoAffiche"></span>
+    </div>
     <div class="menu-buttons" role="group" aria-label="Actions principales">
-      <button type="button" onclick="window.location.href='creer-partie.html'">🎮 Créer une partie</button>
-      <button type="button" onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
-      <button type="button" onclick="window.location.href='profil-joueur.html'">👤 Profil</button>
-      <button type="button" onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
+      <button class="gold-btn" type="button" onclick="window.location.href='creer-partie.html'">🎮 Créer une partie</button>
+      <button class="gold-btn" type="button" onclick="window.location.href='rejoindre-partie.html'">👥 Rejoindre une partie</button>
+      <button class="gold-btn" type="button" onclick="window.location.href='profil-joueur.html'">👤 Profil</button>
+      <button class="gold-btn" type="button" onclick="window.location.href='boutique.html'">🛍️ Boutique</button>
     </div>
     <div class="info">
       <p><strong>Bienvenue&nbsp;!</strong> Organise une Murder Party ou rejoins une partie existante grâce à un code partagé.</p>
@@ -125,7 +130,7 @@
   </footer>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script>
-    // --- Initialisation Firebase (lecture seule, pas d'écriture sur cette page) ---
+    // Initialisation Firebase (lecture seule)
     const firebaseConfig = {
       apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
       authDomain: "murder-party-ba8d1.firebaseapp.com",
@@ -140,44 +145,17 @@
       firebase.initializeApp(firebaseConfig);
     }
 
-    // --- Formulaire principal ---
-    const pseudoInput = document.getElementById("pseudoInput");
-    const accueilForm = document.getElementById("accueilForm");
-
-    // Pré-remplissage éventuel
-    if (localStorage.getItem("pseudo")) {
-      pseudoInput.value = localStorage.getItem("pseudo");
-    }
-    pseudoInput.addEventListener("input", () => {
-      pseudoInput.value = pseudoInput.value.replace(/[<>]/g, ""); // anti XSS simple
-    });
-
-    // Actions
-    function goTo(url) {
-      if (pseudoInput.value.trim().length < 2) {
-        pseudoInput.focus();
-        pseudoInput.setCustomValidity("Le pseudo est obligatoire (au moins 2 caractères).");
-        pseudoInput.reportValidity();
-        return;
+    // Affichage du pseudo dans le message de bienvenue
+    document.addEventListener("DOMContentLoaded", function() {
+      var pseudo = localStorage.getItem("pseudo");
+      if (pseudo && pseudo.trim().length > 0) {
+        document.getElementById("pseudoAffiche").textContent = pseudo;
+      } else {
+        document.getElementById("pseudoAffiche").textContent = "invité";
       }
-      localStorage.setItem("pseudo", pseudoInput.value.trim());
-      window.location.href = url;
-    }
-
-    document.querySelectorAll('.menu-buttons button').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const url = this.getAttribute('onclick').replace("window.location.href='", "").replace("'", "");
-        goTo(url);
-      });
     });
 
-    accueilForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      goTo('creer-partie.html');
-    });
-
-    window.onload = () => { pseudoInput.focus(); };
+    // Nettoyage code salon si existant
     localStorage.removeItem("salonCode");
   </script>
 </body>
