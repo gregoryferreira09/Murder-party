@@ -585,3 +585,21 @@ body.modal-open {
   border: 3px solid red !important;
   box-shadow: 0 0 10px red;
 }
+
+.annuler-btn {
+  background-color: #000000;
+  color: #ffffff;
+  border: 2px solid #e9c78c;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-top: 20px;
+  font-family: 'Cinzel Decorative', serif;
+  transition: all 0.3s ease;
+  margin-left: 10px; /* espace entre les boutons si besoin */
+}
+.annuler-btn:hover {
+  background-color: #e9c78c;
+  color: #000000;
+}
