@@ -19,7 +19,10 @@
       color: #f4e4c1;
       font-family: 'Cormorant Garamond', serif;
       text-align: center;
-      transition: box-shadow 0.2s, background 0.2s, border 0.2s, max-width 0.2s, opacity 0.4s;
+      transition: opacity 0.5s;
+      opacity: 0; /* Fade-in */
+    }
+    .profil-container.visible {
       opacity: 1;
     }
     .avatar-section {
@@ -338,6 +341,13 @@
     window.onload = () => {
       document.getElementById("pseudo-display").focus();
     };
+  </script>
+
+  <!-- Fade-in effet -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelector('.profil-container').classList.add('visible');
+    });
   </script>
 
   <noscript>
