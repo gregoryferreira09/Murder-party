@@ -35,24 +35,40 @@ async function rejoindreSalon() {
 
   // Validation du code salon
   if (!/^[A-Z0-9]{4}$|^[A-Z0-9]{8}$/.test(codeEntre)) {
-  loader.style.display = "none";
-  validerBtn.disabled = false;
-  messageDiv.textContent = "Le code doit comporter 4 ou 8 lettres ou chiffres.";
-  messageDiv.style.color = "#ff6b6b";
-  return;
-}
-
-  let pseudo = localStorage.getItem("pseudo") || "Anonyme";
-  if (!pseudo.trim()) {
     loader.style.display = "none";
     validerBtn.disabled = false;
-    messageDiv.textContent = "Veuillez choisir un pseudo avant de rejoindre.";
+    messageDiv.textContent = "Le code doit comporter 4 ou 8 lettres ou chiffres.";
     messageDiv.style.color = "#ff6b6b";
     return;
   }
 
-  // Empêche les injections ou caractères spéciaux
-  pseudo = pseudo.replace(/[<>\/\\'"`]/g, "").trim().substring(0, 30);
+  // Récupère le pseudo (sécurité anti-caractères spéciaux)
+  let pseudo = (localStorage.getItem("pseudo") || "").replace(/[<>\/\\'"`]/g, "").trim().substring(0, 30);
+
+  // Gestion auto des pseudos anonymes si vide
+  if (!pseudo) {
+    try {
+      // Cherche combien d'anonymes existent déjà dans ce salon
+      const joueursSnap = await db.ref('parties/' + codeEntre + '/joueurs').get();
+      let n = 1;
+      let pseudosExistants = [];
+      if (joueursSnap.exists()) {
+        joueursSnap.forEach(joueurSnap => {
+          pseudosExistants.push(joueurSnap.val().pseudo);
+        });
+        while (pseudosExistants.includes("anonyme" + n)) n++;
+      }
+      pseudo = "anonyme" + n;
+      localStorage.setItem("pseudo", pseudo);
+    } catch (err) {
+      loader.style.display = "none";
+      validerBtn.disabled = false;
+      messageDiv.textContent = "Erreur lors de la génération du pseudo.";
+      messageDiv.style.color = "#ff6b6b";
+      console.error("Erreur génération pseudo anonyme:", err);
+      return;
+    }
+  }
 
   try {
     // Vérifier que le salon existe
@@ -126,6 +142,7 @@ async function rejoindreSalon() {
   }
 }
 
+// N'écoute que la soumission du formulaire (clic sur Rejoindre ou touche Entrée)
 document.getElementById("joinForm").addEventListener("submit", function(e) {
   e.preventDefault();
   rejoindreSalon();
