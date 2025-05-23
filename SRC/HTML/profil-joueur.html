@@ -65,8 +65,12 @@
       box-shadow: 0 0 30px #e0c18555; color: #e0c185; min-width: 330px; max-width: 95vw;
       min-height: 220px; padding: 32px 30px 24px 30px; text-align: center;
       display: flex; flex-direction: column; align-items: center;
+      /* ANIMATION SUPPRIMÉE */
+      /* Aucune transition ou animation ne doit s'appliquer */
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
     }
-    @keyframes fadeIn { to { opacity: 1; transform: none; } }
     .avatar-list {
       display: flex; flex-wrap: wrap; gap: 30px 30px; justify-content: center; align-items: center;
       margin-bottom: 24px; min-width: 240px; min-height: 120px;
