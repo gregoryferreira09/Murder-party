@@ -542,3 +542,24 @@ body.modal-open {
 .accueil .menu-buttons {
   animation: fadeUp 1s ease-out forwards;
 }
+
+@media (max-width: 650px) {
+  html { font-size: 16px; }
+  body { overflow-x: hidden; }
+  .main-accueil {
+    padding: 10px 2vw;
+    margin: 10px auto;
+    border-radius: 10px;
+  }
+  .main-accueil h1 { font-size: 1.6em; }
+  .main-accueil h2 { font-size: 1.1em; }
+  .main-accueil label { margin-top: 10px; }
+  .gold-btn, button, .btn-bleu {
+    width: 100%;
+    max-width: 330px;
+    padding: 14px 10px;
+    font-size: 1em;
+  }
+  .menu-buttons { gap: 10px; }
+  .info { margin: 12px 0 0 0; }
+}
