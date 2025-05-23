@@ -1,167 +1,180 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Rejoindre une partie - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- CSS principal -->
-  <link rel="stylesheet" href="../../Public/styles/style.css" />
-  <!-- Polices -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>Rejoindre une partie – Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../Public/styles/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    main { display: flex; flex-direction: column; align-items: center; }
-    .form-container {
-      background: linear-gradient(135deg, #2c1b1b, #1f1313);
+    .main-join {
+      max-width: 520px;
+      margin: 40px auto;
+      background: linear-gradient(145deg, #2c1b1b, #1f1313);
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #0001;
+      padding: 32px 28px;
       border: 2px solid #e0c185;
-      border-radius: 14px;
-      box-shadow: 0 0 16px #e0c18533;
-      padding: 34px 28px 28px 28px;
-      margin: 32px auto;
-      min-width: 270px;
-      max-width: 375px;
-      width: 92vw;
       color: #f4e4c1;
       font-family: 'Cormorant Garamond', serif;
       text-align: center;
+      transition: opacity 0.5s;
+      opacity: 0; /* Fade-in effet */
     }
-    label { font-weight: 600; color: #e0c185; display: block; margin-bottom: 9px; }
-    input[type="text"] {
-      padding: 12px 12px;
-      border: 2px solid #e0c185;
-      border-radius: 7px;
-      width: 94%;
-      font-size: 1.17em;
+    .main-join.visible {
+      opacity: 1;
+    }
+    .main-join h1 {
+      text-align: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2em;
+      margin-bottom: 8px;
+      color: #e0c185;
+    }
+    .main-join h2 {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      margin-top: 0;
       margin-bottom: 16px;
-      font-family: inherit;
-      background: #fffaf3;
-      color: #2c1b1b;
+      font-size: 1.2em;
+      font-weight: 400;
+      color: #f4e4c1;
+    }
+    .join-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin: 28px 0 0 0;
+      align-items: center;
+    }
+    .input-code {
+      font-size: 1.4em;
+      padding: 13px 18px;
+      border-radius: 10px;
+      border: 2px solid #e0c185;
+      background: #241919;
+      color: #e0c185;
+      text-align: center;
+      letter-spacing: 3px;
       outline: none;
-      transition: border .18s;
+      margin-bottom: 10px;
+      width: 80%;
+      max-width: 240px;
+      font-family: 'Cinzel Decorative', serif;
+      transition: border 0.18s, box-shadow 0.18s;
     }
-    input[type="text"]:focus { border: 2px solid #d4af37; background: #fff; }
-    .boutons-actions {
-      display: flex; gap: 1.3em; justify-content: center; margin-top: 18px; margin-bottom: 10px;
+    .input-code:focus {
+      border-color: #fff8cd;
+      box-shadow: 0 0 8px #e0c18588;
     }
-    .gold-btn {
+    .main-btn {
       background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
-      color: #3d2b1f; border: 2px solid #e0c185; border-radius: 8px;
-      padding: 12px 30px; font-size: 1.04em; font-family: 'Cinzel Decorative', cursive;
-      cursor: pointer; transition: box-shadow .16s, background .16s, color .16s;
-      box-shadow: 0 1px 8px #e0c18544;
+      color: #3d2b1f;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
+      padding: 14px 30px;
+      font-size: 1.15em;
+      font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: box-shadow .2s, background .2s, color .2s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 120px;
+      width: 90%;
+      max-width: 350px;
+      box-sizing: border-box;
     }
-    .gold-btn:focus, .gold-btn:hover {
-      background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none;
+    .main-btn:hover,
+    .main-btn:focus {
+      background: #e0c185;
+      color: #1a1a1a;
+      box-shadow: 0 0 8px #e0c18588;
+      outline: none;
     }
-    .message {
-      min-height: 22px; margin-top: 4px; font-weight: bold; font-size: 1em;
-      color: #c00; transition: color .18s;
+    .error-message {
+      color: #ff6e6e;
+      font-weight: 600;
+      margin-top: 10px;
+      min-height: 20px;
     }
-    .message.succes { color: #2ecc40; }
-    .loader {
-      margin-top: 8px; color: #e0c185; font-family: 'Cinzel Decorative', cursive; font-size: 1.12em;
-      letter-spacing: .1em;
+    .info {
+      margin: 20px 0 0 0;
+      font-size: 0.97em;
+      color: #c9b49a;
+      text-align: center;
     }
-    @media (max-width: 600px) {
-      .form-container { padding: 18px 2vw 12px 2vw; min-width: 0; max-width: 98vw; }
-      input[type="text"] { font-size: 1em; }
+    button:focus, a:focus, input:focus {
+      outline: 2px solid #e0c185;
+      outline-offset: 3px;
+    }
+    @media (max-width: 650px) {
+      html { font-size: 16px; }
+      body { overflow-x: hidden; }
+      .main-join {
+        max-width: 98vw;
+        margin: 10px auto;
+        padding: 12px 2vw;
+        border-radius: 12px;
+      }
+      .main-join h1 { font-size: 1.5em; }
+      .main-join h2 { font-size: 1em; }
+      .join-form { gap: 10px; }
+      .main-btn, button {
+        width: 100%;
+        max-width: 99vw;
+        min-width: 0;
+        padding: 14px 10px;
+        font-size: 1em;
+      }
+      .info { margin: 12px 0 0 0; }
     }
   </style>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body>
-  <header>
+  <main class="main-join" role="main">
     <h1>Rejoindre une partie</h1>
-  </header>
-
-  <main>
-    <section class="bandeau-dore form-container" aria-labelledby="connexion-heading">
-      <h1 id="connexion-heading" style="margin-bottom: 12px;">🔑 Connexion</h1>
-      <form id="codeForm" autocomplete="off" spellcheck="false">
-        <label for="codeInput">Entrez le code de salon reçu :</label>
-        <input type="text"
-               id="codeInput"
-               maxlength="6"
-               placeholder="Ex: ABC123"
-               aria-label="Code de salon"
-               pattern="[A-Za-z0-9]{6}"
-               inputmode="text"
-               required
-               autofocus />
-        <div class="boutons-actions">
-          <button type="submit" class="gold-btn" id="validerBtn" aria-label="Valider">Valider</button>
-          <a class="gold-btn" href="accueil.html" aria-label="Retour">Retour</a>
-        </div>
-        <div class="message" id="message" role="alert" aria-live="polite"></div>
-        <div class="loader" id="loader" style="display:none;" aria-live="polite">Connexion...</div>
-      </form>
-    </section>
+    <h2>Entre le code de la partie pour rejoindre tes amis</h2>
+    <form class="join-form" id="joinForm" autocomplete="off">
+      <input type="text" maxlength="8" minlength="4" class="input-code" id="code" placeholder="Code à 4 ou 8 lettres" required autofocus autocomplete="off" aria-label="Code de la partie">
+      <button class="main-btn" type="submit">Rejoindre</button>
+      <div class="error-message" id="errorMessage"></div>
+    </form>
+    <div class="info">
+      <p>Demande le code à l'organisateur de la partie.<br>
+      <a href="creer-partie.html">Créer une nouvelle partie</a></p>
+      <button class="main-btn" type="button" onclick="location.href='accueil.html'" style="margin-top:10px;">Retour à l'accueil</button>
+    </div>
   </main>
-
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
-
-  <script src="../JS/rejoindre-partie.js"></script>
   <script>
-    // Focus auto et gestion clavier
-    window.onload = () => {
-      document.getElementById("codeInput").focus();
-    };
+    // Validation du code et redirection
+    const joinForm = document.getElementById('joinForm');
+    const codeInput = document.getElementById('code');
+    const errorMessage = document.getElementById('errorMessage');
 
-    // Gestion du formulaire
-    const codeForm = document.getElementById("codeForm");
-    const codeInput = document.getElementById("codeInput");
-    const message = document.getElementById("message");
-    const loader = document.getElementById("loader");
-
-    codeForm.addEventListener("submit", function(e) {
+    joinForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      message.textContent = "";
       const code = codeInput.value.trim().toUpperCase();
-      // Sécurité : filtre caractères non alphanumériques, limite à 6 chars
-      const safeCode = code.replace(/[^A-Z0-9]/gi, "").slice(0,6);
-
-      if (safeCode.length !== 6) {
-        message.textContent = "Le code doit comporter 6 caractères.";
-        codeInput.focus();
+      if (!/^[A-Z0-9]{4}$|^[A-Z0-9]{8}$/.test(code)) {
+        errorMessage.textContent = "Le code doit comporter 4 ou 8 lettres ou chiffres.";
         return;
       }
-      loader.style.display = "block";
-      // Appel de la fonction globale si présente
-      if (typeof rejoindreSalon === "function") {
-        rejoindreSalon(safeCode)
-          .then(() => {
-            loader.style.display = "none";
-            message.textContent = "Connexion réussie !";
-            message.className = "message succes";
-            // Redirection ou suite gérée dans rejoindreSalon.js
-          })
-          .catch(err => {
-            loader.style.display = "none";
-            message.textContent = err && err.message ? err.message : "Échec de la connexion.";
-            message.className = "message";
-          });
-      } else {
-        loader.style.display = "none";
-        message.textContent = "Fonction de connexion absente.";
-      }
+      localStorage.setItem("salonCode", code);
+      window.location.href = "salle-attente.html";
     });
-
-    // Accessibilité : validation avec Entrée dans le champ
-    codeInput.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        codeForm.requestSubmit();
-      }
+    codeInput.addEventListener('input', function() {
+      errorMessage.textContent = "";
     });
   </script>
-  <noscript>
-    <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
-      ⚠️ JavaScript est désactivé. Vous ne pourrez pas rejoindre de partie.
-    </div>
-  </noscript>
+  <!-- Effet fade-in -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelector('.main-join').classList.add('visible');
+    });
+  </script>
 </body>
 </html>
