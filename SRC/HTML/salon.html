@@ -76,6 +76,15 @@
       box-shadow: 0 0 10px #e0c18588;
       outline: none;
     }
+    .demarrer-btn:disabled,
+    .demarrer-btn.desactive {
+      background: #b1a07a !important;
+      color: #3d2b1f99 !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+      border: 2px solid #b1a07a !important;
+      opacity: 0.7;
+    }
     .infoSalon {
       color: #e0c185;
       margin-top: 0.9em;
@@ -127,7 +136,7 @@
             <li>Chargement...</li>
           </ul>
         </div>
-        <button class="demarrer-btn" id="demarrerBtn" style="display:none;">Démarrer la partie</button>
+        <button class="demarrer-btn" id="demarrerBtn" disabled>En attente...</button>
         <div class="infoSalon" id="infoSalon"></div>
         <a href="accueil.html" class="quit-link">Quitter le salon</a>
       </section>
@@ -158,52 +167,76 @@
     const codeSalon = localStorage.getItem("salonCode") || "";
     document.getElementById("codeSalon").textContent = codeSalon;
 
-    // --- Afficher la liste des joueurs en temps réel ---
+    // --- Sélection des éléments ---
     const joueursListe = document.getElementById("joueursListe");
     const btnDemarrer = document.getElementById("demarrerBtn");
     const infoSalon = document.getElementById("infoSalon");
 
+    let nombreJoueursAttendus = 0;
+    let estCreateur = false;
+
     if (!codeSalon) {
       window.location.href = "accueil.html";
     } else {
-      db.ref('parties/' + codeSalon + '/joueurs').on('value', snapshot => {
-        joueursListe.innerHTML = "";
-        const joueurs = [];
-        snapshot.forEach(childSnap => {
-          joueurs.push(childSnap.val().pseudo || "???");
-        });
-        if (joueurs.length === 0) {
-          joueursListe.innerHTML = "<li>Aucun joueur encore connecté.</li>";
+      // Récupérer le créateur et le nombre de joueurs attendus
+      Promise.all([
+        db.ref('parties/' + codeSalon + '/parametres/createur').get(),
+        db.ref('parties/' + codeSalon + '/parametres/nombreJoueurs').get()
+      ]).then(([snapCreateur, snapNbJoueurs]) => {
+        const uuidCreateur = snapCreateur.exists() ? snapCreateur.val().uuid : null;
+        nombreJoueursAttendus = snapNbJoueurs.exists() ? snapNbJoueurs.val() : 0;
+        estCreateur = uuidCreateur && uuidCreateur === localStorage.getItem("uuid");
+        if (!estCreateur) btnDemarrer.style.display = "none";
+        else btnDemarrer.style.display = ""; // Visible seulement pour le créateur
+
+        // Afficher l'info du salon
+        if (nombreJoueursAttendus) {
+          infoSalon.textContent = "En attente de joueurs... (" + nombreJoueursAttendus + " maximum)";
         } else {
-          joueurs.forEach(pseudo => {
-            const li = document.createElement("li");
-            li.textContent = pseudo;
-            joueursListe.appendChild(li);
+          infoSalon.textContent = "";
+        }
+
+        // Gestion de la liste des joueurs en temps réel
+        db.ref('parties/' + codeSalon + '/joueurs').on('value', snapshot => {
+          joueursListe.innerHTML = "";
+          const joueurs = [];
+          snapshot.forEach(childSnap => {
+            joueurs.push(childSnap.val().pseudo || "???");
           });
-        }
-      });
 
-      // Afficher le bouton "Démarrer" uniquement pour le créateur du salon
-      db.ref('parties/' + codeSalon + '/parametres/createur').get().then(snap => {
-        const uuidCreateur = snap.exists() ? snap.val().uuid : null;
-        if (uuidCreateur && uuidCreateur === localStorage.getItem("uuid")) {
-          btnDemarrer.style.display = "";
-        } else {
-          btnDemarrer.style.display = "none";
-        }
-      });
+          if (joueurs.length === 0) {
+            joueursListe.innerHTML = "<li>Aucun joueur encore connecté.</li>";
+            if (estCreateur) {
+              btnDemarrer.disabled = true;
+              btnDemarrer.textContent = "En attente...";
+              btnDemarrer.classList.add("desactive");
+            }
+          } else {
+            joueurs.forEach(pseudo => {
+              const li = document.createElement("li");
+              li.textContent = pseudo;
+              joueursListe.appendChild(li);
+            });
 
-      // Afficher le nombre max de joueurs
-      db.ref('parties/' + codeSalon + '/parametres/nombreJoueurs').get().then(snap => {
-        if (snap.exists()) {
-          infoSalon.textContent = "En attente de joueurs... (" + snap.val() + " maximum)";
-        }
+            if (estCreateur) {
+              if (nombreJoueursAttendus && joueurs.length === nombreJoueursAttendus) {
+                btnDemarrer.disabled = false;
+                btnDemarrer.textContent = "Démarrer la partie";
+                btnDemarrer.classList.remove("desactive");
+              } else {
+                btnDemarrer.disabled = true;
+                btnDemarrer.textContent = "En attente...";
+                btnDemarrer.classList.add("desactive");
+              }
+            }
+          }
+        });
       });
     }
 
     // Action du bouton Démarrer
     btnDemarrer.addEventListener("click", function() {
-      // Ici tu peux lancer le jeu (changer l'état dans la BDD, puis rediriger)
+      if (btnDemarrer.disabled) return;
       window.location.href = "lancement-partie.html";
     });
   </script>
