@@ -238,3 +238,7 @@ button:focus, a:focus, input:focus {
   background: #fff;
   color: #2c1b1b;
 }
+
+.boutons-actions .main-btn {
+  box-sizing: border-box;
+}
