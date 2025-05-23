@@ -4,105 +4,186 @@
   <meta charset="UTF-8">
   <title>Créer une Partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Import des polices Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
-  
+  <!-- Polices Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/creer-partie.css">
-
+  <style>
+    body { background: #181212; color: #f4e4c1; font-family: 'Cormorant Garamond', serif; }
+    header h1 { text-align:center; margin-top: 1.3em; }
+    .bandeau-dore {
+      max-width: 480px; margin: 2em auto 2em auto; padding: 2.2em 2em 1.8em 2em;
+      border-radius: 14px; border: 2px solid #e0c185; box-shadow: 0 0 16px #e0c18533;
+      background: linear-gradient(135deg, #2c1b1b, #1f1313);
+    }
+    .form-container label { font-weight: 600; color: #e0c185; display: block; margin-top: 1.1em; margin-bottom: .5em;}
+    .form-container select, .form-container input[type="text"] {
+      width: 100%; padding: 10px; margin-bottom: 8px;
+      border: 2px solid #e0c185; border-radius: 7px; font-size: 1.1em;
+      background: #fffaf3; color: #2c1b1b; font-family: inherit;
+      outline: none; transition: border .18s;
+    }
+    .form-container select:focus, .form-container input[type="text"]:focus { border: 2px solid #d4af37; background: #fff; }
+    .form-container input[type="checkbox"] { margin-right: 0.7em; transform: scale(1.2);}
+    .boutons-actions { display: flex; gap: 1.3em; justify-content: center; margin-top: 2em; }
+    .gold-btn {
+      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+      color: #3d2b1f; border: 2px solid #e0c185; border-radius: 8px;
+      padding: 12px 30px; font-size: 1.04em; font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer; transition: box-shadow .16s, background .16s, color .16s;
+      box-shadow: 0 1px 8px #e0c18544;
+      text-decoration: none; text-align: center;
+    }
+    .gold-btn:focus, .gold-btn:hover {
+      background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none;
+    }
+    .message { min-height: 22px; margin-top: 4px; font-weight: bold; font-size: 1em; color: #c00; }
+    .message.succes { color: #2ecc40; }
+    @media (max-width: 600px) {
+      .bandeau-dore { padding: 1.2em 2vw 1.2em 2vw; max-width: 99vw;}
+      .form-container select, .form-container input[type="text"] { font-size: 1em; }
+    }
+  </style>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
-
 <body>
 <header>
   <h1>Créer une Partie</h1>
 </header>
 
-  <!-- Ajout du div avec classe bandeau-dore pour encadrer le form-container -->
-  <div class="bandeau-dore">
-    <div class="form-container"> 
-      <label for="mode">Choisissez le mode de jeu :</label> 
-      <select id="mode" name="mode"> 
-        <option value="classique">Classique</option> 
-        <option value="poison">Poison</option> 
-      </select> 
+<main>
+  <section class="bandeau-dore" aria-labelledby="creer-partie-heading">
+    <form id="creerPartieForm" class="form-container" autocomplete="off" spellcheck="false">
+      <h2 id="creer-partie-heading" style="text-align:center; margin-bottom: 1.3em;">Configuration de la partie</h2>
+      <label for="mode">Choisissez le mode de jeu :</label>
+      <select id="mode" name="mode" required>
+        <option value="classique">Classique</option>
+        <option value="poison">Poison</option>
+      </select>
 
-      <label for="duree">Durée de la partie :</label> 
-      <select id="duree" name="duree"> 
-        <option value="30">30 minutes</option> 
-        <option value="60">60 minutes</option> 
-      </select> 
+      <label for="duree">Durée de la partie :</label>
+      <select id="duree" name="duree" required>
+        <option value="30">30 minutes</option>
+        <option value="60">60 minutes</option>
+      </select>
 
-      <label for="periode">Choisissez la période du scénario :</label> 
-      <select id="periode" name="periode"> 
-       <option value="medieval">Moyen-Âge</option>
+      <label for="periode">Choisissez la période du scénario :</label>
+      <select id="periode" name="periode" required>
+        <option value="medieval">Moyen-Âge</option>
         <option value="renaissance">Renaissance</option>
         <option value="victorien">Victorien</option>
         <option value="western">Western</option>
         <option value="contemporain">Contemporain</option>
         <option value="futuriste">Futuriste</option>
         <option value="historique">Historique</option>
-      </select> 
+        <option value="autre">Autre (à préciser)</option>
+      </select>
+      <div id="autrePeriode" style="display: none;">
+        <label for="periode_autre">Précisez la période :</label>
+        <input type="text" id="periode_autre" name="periode_autre" maxlength="32" placeholder="Ex. : 18ème siècle">
+      </div>
 
-      <div id="autrePeriode" style="display: none;"> 
-        <label for="periode_autre">Précisez la période :</label> 
-        <input type="text" id="periode_autre" placeholder="Ex. : 18ème siècle"> 
-      </div> 
+      <label for="nombreJoueurs">Nombre de joueurs :</label>
+      <select id="nombreJoueurs" name="nombreJoueurs" required>
+        <option value="1">1 joueur</option>
+        <option value="2">2 joueurs</option>
+        <option value="4">4 joueurs</option>
+        <option value="5">5 joueurs</option>
+        <option value="6">6 joueurs</option>
+        <option value="7">7 joueurs</option>
+        <option value="8">8 joueurs</option>
+        <option value="9">9 joueurs</option>
+        <option value="10">10 joueurs</option>
+        <option value="11">11 joueurs</option>
+        <option value="12">12 joueurs</option>
+      </select>
 
-      <label for="nombreJoueurs">Nombre de joueurs :</label> 
-      <select id="nombreJoueurs" name="nombreJoueurs"> 
-        <option value="1">1 joueur</option> 
-        <option value="2">2 joueurs</option> 
-        <option value="4">4 joueurs</option> 
-        <option value="5">5 joueurs</option> 
-        <option value="6">6 joueurs</option> 
-        <option value="7">7 joueurs</option> 
-        <option value="8">8 joueurs</option> 
-        <option value="9">9 joueurs</option> 
-        <option value="10">10 joueurs</option> 
-        <option value="11">11 joueurs</option> 
-        <option value="12">12 joueurs</option> 
-      </select> 
+      <label for="criminels">Nombre de criminels :</label>
+      <select id="criminels" name="criminels" required>
+        <option value="1">1 criminel</option>
+        <option value="2">2 criminels</option>
+        <option value="3">3 criminels</option>
+      </select>
 
-      <label for="criminels">Nombre de criminels :</label> 
-      <select id="criminels" name="criminels"> 
-        <option value="1">1 criminel</option> 
-        <option value="2">2 criminels</option> 
-        <option value="3">3 criminels</option> 
-      </select> 
-
-      <label> 
-        <input type="checkbox" id="criminel_fantome"> 
-        Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie) 
-      </label> 
-
-      <label> 
-        <input type="checkbox" id="avatars_legendaires"> 
-        Activer les avatars légendaires 
-      </label> 
-
-      <label> 
-        <input type="checkbox" id="inactifs"> 
-        Activer l'observation des inactifs (notifications après 5 min d'inactivité) 
-      </label> 
+      <label>
+        <input type="checkbox" id="criminel_fantome" name="criminel_fantome">
+        Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie)
+      </label>
+      <label>
+        <input type="checkbox" id="avatars_legendaires" name="avatars_legendaires">
+        Activer les avatars légendaires
+      </label>
+      <label>
+        <input type="checkbox" id="inactifs" name="inactifs">
+        Activer l'observation des inactifs (notifications après 5 min d'inactivité)
+      </label>
 
       <div class="boutons-actions">
-        <button class="gold-btn" id="genererBtn">Créer une partie</button>
+        <button class="gold-btn" type="submit" id="genererBtn">Créer la partie</button>
         <a class="gold-btn" href="./accueil.html">Retour</a>
       </div>
-    </div>
-  </div>
-
-  <!-- Lien vers le JS externe (à mettre absolument ici, juste avant la fermeture du body) -->
- <script src="../JS/personnages.js"></script>
-<script src="../JS/creer-partie.js"></script>
+      <div class="message" id="message" role="alert" aria-live="polite"></div>
+    </form>
+  </section>
+</main>
 
 <footer class="footer">
   <p>© 2025 Murder Party. Tous droits réservés.</p>
   <a href="mentions-legales.html">Mentions légales</a>
 </footer>
 
+<script src="../JS/personnages.js"></script>
+<script src="../JS/creer-partie.js"></script>
+<script>
+  // Gestion du champ "autre période"
+  const periodeSelect = document.getElementById('periode');
+  const autrePeriodeDiv = document.getElementById('autrePeriode');
+  periodeSelect.addEventListener('change', function() {
+    if (this.value === "autre") {
+      autrePeriodeDiv.style.display = "block";
+      document.getElementById('periode_autre').focus();
+    } else {
+      autrePeriodeDiv.style.display = "none";
+      document.getElementById('periode_autre').value = "";
+    }
+  });
 
+  // Gestion du submit sécurisé
+  const form = document.getElementById('creerPartieForm');
+  const message = document.getElementById('message');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    message.textContent = "";
+    // Vérification champ autre période si sélectionné
+    if (periodeSelect.value === "autre") {
+      const autre = document.getElementById('periode_autre').value.trim();
+      if (autre.length < 3) {
+        message.textContent = "Merci de préciser la période.";
+        document.getElementById('periode_autre').focus();
+        return;
+      }
+    }
+    // Appel de la logique JS de création (gérée dans creer-partie.js)
+    if (typeof creerPartie === "function") {
+      creerPartie(new FormData(form))
+        .then(() => {
+          message.textContent = "Partie créée avec succès !";
+          message.className = "message succes";
+          // Redirection ou suite gérée dans creer-partie.js
+        })
+        .catch(err => {
+          message.textContent = err && err.message ? err.message : "Erreur lors de la création.";
+          message.className = "message";
+        });
+    } else {
+      message.textContent = "Fonction de création absente.";
+    }
+  });
+</script>
+<noscript>
+  <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
+    ⚠️ JavaScript est désactivé. Vous ne pourrez pas créer de partie.
+  </div>
+</noscript>
 </body>
 </html>
