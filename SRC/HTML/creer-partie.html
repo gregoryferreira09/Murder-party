@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <script>
     // Nettoyage du salonCode pour forcer une nouvelle création de salon à chaque fois
-    localStorage.removeItem("salonCode");
+    window.addEventListener('DOMContentLoaded', () => {
+      localStorage.removeItem("salonCode");
+    });
   </script>
 </head>
 <body>
@@ -87,7 +89,7 @@
 
       <div class="boutons-actions">
         <button class="main-btn" type="submit" id="genererBtn">Créer la partie</button>
-        <a class="main-btn" href="./accueil.html">Retour</a>
+        <a class="main-btn" href="./accueil.html" id="retourAccueilBtn">Retour</a>
       </div>
       <div class="message" id="message" role="alert" aria-live="polite"></div>
     </form>
@@ -146,6 +148,13 @@
         });
     } else {
       message.textContent = "Fonction de création absente.";
+    }
+  });
+
+  // Empêche le retour arrière du navigateur de revenir dans le salon sans reset
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      localStorage.removeItem("salonCode");
     }
   });
 </script>
