@@ -14,34 +14,30 @@ body {
   scroll-behavior: smooth;
 }
 
-/* === HEADER et FOOTER harmonisés === */
-header {
+/* === HEADER et FOOTER parfaitement harmonisés === */
+header, .footer, footer {
   width: 100%;
-  background: #000;
-  color: #e0c185;
-  padding: 18px 0 8px 0;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-  text-align: center;
-}
-
-.site-title {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 2.5em;
-  color: #e0c185;
-  letter-spacing: 1.5px;
-  margin: 0;
-}
-
-.footer, footer {
+  min-width: 100vw;
   background: #000;
   color: #e0c185;
   text-align: center;
-  width: 100%;
-  padding: 15px 0;
   font-family: 'Cormorant Garamond', serif;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   position: relative;
   bottom: 0;
-  margin-top: auto;
+  margin-top: 0;
+  left: 0;
+  right: 0;
+}
+header h1, .site-title {
+  margin: 0;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2.2em;
+  color: #e0c185;
+  letter-spacing: 1.5px;
 }
 
 .footer a, footer a {
