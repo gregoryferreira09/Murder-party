@@ -347,9 +347,8 @@ function genererScenario() {
   }
 
   if (scenarioData) {
-    let periodeCle = scenarioData.periode;
-    // Si la période n'existe pas, ne génère rien (plus de fallback "autre")
-    if (!univers[periodeCle]) return;
+    let periodeCle = scenarioData.periode; // Utilise la valeur brute du select
+    if (!univers[periodeCle]) return; // Si la période n'existe pas, ne génère rien
     const periodeData = univers[periodeCle];
     const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
 
@@ -456,6 +455,19 @@ function genererScenario() {
         h.objectif === scenarioObj.objectif ||
         h.detailsDuree === scenarioObj.detailsDuree
       );
+
+      if (!scenarioOk && tryCount === maxTry) {
+        history = [];
+        tryCount = 0;
+      }
+    }
+
+    addScenarioToHistory(scenarioObj);
+
+    // Sauvegarde le scénario pour l’affichage moderne
+    localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
+  }
+}
 
       if (!scenarioOk && tryCount === maxTry) {
         history = [];
