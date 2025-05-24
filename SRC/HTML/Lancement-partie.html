@@ -4,31 +4,9 @@
   <meta charset="UTF-8">
   <title>Lancement de la Partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Lancez une partie de Murder Party en ligne. Découvrez le scénario, les objectifs et démarrez la partie avec vos amis !">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    .skip-link {
-      position: absolute;
-      left: -999px;
-      top: auto;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      z-index: 100;
-      background: #e0c185;
-      color: #181212;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-    .skip-link:focus {
-      left: 10px;
-      top: 10px;
-      width: auto;
-      height: auto;
-      outline: 2px solid #e0c185;
-    }
     body {
       background: #181212;
       color: #f4e4c1;
@@ -46,7 +24,7 @@
       background: #2c1b1b;
       border-radius: 18px;
       box-shadow: 0 4px 20px #0002;
-      padding: 48px 36px; /* padding augmenté */
+      padding: 32px 28px;
       border: 2px solid #e0c185;
       color: #f4e4c1;
       font-family: 'Cormorant Garamond', serif;
@@ -58,11 +36,32 @@
       from { opacity: 0; transform: translateY(30px);}
       to { opacity: 1; transform: translateY(0);}
     }
-    .regen-scenario-btn { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; margin-top: -10px;}
+    /* Symbole régénération seul, centré, sans style bouton classique */
+    .regen-scenario-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      margin-top: -10px;
+    }
     .regen-scenario-btn button {
-      background: none; border: none; font-size: 2.4em; color: #e0c185; cursor: pointer; padding: 0; margin: 0;
-      outline: none; transition: color 0.13s, transform 0.13s; box-shadow: none; border-radius: 50%; line-height: 1;
-      width: 1em; height: 1em; display: flex; align-items: center; justify-content: center;
+      background: none;
+      border: none;
+      font-size: 2.4em;
+      color: #e0c185;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+      outline: none;
+      transition: color 0.13s, transform 0.13s;
+      box-shadow: none;
+      border-radius: 50%;
+      line-height: 1;
+      width: 1em;
+      height: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .regen-scenario-btn button:focus,
     .regen-scenario-btn button:hover {
@@ -72,13 +71,12 @@
       background: none;
       box-shadow: 0 0 8px #e0c18588;
     }
-    /* Correction ici : les blocs internes n'ont plus de fond, ni d'ombre, ni d'arrondi */
     .scenario-block {
-      background: transparent !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
+      background: #3d2b1f44;
+      border-radius: 10px;
+      padding: 16px 18px;
       margin-bottom: 22px;
-      padding: 0 0 12px 0;
+      box-shadow: 0 2px 10px #0001;
     }
     .scenario-title {
       font-size: 1.2em;
@@ -89,6 +87,7 @@
     }
     .scenario-detail { margin: 0 0 8px 0; color: #ffeecb; }
     .scenario-label { color: #e0c185; font-weight: 600; margin-right: 4px; }
+    /* Boutons style général accueil */
     .scenario-actions {
       display: flex;
       gap: 18px;
@@ -137,7 +136,7 @@
     }
     @media (max-width: 700px) {
       .page-lancement { max-width: 97vw; padding: 12px 2vw; border-radius: 12px; font-size: 1em; }
-      .scenario-block { padding: 0 0 10px 0; }
+      .scenario-block { padding: 10px 6px; }
       .main-btn { width: 100%; min-width: 0; max-width: 99vw; font-size: 1em; }
       .scenario-actions { flex-direction: column; gap: 10px; }
       .regen-scenario-btn button { font-size: 1.7em; min-width: 60px; }
@@ -145,33 +144,34 @@
   </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Aller au contenu principal</a>
   <!-- BANDEAU HAUT -->
   <header>
     <h1 class="site-title">Murder Party</h1>
   </header>
+  <!-- Centrage vertical/horizontal du bandeau doré -->
   <div class="center-wrapper">
-    <main id="main-content" tabindex="-1">
-      <section class="page-lancement" aria-label="Scénario de la partie" aria-live="polite">
-        <div id="scenario-loading" class="info" role="status">Chargement du scénario...</div>
+    <main>
+      <section class="page-lancement" role="main" aria-live="polite">
+        <div id="scenario-loading" class="info">Chargement du scénario...</div>
         <div id="scenario-content" style="display:none;">
+          <!-- Symbole régénération centré, sans style bouton principal -->
           <div class="regen-scenario-btn">
             <button id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario" tabindex="0">📜</button>
           </div>
-          <section class="scenario-block">
-            <h2 class="scenario-title" id="intro-title">Introduction</h2>
-            <p class="scenario-detail" id="introduction" aria-labelledby="intro-title"></p>
-          </section>
-          <section class="scenario-block">
-            <h2 class="scenario-title" id="crime-title">Le crime</h2>
-            <p class="scenario-detail" id="crime" aria-labelledby="crime-title"></p>
-          </section>
-          <section class="scenario-block">
-            <h2 class="scenario-title" id="objectif-title">Objectif général</h2>
-            <p class="scenario-detail" id="objectif" aria-labelledby="objectif-title"></p>
-          </section>
-          <section class="scenario-block" aria-label="Détails du jeu">
-            <h2 class="scenario-title">Détails du jeu</h2>
+          <div class="scenario-block">
+            <div class="scenario-title">Introduction</div>
+            <p class="scenario-detail" id="introduction"></p>
+          </div>
+          <div class="scenario-block">
+            <div class="scenario-title">Le crime</div>
+            <p class="scenario-detail" id="crime"></p>
+          </div>
+          <div class="scenario-block">
+            <div class="scenario-title">Objectif général</div>
+            <p class="scenario-detail" id="objectif"></p>
+          </div>
+          <div class="scenario-block">
+            <div class="scenario-title">Détails du jeu</div>
             <p class="scenario-detail"><span class="scenario-label">Mode :</span> <span id="mode"></span></p>
             <p class="scenario-detail"><span class="scenario-label">Durée :</span> <span id="duree"></span></p>
             <p class="scenario-detail"><span class="scenario-label">Période :</span> <span id="periode"></span></p>
@@ -179,12 +179,12 @@
             <p class="scenario-detail"><span class="scenario-label">Criminels :</span> <span id="criminels"></span></p>
             <p class="scenario-detail"><span class="scenario-label">Fantômes :</span> <span id="fantome"></span></p>
             <p class="scenario-detail"><span class="scenario-label">Avatars légendaires :</span> <span id="avatars"></span></p>
-          </section>
-          <nav class="scenario-actions" aria-label="Actions de scénario">
+          </div>
+          <div class="scenario-actions">
             <a class="main-btn" id="demarrerBtn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
             <a class="main-btn" href="accueil.html">Retour</a>
-          </nav>
-          <div class="info" id="messageInfo" aria-live="assertive"></div>
+          </div>
+          <div class="info" id="messageInfo"></div>
         </div>
       </section>
     </main>
@@ -237,19 +237,17 @@
       chargerScenario();
       // Bouton régénération
       const regenBtn = document.getElementById("regenScenarioBtn");
-      if (regenBtn) {
-        regenBtn.onclick = function() {
-          if (typeof genererScenario === "function") {
-            genererScenario();
-            setTimeout(chargerScenario, 200);
-          }
-        };
-        regenBtn.onkeydown = function(e) {
-          if (e.key === "Enter" || e.key === " ") {
-            regenBtn.click();
-          }
-        };
-      }
+      regenBtn.onclick = function() {
+        if (typeof genererScenario === "function") {
+          genererScenario();
+          setTimeout(chargerScenario, 200);
+        }
+      };
+      regenBtn.onkeydown = function(e) {
+        if (e.key === "Enter" || e.key === " ") {
+          regenBtn.click();
+        }
+      };
       // Timer bouton démarrer
       const launchBtn = document.getElementById("demarrerBtn");
       let timeLeft = 30;
@@ -268,7 +266,7 @@
         }
       }, 1000);
       setTimeout(() => {
-        document.getElementById("main-content").focus();
+        document.querySelector(".page-lancement").focus();
       }, 600);
       window.addEventListener('offline', () => {
         document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
