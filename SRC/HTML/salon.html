@@ -58,6 +58,66 @@
         Bonjour <span id="pseudoAffiche"></span>
       </div>
       <div>
+        <p class="texte-x2">Partagez ce code avec les autres joueurs :</p><!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Salon de la Partie – Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../Public/styles/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    /* Harmonisation modale pour garder le style général */
+    #confirmationModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(44,27,27,0.75);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    #confirmationModal.active {
+      display: flex;
+    }
+    #confirmationModal .main-accueil {
+      max-width: 340px;
+      margin: auto;
+      text-align: center;
+      border: 2px solid #e0c185;
+      background: #2c1b1b;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #0008;
+      padding: 32px 28px;
+    }
+    #confirmationModal .modal-question {
+      font-weight: bold;
+      margin-bottom: 22px;
+      color: #e0c185;
+      font-family: 'Cinzel Decorative',serif;
+      font-size: 1.1em;
+    }
+    #confirmationModal .boutons-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      justify-content: center;
+      margin: 0;
+    }
+    #confirmationModal .main-btn {
+      width: 130px;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body class="accueil">
+  <div class="center-wrapper">
+    <main class="main-accueil" role="main">
+      <h1>Salon de la partie</h1>
+      <div class="bienvenue-message">
+        Bonjour <span id="pseudoAffiche"></span>
+      </div>
+      <div>
         <p class="texte-x2">Partagez ce code avec les autres joueurs :</p>
         <div class="code code-x2" id="codeSalon">------</div>
         <div class="status" id="etatSalon">En attente de joueurs...</div>
