@@ -21,9 +21,16 @@ function generateUUID() {
   );
 }
 
+// Fonction utilitaire pour tirer N éléments aléatoires d'un tableau, sans doublons
+function getRandomElements(arr, n) {
+  if (!Array.isArray(arr)) return [];
+  const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, n);
+}
+
 // Fonction globale accessible depuis l'extérieur
 window.creerPartie = async function(formData) {
-  // Utilise formData pour lire les valeurs du formulaire
+  // Récupère les valeurs du formulaire
   const mode = formData.get("mode");
   const duree = formData.get("duree");
   const periode = formData.get("periode");
@@ -61,27 +68,27 @@ window.creerPartie = async function(formData) {
     createur: { uuid, pseudo }
   };
 
-  // Générer code salon unique
+  // Génère un code salon unique
   const salonCode = (Math.random().toString(36).substr(2, 6)).toUpperCase();
 
-  // Enregistrer paramètres dans Firebase
+  // Enregistre les paramètres dans Firebase
   await db.ref('parties/' + salonCode + '/parametres').set(parametresPartie);
 
-  // Tirage unique des personnages et stockage
+  // Tirage unique des personnages pour la partie
   let listePersos;
   if (periode === "autre" && periodeAutre) {
     listePersos = getRandomElements(window.personnagesParEpoque["contemporain"], nombreJoueurs);
   } else {
     listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
   }
-  // CORRECTION: Stocker sous forme d'objet et non d'array
+  // Stocke SOUS FORME D'OBJET (clé=perso0, perso1, ...)
   let persosObj = {};
   listePersos.forEach((p, i) => {
     persosObj['perso' + i] = p;
   });
   await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
 
-  // Ajouter le créateur comme premier joueur (UUID + pseudo)
+  // Enregistre le créateur comme premier joueur
   await db.ref('parties/' + salonCode + '/joueurs').push({
     uuid,
     pseudo
@@ -91,25 +98,3 @@ window.creerPartie = async function(formData) {
 
   window.location.href = "salon.html";
 };
-
-// Fonction utilitaire pour tirer N éléments aléatoires d'un tableau, sans doublons
-// Fonction utilitaire pour tirer N éléments aléatoires d'un tableau, sans doublons
-function getRandomElements(arr, n) {
-  if (!Array.isArray(arr)) return [];
-  const shuffled = arr.slice().sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, n);
-}
-
-// ...dans ta fonction window.creerPartie = async function(formData) { ... }
-let listePersos;
-if (periode === "autre" && periodeAutre) {
-  listePersos = getRandomElements(window.personnagesParEpoque["contemporain"], nombreJoueurs);
-} else {
-  listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
-}
-// Stockage SOUS FORME D'OBJET (clé=perso0, perso1, ...)
-let persosObj = {};
-listePersos.forEach((p, i) => {
-  persosObj['perso' + i] = p;
-});
-await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
