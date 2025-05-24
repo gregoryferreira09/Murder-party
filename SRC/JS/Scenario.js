@@ -629,25 +629,6 @@ function fillScenarioDisplay() {
 }
 fillScenarioDisplay();
 
-// Optionnel : lance aussi le timer bouton lancement si tu veux le faire ici
-if (document.getElementById("demarrerBtn")) {
-  let timeLeft = 30;
-  const launchBtn = document.getElementById("demarrerBtn");
-  launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-  launchBtn.style.pointerEvents = "none";
-  launchBtn.style.opacity = "0.6";
-  const interval = setInterval(() => {
-    timeLeft--;
-    if (timeLeft > 0) {
-      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-    } else {
-      clearInterval(interval);
-      launchBtn.textContent = "Démarrer la partie";
-      launchBtn.style.pointerEvents = "auto";
-      launchBtn.style.opacity = "1";
-    }
-  }, 1000);
-}
   } else {
     container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
