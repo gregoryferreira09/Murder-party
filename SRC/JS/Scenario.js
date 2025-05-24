@@ -488,14 +488,7 @@ function genererScenario() {
     } else {
     container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
-}
-      .catch((error) => {
-        container.innerHTML = `<p>Erreur lors de la connexion à la base de données : ${escapeHtml(error.message)}</p>`;
-      });
-  } else {
-    container.innerHTML = "<p>Aucun salon trouvé. Veuillez créer ou rejoindre une partie.</p>";
-  }
-});
+} 
 
 // Fonction utilitaire pour échapper le HTML (sécurité)
 function escapeHtml(string) {
