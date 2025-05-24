@@ -148,44 +148,47 @@
   <header>
     <h1 class="site-title">Murder Party</h1>
   </header>
-  <main>
-    <section class="page-lancement" role="main" aria-live="polite">
-      <div id="scenario-loading" class="info">Chargement du scénario...</div>
-      <div id="scenario-content" style="display:none;">
-        <!-- Symbole régénération centré, sans style bouton principal -->
-        <div class="regen-scenario-btn">
-          <button id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario" tabindex="0">📜</button>
+  <!-- Centrage vertical/horizontal du bandeau doré -->
+  <div class="center-wrapper">
+    <main>
+      <section class="page-lancement" role="main" aria-live="polite">
+        <div id="scenario-loading" class="info">Chargement du scénario...</div>
+        <div id="scenario-content" style="display:none;">
+          <!-- Symbole régénération centré, sans style bouton principal -->
+          <div class="regen-scenario-btn">
+            <button id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario" tabindex="0">📜</button>
+          </div>
+          <div class="scenario-block">
+            <div class="scenario-title">Introduction</div>
+            <p class="scenario-detail" id="introduction"></p>
+          </div>
+          <div class="scenario-block">
+            <div class="scenario-title">Le crime</div>
+            <p class="scenario-detail" id="crime"></p>
+          </div>
+          <div class="scenario-block">
+            <div class="scenario-title">Objectif général</div>
+            <p class="scenario-detail" id="objectif"></p>
+          </div>
+          <div class="scenario-block">
+            <div class="scenario-title">Détails du jeu</div>
+            <p class="scenario-detail"><span class="scenario-label">Mode :</span> <span id="mode"></span></p>
+            <p class="scenario-detail"><span class="scenario-label">Durée :</span> <span id="duree"></span></p>
+            <p class="scenario-detail"><span class="scenario-label">Période :</span> <span id="periode"></span></p>
+            <p class="scenario-detail"><span class="scenario-label">Joueurs :</span> <span id="joueurs"></span></p>
+            <p class="scenario-detail"><span class="scenario-label">Criminels :</span> <span id="criminels"></span></p>
+            <p class="scenario-detail"><span class="scenario-label">Fantômes :</span> <span id="fantome"></span></p>
+            <p class="scenario-detail"><span class="scenario-label">Avatars légendaires :</span> <span id="avatars"></span></p>
+          </div>
+          <div class="scenario-actions">
+            <a class="main-btn" id="demarrerBtn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
+            <a class="main-btn" href="accueil.html">Retour</a>
+          </div>
+          <div class="info" id="messageInfo"></div>
         </div>
-        <div class="scenario-block">
-          <div class="scenario-title">Introduction</div>
-          <p class="scenario-detail" id="introduction"></p>
-        </div>
-        <div class="scenario-block">
-          <div class="scenario-title">Le crime</div>
-          <p class="scenario-detail" id="crime"></p>
-        </div>
-        <div class="scenario-block">
-          <div class="scenario-title">Objectif général</div>
-          <p class="scenario-detail" id="objectif"></p>
-        </div>
-        <div class="scenario-block">
-          <div class="scenario-title">Détails du jeu</div>
-          <p class="scenario-detail"><span class="scenario-label">Mode :</span> <span id="mode"></span></p>
-          <p class="scenario-detail"><span class="scenario-label">Durée :</span> <span id="duree"></span></p>
-          <p class="scenario-detail"><span class="scenario-label">Période :</span> <span id="periode"></span></p>
-          <p class="scenario-detail"><span class="scenario-label">Joueurs :</span> <span id="joueurs"></span></p>
-          <p class="scenario-detail"><span class="scenario-label">Criminels :</span> <span id="criminels"></span></p>
-          <p class="scenario-detail"><span class="scenario-label">Fantômes :</span> <span id="fantome"></span></p>
-          <p class="scenario-detail"><span class="scenario-label">Avatars légendaires :</span> <span id="avatars"></span></p>
-        </div>
-        <div class="scenario-actions">
-          <a class="main-btn" id="demarrerBtn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
-          <a class="main-btn" href="accueil.html">Retour</a>
-        </div>
-        <div class="info" id="messageInfo"></div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
   <!-- BANDEAU BAS -->
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
