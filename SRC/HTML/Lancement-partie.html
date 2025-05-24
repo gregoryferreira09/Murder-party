@@ -43,32 +43,44 @@
       margin-bottom: 14px;
       margin-top: -10px;
     }
-    .regen-scenario-btn button {
-      background: none;
-      border: none;
-      font-size: 2.7em;
-      cursor: pointer;
+    /* Style du bouton principal harmonisé (noir, doré au hover) */
+    .main-btn, .regen-scenario-btn button {
+      background: #181212;
       color: #e0c185;
-      transition: color 0.15s, transform 0.15s;
-      outline: none;
-      padding: 0;
-      line-height: 1;
-      border-radius: 50%;
-      box-shadow: none;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
       font-family: 'Cinzel Decorative', serif;
+      font-size: 2em;
+      padding: 0.3em 0.4em;
+      min-width: 140px;
+      min-height: 58px;
+      max-width: 340px;
+      text-align: center;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: background .18s, color .18s, box-shadow .18s, transform .15s;
+      box-shadow: 0 1px 8px #e0c18544;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      outline: none;
+      line-height: 1;
     }
+    .regen-scenario-btn button {
+      font-size: 2.35em;
+      min-width: 80px;
+      min-height: 58px;
+      padding: 0.15em 0.2em;
+    }
+    .main-btn:focus, .main-btn:hover,
     .regen-scenario-btn button:focus,
     .regen-scenario-btn button:hover {
-      color: #ffeecb;
-      transform: scale(1.13) rotate(-8deg);
-      outline: none;
-      background: none;
-      box-shadow: 0 0 8px #e0c18577;
+      background: #e0c185;
+      color: #181212;
+      box-shadow: 0 0 10px #e0c185a8;
+      transform: scale(1.06);
     }
-
     .scenario-block {
       background: #3d2b1f44;
       border-radius: 10px;
@@ -83,16 +95,8 @@
       margin-bottom: 8px;
       font-family: 'Cinzel Decorative', serif;
     }
-    .scenario-detail {
-      margin: 0 0 8px 0;
-      color: #ffeecb;
-    }
-    .scenario-label {
-      color: #e0c185;
-      font-weight: 600;
-      margin-right: 4px;
-    }
-    /* BOUTONS PRINCIPAUX harmonisés */
+    .scenario-detail { margin: 0 0 8px 0; color: #ffeecb; }
+    .scenario-label { color: #e0c185; font-weight: 600; margin-right: 4px; }
     .scenario-actions {
       display: flex;
       gap: 18px;
@@ -101,42 +105,9 @@
       margin-top: 24px;
       margin-bottom: 8px;
     }
-    .gold-btn, .main-btn {
-      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
-      color: #3d2b1f;
-      border: 2px solid #e0c185;
-      border-radius: 8px;
-      padding: 14px 32px;
-      font-size: 1.18em;
-      font-family: 'Cinzel Decorative', serif;
-      cursor: pointer;
-      margin: 0 4px;
-      transition: box-shadow .2s, background .2s, color .2s, transform .12s;
-      text-decoration: none;
-      display: inline-block;
-      min-width: 140px;
-      max-width: 340px;
-      box-shadow: 0 1px 8px #e0c18544;
-      font-weight: 700;
-      text-align: center;
-    }
-    .gold-btn:focus, .gold-btn:hover, .main-btn:focus, .main-btn:hover {
-      background: #e0c185;
-      color: #1a1a1a;
-      box-shadow: 0 0 8px #e0c185a8;
-      outline: none;
-      transform: translateY(-2px) scale(1.04);
-    }
-    .main-btn {
-      background: #2c1b1b;
-      color: #e0c185;
-      border-color: #e0c185;
-      font-family: 'Cinzel Decorative', serif;
-      transition: box-shadow .2s, background .2s, color .2s, transform .12s;
-    }
-    .main-btn:focus, .main-btn:hover {
-      background: #e0c185;
-      color: #2c1b1b;
+    .main-btn[disabled], .main-btn[style*="pointer-events: none"] {
+      opacity: 0.6;
+      pointer-events: none;
     }
     .info {
       font-size: .99em;
@@ -148,9 +119,9 @@
     @media (max-width: 700px) {
       .page-lancement { max-width: 97vw; padding: 12px 2vw; border-radius: 12px; font-size: 1em; }
       .scenario-block { padding: 10px 6px; }
-      .gold-btn, .main-btn { width: 100%; min-width: 0; max-width: 99vw; padding: 14px 10px; font-size: 1em; }
+      .main-btn, .regen-scenario-btn button { width: 100%; min-width: 0; max-width: 99vw; font-size: 1.3em; }
       .scenario-actions { flex-direction: column; gap: 10px; }
-      .regen-scenario-btn button { font-size: 2.2em; }
+      .regen-scenario-btn button { font-size: 1.7em; min-width: 60px; }
     }
   </style>
 </head>
@@ -189,7 +160,7 @@
           <p class="scenario-detail"><span class="scenario-label">Avatars légendaires :</span> <span id="avatars"></span></p>
         </div>
         <div class="scenario-actions">
-          <a class="gold-btn" id="demarrerBtn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
+          <a class="main-btn" id="demarrerBtn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
           <a class="main-btn" href="accueil.html">Retour</a>
         </div>
         <div class="info" id="messageInfo"></div>
