@@ -123,16 +123,16 @@
     let jeSuisCreateur = false;
 
     db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
-      if (snap.exists() && snap.val() === monPseudo) {
-        jeSuisCreateur = true;
-        cloturerSalonBtn.style.display = "inline-block";
-        quitterSalonBtn.style.display = "none";
-      } else {
-        jeSuisCreateur = false;
-        cloturerSalonBtn.style.display = "none";
-        quitterSalonBtn.style.display = "inline-block";
-      }
-    });
+  if (snap.exists() && snap.val().pseudo === monPseudo) {
+    jeSuisCreateur = true;
+    cloturerSalonBtn.style.display = "inline-block";
+    quitterSalonBtn.style.display = "none";
+  } else {
+    jeSuisCreateur = false;
+    cloturerSalonBtn.style.display = "none";
+    quitterSalonBtn.style.display = "inline-block";
+  }
+});
 
     // Actions boutons
     cloturerSalonBtn.addEventListener("click", function() {
