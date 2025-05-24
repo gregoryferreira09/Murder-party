@@ -184,17 +184,10 @@
         db.ref('parties/' + codeSalon + '/parametres/nombreJoueurs').get()
       ]).then(([snapCreateur, snapNbJoueurs]) => {
         const uuidCreateur = snapCreateur.exists() ? snapCreateur.val().uuid : null;
-        nombreJoueursAttendus = snapNbJoueurs.exists() ? snapNbJoueurs.val() : 0;
+        nombreJoueursAttendus = snapNbJoueurs.exists() ? parseInt(snapNbJoueurs.val()) : 0;
         estCreateur = uuidCreateur && uuidCreateur === localStorage.getItem("uuid");
         if (!estCreateur) btnDemarrer.style.display = "none";
         else btnDemarrer.style.display = ""; // Visible seulement pour le créateur
-
-        // Afficher l'info du salon
-        if (nombreJoueursAttendus) {
-          infoSalon.textContent = "En attente de joueurs... (" + nombreJoueursAttendus + " maximum)";
-        } else {
-          infoSalon.textContent = "";
-        }
 
         // Gestion de la liste des joueurs en temps réel
         db.ref('parties/' + codeSalon + '/joueurs').on('value', snapshot => {
@@ -203,6 +196,10 @@
           snapshot.forEach(childSnap => {
             joueurs.push(childSnap.val().pseudo || "???");
           });
+
+          // Mise à jour du compteur
+          const compteurTxt = `${joueurs.length} / ${nombreJoueursAttendus} maximum`;
+          infoSalon.textContent = `En attente de joueurs... (${compteurTxt})`;
 
           if (joueurs.length === 0) {
             joueursListe.innerHTML = "<li>Aucun joueur encore connecté.</li>";
@@ -231,14 +228,25 @@
             }
           }
         });
+
+        // --- Gestion du démarrage de la partie ---
+        // On écoute la valeur "partieLancee" dans la BDD (pour tous les joueurs)
+        db.ref('parties/' + codeSalon + '/partieLancee').on('value', (snap) => {
+          if (snap.exists() && snap.val() === true) {
+            window.location.href = "lancement-partie.html";
+          }
+        });
+
+        // Action du bouton Démarrer (créateur uniquement)
+        btnDemarrer.addEventListener("click", function () {
+          if (btnDemarrer.disabled) return;
+          // On écrit dans la BDD pour signaler le début de partie
+          db.ref('parties/' + codeSalon + '/partieLancee').set(true);
+          // Redirection immédiate aussi pour le créateur (sinon il attend l'event Firebase)
+          window.location.href = "lancement-partie.html";
+        });
       });
     }
-
-    // Action du bouton Démarrer
-    btnDemarrer.addEventListener("click", function() {
-      if (btnDemarrer.disabled) return;
-      window.location.href = "lancement-partie.html";
-    });
   </script>
 </body>
 </html>
