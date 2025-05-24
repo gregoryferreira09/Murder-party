@@ -486,8 +486,6 @@ function genererScenario() {
   } catch {
     scenarioData = null;
   }
-  const container = document.getElementById("scenarioContainer");
-  if (!container) return;
 
   if (scenarioData) {
     let periodeCle = scenarioData.periode;
