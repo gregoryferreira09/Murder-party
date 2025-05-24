@@ -94,6 +94,19 @@ window.creerPartie = async function(formData) {
     pseudo
   });
 
+  // Stocker les paramètres pour la page Lancement-partie.html
+  const parametresPourLancement = {
+    mode,
+    duree,
+    periode: (periode === "autre" && periodeAutre) ? periodeAutre : periode,
+    nombreJoueurs,
+    criminels,
+    criminelFantome: criminel_fantome,
+    avatarsLegendaires: avatars_legendaires,
+    inactifs
+  };
+  localStorage.setItem("parametresPartie", JSON.stringify(parametresPourLancement));
+
   localStorage.setItem("salonCode", salonCode);
 
   window.location.href = "salon.html";
