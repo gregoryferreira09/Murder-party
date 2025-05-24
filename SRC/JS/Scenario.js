@@ -90,7 +90,7 @@ function tirageTemplateUnique(array, history, fieldName) {
 // === UNIVERS COHÉRENTS & ÉLARGIS ===
 const univers = {
   victorien: { /* ... inchangé ... */ },
-  medieval: { /* ... inchangé ... */ },
+  médieval: { /* ... inchangé ... */ },
   futuriste: { /* ... inchangé ... */ },
 
   renaissance: {
