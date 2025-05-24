@@ -30,11 +30,9 @@ function getRandomElements(arr, n) {
 
 // Fonction globale accessible depuis l'extérieur
 window.creerPartie = async function(formData) {
-  // Récupère les valeurs du formulaire
   const mode = formData.get("mode");
   const duree = formData.get("duree");
   const periode = formData.get("periode");
-  const periodeAutre = formData.get("periode_autre") || "";
   const nombreJoueurs = parseInt(formData.get("nombreJoueurs"), 10);
   const criminels = parseInt(formData.get("criminels"), 10);
   const criminel_fantome = !!formData.get("criminel_fantome");
@@ -58,12 +56,11 @@ window.creerPartie = async function(formData) {
   const parametresPartie = {
     mode,
     duree,
-    periode,
-    periodeAutre,
+    periode, // On stocke la vraie valeur du select, qui doit correspondre aux clés de univers
     nombreJoueurs,
     criminels,
-    criminel_fantome,
-    avatars_legendaires,
+    criminelFantome: criminel_fantome,
+    avatarsLegendaires: avatars_legendaires,
     inactifs,
     createur: { uuid, pseudo }
   };
@@ -75,13 +72,8 @@ window.creerPartie = async function(formData) {
   await db.ref('parties/' + salonCode + '/parametres').set(parametresPartie);
 
   // Tirage unique des personnages pour la partie
-  let listePersos;
-  if (periode === "autre" && periodeAutre) {
-    listePersos = getRandomElements(window.personnagesParEpoque["contemporain"], nombreJoueurs);
-  } else {
-    listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
-  }
-  // Stocke SOUS FORME D'OBJET (clé=perso0, perso1, ...)
+  let listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
+
   let persosObj = {};
   listePersos.forEach((p, i) => {
     persosObj['perso' + i] = p;
@@ -95,18 +87,7 @@ window.creerPartie = async function(formData) {
   });
 
   // Stocker les paramètres pour la page Lancement-partie.html
-  const parametresPourLancement = {
-    mode,
-    duree,
-    periode: (periode === "autre" && periodeAutre) ? periodeAutre : periode,
-    nombreJoueurs,
-    criminels,
-    criminelFantome: criminel_fantome,
-    avatarsLegendaires: avatars_legendaires,
-    inactifs
-  };
-  localStorage.setItem("parametresPartie", JSON.stringify(parametresPourLancement));
-
+  localStorage.setItem("parametresPartie", JSON.stringify(parametresPartie));
   localStorage.setItem("salonCode", salonCode);
 
   window.location.href = "salon.html";
