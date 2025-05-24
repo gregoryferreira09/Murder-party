@@ -322,37 +322,7 @@ body {
   background: #3d2b1f;
   box-shadow: 0 0 8px #e0c18588;
 }
-.carte-personnage.indisponible {
-  filter: grayscale(0.8) blur(1px);
-  pointer-events: none;
-  opacity: 0.7;
-}
-.carte-personnage-avatarzone {
-  flex: 0 0 auto;
-  margin-right: 18px;
-  display: flex;
-  align-items: center;
-}
-.carte-personnage-avatar {
-  width: 72px;
-  height: 72px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid #e0c185;
-  background: #fff2;
-  box-shadow: 0 2px 5px #0002;
-}
-.carte-personnage-infos {
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.carte-personnage-role {
-  color: #e0c185;
-  font-style: italic;
-  font-size: 1em;
-}
+
 .carte-personnage {
   border: 2px solid #e0c185;
   border-radius: 12px;
