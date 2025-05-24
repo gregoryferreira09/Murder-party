@@ -36,50 +36,40 @@
       from { opacity: 0; transform: translateY(30px);}
       to { opacity: 1; transform: translateY(0);}
     }
+    /* Symbole régénération seul, centré, sans style bouton classique */
     .regen-scenario-btn {
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       margin-top: -10px;
     }
-    /* Style du bouton principal harmonisé (noir, doré au hover) */
-    .main-btn, .regen-scenario-btn button {
-      background: #181212;
+    .regen-scenario-btn button {
+      background: none;
+      border: none;
+      font-size: 2.4em;
       color: #e0c185;
-      border: 2px solid #e0c185;
-      border-radius: 8px;
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 2em;
-      padding: 0.3em 0.4em;
-      min-width: 140px;
-      min-height: 58px;
-      max-width: 340px;
-      text-align: center;
-      font-weight: 600;
       cursor: pointer;
-      margin: 0 4px;
-      transition: background .18s, color .18s, box-shadow .18s, transform .15s;
-      box-shadow: 0 1px 8px #e0c18544;
-      display: inline-flex;
+      padding: 0;
+      margin: 0;
+      outline: none;
+      transition: color 0.13s, transform 0.13s;
+      box-shadow: none;
+      border-radius: 50%;
+      line-height: 1;
+      width: 1em;
+      height: 1em;
+      display: flex;
       align-items: center;
       justify-content: center;
-      outline: none;
-      line-height: 1;
     }
-    .regen-scenario-btn button {
-      font-size: 2.35em;
-      min-width: 80px;
-      min-height: 58px;
-      padding: 0.15em 0.2em;
-    }
-    .main-btn:focus, .main-btn:hover,
     .regen-scenario-btn button:focus,
     .regen-scenario-btn button:hover {
-      background: #e0c185;
-      color: #181212;
-      box-shadow: 0 0 10px #e0c185a8;
-      transform: scale(1.06);
+      color: #ffeecb;
+      transform: scale(1.14) rotate(-8deg);
+      outline: none;
+      background: none;
+      box-shadow: 0 0 8px #e0c18588;
     }
     .scenario-block {
       background: #3d2b1f44;
@@ -97,6 +87,7 @@
     }
     .scenario-detail { margin: 0 0 8px 0; color: #ffeecb; }
     .scenario-label { color: #e0c185; font-weight: 600; margin-right: 4px; }
+    /* Boutons style général accueil */
     .scenario-actions {
       display: flex;
       gap: 18px;
@@ -104,6 +95,33 @@
       flex-wrap: wrap;
       margin-top: 24px;
       margin-bottom: 8px;
+    }
+    .main-btn {
+      background: #181212;
+      color: #e0c185;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.13em;
+      padding: 14px 36px;
+      min-width: 140px;
+      max-width: 340px;
+      text-align: center;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: box-shadow .2s, background .2s, color .2s, transform .12s;
+      box-shadow: 0 1px 8px #e0c18544;
+      display: inline-block;
+      outline: none;
+    }
+    .main-btn:focus, .main-btn:hover {
+      background: #e0c185;
+      color: #181212;
+      box-shadow: 0 0 8px #e0c185a8;
+      outline: 2px solid #e0c185;
+      outline-offset: 3px;
+      transform: scale(1.04);
     }
     .main-btn[disabled], .main-btn[style*="pointer-events: none"] {
       opacity: 0.6;
@@ -119,7 +137,7 @@
     @media (max-width: 700px) {
       .page-lancement { max-width: 97vw; padding: 12px 2vw; border-radius: 12px; font-size: 1em; }
       .scenario-block { padding: 10px 6px; }
-      .main-btn, .regen-scenario-btn button { width: 100%; min-width: 0; max-width: 99vw; font-size: 1.3em; }
+      .main-btn { width: 100%; min-width: 0; max-width: 99vw; font-size: 1em; }
       .scenario-actions { flex-direction: column; gap: 10px; }
       .regen-scenario-btn button { font-size: 1.7em; min-width: 60px; }
     }
@@ -133,7 +151,7 @@
     <section class="page-lancement" role="main" aria-live="polite">
       <div id="scenario-loading" class="info">Chargement du scénario...</div>
       <div id="scenario-content" style="display:none;">
-        <!-- Symbole régénération centré -->
+        <!-- Symbole régénération centré, sans style bouton principal -->
         <div class="regen-scenario-btn">
           <button id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario" tabindex="0">📜</button>
         </div>
