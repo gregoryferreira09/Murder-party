@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Lancement de la Partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Polices Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
@@ -37,8 +36,6 @@
       from { opacity: 0; transform: translateY(30px);}
       to { opacity: 1; transform: translateY(0);}
     }
-
-    /* Symbole régénération seul */
     .regen-scenario-btn {
       display: flex;
       justify-content: center;
@@ -58,11 +55,15 @@
       line-height: 1;
       border-radius: 50%;
       box-shadow: none;
+      font-family: 'Cinzel Decorative', serif;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .regen-scenario-btn button:focus,
     .regen-scenario-btn button:hover {
       color: #ffeecb;
-      transform: scale(1.1) rotate(-8deg);
+      transform: scale(1.13) rotate(-8deg);
       outline: none;
       background: none;
       box-shadow: 0 0 8px #e0c18577;
@@ -91,6 +92,7 @@
       font-weight: 600;
       margin-right: 4px;
     }
+    /* BOUTONS PRINCIPAUX harmonisés */
     .scenario-actions {
       display: flex;
       gap: 18px;
@@ -104,24 +106,37 @@
       color: #3d2b1f;
       border: 2px solid #e0c185;
       border-radius: 8px;
-      padding: 12px 28px;
-      font-size: 1.07em;
-      font-family: 'Cinzel Decorative', cursive;
+      padding: 14px 32px;
+      font-size: 1.18em;
+      font-family: 'Cinzel Decorative', serif;
       cursor: pointer;
       margin: 0 4px;
-      transition: box-shadow .2s, background .2s, color .2s, transform .15s;
+      transition: box-shadow .2s, background .2s, color .2s, transform .12s;
       text-decoration: none;
       display: inline-block;
-      min-width: 120px;
-      max-width: 350px;
-      font-weight: 600;
+      min-width: 140px;
+      max-width: 340px;
+      box-shadow: 0 1px 8px #e0c18544;
+      font-weight: 700;
+      text-align: center;
     }
-    .gold-btn:hover, .gold-btn:focus, .main-btn:hover, .main-btn:focus {
+    .gold-btn:focus, .gold-btn:hover, .main-btn:focus, .main-btn:hover {
       background: #e0c185;
       color: #1a1a1a;
-      box-shadow: 0 0 8px #e0c18588;
+      box-shadow: 0 0 8px #e0c185a8;
       outline: none;
-      transform: translateY(-2px) scale(1.03);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .main-btn {
+      background: #2c1b1b;
+      color: #e0c185;
+      border-color: #e0c185;
+      font-family: 'Cinzel Decorative', serif;
+      transition: box-shadow .2s, background .2s, color .2s, transform .12s;
+    }
+    .main-btn:focus, .main-btn:hover {
+      background: #e0c185;
+      color: #2c1b1b;
     }
     .info {
       font-size: .99em;
@@ -133,7 +148,7 @@
     @media (max-width: 700px) {
       .page-lancement { max-width: 97vw; padding: 12px 2vw; border-radius: 12px; font-size: 1em; }
       .scenario-block { padding: 10px 6px; }
-      .gold-btn, .main-btn { width: 100%; min-width: 0; max-width: 99vw; padding: 12px 10px; font-size: 1em; }
+      .gold-btn, .main-btn { width: 100%; min-width: 0; max-width: 99vw; padding: 14px 10px; font-size: 1em; }
       .scenario-actions { flex-direction: column; gap: 10px; }
       .regen-scenario-btn button { font-size: 2.2em; }
     }
@@ -185,13 +200,11 @@
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
-  <!-- Firebase et scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script src="../JS/personnages.js"></script>
   <script src="../JS/Scenario.js"></script>
   <script>
-    // Affichage et accessibilité
     function afficherScenario(scenarioObj, scenarioData) {
       document.getElementById("scenario-loading").style.display = "none";
       document.getElementById("scenario-content").style.display = "block";
@@ -207,22 +220,18 @@
       document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
       document.getElementById("messageInfo").textContent = "";
     }
-
-    // Injection du scénario (exploite la fonction genererScenario() de Scenario.js)
     function chargerScenario() {
       try {
         let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
         if (!scenarioData) throw new Error("Aucune donnée de scénario.");
-        // Appelle genererScenario() qui place le résultat dans localStorage.scenarioCourant ou dans l’UI
         if (typeof genererScenario === "function") {
           genererScenario();
-          // Extraction du scénario généré si stocké dans localStorage
           setTimeout(() => {
             let scenarioObj = JSON.parse(localStorage.getItem("scenarioCourant") || "null");
             if (scenarioObj) {
               afficherScenario(scenarioObj, scenarioData);
             }
-          }, 200); // Laisse le temps à genererScenario de finir
+          }, 200);
         }
       } catch (e) {
         document.getElementById("scenario-loading").style.display = "none";
@@ -230,12 +239,9 @@
         document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
       }
     }
-
-    // Nouveau scénario
     document.addEventListener("DOMContentLoaded", function() {
       chargerScenario();
-
-      // Bouton régénération (symbole 📜)
+      // Bouton régénération
       const regenBtn = document.getElementById("regenScenarioBtn");
       regenBtn.onclick = function() {
         if (typeof genererScenario === "function") {
@@ -248,7 +254,6 @@
           regenBtn.click();
         }
       };
-
       // Timer bouton démarrer
       const launchBtn = document.getElementById("demarrerBtn");
       let timeLeft = 30;
@@ -266,13 +271,9 @@
           launchBtn.style.opacity = "1";
         }
       }, 1000);
-
-      // Accessibilité focus
       setTimeout(() => {
         document.querySelector(".page-lancement").focus();
       }, 600);
-
-      // Offline/online
       window.addEventListener('offline', () => {
         document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
       });
