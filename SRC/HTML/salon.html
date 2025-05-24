@@ -199,6 +199,7 @@
       pseudoAffiche.textContent = pseudoOrigine;
       let jeSuisCreateur = false;
       let countdownInterval = null;
+      let lancementAutomatiqueDemarre = false;
 
       // Gestion boutons selon créateur
       db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
@@ -216,11 +217,13 @@
             lancerBtn.style.marginRight = "15px";
             cloturerSalonBtn.parentNode.insertBefore(lancerBtn, cloturerSalonBtn);
             lancerBtn.onclick = function() {
-              // Fin de partie : restauration pseudo d'origine pour ce joueur
-              localStorage.setItem("pseudo", pseudoOrigine);
-              localStorage.removeItem("pseudoOrigine");
-              localStorage.removeItem("salonCode");
-              window.location.href = "lancement-partie.html";
+              // NE SUPPRIME PAS LA PARTIE ! Mets juste etat = 'en_cours'
+              db.ref('parties/' + salonCode + '/etat').set('en_cours').then(() => {
+                localStorage.setItem("pseudo", pseudoOrigine);
+                localStorage.removeItem("pseudoOrigine");
+                localStorage.removeItem("salonCode");
+                window.location.href = "lancement-partie.html";
+              });
             };
           } else {
             lancerBtn.style.display = "inline-block";
@@ -289,6 +292,15 @@
       });
 
       db.ref('parties/' + salonCode).on('value', snapshot => {
+        // --- NOUVEAU : gestion du lancement automatique via /etat ---
+        const etatPartie = snapshot.child('etat').val();
+        if (etatPartie === 'en_cours') {
+          localStorage.setItem("pseudo", pseudoOrigine);
+          localStorage.removeItem("pseudoOrigine");
+          localStorage.removeItem("salonCode");
+          window.location.href = "lancement-partie.html";
+          return;
+        }
         if (!snapshot.exists()) {
           alertSalonSupprime.style.display = "block";
           setTimeout(() => {
@@ -325,7 +337,8 @@
         etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
 
         // Décompte si complet
-        if (nbJoueurs >= totalJoueurs) {
+        if (nbJoueurs >= totalJoueurs && !lancementAutomatiqueDemarre) {
+          lancementAutomatiqueDemarre = true;
           let countdown = 5;
           etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
           if (countdownInterval) clearInterval(countdownInterval);
@@ -336,14 +349,12 @@
             } else {
               clearInterval(countdownInterval);
               etatSalon.textContent = "La partie commence !";
-              // Fin de partie : restauration pseudo
-              localStorage.setItem("pseudo", pseudoOrigine);
-              localStorage.removeItem("pseudoOrigine");
-              localStorage.removeItem("salonCode");
-              window.location.href = "lancement-partie.html";
+              // NE SUPPRIME PAS LE SALON ! Mets juste /etat
+              db.ref('parties/' + salonCode + '/etat').set('en_cours');
             }
           }, 1000);
-        } else {
+        } else if (nbJoueurs < totalJoueurs) {
+          lancementAutomatiqueDemarre = false;
           if (countdownInterval) clearInterval(countdownInterval);
         }
       });
