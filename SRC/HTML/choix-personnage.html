@@ -195,9 +195,10 @@
       });
 
       // Quand tu valides
-document.getElementById("valider-choix").onclick = function() {
+      document.getElementById("valider-choix").onclick = function() {
   if (personnageSelectionne && !this.disabled) {
-    // <-- Ici tu dois ajouter la ligne pour le localStorage !
+    // Stocke l'objet complet du personnage dans le localStorage
+    localStorage.setItem("persoChoisi", JSON.stringify(personnages[personnageSelectionne]));
     db.ref(partieID + '/validations/' + playerId).set({ personnageId: personnageSelectionne });
     this.disabled = true;
   }
@@ -243,7 +244,5 @@ document.getElementById("valider-choix").onclick = function() {
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
 
-</body>
-</html>
 </body>
 </html>
