@@ -34,24 +34,20 @@ window.creerPartie = async function(formData) {
   const avatars_legendaires = !!formData.get("avatars_legendaires");
   const inactifs = !!formData.get("inactifs");
 
-  // Validation des champs
   if (!mode || !duree || !periode || isNaN(nombreJoueurs) || nombreJoueurs < 1 || nombreJoueurs > 12) {
     alert("Veuillez remplir tous les champs correctement.");
     return;
   }
 
-  // Récupérer ou générer l'UUID du créateur
   let uuid = localStorage.getItem("uuid");
   if (!uuid) {
     uuid = generateUUID();
     localStorage.setItem("uuid", uuid);
   }
 
-  // Pseudo affiché
   let pseudo = localStorage.getItem("pseudo") || "Anonyme";
   pseudo = pseudo.replace(/[<>\/\\'"`]/g, "").trim().substring(0, 30);
 
-  // Paramètres de la partie
   const parametresPartie = {
     mode,
     duree,
@@ -78,7 +74,12 @@ window.creerPartie = async function(formData) {
   } else {
     listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
   }
-  await db.ref('parties/' + salonCode + '/personnages').set(listePersos);
+  // CORRECTION: Stocker sous forme d'objet et non d'array
+  let persosObj = {};
+  listePersos.forEach((p, i) => {
+    persosObj['perso' + i] = p;
+  });
+  await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
 
   // Ajouter le créateur comme premier joueur (UUID + pseudo)
   await db.ref('parties/' + salonCode + '/joueurs').push({
@@ -97,9 +98,3 @@ function getRandomElements(arr, n) {
   const shuffled = arr.slice().sort(() => 0.5 - Math.random());
   return shuffled.slice(0, n);
 }
-
-// SUPPRIMER ce bloc inutile :
-// document.getElementById("genererBtn").addEventListener("click", function(e) {
-//   e.preventDefault();
-//   creerPartie();
-// });
