@@ -501,13 +501,3 @@ function genererScenario() {
     container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
 } 
-
-// Fonction utilitaire pour échapper le HTML (sécurité)
-function escapeHtml(string) {
-  return String(string)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
