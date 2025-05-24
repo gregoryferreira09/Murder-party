@@ -7,50 +7,16 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    /* Harmonisation modale pour garder le style général */
-    #confirmationModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(44,27,27,0.75);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    #confirmationModal.active {
-      display: flex;
-    }
-    #confirmationModal .main-accueil {
-      max-width: 340px;
-      margin: auto;
-      text-align: center;
-      border: 2px solid #e0c185;
-      background: #2c1b1b;
-      border-radius: 18px;
-      box-shadow: 0 4px 20px #0008;
-      padding: 32px 28px;
-    }
-    #confirmationModal .modal-question {
-      font-weight: bold;
-      margin-bottom: 22px;
-      color: #e0c185;
-      font-family: 'Cinzel Decorative',serif;
-      font-size: 1.1em;
-    }
-    #confirmationModal .boutons-actions {
-      display: flex;
-      flex-direction: row;
-      gap: 24px;
-      justify-content: center;
-      margin: 0;
-    }
-    #confirmationModal .main-btn {
-      width: 130px;
-      margin-bottom: 0;
-    }
+    /* ... styles inchangés ... */
   </style>
 </head>
 <body class="accueil">
+  <script>
+    // Vérifie salonCode dès que possible
+    if (!localStorage.getItem("salonCode")) {
+      window.location.replace("creer-partie.html");
+    }
+  </script>
   <div class="center-wrapper">
     <main class="main-accueil" role="main">
       <h1>Salon de la partie</h1>
@@ -70,16 +36,7 @@
           Salon supprimé par le créateur.
         </div>
       </div>
-      <!-- Modale confirmation harmonisée -->
-      <div id="confirmationModal">
-        <div class="main-accueil">
-          <div class="modal-question" id="modalQuestion"></div>
-          <div class="boutons-actions">
-            <button id="confirmModalBtn" class="main-btn">Oui</button>
-            <button id="cancelModalBtn" class="main-btn">Non</button>
-          </div>
-        </div>
-      </div>
+      <!-- ... modal confirmation ... -->
     </main>
   </div>
   <footer class="footer">
@@ -89,195 +46,16 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
-    // Sécurisation du texte
-    function escapeHTML(s) {
-      if (!s) return '';
-      return s.replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[c]));
-    }
-
-    // Initialisation Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-      authDomain: "murder-party-ba8d1.firebaseapp.com",
-      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "murder-party-ba8d1",
-      storageBucket: "murder-party-ba8d1.firebasestorage.app",
-      messagingSenderId: "20295055805",
-      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-      measurementId: "G-KSBMBB7KMJ"
-    };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
-
-    // Variables utiles
-    const salonCode = localStorage.getItem("salonCode");
-    const monPseudo = localStorage.getItem("pseudo") || "invité";
-    document.getElementById("pseudoAffiche").textContent = escapeHTML(monPseudo);
-
+    // ... (le reste de ton code inchangé) ...
+    // Change juste la ligne suivante :
+    // if (!salonCode) {
+    //   window.location.href = "accueil.html";
+    // }
+    // en :
     if (!salonCode) {
-      window.location.href = "accueil.html";
+      window.location.replace("creer-partie.html");
     }
-    document.getElementById("codeSalon").textContent = escapeHTML(salonCode);
-
-    // Alias de pseudo pour la partie
-    let pseudoPartie = monPseudo;
-
-    // Alias unique si déjà présent
-    function getUniqueAlias(joueurs, base = "Joueur") {
-      let i = 1, alias;
-      const pseudos = joueurs.map(j => j.pseudo);
-      do {
-        alias = `${base} ${i}`;
-        i++;
-      } while (pseudos.includes(alias));
-      return alias;
-    }
-
-    // Gestion du pseudo lors de l'entrée dans la partie
-    const joueursRef = db.ref('parties/' + salonCode + '/joueurs');
-    joueursRef.once('value', snap => {
-      const joueurs = [];
-      snap.forEach(child => joueurs.push(child.val()));
-      // Si pseudo déjà existant, alias local pour cette partie
-      if (joueurs.some(j => j.pseudo === monPseudo)) {
-        pseudoPartie = getUniqueAlias(joueurs);
-      }
-      // Ajoute le joueur avec son alias uniquement s'il n'est pas déjà dans la partie
-      if (!joueurs.some(j => j.pseudo === pseudoPartie)) {
-        joueursRef.push({pseudo: pseudoPartie});
-      }
-    });
-
-    // Affichage conditionnel des boutons
-    const cloturerSalonBtn = document.getElementById("cloturerSalonBtn");
-    const quitterSalonBtn = document.getElementById("quitterSalonBtn");
-    const confirmationModal = document.getElementById("confirmationModal");
-    const confirmModalBtn = document.getElementById("confirmModalBtn");
-    const cancelModalBtn = document.getElementById("cancelModalBtn");
-    const modalQuestion = document.getElementById("modalQuestion");
-    const alertSalonSupprime = document.getElementById("alertSalonSupprime");
-    alertSalonSupprime.style.display = "none";
-
-    let currentAction = null; // "cloture" ou "quitter"
-    let jeSuisCreateur = false;
-
-    db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
-  if (snap.exists() && snap.val().pseudo === monPseudo) {
-    jeSuisCreateur = true;
-    cloturerSalonBtn.style.display = "inline-block";
-    quitterSalonBtn.style.display = "none";
-  } else {
-    jeSuisCreateur = false;
-    cloturerSalonBtn.style.display = "none";
-    quitterSalonBtn.style.display = "inline-block";
-  }
-});
-
-    // Actions boutons
-    cloturerSalonBtn.addEventListener("click", function() {
-      modalQuestion.textContent = "Es-tu sûr de vouloir clôturer le salon ?";
-      confirmationModal.classList.add('active');
-      currentAction = "cloture";
-    });
-
-    quitterSalonBtn.addEventListener("click", function() {
-      modalQuestion.textContent = "Es-tu sûr de vouloir quitter le salon ?";
-      confirmationModal.classList.add('active');
-      currentAction = "quitter";
-    });
-
-    confirmModalBtn.addEventListener("click", function() {
-      if(currentAction === "cloture") {
-        db.ref('parties/' + salonCode).remove().then(() => {
-          localStorage.removeItem("salonCode");
-          window.location.href = "creer-partie.html";
-        });
-      } else if(currentAction === "quitter") {
-        joueursRef.once('value', snap => {
-          snap.forEach(child => {
-            if(child.val().pseudo === pseudoPartie) {
-              joueursRef.child(child.key).remove();
-            }
-          });
-        });
-        setTimeout(() => {
-          localStorage.removeItem("salonCode");
-          window.location.href = "rejoindre-partie.html";
-        }, 300);
-      }
-      confirmationModal.classList.remove('active');
-      currentAction = null;
-    });
-
-    cancelModalBtn.addEventListener("click", function() {
-      confirmationModal.classList.remove('active');
-      currentAction = null;
-    });
-
-    // Affichage joueurs et état du salon
-    const joueursDiv = document.getElementById("listeJoueurs");
-    const etatSalon = document.getElementById("etatSalon");
-    let totalJoueurs = 1;
-
-    db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
-      if (snap.exists()) {
-        const parametres = snap.val();
-        totalJoueurs = parseInt(parametres.nombreJoueurs) || 1;
-      }
-    });
-
-    db.ref('parties/' + salonCode).on('value', snapshot => {
-      if (!snapshot.exists()) {
-        alertSalonSupprime.style.display = "block";
-        setTimeout(() => {
-          localStorage.removeItem("salonCode");
-          window.location.href = "rejoindre-partie.html";
-        }, 2000);
-        return;
-      }
-
-      joueursDiv.innerHTML = "";
-      let nbJoueurs = 0;
-      const joueursSnap = snapshot.child('joueurs');
-      if(joueursSnap && joueursSnap.forEach) {
-        joueursSnap.forEach(joueurSnap => {
-          const pseudoJ = joueurSnap.val().pseudo;
-          const li = document.createElement("li");
-          li.textContent = pseudoJ;
-          joueursDiv.appendChild(li);
-          nbJoueurs++;
-        });
-      }
-      etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
-
-      if (nbJoueurs >= totalJoueurs) {
-        let countdown = 5;
-        etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
-        const interval = setInterval(() => {
-          countdown--;
-          if (countdown > 0) {
-            etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
-          } else {
-            clearInterval(interval);
-            etatSalon.textContent = "La partie commence !";
-            localStorage.removeItem("salonCode");
-            window.location.href = "lancement-partie.html";
-          }
-        }, 1000);
-      }
-    });
-
-    // Suppression automatique si le créateur ferme l'onglet
-    window.addEventListener("beforeunload", function () {
-      if (jeSuisCreateur) {
-        db.ref('parties/' + salonCode).remove();
-      }
-      localStorage.removeItem("salonCode");
-    });
+    // ... (le reste de ton code) ...
   </script>
 </body>
 </html>
