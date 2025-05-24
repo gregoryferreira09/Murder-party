@@ -34,13 +34,13 @@ async function rejoindreSalon() {
   validerBtn.disabled = true;
 
   // Validation du code salon
-  if (!/^[A-Z0-9]{4}$|^[A-Z0-9]{8}$/.test(codeEntre)) {
+  if (!/^[A-Z0-9]{4}$|^[A-Z0-9]{6}$|^[A-Z0-9]{8}$/.test(codeEntre)) {
     loader.style.display = "none";
     validerBtn.disabled = false;
-    messageDiv.textContent = "Le code doit comporter 4 ou 8 lettres ou chiffres.";
+    messageDiv.textContent = "Le code doit comporter 4, 6 ou 8 lettres ou chiffres.";
     messageDiv.style.color = "#ff6b6b";
     return;
-  }
+}
 
   // Récupère le pseudo (sécurité anti-caractères spéciaux)
   let pseudo = (localStorage.getItem("pseudo") || "").replace(/[<>\/\\'"`]/g, "").trim().substring(0, 30);
