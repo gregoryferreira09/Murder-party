@@ -12,8 +12,8 @@
 </head>
 <body class="accueil">
   <script>
-    // Vérifie salonCode dès que possible
-    if (!localStorage.getItem("salonCode")) {
+    const salonCode = localStorage.getItem("salonCode");
+    if (!salonCode) {
       window.location.replace("creer-partie.html");
     }
   </script>
