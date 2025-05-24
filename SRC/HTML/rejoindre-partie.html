@@ -21,6 +21,11 @@
       .main-join { max-width: 98vw; margin: 10px auto; padding: 12px 2vw; border-radius: 12px; }
     }
   </style>
+  <!-- AJOUT : Charger Firebase AVANT ton script local -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <!-- Ton script local (chemin correct si tu es en serveur local) -->
+  <script src="../../JS/rejoindre-partie.js"></script>
 </head>
 <body>
   <header>
@@ -61,7 +66,6 @@
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
-  <script src="rejoindre-partie.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       document.querySelector('.main-join').classList.add('visible');
