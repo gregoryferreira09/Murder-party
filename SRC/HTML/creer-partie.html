@@ -7,6 +7,10 @@
   <!-- Polices Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/style.css">
+  <script>
+    // Nettoyage du salonCode pour forcer une nouvelle création de salon à chaque fois
+    localStorage.removeItem("salonCode");
+  </script>
 </head>
 <body>
 <header>
@@ -95,10 +99,9 @@
   <a href="mentions-legales.html">Mentions légales</a>
 </footer>
 
-<!-- AJOUT FONDAMENTAL: Charger Firebase AVANT tout JS qui l'utilise -->
+<!-- Charger Firebase AVANT tout JS qui l'utilise -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<!-- Les personnages doivent être déclarés avant creer-partie.js -->
 <script src="../JS/personnages.js"></script>
 <script src="../JS/creer-partie.js"></script>
 <script>
