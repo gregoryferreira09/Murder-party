@@ -131,7 +131,6 @@
         <div class="status" id="etatSalon">En attente de joueurs...</div>
         <ul id="listeJoueurs"></ul>
         <div class="boutons-actions">
-          <!-- Le bouton "Lancer la partie" sera injecté dynamiquement -->
           <button class="main-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
           <button class="main-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
         </div>
@@ -207,33 +206,11 @@
           jeSuisCreateur = true;
           cloturerSalonBtn.style.display = "inline-block";
           quitterSalonBtn.style.display = "none";
-          // Ajout dynamique du bouton "Lancer la partie" si pas déjà là
-          let lancerBtn = document.getElementById("lancerPartieBtn");
-          if (!lancerBtn) {
-            lancerBtn = document.createElement("button");
-            lancerBtn.className = "main-btn";
-            lancerBtn.id = "lancerPartieBtn";
-            lancerBtn.textContent = "Lancer la partie";
-            lancerBtn.style.marginRight = "15px";
-            cloturerSalonBtn.parentNode.insertBefore(lancerBtn, cloturerSalonBtn);
-            lancerBtn.onclick = function() {
-              // NE SUPPRIME PAS LA PARTIE ! Mets juste etat = 'en_cours'
-              db.ref('parties/' + salonCode + '/etat').set('en_cours').then(() => {
-                localStorage.setItem("pseudo", pseudoOrigine);
-                localStorage.removeItem("pseudoOrigine");
-                localStorage.removeItem("salonCode");
-                window.location.href = "lancement-partie.html";
-              });
-            };
-          } else {
-            lancerBtn.style.display = "inline-block";
-          }
+          // Plus de bouton "Lancer la partie" ici : tout est automatisé !
         } else {
           jeSuisCreateur = false;
           cloturerSalonBtn.style.display = "none";
           quitterSalonBtn.style.display = "inline-block";
-          let lancerBtn = document.getElementById("lancerPartieBtn");
-          if (lancerBtn) lancerBtn.style.display = "none";
         }
       });
 
@@ -292,7 +269,7 @@
       });
 
       db.ref('parties/' + salonCode).on('value', snapshot => {
-        // --- NOUVEAU : gestion du lancement automatique via /etat ---
+        // --- Gestion du lancement automatique via /etat ---
         const etatPartie = snapshot.child('etat').val();
         if (etatPartie === 'en_cours') {
           localStorage.setItem("pseudo", pseudoOrigine);
