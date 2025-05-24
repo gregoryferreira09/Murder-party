@@ -296,3 +296,90 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
+.carte-personnage {
+  border: 2px solid #e0c185;
+  border-radius: 12px;
+  background: #2c1b1b;
+  color: #f4e4c1;
+  padding: 14px 18px;
+  margin: 18px auto;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 2px 8px #0001;
+  cursor: pointer;
+  min-width: 220px;
+  max-width: 480px;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.carte-personnage:hover,
+.carte-personnage:focus {
+  border: 2px solid #d4af37;
+  background: #3d2b1f;
+  box-shadow: 0 0 8px #e0c18588;
+}
+.carte-personnage.indisponible {
+  filter: grayscale(0.8) blur(1px);
+  pointer-events: none;
+  opacity: 0.7;
+}
+.carte-personnage-avatarzone {
+  flex: 0 0 auto;
+  margin-right: 18px;
+  display: flex;
+  align-items: center;
+}
+.carte-personnage-avatar {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #e0c185;
+  background: #fff2;
+  box-shadow: 0 2px 5px #0002;
+}
+.carte-personnage-infos {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.carte-personnage-role {
+  color: #e0c185;
+  font-style: italic;
+  font-size: 1em;
+}
+.carte-personnage-desc {
+  color: #f4e4c1;
+  font-size: 0.98em;
+  margin-top: 2px;
+}
+.pris-label {
+  color: #b71c1c;
+  font-size: 0.95em;
+  font-weight: bold;
+  margin-left: 8px;
+  background: #fff3;
+  padding: 2px 7px;
+  border-radius: 5px;
+  display: inline-block;
+}
+@media (max-width: 650px) {
+  .carte-personnage {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 8px;
+  }
+  .carte-personnage-avatarzone {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+  .carte-personnage-avatar {
+    width: 56px;
+    height: 56px;
+  }
+}
