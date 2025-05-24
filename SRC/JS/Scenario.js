@@ -489,54 +489,6 @@ function genererScenario() {
     container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
 }
-
-// --- SYNCHRO ET INIT UNIQUE ---
-// --- SYNCHRO ET INIT UNIQUE ---
-document.addEventListener("DOMContentLoaded", function() {
-  const container = document.getElementById("scenarioContainer");
-  const salonCode = localStorage.getItem('salonCode');
-
-  if (!container) return;
-
-  // Gestion offline/online
-  window.addEventListener('offline', () => {
-    // Ajoute un message seulement si pas déjà présent
-    if (!document.getElementById('offline-warning')) {
-      const warning = document.createElement('div');
-      warning.id = 'offline-warning';
-      warning.style.color = "#e86d6d";
-      warning.style.marginTop = "18px";
-      warning.textContent = "Vous êtes hors ligne.";
-      container.appendChild(warning);
-    }
-  });
-
-  window.addEventListener('online', () => {
-    window.location.reload();
-  });
-
-  window.addEventListener('storage', (event) => {
-    if (event.key === 'salonCode') window.location.reload();
-  });
-
-  // Chargement des paramètres via Firebase puis génération du scénario
-  if (salonCode && typeof db !== "undefined" && db) {
-    db.ref('parties/' + salonCode + '/parametres').once('value')
-      .then((snap) => {
-        const params = snap.val();
-        if (!params) {
-          container.innerHTML = "<p>La partie n'existe plus ou a expiré. Veuillez en créer une nouvelle.</p>";
-          localStorage.removeItem('salonCode');
-          localStorage.removeItem('parametresPartie');
-          return;
-        }
-        localStorage.setItem('parametresPartie', JSON.stringify(params));
-        if (typeof genererScenario === "function") {
-          genererScenario();
-        } else {
-          container.innerHTML += "<p>Erreur : la fonction de génération de scénario n'est pas disponible.</p>";
-        }
-      })
       .catch((error) => {
         container.innerHTML = `<p>Erreur lors de la connexion à la base de données : ${escapeHtml(error.message)}</p>`;
       });
