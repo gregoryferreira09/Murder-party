@@ -29,13 +29,13 @@
       color: #f4e4c1;
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.13em;
-      animation: fadeUp 1.2s cubic-bezier(.6,.1,.3,1) both;
+      animation: fade 1s ease both;
       position: relative;
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
+    @keyframes fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
     /* Symbole régénération seul, centré, sans style bouton classique */
     .regen-scenario-btn {
       display: flex;
