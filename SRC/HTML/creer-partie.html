@@ -8,10 +8,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <script>
-    // Nettoyage du salonCode pour forcer une nouvelle création de salon à chaque fois
-    window.addEventListener('DOMContentLoaded', () => {
-      localStorage.removeItem("salonCode");
-    });
+   // Ne reset le code salon que si on arrive sur cette page sans transition depuis salon.html
+if (!document.referrer.includes("salon.html")) {
+  localStorage.removeItem("salonCode");
+}
   </script>
 </head>
 <body>
