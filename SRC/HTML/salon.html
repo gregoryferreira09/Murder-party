@@ -13,6 +13,9 @@
     .joueurs-liste { list-style: none; padding: 0; margin: 1em 0 2em 0; width: 100%; max-width: 360px;}
     .joueurs-liste li { padding: 0.5em 0; border-bottom: 1px solid #e0c18533; color: #f4e4c1; font-size: 1.08em; text-align: left;}
     .joueurs-liste li:last-child { border-bottom: none;}
+    .demarrer-btn { background: linear-gradient(90deg, #e9c78c, #e0c185 60%); color: #3d2b1f; border: 2px solid #e0c185; border-radius: 8px; padding: 14px 30px; font-size: 1.15em; font-family: 'Cinzel Decorative', cursive; cursor: pointer; box-shadow: 0 1px 8px #e0c18544; margin-top: 1.4em; margin-bottom: 0.6em; transition: box-shadow .2s, background .2s, color .2s; min-width: 170px;}
+    .demarrer-btn:focus, .demarrer-btn:hover { background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none;}
+    .demarrer-btn:disabled, .demarrer-btn.desactive { background: #b1a07a !important; color: #3d2b1f99 !important; cursor: not-allowed !important; box-shadow: none !important; border: 2px solid #b1a07a !important; opacity: 0.7;}
     .infoSalon { color: #e0c185; margin-top: 0.9em; font-size: 1em; min-height: 1.2em;}
     .quit-link { margin-top: 1.6em; color: #e0c185; text-decoration: underline; font-size: 1em; display: inline-block; transition: color 0.18s;}
     .quit-link:hover, .quit-link:focus { color: #f4e4c1; text-decoration: none;}
@@ -21,7 +24,7 @@
     #confirmationModal .modal-content .modal-question { font-size: 2em; font-weight: bold; margin-bottom: 32px;}
     #confirmationModal .modal-btns { display: flex; justify-content: center; gap: 36px; margin-top: 0;}
     #confirmationModal .gold-btn { min-width: 120px; font-size: 1.15em; padding: 12px 0;}
-    @media (max-width: 650px) { .salon-container { max-width: 98vw; margin: 10px auto; padding: 12px 2vw; border-radius: 12px;} .salon-titre { font-size: 1.3em; } .code-salon { font-size: 1.14em; } .joueurs-liste { max-width: 98vw; } }
+    @media (max-width: 650px) { .salon-container { max-width: 98vw; margin: 10px auto; padding: 12px 2vw; border-radius: 12px;} .salon-titre { font-size: 1.3em; } .code-salon { font-size: 1.14em; } .demarrer-btn { font-size: 1em; padding: 14px 10px; min-width: 0; } .joueurs-liste { max-width: 98vw; } }
   </style>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -42,6 +45,7 @@
             <li>Chargement...</li>
           </ul>
         </div>
+        <button class="demarrer-btn" id="demarrerBtn" disabled style="display:none;">Démarrer la partie</button>
         <div class="infoSalon" id="infoSalon"></div>
         <a href="#" class="quit-link" id="quitSalonBtn">Quitter le salon</a>
       </section>
@@ -49,7 +53,7 @@
     <!-- Modale de confirmation commune -->
     <div id="confirmationModal">
       <div class="modal-content">
-        <div class="modal-question" id="modalQuestion">Es-tu sûr de vouloir quitter le salon ?</div>
+        <div class="modal-question" id="modalQuestion">Es-tu sûr de vouloir clôturer le salon ?</div>
         <div class="modal-btns">
           <button id="confirmModalBtn" class="gold-btn">Oui</button>
           <button id="cancelModalBtn" class="gold-btn">Non</button>
@@ -78,10 +82,13 @@
     }
     const db = firebase.database();
 
+    // --- Récupérer le code salon et l'afficher ---
     const codeSalon = localStorage.getItem("salonCode") || "";
     document.getElementById("codeSalon").textContent = codeSalon;
 
+    // --- Sélection des éléments ---
     const joueursListe = document.getElementById("joueursListe");
+    const btnDemarrer = document.getElementById("demarrerBtn");
     const infoSalon = document.getElementById("infoSalon");
     const quitSalonBtn = document.getElementById("quitSalonBtn");
 
@@ -107,8 +114,10 @@
         nombreJoueursAttendus = snapNbJoueurs.exists() ? parseInt(snapNbJoueurs.val()) : 0;
         estCreateur = uuidCreateur && uuidCreateur === uuid;
 
-        // Gestion de la liste des joueurs en temps réel + redirection auto
-        let compteARebours = null;
+        // Afficher le bouton Démarrer uniquement pour le créateur
+        btnDemarrer.style.display = estCreateur ? "" : "none";
+
+        // Gestion de la liste des joueurs en temps réel
         db.ref('parties/' + codeSalon + '/joueurs').on('value', snapshot => {
           joueursListe.innerHTML = "";
           const joueurs = [];
@@ -122,45 +131,43 @@
 
           if (joueurs.length === 0) {
             joueursListe.innerHTML = "<li>Aucun joueur encore connecté.</li>";
+            if (estCreateur) {
+              btnDemarrer.disabled = true;
+              btnDemarrer.classList.add("desactive");
+            }
           } else {
             joueurs.forEach(pseudo => {
               const li = document.createElement("li");
               li.textContent = pseudo;
               joueursListe.appendChild(li);
             });
-          }
 
-          // Compte à rebours si tout le monde est connecté
-          if (nombreJoueursAttendus && joueurs.length === nombreJoueursAttendus) {
-            let countdown = 5;
-            infoSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
-            if (!compteARebours) {
-              compteARebours = setInterval(() => {
-                countdown--;
-                if (countdown > 0) {
-                  infoSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
-                } else {
-                  clearInterval(compteARebours);
-                  db.ref('parties/' + codeSalon + '/partieLancee').set(true);
-                }
-              }, 1000);
-            }
-          } else {
-            if (compteARebours) {
-              clearInterval(compteARebours);
-              compteARebours = null;
+            if (estCreateur) {
+              if (nombreJoueursAttendus && joueurs.length === nombreJoueursAttendus) {
+                btnDemarrer.disabled = false;
+                btnDemarrer.classList.remove("desactive");
+              } else {
+                btnDemarrer.disabled = true;
+                btnDemarrer.classList.add("desactive");
+              }
             }
           }
         });
 
-        // --- Redirection de tous quand la partie démarre ---
+        // --- Gestion du démarrage de la partie par bouton ---
         db.ref('parties/' + codeSalon + '/partieLancee').on('value', (snap) => {
           if (snap.exists() && snap.val() === true) {
             window.location.href = "lancement-partie.html";
           }
         });
 
-        // --- Suppression/fermeture du salon ---
+        btnDemarrer.addEventListener("click", function () {
+          if (btnDemarrer.disabled) return;
+          db.ref('parties/' + codeSalon + '/partieLancee').set(true);
+          window.location.href = "lancement-partie.html";
+        });
+
+        // --- Gestion de la suppression du salon (pour tous) ---
         db.ref('parties/' + codeSalon).on('value', (snap) => {
           if (!snap.exists()) {
             alert("Le salon a été fermé par le créateur.");
@@ -168,15 +175,18 @@
           }
         });
 
-        // --- Quitter le salon (modale de confirmation) ---
+        // --- Gestion du bouton "Quitter le salon" ---
         quitSalonBtn.addEventListener("click", function(e) {
           e.preventDefault();
-          modalQuestion.textContent = estCreateur
-            ? "Es-tu sûr de vouloir clôturer le salon ?"
-            : "Es-tu sûr de vouloir quitter le salon ?";
+          if (estCreateur) {
+            modalQuestion.textContent = "Es-tu sûr de vouloir clôturer le salon ?";
+          } else {
+            modalQuestion.textContent = "Es-tu sûr de vouloir quitter le salon ?";
+          }
           confirmationModal.style.display = "flex";
         });
 
+        // --- Modale de confirmation ---
         confirmModalBtn.addEventListener("click", function() {
           if (estCreateur) {
             db.ref('parties/' + codeSalon).remove().then(() => {
@@ -197,7 +207,7 @@
           confirmationModal.style.display = "none";
         });
 
-        // --- Suppression auto si le créateur ferme l'onglet ---
+        // --- Suppression automatique si le créateur ferme l'onglet ou recharge ---
         window.addEventListener("beforeunload", function (e) {
           if (estCreateur) {
             db.ref('parties/' + codeSalon).remove();
