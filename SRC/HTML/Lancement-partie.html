@@ -9,85 +9,212 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
     body { background: #181212; color: #f4e4c1; font-family: 'Cormorant Garamond', serif; }
-    header h1 { text-align: center; margin-top: 1.4em; }
-    #scenarioContainer {
-      margin: 2.5em auto 2em auto;
-      padding: 2.1em 2em 1.8em 2em;
-      border-radius: 14px;
-      border: 2px solid #e0c185;
-      box-shadow: 0 0 16px #e0c18533;
-      background: linear-gradient(135deg, #2c1b1b, #1f1313);
-      color: #ffe5b4;
-      font-size: 1.19em;
+    header h1 { text-align: center; margin-top: 1.4em; font-family: 'Cinzel Decorative', serif; color: #e0c185; }
+    .page-lancement {
       max-width: 600px;
-      min-height: 120px;
+      margin: 40px auto 24px auto;
+      background: #2c1b1b;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #0002;
+      padding: 32px 28px;
+      border: 2px solid #e0c185;
+      color: #f4e4c1;
       font-family: 'Cormorant Garamond', serif;
-      line-height: 1.5em;
-      text-align: center;
-      transition: box-shadow .18s;
+      font-size: 1.13em;
+      animation: fadeUp 1.2s cubic-bezier(.6,.1,.3,1) both;
     }
-    .fadeUp { animation: fadeUp 1.2s cubic-bezier(.6,.1,.3,1) both; }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(30px);}
       to { opacity: 1; transform: translateY(0);}
     }
-    .gold-btn {
+    .scenario-block {
+      background: #3d2b1f44;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 10px #0001;
+    }
+    .scenario-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #e9c78c;
+      margin-bottom: 8px;
+      font-family: 'Cinzel Decorative', serif;
+    }
+    .scenario-detail { margin: 0 0 8px 0; color: #ffeecb; }
+    .scenario-label { color: #e0c185; font-weight: 600; margin-right: 4px; }
+    .scenario-actions {
+      display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-top: 24px; margin-bottom: 8px;
+    }
+    .gold-btn, .main-btn {
       background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
-      color: #3d2b1f; border: 2px solid #e0c185; border-radius: 8px;
-      padding: 12px 30px; font-size: 1.04em; font-family: 'Cinzel Decorative', cursive;
-      cursor: pointer; transition: box-shadow .16s, background .16s, color .16s;
-      box-shadow: 0 1px 8px #e0c18544;
-      margin: 1.2em 0.7em 0 0.7em;
-      text-decoration: none; text-align: center;
+      color: #3d2b1f;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-size: 1.07em;
+      font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: box-shadow .2s, background .2s, color .2s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 120px;
+      max-width: 350px;
     }
-    .gold-btn:focus, .gold-btn:hover {
-      background: #e0c185; color: #1a1a1a; box-shadow: 0 0 10px #e0c18588; outline: none;
+    .gold-btn:hover, .gold-btn:focus, .main-btn:hover, .main-btn:focus {
+      background: #e0c185;
+      color: #1a1a1a;
+      box-shadow: 0 0 8px #e0c18588;
+      outline: none;
     }
-    .boutons-actions {
-      display: flex; gap: 1.3em; justify-content: center; flex-wrap: wrap; margin-top: 1.9em;
+    .info {
+      font-size: .99em;
+      color: #c9b49a;
+      text-align: center;
+      margin-top: 18px;
+      margin-bottom: 4px;
     }
     @media (max-width: 700px) {
-      #scenarioContainer { padding: 1.2em 2vw 1.2em 2vw; min-width: 0; max-width: 99vw;}
-      .gold-btn { font-size: 1em; padding: 10px 12vw;}
+      .page-lancement { max-width: 97vw; padding: 12px 2vw; border-radius: 12px; font-size: 1em; }
+      .scenario-block { padding: 10px 6px; }
+      .gold-btn, .main-btn { width: 100%; min-width: 0; max-width: 99vw; padding: 12px 10px; font-size: 1em; }
+      .scenario-actions { flex-direction: column; gap: 10px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Scénario proposé</h1>
+    <h1>Lancement de la partie</h1>
   </header>
-
   <main>
-    <section id="scenarioContainer" class="scenario bandeau-dore fadeUp" aria-live="polite" tabindex="0">
-      Chargement du scénario...
+    <section class="page-lancement" role="main" aria-live="polite">
+      <div id="scenario-loading" class="info">Chargement du scénario...</div>
+      <div id="scenario-content" style="display:none;">
+        <div class="scenario-block">
+          <div class="scenario-title">Introduction</div>
+          <p class="scenario-detail" id="introduction"></p>
+        </div>
+        <div class="scenario-block">
+          <div class="scenario-title">Le crime</div>
+          <p class="scenario-detail" id="crime"></p>
+        </div>
+        <div class="scenario-block">
+          <div class="scenario-title">Objectif général</div>
+          <p class="scenario-detail" id="objectif"></p>
+        </div>
+        <div class="scenario-block">
+          <div class="scenario-title">Détails du jeu</div>
+          <p class="scenario-detail"><span class="scenario-label">Mode :</span> <span id="mode"></span></p>
+          <p class="scenario-detail"><span class="scenario-label">Durée :</span> <span id="duree"></span></p>
+          <p class="scenario-detail"><span class="scenario-label">Période :</span> <span id="periode"></span></p>
+          <p class="scenario-detail"><span class="scenario-label">Joueurs :</span> <span id="joueurs"></span></p>
+          <p class="scenario-detail"><span class="scenario-label">Criminels :</span> <span id="criminels"></span></p>
+          <p class="scenario-detail"><span class="scenario-label">Fantômes :</span> <span id="fantome"></span></p>
+          <p class="scenario-detail"><span class="scenario-label">Avatars légendaires :</span> <span id="avatars"></span></p>
+        </div>
+        <div class="scenario-actions">
+          <button class="gold-btn" id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario">📜 Nouveau scénario</button>
+          <a class="gold-btn" id="demarrerBtn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
+          <a class="main-btn" href="accueil.html">Retour</a>
+        </div>
+        <div class="info" id="messageInfo"></div>
+      </div>
     </section>
-    <div class="boutons-actions">
-      <button class="gold-btn" id="demarrerBtn" style="display:none;">Démarrer la partie</button>
-      <a class="gold-btn" href="accueil.html">Retour</a>
-    </div>
   </main>
-
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
-
   <!-- Firebase et scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script src="../JS/personnages.js"></script>
   <script src="../JS/Scenario.js"></script>
   <script>
-    // Accessibilité : focus sur le texte dès chargement pour les lecteurs d'écran
-    window.onload = () => {
-      document.getElementById("scenarioContainer").focus();
-    };
-    // Affichage du bouton "Démarrer" si la logique du JS le prévoit
-    if (typeof afficherBoutonDemarrer === "function") {
-      afficherBoutonDemarrer();
+    // Affichage et accessibilité
+    function afficherScenario(scenarioObj, scenarioData) {
+      document.getElementById("scenario-loading").style.display = "none";
+      document.getElementById("scenario-content").style.display = "block";
+      document.getElementById("introduction").innerHTML = scenarioObj.introduction || "";
+      document.getElementById("crime").innerHTML = scenarioObj.crime || "";
+      document.getElementById("objectif").innerHTML = scenarioObj.objectif || "";
+      document.getElementById("mode").textContent = scenarioData.mode || "-";
+      document.getElementById("duree").textContent = (scenarioData.duree ? scenarioData.duree + " min" : "-") + (scenarioObj.detailsDuree ? " — " + scenarioObj.detailsDuree : "");
+      document.getElementById("periode").textContent = scenarioData.periode || "-";
+      document.getElementById("joueurs").textContent = scenarioData.nombreJoueurs || "-";
+      document.getElementById("criminels").textContent = scenarioData.criminels || "-";
+      document.getElementById("fantome").textContent = scenarioData.criminelFantome ? "Oui" : "Non";
+      document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
+      document.getElementById("messageInfo").textContent = "";
     }
-    // Exemples d’extension : écouteur sur le bouton démarrer (géré dans Scenario.js)
-    // document.getElementById("demarrerBtn").addEventListener("click", function() { ... });
+
+    // Injection du scénario (exploite la fonction genererScenario() de Scenario.js)
+    function chargerScenario() {
+      try {
+        let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+        if (!scenarioData) throw new Error("Aucune donnée de scénario.");
+        // Appelle genererScenario() qui place le résultat dans localStorage.scenarioCourant ou dans l’UI
+        if (typeof genererScenario === "function") {
+          genererScenario();
+          // Extraction du scénario généré si stocké dans localStorage
+          setTimeout(() => {
+            let scenarioObj = JSON.parse(localStorage.getItem("scenarioCourant") || "null");
+            if (scenarioObj) {
+              afficherScenario(scenarioObj, scenarioData);
+            }
+          }, 200); // Laisse le temps à genererScenario de finir
+        }
+      } catch (e) {
+        document.getElementById("scenario-loading").style.display = "none";
+        document.getElementById("scenario-content").style.display = "none";
+        document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
+      }
+    }
+
+    // Nouveau scénario
+    document.addEventListener("DOMContentLoaded", function() {
+      chargerScenario();
+
+      // Bouton régénération
+      document.getElementById("regenScenarioBtn").onclick = function() {
+        if (typeof genererScenario === "function") {
+          genererScenario();
+          setTimeout(chargerScenario, 200);
+        }
+      };
+
+      // Timer bouton démarrer
+      const launchBtn = document.getElementById("demarrerBtn");
+      let timeLeft = 30;
+      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+      launchBtn.style.pointerEvents = "none";
+      launchBtn.style.opacity = "0.6";
+      const interval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+        } else {
+          clearInterval(interval);
+          launchBtn.textContent = "Démarrer la partie";
+          launchBtn.style.pointerEvents = "auto";
+          launchBtn.style.opacity = "1";
+        }
+      }, 1000);
+
+      // Accessibilité focus
+      setTimeout(() => {
+        document.querySelector(".page-lancement").focus();
+      }, 600);
+
+      // Offline/online
+      window.addEventListener('offline', () => {
+        document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
+      });
+      window.addEventListener('online', () => {
+        window.location.reload();
+      });
+    });
   </script>
   <noscript>
     <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
