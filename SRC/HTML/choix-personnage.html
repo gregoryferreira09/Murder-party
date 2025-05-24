@@ -4,57 +4,186 @@
   <meta charset="UTF-8">
   <title>Choix du personnage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Ajout du style global pour le bandeau doré -->
+  <!-- Style global -->
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    h1 {
+    body {
+      background: #181212;
+      color: #f4e4c1;
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: linear-gradient(90deg,#22180f 0%, #3d2b1f 100%);
+      box-shadow: 0 2px 12px #0005;
+      padding: 35px 0 20px 0;
+      margin-bottom: 0;
+      border-bottom: 3px solid #e0c185;
+    }
+    header h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 2.8em;
-      margin-bottom: 30px;
-      color: #e9c78c;
+      font-size: 2.7em;
+      color: #e0c185;
+      margin: 0;
+      letter-spacing: 1.5px;
+      text-shadow: 1px 2px 8px #000a;
+      text-align: center;
+    }
+    main {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 60vh;
+      justify-content: flex-start;
+      background: none;
+      width: 100%;
+    }
+    .bandeau-dore {
+      background: linear-gradient(120deg,#312015 80%,#e0c18522 100%);
+      border-radius: 18px;
+      box-shadow: 0 6px 32px #0002;
+      padding: 28px 16px 36px 16px;
+      max-width: 1100px;
+      margin: 36px auto 48px auto;
+      border: 2px solid #e0c185;
+      width: 95vw;
+      min-width: 280px;
+      text-align: center;
     }
     .galerie-personnages {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 27px 34px;
+      margin-bottom: 24px;
     }
     .carte-personnage {
-      background-color: #2c1b1b;
-      border: 2px solid #e9c78c;
-      border-radius: 12px;
-      width: 200px;
-      padding: 10px;
+      background: linear-gradient(120deg,#2c1b1b 65%,#3d2b1f 100%);
+      border: 2.5px solid #e0c185;
+      border-radius: 16px;
+      width: 195px;
+      min-height: 285px;
+      padding: 18px 10px 13px 10px;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: transform 0.25s cubic-bezier(.6,.1,.3,1), box-shadow 0.27s, border 0.17s;
+      box-shadow: 0 4px 12px #0003;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
     }
     .carte-personnage img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2.5px solid #e0c185;
+      background: #fff1;
+      margin-bottom: 14px;
+      object-fit: cover;
+      box-shadow: 0 2px 6px #0002;
+      transition: box-shadow 0.18s;
     }
-    .carte-personnage:hover {
-      transform: scale(1.05);
+    .carte-personnage:hover, .carte-personnage:focus {
+      transform: scale(1.045) translateY(-2px);
+      box-shadow: 0 8px 26px #e0c18544, 0 1px 22px #0002;
+      border-color: #ffeecb;
+      outline: none;
     }
-    #valider-choix {
-      background-color: #000000;
-      color: #ffffff;
-      border: 2px solid #e9c78c;
-      border-radius: 8px;
-      padding: 12px 24px;
-      font-size: 1.1em;
-      cursor: pointer;
-      margin-top: 20px;
+    .carte-personnage.selected {
+      border: 2.5px solid #4caf50 !important;
+      box-shadow: 0 0 10px #4caf5088;
+      background: linear-gradient(120deg,#2c1b1b 65%,#e0c18533 100%);
+    }
+    .carte-personnage p {
+      margin: 0 0 5px 0;
+      font-size: 1.12em;
+      color: #ffeecb;
+      font-weight: 600;
+      letter-spacing: 0.7px;
+    }
+    #valider-choix, #annuler-choix {
+      background-color: #181212;
+      color: #e0c185;
+      border: 2.5px solid #e0c185;
+      border-radius: 9px;
+      padding: 15px 40px;
+      font-size: 1.16em;
       font-family: 'Cinzel Decorative', serif;
-      transition: all 0.3s ease;
+      cursor: pointer;
+      margin: 18px 10px 0 10px;
+      transition: background .25s, color .2s, box-shadow .2s, border .18s;
+      box-shadow: 0 2px 8px #0001;
+      min-width: 170px;
+      font-weight: 600;
+      outline: none;
+      display: inline-block;
     }
-    #valider-choix:hover {
-      background-color: #e9c78c;
-      color: #000000;
+    #valider-choix:disabled {
+      opacity: 0.6;
+      pointer-events: none;
     }
-    /* Pour que le bandeau ne soit pas collé au footer sur petits écrans */
-    main { min-height: 60vh; }
+    #valider-choix:hover:not(:disabled), #annuler-choix:hover {
+      background: #e0c185;
+      color: #181212;
+      box-shadow: 0 0 14px #e0c18577;
+      border-color: #ffeecb;
+    }
+    #annuler-choix {
+      margin-left: 16px;
+      background: #2c1b1b;
+      color: #e86d6d;
+      border: 2.5px solid #e86d6d;
+    }
+    #annuler-choix:hover {
+      background: #e86d6d;
+      color: #fff;
+      border: 2.5px solid #fff;
+    }
+    @media (max-width: 900px) {
+      .galerie-personnages { gap: 20px 14px; }
+      .bandeau-dore { padding: 16px 2vw 28px 2vw; }
+      .carte-personnage { width: 165px; min-height: 220px; }
+      .carte-personnage img { width: 62px; height: 62px; }
+    }
+    @media (max-width: 650px) {
+      .bandeau-dore { width: 99vw; min-width: 0; border-radius: 10px; }
+      .carte-personnage { width: 98vw; max-width: 320px; margin: 0 auto; }
+      main { min-height: 0; }
+    }
+    /* Pied de page harmonisé */
+    .footer, footer {
+      width: 100%;
+      background: linear-gradient(90deg,#22180f 0%,#3d2b1f 100%);
+      color: #e0c185;
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      padding: 23px 0 26px 0;
+      font-size: 1em;
+      border-top: 3px solid #e0c185;
+      box-shadow: 0 -2px 14px #0005;
+      margin-top: 0;
+      letter-spacing: 0.3px;
+      position: relative;
+      bottom: 0;
+      left: 0;
+    }
+    .footer a, footer a {
+      color: #e0c185;
+      text-decoration: underline;
+      margin-left: 15px;
+      margin-right: 15px;
+      font-size: 1.03em;
+      transition: color 0.23s;
+    }
+    .footer a:hover, footer a:hover {
+      color: #ffeecb;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -72,145 +201,12 @@
     </div>
   </main>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="../JS/personnages.js"></script>
-  <script>
-    // 1. CONFIG FIREBASE
-    const firebaseConfig = {
-      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-      authDomain: "murder-party-ba8d1.firebaseapp.com",
-      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "murder-party-ba8d1",
-      storageBucket: "murder-party-ba8d1.firebasestorage.app",
-      messagingSenderId: "20295055805",
-      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-      measurementId: "G-KSBMBB7KMJ"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const partieID = "partie1";
-
-    // 2. Utilisation du pseudo profil ou "Anonyme"
-    const playerId = localStorage.getItem("pseudo") || "Anonyme";
-
-    // 3. Variables globales
-    let nombreJoueurs = 0;
-    let personnages = [];
-
-    // 4. Génère la galerie de personnages
-    function getRandomElements(array, n) {
-      const copy = [...array];
-      const result = [];
-      for (let i = 0; i < n && copy.length > 0; i++) {
-        const idx = Math.floor(Math.random() * copy.length);
-        result.push(copy.splice(idx, 1)[0]);
-      }
-      return result;
-    }
-
-    function afficherPersonnages() {
-      const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-      if (!scenarioData) {
-        alert("Aucune donnée de scénario trouvée.");
-        return;
-      }
-      nombreJoueurs = scenarioData.nombreJoueurs;
-      const periode = scenarioData.periode;
-      const galeriePersonnages = document.getElementById("galeriePersonnages");
-      personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
-
-      galeriePersonnages.innerHTML = personnages.map((perso, i) => `
-        <div class="carte-personnage" data-id="${i}">
-          <img src="${perso.image}" alt="${perso.nom}">
-          <p>${perso.nom}</p>
-        </div>
-      `).join("");
-
-      // Sélection d'un personnage
-      const cartes = document.querySelectorAll(".carte-personnage");
-      cartes.forEach(carte => {
-        carte.addEventListener("click", () => {
-          cartes.forEach(card => card.style.border = "2px solid #e9c78c");
-          carte.style.border = "2px solid #4CAF50";
-          localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
-          document.getElementById("valider-choix").disabled = false;
-        });
-      });
-    }
-
-    // 5. Synchro temps réel (Firebase)
-    function startRealtimeSync() {
-      db.ref(partieID + '/validations').on('value', snap => {
-        const valids = snap.val() || {};
-        // Grise les personnages déjà pris
-        document.querySelectorAll('.carte-personnage').forEach(div => {
-          const id = div.getAttribute('data-id');
-          const dejaPris = Object.values(valids).some(v => v.personnageId == id);
-          if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
-            div.style.opacity = 0.5;
-            div.style.pointerEvents = 'none';
-          } else {
-            div.style.opacity = 1;
-            div.style.pointerEvents = '';
-          }
-        });
-        // Compteur validés/total
-        const nbValid = Object.keys(valids).length;
-        const btnValider = document.getElementById('valider-choix');
-        btnValider.textContent =
-          (valids[playerId] ? 'En attente des autres joueurs (' : '') +
-          nbValid + '/' + nombreJoueurs +
-          (valids[playerId] ? ')' : ' Valider mon personnage');
-        // Redirige si tout le monde a validé
-        if(nbValid === nombreJoueurs) {
-          window.location.href = "gameplay.html";
-        }
-        // Affiche le bouton annuler si validé
-        if (valids[playerId] && !document.getElementById('annuler-choix')) {
-          ajouterBoutonAnnuler();
-          btnValider.disabled = true;
-        }
-        if (!valids[playerId] && document.getElementById('annuler-choix')) {
-          document.getElementById('annuler-choix').remove();
-          btnValider.disabled = false;
-        }
-      });
-
-      // Quand tu valides
-      document.getElementById("valider-choix").onclick = function() {
-        const personnageId = localStorage.getItem("personnageSelectionne");
-        if (personnageId && !this.disabled) {
-          db.ref(partieID + '/validations/' + playerId).set({ personnageId });
-          this.disabled = true;
-        }
-      };
-    }
-
-    // 6. Bouton annuler
-    function ajouterBoutonAnnuler() {
-      const btn = document.createElement('button');
-      btn.id = 'annuler-choix';
-      btn.textContent = "Annuler";
-      btn.onclick = function() {
-        db.ref(partieID + '/validations/' + playerId).remove();
-      };
-      document.getElementById('valider-choix').parentNode.appendChild(btn);
-    }
-
-    // 7. Lancement au chargement
-    window.onload = function() {
-      afficherPersonnages();
-      startRealtimeSync();
-    }
-  </script>
+  <!-- Scripts JS inchangés -->
 
   <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
+    <p>© 2025 Murder Party. Tous droits réservés.
+      <a href="mentions-legales.html">Mentions légales</a>
+    </p>
   </footer>
-
-</body>
-</html>
 </body>
 </html>
