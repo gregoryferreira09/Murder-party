@@ -40,35 +40,11 @@ async function rejoindreSalon() {
     messageDiv.textContent = "Le code doit comporter 4, 6 ou 8 lettres ou chiffres.";
     messageDiv.style.color = "#ff6b6b";
     return;
-}
+  }
 
   // Récupère le pseudo (sécurité anti-caractères spéciaux)
-  let pseudo = (localStorage.getItem("pseudo") || "").replace(/[<>\/\\'"`]/g, "").trim().substring(0, 30);
-
-  // Gestion auto des pseudos anonymes si vide
-  if (!pseudo) {
-    try {
-      // Cherche combien d'anonymes existent déjà dans ce salon
-      const joueursSnap = await db.ref('parties/' + codeEntre + '/joueurs').get();
-      let n = 1;
-      let pseudosExistants = [];
-      if (joueursSnap.exists()) {
-        joueursSnap.forEach(joueurSnap => {
-          pseudosExistants.push(joueurSnap.val().pseudo);
-        });
-        while (pseudosExistants.includes("anonyme" + n)) n++;
-      }
-      pseudo = "anonyme" + n;
-      localStorage.setItem("pseudo", pseudo);
-    } catch (err) {
-      loader.style.display = "none";
-      validerBtn.disabled = false;
-      messageDiv.textContent = "Erreur lors de la génération du pseudo.";
-      messageDiv.style.color = "#ff6b6b";
-      console.error("Erreur génération pseudo anonyme:", err);
-      return;
-    }
-  }
+  let pseudoBase = (localStorage.getItem("pseudo") || "").replace(/[<>\/\\'"`]/g, "").trim().substring(0, 30);
+  let pseudo = pseudoBase || "joueur";
 
   try {
     // Vérifier que le salon existe
@@ -85,8 +61,18 @@ async function rejoindreSalon() {
     const joueursSnap = await db.ref('parties/' + codeEntre + '/joueurs').get();
     let pseudosExistants = [];
     joueursSnap.forEach(joueurSnap => {
-      pseudosExistants.push(joueurSnap.val().pseudo);
+      pseudosExistants.push(joueurSnap.val().pseudo.toLowerCase());
     });
+
+    // Assigner un pseudo unique si déjà pris
+    let pseudoUnique = pseudo;
+    let count = 1;
+    while (pseudosExistants.includes(pseudoUnique.toLowerCase())) {
+      pseudoUnique = pseudo + count;
+      count++;
+    }
+    pseudo = pseudoUnique;
+    localStorage.setItem("pseudo", pseudo);
 
     // Vérifier le nombre max de joueurs
     const paramSnap = await db.ref('parties/' + codeEntre + '/parametres').get();
@@ -95,15 +81,6 @@ async function rejoindreSalon() {
       loader.style.display = "none";
       validerBtn.disabled = false;
       messageDiv.textContent = "Ce salon est déjà complet.";
-      messageDiv.style.color = "#ff6b6b";
-      return;
-    }
-
-    // Empêcher le même pseudo deux fois dans le même salon
-    if (pseudosExistants.includes(pseudo)) {
-      loader.style.display = "none";
-      validerBtn.disabled = false;
-      messageDiv.textContent = "Ce pseudo est déjà utilisé dans ce salon.";
       messageDiv.style.color = "#ff6b6b";
       return;
     }
@@ -131,7 +108,7 @@ async function rejoindreSalon() {
     messageDiv.style.color = "#90ee90";
     setTimeout(() => {
       window.location.href = "salon.html";
-    }, 1200);
+    }, 1000);
 
   } catch (err) {
     loader.style.display = "none";
