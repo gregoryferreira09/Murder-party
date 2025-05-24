@@ -214,69 +214,63 @@
       document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
       document.getElementById("messageInfo").textContent = "";
     }
-    function chargerScenario() {
-      try {
-        let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-        if (!scenarioData) throw new Error("Aucune donnée de scénario.");
-        if (typeof genererScenario === "function") {
-          genererScenario();
-          setTimeout(() => {
-            let scenarioObj = JSON.parse(localStorage.getItem("scenarioCourant") || "null");
-            if (scenarioObj) {
-              afficherScenario(scenarioObj, scenarioData);
-            }
-          }, 200);
-        }
-      } catch (e) {
-        const loadingDiv = document.getElementById("scenario-loading");
-        const contentDiv = document.getElementById("scenario-content");
-        if (loadingDiv) loadingDiv.style.display = "none";
-        if (contentDiv) contentDiv.style.display = "none";
-        document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
+
+  function chargerScenario() {
+    try {
+      let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+      if (!scenarioData) throw new Error("Aucune donnée de scénario.");
+      if (typeof genererScenario === "function") {
+        genererScenario(); // Génère ET affiche le scénario directement
       }
+    } catch (e) {
+      const loadingDiv = document.getElementById("scenario-loading");
+      const contentDiv = document.getElementById("scenario-content");
+      if (loadingDiv) loadingDiv.style.display = "none";
+      if (contentDiv) contentDiv.style.display = "none";
+      document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
     }
-    document.addEventListener("DOMContentLoaded", function() {
-      chargerScenario();
-      // Bouton régénération
-      const regenBtn = document.getElementById("regenScenarioBtn");
-      regenBtn.onclick = function() {
-        if (typeof genererScenario === "function") {
-          genererScenario();
-          setTimeout(chargerScenario, 200);
-        }
-      };
-      regenBtn.onkeydown = function(e) {
-        if (e.key === "Enter" || e.key === " ") {
-          regenBtn.click();
-        }
-      };
-      // Timer bouton démarrer
-      const launchBtn = document.getElementById("demarrerBtn");
-      let timeLeft = 30;
-      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-      launchBtn.style.pointerEvents = "none";
-      launchBtn.style.opacity = "0.6";
-      const interval = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-          launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-        } else {
-          clearInterval(interval);
-          launchBtn.textContent = "Démarrer la partie";
-          launchBtn.style.pointerEvents = "auto";
-          launchBtn.style.opacity = "1";
-        }
-      }, 1000);
-      setTimeout(() => {
-        document.querySelector(".page-lancement").focus();
-      }, 600);
-      window.addEventListener('offline', () => {
-        document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
-      });
-      window.addEventListener('online', () => {
-        window.location.reload();
-      });
+  }
+  document.addEventListener("DOMContentLoaded", function() {
+    chargerScenario();
+    // Bouton régénération
+    const regenBtn = document.getElementById("regenScenarioBtn");
+    regenBtn.onclick = function() {
+      if (typeof genererScenario === "function") {
+        genererScenario();
+      }
+    };
+    regenBtn.onkeydown = function(e) {
+      if (e.key === "Enter" || e.key === " ") {
+        regenBtn.click();
+      }
+    };
+    // Timer bouton démarrer
+    const launchBtn = document.getElementById("demarrerBtn");
+    let timeLeft = 30;
+    launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+    launchBtn.style.pointerEvents = "none";
+    launchBtn.style.opacity = "0.6";
+    const interval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+      } else {
+        clearInterval(interval);
+        launchBtn.textContent = "Démarrer la partie";
+        launchBtn.style.pointerEvents = "auto";
+        launchBtn.style.opacity = "1";
+      }
+    }, 1000);
+    setTimeout(() => {
+      document.querySelector(".page-lancement").focus();
+    }, 600);
+    window.addEventListener('offline', () => {
+      document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
     });
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+  });
   </script>
   <noscript>
     <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
