@@ -285,3 +285,19 @@ body {
   min-width: 140px;
   margin: 0 auto;
 }
+
+.salon-colonne {
+  display: flex;
+  flex-direction: column;
+  min-height: 320px; /* Ajuste selon la hauteur souhaitée du cadre */
+  height: 40vh;
+  justify-content: flex-start;
+}
+
+.salon-colonne .boutons-actions {
+  margin-top: auto;      /* Pousse le bouton vers le bas du conteneur */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
