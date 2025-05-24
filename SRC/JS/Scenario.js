@@ -610,53 +610,46 @@ function genererScenario() {
 
     addScenarioToHistory(scenarioObj);
 
-    container.innerHTML = `
-      <span id="regenScenarioBtn" style="cursor:pointer; float:right; font-size:1.8em;" title="Générer un autre scénario" tabindex="0" aria-label="Générer un autre scénario">📜</span>
-      <h2>Introduction</h2>
-      <p>${scenarioObj.introduction}</p>
-      <h2>Le crime</h2>
-      <p>${scenarioObj.crime}</p>
-      <h2>Objectif général</h2>
-      <p>${scenarioObj.objectif}</p>
-      <h2>Détails du jeu</h2>
-      <p>Mode de jeu : ${escapeHtml(scenarioData.mode)}</p>
-      <p>Durée de la partie : ${escapeHtml(String(scenarioData.duree))} minutes — ${scenarioObj.detailsDuree}</p>
-      <p>Période : ${escapeHtml(scenarioData.periode)}</p>
-      <p>Nombre de joueurs : ${escapeHtml(String(scenarioData.nombreJoueurs))}</p>
-      <p>Nombre de criminels : ${escapeHtml(String(scenarioData.criminels))}</p>
-      <p>Mode criminels fantômes : ${scenarioData.criminelFantome ? "Oui" : "Non"}</p>
-      <p>Avatars légendaires activés : ${scenarioData.avatarsLegendaires ? "Oui" : "Non"}</p>
-      <div class="boutons-actions">
-        <a id="launchBtn" class="gold-btn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
-        <a class="gold-btn" href="creer-partie.html">Retour</a>
-      </div>
-    `;
-    // Accessibilité : bouton génération clavier
-    const regenBtn = document.getElementById("regenScenarioBtn");
-    if (regenBtn) {
-      regenBtn.onclick = genererScenario;
-      regenBtn.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") genererScenario(); };
-    }
+    // Sauvegarde le scénario pour l’affichage moderne
+localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
 
-    // Timer bouton lancement
-    const launchBtn = document.getElementById("launchBtn");
-    let timeLeft = 30;
-    if (launchBtn) {
+// Affiche dans les bons éléments si ils existent
+function fillScenarioDisplay() {
+  if (document.getElementById("introduction")) document.getElementById("introduction").innerHTML = scenarioObj.introduction;
+  if (document.getElementById("crime")) document.getElementById("crime").innerHTML = scenarioObj.crime;
+  if (document.getElementById("objectif")) document.getElementById("objectif").innerHTML = scenarioObj.objectif;
+  if (document.getElementById("mode")) document.getElementById("mode").textContent = scenarioData.mode || "-";
+  if (document.getElementById("duree")) document.getElementById("duree").textContent = scenarioData.duree + " min — " + (scenarioObj.detailsDuree || "");
+  if (document.getElementById("periode")) document.getElementById("periode").textContent = scenarioData.periode || "-";
+  if (document.getElementById("joueurs")) document.getElementById("joueurs").textContent = scenarioData.nombreJoueurs || "-";
+  if (document.getElementById("criminels")) document.getElementById("criminels").textContent = scenarioData.criminels || "-";
+  if (document.getElementById("fantome")) document.getElementById("fantome").textContent = scenarioData.criminelFantome ? "Oui" : "Non";
+  if (document.getElementById("avatars")) document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
+  // Cache le message de chargement, affiche le contenu
+  if (document.getElementById("scenario-loading")) document.getElementById("scenario-loading").style.display = "none";
+  if (document.getElementById("scenario-content")) document.getElementById("scenario-content").style.display = "block";
+}
+fillScenarioDisplay();
+
+// Optionnel : lance aussi le timer bouton lancement si tu veux le faire ici
+if (document.getElementById("demarrerBtn")) {
+  let timeLeft = 30;
+  const launchBtn = document.getElementById("demarrerBtn");
+  launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+  launchBtn.style.pointerEvents = "none";
+  launchBtn.style.opacity = "0.6";
+  const interval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
       launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-      launchBtn.style.pointerEvents = "none";
-      launchBtn.style.opacity = "0.6";
-      const interval = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-          launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-        } else {
-          clearInterval(interval);
-          launchBtn.textContent = "Lancement";
-          launchBtn.style.pointerEvents = "auto";
-          launchBtn.style.opacity = "1";
-        }
-      }, 1000);
+    } else {
+      clearInterval(interval);
+      launchBtn.textContent = "Démarrer la partie";
+      launchBtn.style.pointerEvents = "auto";
+      launchBtn.style.opacity = "1";
     }
+  }, 1000);
+}
   } else {
     container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
