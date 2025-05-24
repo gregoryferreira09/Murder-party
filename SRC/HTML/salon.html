@@ -2,21 +2,116 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Salon de la Partie</title>
+  <title>Salon de la Partie – Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <style>
+    .main-accueil {
+      max-width: 520px;
+      margin: 40px auto;
+      background: #2c1b1b;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px #0001;
+      padding: 32px 28px;
+      border: 2px solid #e0c185;
+      color: #f4e4c1;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .main-accueil h1 {
+      text-align: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.3em;
+      margin-bottom: 8px;
+      color: #e0c185;
+    }
+    .bienvenue-message {
+      font-size: 1.25em;
+      color: #e0c185;
+      text-align: center;
+      margin-bottom: 18px;
+      margin-top: 12px;
+    }
+    .bandeau-dore {
+      background: #3d2b1f;
+      border-radius: 10px;
+      border: 2px solid #e0c185;
+      padding: 20px;
+      margin: 24px 0;
+      color: #f4e4c1;
+      box-shadow: 0 2px 12px #0002;
+      font-family: 'Cormorant Garamond', serif;
+    }
     .texte-x2 {
-      font-size: 2em;
+      font-size: 1.25em;
+      margin-bottom: 10px;
+      text-align: center;
+      color: #e0c185;
     }
     .code-x2 {
       font-size: 2em;
       font-weight: bold;
       letter-spacing: 2px;
+      text-align: center;
+      color: #e0c185;
+      margin-bottom: 8px;
     }
+    .status {
+      text-align: center;
+      margin-bottom: 12px;
+      color: #c9b49a;
+    }
+    #listeJoueurs {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+      text-align: center;
+    }
+    #listeJoueurs li {
+      padding: 4px 0;
+      font-size: 1.1em;
+    }
+    .menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .gold-btn {
+      background: linear-gradient(90deg, #e9c78c, #e0c185 60%);
+      color: #3d2b1f;
+      border: 2px solid #e0c185;
+      border-radius: 8px;
+      padding: 14px 30px;
+      font-size: 1.15em;
+      font-family: 'Cinzel Decorative', cursive;
+      cursor: pointer;
+      margin: 0 4px;
+      transition: box-shadow .2s, background .2s, color .2s;
+      text-decoration: none;
+      display: inline-block;
+      min-width: 120px;
+      width: 90%;
+      max-width: 350px;
+      box-sizing: border-box;
+    }
+    .gold-btn:hover,
+    .gold-btn:focus {
+      background: #e0c185;
+      color: #1a1a1a;
+      box-shadow: 0 0 8px #e0c18588;
+      outline: none;
+    }
+    #alertSalonSupprime {
+      display: none;
+      color: #ff6b6b;
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    /* Modale confirmation */
     #confirmationModal {
       display: none;
       position: fixed;
@@ -53,42 +148,82 @@
       font-size: 1.15em;
       padding: 12px 0;
     }
+    .footer {
+      text-align: center;
+      color: #c9b49a;
+      margin-top: 30px;
+      font-size: 0.97em;
+    }
+    .footer a {
+      color: #e0c185;
+      margin-left: 12px;
+      text-decoration: underline;
+    }
+    @media (max-width: 650px) {
+      .main-accueil {
+        max-width: 98vw;
+        margin: 10px auto;
+        padding: 12px 2vw;
+        border-radius: 12px;
+      }
+      .main-accueil h1 { font-size: 2em; }
+      .bienvenue-message { font-size: 1.05em; margin-bottom: 10px; }
+      .bandeau-dore { padding: 10px; }
+      .code-x2 { font-size: 1.3em; }
+      .modal-content { min-width: unset !important; width: 95vw; }
+    }
+    button:focus, a:focus, input:focus {
+      outline: 2px solid #e0c185;
+      outline-offset: 3px;
+    }
   </style>
 </head>
-<body>
-  <header>
-    <h1>Salon de la partie</h1>
-  </header>
-
-  <main>
-    <div class="bandeau-dore">
-      <p class="texte-x2">Partagez ce code avec les autres joueurs :</p>
-      <div class="code code-x2" id="codeSalon">------</div>
-      <div class="status" id="etatSalon">
-        En attente de joueurs...
+<body class="accueil">
+  <div class="center-wrapper">
+    <main class="main-accueil" role="main">
+      <h1>Salon de la partie</h1>
+      <div class="bienvenue-message">
+        Bonjour <span id="pseudoAffiche"></span>
       </div>
-      <ul id="listeJoueurs"></ul>
-      <div class="menu-buttons">
-        <button class="gold-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
-        <button class="gold-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
+      <div class="bandeau-dore">
+        <p class="texte-x2">Partagez ce code avec les autres joueurs :</p>
+        <div class="code code-x2" id="codeSalon">------</div>
+        <div class="status" id="etatSalon">En attente de joueurs...</div>
+        <ul id="listeJoueurs"></ul>
+        <div class="menu-buttons" role="group" aria-label="Actions principales">
+          <button class="gold-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
+          <button class="gold-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
+        </div>
+        <div id="alertSalonSupprime">Salon supprimé par le créateur.</div>
       </div>
-      <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px;">Salon supprimé par le créateur.</div>
-    </div>
-
-    <!-- Modale de confirmation commune -->
-    <div id="confirmationModal">
-      <div class="modal-content">
-        <div class="modal-question" id="modalQuestion">Es-tu sûr de vouloir clôturer le salon ?</div>
-        <div class="modal-btns">
-          <button id="confirmModalBtn" class="gold-btn">Oui</button>
-          <button id="cancelModalBtn" class="gold-btn">Non</button>
+      <!-- Modale confirmation -->
+      <div id="confirmationModal">
+        <div class="modal-content">
+          <div class="modal-question" id="modalQuestion">Es-tu sûr de vouloir clôturer le salon ?</div>
+          <div class="modal-btns">
+            <button id="confirmModalBtn" class="gold-btn">Oui</button>
+            <button id="cancelModalBtn" class="gold-btn">Non</button>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
-
+    </main>
+  </div>
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
-    // --- Initialisation Firebase ---
+    // Sécurisation du texte
+    function escapeHTML(s) {
+      if (!s) return '';
+      return s.replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    // Initialisation Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
       authDomain: "murder-party-ba8d1.firebaseapp.com",
@@ -104,23 +239,31 @@
     }
     const db = firebase.database();
 
-    // --- Variables utiles ---
+    // Variables utiles
     const salonCode = localStorage.getItem("salonCode");
-    const monPseudo = localStorage.getItem("pseudo") || "Anonyme";
-    let jeSuisCreateur = false;
-    document.getElementById("codeSalon").textContent = salonCode;
+    const monPseudo = localStorage.getItem("pseudo") || "invité";
+    document.getElementById("pseudoAffiche").textContent = escapeHTML(monPseudo);
 
-    // --- Affichage conditionnel des boutons ---
+    // Vérif code salon présent
+    if (!salonCode) {
+      window.location.href = "accueil.html";
+    }
+    document.getElementById("codeSalon").textContent = escapeHTML(salonCode);
+
+    // Affichage conditionnel des boutons
     const cloturerSalonBtn = document.getElementById("cloturerSalonBtn");
     const quitterSalonBtn = document.getElementById("quitterSalonBtn");
     const confirmationModal = document.getElementById("confirmationModal");
     const confirmModalBtn = document.getElementById("confirmModalBtn");
     const cancelModalBtn = document.getElementById("cancelModalBtn");
     const modalQuestion = document.getElementById("modalQuestion");
+    const alertSalonSupprime = document.getElementById("alertSalonSupprime");
+    alertSalonSupprime.style.display = "none";
 
     let currentAction = null; // "cloture" ou "quitter"
+    let jeSuisCreateur = false;
 
-    // --- Vérifier qui est le créateur et afficher les bons boutons ---
+    // Vérifier créateur / participant
     db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
       if (snap.exists() && snap.val() === monPseudo) {
         jeSuisCreateur = true;
@@ -133,30 +276,26 @@
       }
     });
 
-    // --- Actions boutons ---
-    // Créateur : ouvrir la modale de confirmation pour clôturer
+    // Actions boutons
     cloturerSalonBtn.addEventListener("click", function() {
       modalQuestion.textContent = "Es-tu sûr de vouloir clôturer le salon ?";
       currentAction = "cloture";
       confirmationModal.style.display = "flex";
     });
 
-    // Participant : ouvrir la modale de confirmation pour quitter
     quitterSalonBtn.addEventListener("click", function() {
       modalQuestion.textContent = "Es-tu sûr de vouloir quitter le salon ?";
       currentAction = "quitter";
       confirmationModal.style.display = "flex";
     });
 
-    // Confirmer l'action sur la modale
     confirmModalBtn.addEventListener("click", function() {
       if(currentAction === "cloture") {
         db.ref('parties/' + salonCode).remove().then(() => {
+          localStorage.removeItem("salonCode");
           window.location.href = "creer-partie.html";
         });
       } else if(currentAction === "quitter") {
-        // Retirer le joueur de la liste des joueurs
-        // Recherche du joueur par pseudo puis suppression de son entrée
         const joueursRef = db.ref('parties/' + salonCode + '/joueurs');
         joueursRef.once('value', snap => {
           snap.forEach(child => {
@@ -165,8 +304,8 @@
             }
           });
         });
-        // Redirection après un petit délai pour s'assurer de la suppression
         setTimeout(() => {
+          localStorage.removeItem("salonCode");
           window.location.href = "rejoindre-partie.html";
         }, 300);
       }
@@ -174,13 +313,12 @@
       currentAction = null;
     });
 
-    // Annuler dans la modale
     cancelModalBtn.addEventListener("click", function() {
       confirmationModal.style.display = "none";
       currentAction = null;
     });
 
-    // --- Affichage des joueurs en temps réel + état du salon ---
+    // Affichage joueurs et état du salon
     const joueursDiv = document.getElementById("listeJoueurs");
     const etatSalon = document.getElementById("etatSalon");
     let totalJoueurs = 1;
@@ -192,24 +330,24 @@
       }
     });
 
-    // --- Ecoute la suppression du salon ---
     db.ref('parties/' + salonCode).on('value', snapshot => {
       if (!snapshot.exists()) {
-        document.getElementById("alertSalonSupprime").style.display = "block";
+        alertSalonSupprime.style.display = "block";
         setTimeout(() => {
+          localStorage.removeItem("salonCode");
           window.location.href = "rejoindre-partie.html";
         }, 2000);
         return;
       }
-      // Sinon, affichage normal
+
       joueursDiv.innerHTML = "";
       let nbJoueurs = 0;
       const joueursSnap = snapshot.child('joueurs');
       if(joueursSnap && joueursSnap.forEach) {
         joueursSnap.forEach(joueurSnap => {
-          const pseudo = joueurSnap.val().pseudo;
+          const pseudoJ = joueurSnap.val().pseudo;
           const li = document.createElement("li");
-          li.textContent = pseudo;
+          li.textContent = pseudoJ;
           joueursDiv.appendChild(li);
           nbJoueurs++;
         });
@@ -226,23 +364,20 @@
           } else {
             clearInterval(interval);
             etatSalon.textContent = "La partie commence !";
+            localStorage.removeItem("salonCode");
             window.location.href = "lancement-partie.html";
           }
         }, 1000);
       }
     });
 
-    // --- Suppression automatique si le créateur ferme l'onglet ou recharge ---
-    window.addEventListener("beforeunload", function (e) {
+    // Suppression automatique si le créateur ferme l'onglet
+    window.addEventListener("beforeunload", function () {
       if (jeSuisCreateur) {
         db.ref('parties/' + salonCode).remove();
       }
+      localStorage.removeItem("salonCode");
     });
   </script>
-
-  <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
 </body>
 </html>
