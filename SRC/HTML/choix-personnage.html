@@ -1,4 +1,182 @@
-<!-- ... le reste du HTML ... -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Choix du personnage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../Public/styles/style.css">
+  <style>
+    /* Améliorations spécifiques à la galerie */
+    .galerie-personnages {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 18px;
+      margin-bottom: 18px;
+    }
+    .carte-personnage {
+      background: linear-gradient(145deg, #291e15 80%, #e0c18522 100%);
+      border: 2.5px solid #e0c185;
+      border-radius: 15px;
+      box-shadow: 0 4px 18px #0004, 0 0 0 3px #e0c18522;
+      transition: 
+        box-shadow 0.2s, 
+        border 0.2s, 
+        background 0.2s,
+        transform 0.18s;
+      min-width: 230px;
+      max-width: 270px;
+      width: 100%;
+      min-height: 154px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px 16px 14px 16px;
+      position: relative;
+      opacity: 1;
+    }
+    .carte-personnage.selected {
+      border: 2.8px solid #d4af37;
+      background: linear-gradient(135deg, #3d2b1f 75%, #e0c18555 100%);
+      box-shadow: 0 0 18px #d4af37cc, 0 0 0 4px #e0c18544;
+      transform: scale(1.04);
+      z-index: 2;
+    }
+    .carte-personnage.indisponible {
+      filter: grayscale(0.88) blur(1.2px);
+      opacity: 0.61;
+      pointer-events: none;
+    }
+    .carte-personnage-avatar {
+      width: 82px;
+      height: 82px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #e0c185;
+      background: #fff2;
+      box-shadow: 0 2px 10px #0004;
+      margin-bottom: 10px;
+    }
+    .carte-personnage-nom {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.25em;
+      color: #ffd88f;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .carte-personnage-role {
+      color: #e0c185;
+      font-style: italic;
+      font-size: 1em;
+      margin-bottom: 5px;
+      text-align: center;
+      display: block;
+    }
+    .carte-personnage-desc {
+      color: #f4e4c1;
+      font-size: 1em;
+      margin-top: 7px;
+      text-align: center;
+      min-height: 34px;
+    }
+    /* Effet de survol */
+    .carte-personnage:not(.indisponible):hover,
+    .carte-personnage:not(.indisponible):focus {
+      border: 2.5px solid #d4af37;
+      background: linear-gradient(140deg, #3d2b1f 80%, #e0c18566 100%);
+      box-shadow: 0 0 20px #d4af3777, 0 0 0 4px #e0c18533;
+      transform: scale(1.03);
+      z-index: 1;
+    }
+    /* message d'état (validation, attente) */
+    .etat-message {
+      font-size: 1.06em;
+      color: #e0c185;
+      margin-bottom: 18px;
+      text-align: center;
+      min-height: 24px;
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+    /* titre de la section dans le bandeau */
+    .section-titre {
+      font-size: 1.28em;
+      color: #e0c185;
+      margin-bottom: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.5px;
+      text-align: center;
+      font-weight: 600;
+    }
+    /* bouton principal plus visible */
+    .main-btn#valider-choix,
+    .main-btn#annuler-choix {
+      max-width: 300px;
+      margin: 0 auto;
+      font-size: 1.14em;
+      box-shadow: 0 0 8px #e0c18511;
+      background: #1b1b1b;
+      border: 2.5px solid #e0c185;
+      color: #e0c185;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
+    }
+    .main-btn#valider-choix:hover:not([disabled]),
+    .main-btn#valider-choix:focus:not([disabled]),
+    .main-btn#annuler-choix:hover,
+    .main-btn#annuler-choix:focus {
+      background: #e0c185;
+      color: #2c1b1b;
+      border: 2.5px solid #d4af37;
+      box-shadow: 0 0 18px #d4af37bb;
+    }
+    .main-btn[disabled] {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    @media (max-width: 730px) {
+      .galerie-personnages {
+        gap: 12px;
+      }
+      .carte-personnage {
+        min-width: 160px;
+        max-width: 98vw;
+        padding: 13px 4vw 9px 4vw;
+      }
+      .carte-personnage-avatar {
+        width: 56px;
+        height: 56px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="site-title">Choisissez votre personnage</h1>
+  </header>
+
+  <div class="center-wrapper">
+    <main class="main-accueil">
+      <div class="section-titre">Faites votre choix parmi les personnages proposés</div>
+      <div class="etat-message" id="etatMessage"></div>
+      <section class="galerie-personnages" id="galeriePersonnages">
+        <!-- Les personnages seront ajoutés dynamiquement ici -->
+      </section>
+      <div class="boutons-actions">
+        <button id="valider-choix" class="main-btn" disabled>Valider mon personnage</button>
+      </div>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer><!-- ... le reste du HTML ... -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
