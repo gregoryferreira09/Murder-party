@@ -462,20 +462,7 @@ function genererScenario() {
       }
     }
 
-    addScenarioToHistory(scenarioObj);
-
-    // Sauvegarde le scénario pour l’affichage moderne
-    localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
-  }
-}
-
-      if (!scenarioOk && tryCount === maxTry) {
-        history = [];
-        tryCount = 0;
-      }
-    }
-
-    addScenarioToHistory(scenarioObj);
+      addScenarioToHistory(scenarioObj);
 
     // Sauvegarde le scénario pour l’affichage moderne
     localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
@@ -497,7 +484,10 @@ function genererScenario() {
       if (document.getElementById("scenario-content")) document.getElementById("scenario-content").style.display = "block";
     }
     fillScenarioDisplay();
-    } else {
-    container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
+  } else {
+    // Affichage d’erreur si pas de données de scénario
+    if (document.getElementById("scenario-loading")) document.getElementById("scenario-loading").style.display = "none";
+    if (document.getElementById("scenario-content")) document.getElementById("scenario-content").style.display = "none";
+    if (document.getElementById("messageInfo")) document.getElementById("messageInfo").textContent = "Aucune donnée de scénario trouvée.";
   }
-} 
+}
