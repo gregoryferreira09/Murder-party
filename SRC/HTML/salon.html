@@ -12,6 +12,7 @@
 </head>
 <body class="accueil">
   <script>
+    // Redirection immédiate si pas de code salon
     const salonCode = localStorage.getItem("salonCode");
     if (!salonCode) {
       window.location.replace("creer-partie.html");
@@ -46,16 +47,15 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
-    // ... (le reste de ton code inchangé) ...
-    // Change juste la ligne suivante :
-    // if (!salonCode) {
-    //   window.location.href = "accueil.html";
-    // }
-    // en :
-    if (!salonCode) {
-      window.location.replace("creer-partie.html");
-    }
-    // ... (le reste de ton code) ...
+    // ... (ton code de gestion Firebase, joueurs, etc.) ...
+    // NE remplace pas la logique de codeSalon ici, elle est gérée plus bas.
+  </script>
+  <script>
+    // Affiche le code salon dès que le DOM est prêt
+    document.addEventListener('DOMContentLoaded', function() {
+      const salonCode = localStorage.getItem("salonCode");
+      document.getElementById("codeSalon").textContent = salonCode || "------";
+    });
   </script>
 </body>
 </html>
