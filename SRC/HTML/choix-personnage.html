@@ -6,31 +6,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    /* Focus visible sur sélection */
-    .carte-personnage:focus {
-      outline: 3px solid #ffd700;
-      outline-offset: 2px;
-      background: #2c1b1b33;
-    }
-    .carte-personnage.indisponible {
-      filter: grayscale(0.8) blur(1px);
-      pointer-events: none;
-      opacity: 0.7;
-    }
-    .pris-label {
-      color: #b71c1c;
-      font-size: 0.95em;
-      font-weight: bold;
-      margin-left: 8px;
-      background: #fff3;
-      padding: 2px 7px;
-      border-radius: 5px;
-      display: inline-block;
-    }
-    #valider-choix:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
     .a11y-visually-hidden {
       position: absolute;
       left: -9999px;
@@ -46,9 +21,15 @@
     <div id="desc" class="a11y-visually-hidden">Liste de personnages à choisir, un seul disponible par joueur.</div>
   </header>
   <main>
-    <div id="personnages-list" role="list" aria-labelledby="desc"></div>
-    <button id="valider-choix" disabled>Valider mon personnage</button>
-    <div id="message" aria-live="polite" style="margin-top:15px;"></div>
+    <div class="center-wrapper">
+      <section class="main-accueil">
+        <div id="personnages-list" role="list" aria-labelledby="desc"></div>
+        <div class="boutons-actions">
+          <button class="main-btn" id="valider-choix" disabled>Valider mon personnage</button>
+        </div>
+        <div id="message" aria-live="polite" style="margin-top:15px;"></div>
+      </section>
+    </div>
   </main>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -68,7 +49,6 @@
     }
     const db = firebase.database();
 
-    // --- Récupération infos joueur ---
     const salonCode = localStorage.getItem("salonCode");
     let uuid = localStorage.getItem("uuid");
     if (!uuid) {
@@ -79,7 +59,6 @@
     }
     let pseudo = localStorage.getItem("pseudo") || "Anonyme";
 
-    // --- Affichage liste perso (exemple, à adapter à ta structure) ---
     let personnages = [];
     let personnageSelectionne = null;
     let valids = {};
@@ -94,18 +73,24 @@
         div.setAttribute("tabindex", "0");
         div.setAttribute("aria-label", `${perso.nom} - ${perso.description || ""}`);
         div.setAttribute("data-id", perso.id);
+
         div.innerHTML = `
-          <strong>${perso.nom}</strong>
-          <span class="pris-label" style="display:none">Pris</span>
-          <div>${perso.description || ""}</div>
+          <div class="carte-personnage-avatarzone">
+            <img class="carte-personnage-avatar" src="${perso.image || 'Public/images/personnage1.png'}" alt="Avatar de ${perso.nom}">
+          </div>
+          <div class="carte-personnage-infos">
+            <strong>${perso.nom}</strong>
+            <span class="pris-label" style="display:none">Pris</span>
+            <div class="carte-personnage-role">${perso.role || ""}</div>
+            <div class="carte-personnage-desc">${perso.description || ""}</div>
+          </div>
         `;
-        // Ajout accessibilité clavier
         div.addEventListener("keydown", e => {
           if (e.key === "Enter" || e.key === " ") div.click();
         });
         div.addEventListener("click", () => {
           if (div.classList.contains("indisponible")) return;
-          document.querySelectorAll('.carte-personnage').forEach(card => card.style.border = "2px solid #e9c78c");
+          document.querySelectorAll('.carte-personnage').forEach(card => card.style.border = "2px solid #e0c185");
           div.style.border = "2px solid #4CAF50";
           personnageSelectionne = perso.id;
           localStorage.setItem("personnageSelectionne", personnageSelectionne);
@@ -117,7 +102,6 @@
     }
 
     function majDisponibilite() {
-      // Récupère la validation de chaque joueur
       Object.keys(valids).forEach(joueurUUID => {
         const pid = valids[joueurUUID].personnageId;
         document.querySelectorAll('.carte-personnage').forEach(div => {
@@ -133,7 +117,6 @@
       });
     }
 
-    // --- Sync temps réel validation ---
     function startRealtimeSync() {
       db.ref('parties/' + salonCode + '/validations').on('value', snap => {
         valids = snap.val() || {};
@@ -143,7 +126,6 @@
         btn.textContent = (valids[uuid] ? 'En attente des autres joueurs (' : '') +
                           nbValid + '/' + personnages.length +
                           (valids[uuid] ? ')' : ' Valider mon personnage');
-        // Redirige si tous les joueurs ont validé
         if(nbValid === personnages.length) {
           window.location.href = "gameplay.html";
         }
@@ -152,7 +134,6 @@
 
     document.getElementById("valider-choix").onclick = async function() {
       if (!personnageSelectionne || this.disabled) return;
-      // Validation côté client (sécurité)
       if (Object.values(valids).some(v => v.personnageId === personnageSelectionne && v.uuid !== uuid)) {
         document.getElementById("message").textContent = "Ce personnage vient d'être pris !";
         return;
@@ -166,7 +147,6 @@
       document.getElementById("message").textContent = "Choix validé, en attente...";
     };
 
-    // --- Récupère la liste des personnages depuis la base ---
     async function chargerPersonnages() {
       const persosSnap = await db.ref('parties/' + salonCode + '/personnages').get();
       personnages = [];
@@ -177,7 +157,6 @@
       startRealtimeSync();
     }
 
-    // --- Init page ---
     document.addEventListener("DOMContentLoaded", async function() {
       if (!salonCode) {
         document.getElementById("message").textContent = "Aucun salon trouvé.";
