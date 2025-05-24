@@ -2,284 +2,176 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Lancement de la Partie - Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <title>Choix du personnage - Murder Party</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    body {
-      background: #181212;
-      color: #f4e4c1;
-      font-family: 'Cormorant Garamond', serif;
-    }
-    header h1 {
-      text-align: center;
-      margin-top: 1.4em;
-      font-family: 'Cinzel Decorative', serif;
-      color: #e0c185;
-    }
-    .page-lancement {
-      max-width: 600px;
-      margin: 40px auto 24px auto;
-      background: #2c1b1b;
-      border-radius: 18px;
-      box-shadow: 0 4px 20px #0002;
-      padding: 32px 28px;
-      border: 2px solid #e0c185;
-      color: #f4e4c1;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.13em;
-      animation: fade 1s ease both;
-      position: relative;
-    }
-    @keyframes fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-    /* Symbole régénération seul, centré, sans style bouton classique */
-    .regen-scenario-btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 10px;
-      margin-top: -10px;
-    }
-    .regen-scenario-btn button {
-      background: none;
-      border: none;
-      font-size: 2.4em;
-      color: #e0c185;
-      cursor: pointer;
-      padding: 0;
-      margin: 0;
-      outline: none;
-      transition: color 0.13s, transform 0.13s;
-      box-shadow: none;
-      border-radius: 50%;
-      line-height: 1;
-      width: 1em;
-      height: 1em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .regen-scenario-btn button:focus,
-    .regen-scenario-btn button:hover {
-      color: #ffeecb;
-      transform: scale(1.14) rotate(-8deg);
-      outline: none;
-      background: none;
-      box-shadow: 0 0 8px #e0c18588;
-    }
-    .scenario-block {
-      background: #3d2b1f44;
-      border-radius: 10px;
-      padding: 16px 18px;
-      margin-bottom: 22px;
-      box-shadow: 0 2px 10px #0001;
-    }
-    .scenario-title {
-      font-size: 1.2em;
-      font-weight: 600;
-      color: #e9c78c;
-      margin-bottom: 8px;
-      font-family: 'Cinzel Decorative', serif;
-    }
-    .scenario-detail { margin: 0 0 8px 0; color: #ffeecb; }
-    .scenario-label { color: #e0c185; font-weight: 600; margin-right: 4px; }
-    /* Boutons style général accueil */
-    .scenario-actions {
-      display: flex;
-      gap: 18px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 24px;
-      margin-bottom: 8px;
-    }
-    .main-btn {
-      background: #181212;
-      color: #e0c185;
-      border: 2px solid #e0c185;
-      border-radius: 8px;
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 1.13em;
-      padding: 14px 36px;
-      min-width: 140px;
-      max-width: 340px;
-      text-align: center;
-      font-weight: 600;
-      cursor: pointer;
-      margin: 0 4px;
-      transition: box-shadow .2s, background .2s, color .2s, transform .12s;
-      box-shadow: 0 1px 8px #e0c18544;
-      display: inline-block;
-      outline: none;
-    }
-    .main-btn:focus, .main-btn:hover {
-      background: #e0c185;
-      color: #181212;
-      box-shadow: 0 0 8px #e0c185a8;
-      outline: 2px solid #e0c185;
-      outline-offset: 3px;
-      transform: scale(1.04);
-    }
-    .main-btn[disabled], .main-btn[style*="pointer-events: none"] {
-      opacity: 0.6;
-      pointer-events: none;
-    }
-    .info {
-      font-size: .99em;
-      color: #c9b49a;
-      text-align: center;
-      margin-top: 18px;
-      margin-bottom: 4px;
-    }
-    @media (max-width: 700px) {
-      .page-lancement { max-width: 97vw; padding: 12px 2vw; border-radius: 12px; font-size: 1em; }
-      .scenario-block { padding: 10px 6px; }
-      .main-btn { width: 100%; min-width: 0; max-width: 99vw; font-size: 1em; }
-      .scenario-actions { flex-direction: column; gap: 10px; }
-      .regen-scenario-btn button { font-size: 1.7em; min-width: 60px; }
+    /* Accessibilité et exceptions spécifiques */
+    .a11y-visually-hidden {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
-  <!-- BANDEAU HAUT -->
   <header>
-    <h1 class="site-title">Murder Party</h1>
+    <h1>Choisissez votre personnage</h1>
+    <div id="desc" class="a11y-visually-hidden">Liste de personnages à choisir, un seul disponible par joueur.</div>
   </header>
-  <!-- Centrage vertical/horizontal du bandeau doré -->
-  <div class="center-wrapper">
-    <main>
-      <section class="page-lancement" role="main" aria-live="polite">
-        <div id="scenario-loading" class="info">Chargement du scénario...</div>
-        <div id="scenario-content" style="display:none;">
-          <!-- Symbole régénération centré, sans style bouton principal -->
-          <div class="regen-scenario-btn">
-            <button id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario" tabindex="0">📜</button>
-          </div>
-          <div class="scenario-block">
-            <div class="scenario-title">Introduction</div>
-            <p class="scenario-detail" id="introduction"></p>
-          </div>
-          <div class="scenario-block">
-            <div class="scenario-title">Le crime</div>
-            <p class="scenario-detail" id="crime"></p>
-          </div>
-          <div class="scenario-block">
-            <div class="scenario-title">Objectif général</div>
-            <p class="scenario-detail" id="objectif"></p>
-          </div>
-          <div class="scenario-block">
-            <div class="scenario-title">Détails du jeu</div>
-            <p class="scenario-detail"><span class="scenario-label">Mode :</span> <span id="mode"></span></p>
-            <p class="scenario-detail"><span class="scenario-label">Durée :</span> <span id="duree"></span></p>
-            <p class="scenario-detail"><span class="scenario-label">Période :</span> <span id="periode"></span></p>
-            <p class="scenario-detail"><span class="scenario-label">Joueurs :</span> <span id="joueurs"></span></p>
-            <p class="scenario-detail"><span class="scenario-label">Criminels :</span> <span id="criminels"></span></p>
-            <p class="scenario-detail"><span class="scenario-label">Fantômes :</span> <span id="fantome"></span></p>
-            <p class="scenario-detail"><span class="scenario-label">Avatars légendaires :</span> <span id="avatars"></span></p>
-          </div>
-          <div class="scenario-actions">
-            <a class="main-btn" id="demarrerBtn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
-            <a class="main-btn" href="accueil.html">Retour</a>
-          </div>
-          <div class="info" id="messageInfo"></div>
+  <main>
+    <div class="center-wrapper">
+      <section class="main-accueil">
+        <div id="personnages-list" role="list" aria-labelledby="desc"></div>
+        <div class="boutons-actions">
+          <button class="main-btn" id="valider-choix" disabled>Valider mon personnage</button>
         </div>
+        <div id="message" aria-live="polite" style="margin-top:15px;"></div>
       </section>
-    </main>
-  </div>
-  <!-- BANDEAU BAS -->
-  <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  <script src="../JS/personnages.js"></script>
-  <script src="../JS/Scenario.js"></script>
+    </div>
+  </main>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script>
-    function afficherScenario(scenarioObj, scenarioData) {
-      document.getElementById("scenario-loading").style.display = "none";
-      document.getElementById("scenario-content").style.display = "block";
-      document.getElementById("introduction").innerHTML = scenarioObj.introduction || "";
-      document.getElementById("crime").innerHTML = scenarioObj.crime || "";
-      document.getElementById("objectif").innerHTML = scenarioObj.objectif || "";
-      document.getElementById("mode").textContent = scenarioData.mode || "-";
-      document.getElementById("duree").textContent = (scenarioData.duree ? scenarioData.duree + " min" : "-") + (scenarioObj.detailsDuree ? " — " + scenarioObj.detailsDuree : "");
-      document.getElementById("periode").textContent = scenarioData.periode || "-";
-      document.getElementById("joueurs").textContent = scenarioData.nombreJoueurs || "-";
-      document.getElementById("criminels").textContent = scenarioData.criminels || "-";
-      document.getElementById("fantome").textContent = scenarioData.criminelFantome ? "Oui" : "Non";
-      document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
-      document.getElementById("messageInfo").textContent = "";
+    // --- Firebase config ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+      authDomain: "murder-party-ba8d1.firebaseapp.com",
+      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "murder-party-ba8d1",
+      storageBucket: "murder-party-ba8d1.appspot.com",
+      messagingSenderId: "20295055805",
+      appId: "1:20295055805:web:0963719c3f23ab7752fad4"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
-    function chargerScenario() {
-      try {
-        let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-        if (!scenarioData) throw new Error("Aucune donnée de scénario.");
-        if (typeof genererScenario === "function") {
-          genererScenario();
-          setTimeout(() => {
-            let scenarioObj = JSON.parse(localStorage.getItem("scenarioCourant") || "null");
-            if (scenarioObj) {
-              afficherScenario(scenarioObj, scenarioData);
-            }
-          }, 200);
+    const db = firebase.database();
+
+    // --- Récupération infos joueur ---
+    const salonCode = localStorage.getItem("salonCode");
+    let uuid = localStorage.getItem("uuid");
+    if (!uuid) {
+      uuid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+      localStorage.setItem("uuid", uuid);
+    }
+    let pseudo = localStorage.getItem("pseudo") || "Anonyme";
+
+    // --- Affichage liste perso (avec avatar harmonisé) ---
+    let personnages = [];
+    let personnageSelectionne = null;
+    let valids = {};
+
+    function afficherPersonnages() {
+      const listDiv = document.getElementById("personnages-list");
+      listDiv.innerHTML = "";
+      personnages.forEach(perso => {
+        const div = document.createElement("div");
+        div.className = "carte-personnage";
+        div.setAttribute("role", "listitem");
+        div.setAttribute("tabindex", "0");
+        div.setAttribute("aria-label", `${perso.nom} - ${perso.description || ""}`);
+        div.setAttribute("data-id", perso.id);
+
+        // Avatar affiché à gauche, texte à droite
+        div.innerHTML = `
+          <div class="carte-personnage-avatarzone">
+            <img class="carte-personnage-avatar" src="${perso.image || 'Public/images/personnage1.png'}" alt="Avatar de ${perso.nom}">
+          </div>
+          <div class="carte-personnage-infos">
+            <strong>${perso.nom}</strong>
+            <span class="pris-label" style="display:none">Pris</span>
+            <div class="carte-personnage-role">${perso.role || ""}</div>
+            <div class="carte-personnage-desc">${perso.description || ""}</div>
+          </div>
+        `;
+        // Sélection par clavier ou clic
+        div.addEventListener("keydown", e => {
+          if (e.key === "Enter" || e.key === " ") div.click();
+        });
+        div.addEventListener("click", () => {
+          if (div.classList.contains("indisponible")) return;
+          document.querySelectorAll('.carte-personnage').forEach(card => card.style.border = "2px solid #e0c185");
+          div.style.border = "2px solid #4CAF50";
+          personnageSelectionne = perso.id;
+          localStorage.setItem("personnageSelectionne", personnageSelectionne);
+          document.getElementById("valider-choix").disabled = false;
+        });
+        listDiv.appendChild(div);
+      });
+      majDisponibilite();
+    }
+
+    function majDisponibilite() {
+      Object.keys(valids).forEach(joueurUUID => {
+        const pid = valids[joueurUUID].personnageId;
+        document.querySelectorAll('.carte-personnage').forEach(div => {
+          if (div.getAttribute('data-id') == pid && joueurUUID !== uuid) {
+            div.classList.add("indisponible");
+            div.querySelector('.pris-label').style.display = "inline-block";
+          }
+          if (div.getAttribute('data-id') == pid && joueurUUID === uuid) {
+            div.classList.remove("indisponible");
+            div.querySelector('.pris-label').style.display = "none";
+          }
+        });
+      });
+    }
+
+    // --- Sync temps réel validation ---
+    function startRealtimeSync() {
+      db.ref('parties/' + salonCode + '/validations').on('value', snap => {
+        valids = snap.val() || {};
+        majDisponibilite();
+        const nbValid = Object.keys(valids).length;
+        const btn = document.getElementById('valider-choix');
+        btn.textContent = (valids[uuid] ? 'En attente des autres joueurs (' : '') +
+                          nbValid + '/' + personnages.length +
+                          (valids[uuid] ? ')' : ' Valider mon personnage');
+        if(nbValid === personnages.length) {
+          window.location.href = "gameplay.html";
         }
-      } catch (e) {
-        document.getElementById("scenario-loading").style.display = "none";
-        document.getElementById("scenario-content").style.display = "none";
-        document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
+      });
+    }
+
+    document.getElementById("valider-choix").onclick = async function() {
+      if (!personnageSelectionne || this.disabled) return;
+      if (Object.values(valids).some(v => v.personnageId === personnageSelectionne && v.uuid !== uuid)) {
+        document.getElementById("message").textContent = "Ce personnage vient d'être pris !";
+        return;
       }
+      await db.ref('parties/' + salonCode + '/validations/' + uuid).set({
+        uuid,
+        pseudo,
+        personnageId: personnageSelectionne
+      });
+      document.getElementById("valider-choix").disabled = true;
+      document.getElementById("message").textContent = "Choix validé, en attente...";
+    };
+
+    // --- Récupère la liste des personnages depuis la base ---
+    async function chargerPersonnages() {
+      const persosSnap = await db.ref('parties/' + salonCode + '/personnages').get();
+      personnages = [];
+      persosSnap.forEach(snap => {
+        personnages.push({ ...snap.val(), id: snap.key });
+      });
+      afficherPersonnages();
+      startRealtimeSync();
     }
-    document.addEventListener("DOMContentLoaded", function() {
-      chargerScenario();
-      // Bouton régénération
-      const regenBtn = document.getElementById("regenScenarioBtn");
-      regenBtn.onclick = function() {
-        if (typeof genererScenario === "function") {
-          genererScenario();
-          setTimeout(chargerScenario, 200);
-        }
-      };
-      regenBtn.onkeydown = function(e) {
-        if (e.key === "Enter" || e.key === " ") {
-          regenBtn.click();
-        }
-      };
-      // Timer bouton démarrer
-      const launchBtn = document.getElementById("demarrerBtn");
-      let timeLeft = 30;
-      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-      launchBtn.style.pointerEvents = "none";
-      launchBtn.style.opacity = "0.6";
-      const interval = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-          launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-        } else {
-          clearInterval(interval);
-          launchBtn.textContent = "Démarrer la partie";
-          launchBtn.style.pointerEvents = "auto";
-          launchBtn.style.opacity = "1";
-        }
-      }, 1000);
-      setTimeout(() => {
-        document.querySelector(".page-lancement").focus();
-      }, 600);
-      window.addEventListener('offline', () => {
-        document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
-      });
-      window.addEventListener('online', () => {
-        window.location.reload();
-      });
+
+    // --- Init page ---
+    document.addEventListener("DOMContentLoaded", async function() {
+      if (!salonCode) {
+        document.getElementById("message").textContent = "Aucun salon trouvé.";
+        return;
+      }
+      await chargerPersonnages();
     });
   </script>
-  <noscript>
-    <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
-      ⚠️ JavaScript est désactivé. Le scénario ne pourra pas être affiché.
-    </div>
-  </noscript>
 </body>
 </html>
