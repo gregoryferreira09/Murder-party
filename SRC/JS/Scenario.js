@@ -347,8 +347,9 @@ function genererScenario() {
   }
 
   if (scenarioData) {
-    let periodeCle = scenarioData.periode; // Utilise la valeur brute du select
-    if (!univers[periodeCle]) return; // Si la période n'existe pas, ne génère rien
+    let periodeCle = scenarioData.periode;
+    // Si la période n'existe pas, ne génère rien (plus de fallback "autre")
+    if (!univers[periodeCle]) return;
     const periodeData = univers[periodeCle];
     const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
 
@@ -462,30 +463,39 @@ function genererScenario() {
       }
     }
 
-      addScenarioToHistory(scenarioObj);
+    addScenarioToHistory(scenarioObj);
 
     // Sauvegarde le scénario pour l’affichage moderne
     localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
 
-        // Ajoute ceci à la fin de genererScenario, juste après la sauvegarde du scénario
-    if (document.getElementById("introduction")) document.getElementById("introduction").innerHTML = scenarioObj.introduction || "";
-    if (document.getElementById("crime")) document.getElementById("crime").innerHTML = scenarioObj.crime || "";
-    if (document.getElementById("objectif")) document.getElementById("objectif").innerHTML = scenarioObj.objectif || "";
-    if (document.getElementById("mode")) document.getElementById("mode").textContent = scenarioData.mode || "-";
-    if (document.getElementById("duree")) document.getElementById("duree").textContent = (scenarioData.duree ? scenarioData.duree + " min" : "-") + (scenarioObj.detailsDuree ? " — " + scenarioObj.detailsDuree : "");
-    if (document.getElementById("periode")) document.getElementById("periode").textContent = scenarioData.periode || "-";
-    if (document.getElementById("joueurs")) document.getElementById("joueurs").textContent = scenarioData.nombreJoueurs || "-";
-    if (document.getElementById("criminels")) document.getElementById("criminels").textContent = scenarioData.criminels || "-";
-    if (document.getElementById("fantome")) document.getElementById("fantome").textContent = scenarioData.criminelFantome ? "Oui" : "Non";
-    if (document.getElementById("avatars")) document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
-    if (document.getElementById("scenario-loading")) document.getElementById("scenario-loading").style.display = "none";
-    if (document.getElementById("scenario-content")) document.getElementById("scenario-content").style.display = "block";
-    
+    // Affiche dans les bons éléments si ils existent
+    function fillScenarioDisplay() {
+      if (document.getElementById("introduction")) document.getElementById("introduction").innerHTML = scenarioObj.introduction;
+      if (document.getElementById("crime")) document.getElementById("crime").innerHTML = scenarioObj.crime;
+      if (document.getElementById("objectif")) document.getElementById("objectif").innerHTML = scenarioObj.objectif;
+      if (document.getElementById("mode")) document.getElementById("mode").textContent = scenarioData.mode || "-";
+      if (document.getElementById("duree")) document.getElementById("duree").textContent = scenarioData.duree + " min — " + (scenarioObj.detailsDuree || "");
+      if (document.getElementById("periode")) document.getElementById("periode").textContent = scenarioData.periode || "-";
+      if (document.getElementById("joueurs")) document.getElementById("joueurs").textContent = scenarioData.nombreJoueurs || "-";
+      if (document.getElementById("criminels")) document.getElementById("criminels").textContent = scenarioData.criminels || "-";
+      if (document.getElementById("fantome")) document.getElementById("fantome").textContent = scenarioData.criminelFantome ? "Oui" : "Non";
+      if (document.getElementById("avatars")) document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
+      // Cache le message de chargement, affiche le contenu
+      if (document.getElementById("scenario-loading")) document.getElementById("scenario-loading").style.display = "none";
+      if (document.getElementById("scenario-content")) document.getElementById("scenario-content").style.display = "block";
+    }
     fillScenarioDisplay();
-  } else {
-    // Affichage d’erreur si pas de données de scénario
-    if (document.getElementById("scenario-loading")) document.getElementById("scenario-loading").style.display = "none";
-    if (document.getElementById("scenario-content")) document.getElementById("scenario-content").style.display = "none";
-    if (document.getElementById("messageInfo")) document.getElementById("messageInfo").textContent = "Aucune donnée de scénario trouvée.";
+    } else {
+    container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
   }
+} 
+
+// Fonction utilitaire pour échapper le HTML (sécurité)
+function escapeHtml(string) {
+  return String(string)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
