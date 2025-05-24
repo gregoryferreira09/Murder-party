@@ -4,8 +4,156 @@
   <meta charset="UTF-8">
   <title>Choix du personnage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Style global -->
   <link rel="stylesheet" href="../../Public/styles/style.css">
+  <style>
+    /* Améliorations spécifiques à la galerie */
+    .galerie-personnages {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 18px;
+      margin-bottom: 18px;
+    }
+    .carte-personnage {
+      background: linear-gradient(145deg, #291e15 80%, #e0c18522 100%);
+      border: 2.5px solid #e0c185;
+      border-radius: 15px;
+      box-shadow: 0 4px 18px #0004, 0 0 0 3px #e0c18522;
+      transition: 
+        box-shadow 0.2s, 
+        border 0.2s, 
+        background 0.2s,
+        transform 0.18s;
+      min-width: 230px;
+      max-width: 270px;
+      width: 100%;
+      min-height: 154px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px 16px 14px 16px;
+      position: relative;
+      opacity: 1;
+    }
+    .carte-personnage.selected {
+      border: 2.8px solid #d4af37;
+      background: linear-gradient(135deg, #3d2b1f 75%, #e0c18555 100%);
+      box-shadow: 0 0 18px #d4af37cc, 0 0 0 4px #e0c18544;
+      transform: scale(1.04);
+      z-index: 2;
+    }
+    .carte-personnage.indisponible {
+      filter: grayscale(0.88) blur(1.2px);
+      opacity: 0.61;
+      pointer-events: none;
+    }
+    .carte-personnage-avatar {
+      width: 82px;
+      height: 82px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #e0c185;
+      background: #fff2;
+      box-shadow: 0 2px 10px #0004;
+      margin-bottom: 10px;
+    }
+    .carte-personnage-nom {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.25em;
+      color: #ffd88f;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .carte-personnage-role {
+      color: #e0c185;
+      font-style: italic;
+      font-size: 1em;
+      margin-bottom: 5px;
+      text-align: center;
+      display: block;
+    }
+    .carte-personnage-desc {
+      color: #f4e4c1;
+      font-size: 1em;
+      margin-top: 7px;
+      text-align: center;
+      min-height: 34px;
+    }
+    /* Effet de survol */
+    .carte-personnage:not(.indisponible):hover,
+    .carte-personnage:not(.indisponible):focus {
+      border: 2.5px solid #d4af37;
+      background: linear-gradient(140deg, #3d2b1f 80%, #e0c18566 100%);
+      box-shadow: 0 0 20px #d4af3777, 0 0 0 4px #e0c18533;
+      transform: scale(1.03);
+      z-index: 1;
+    }
+    /* message d'état (validation, attente) */
+    .etat-message {
+      font-size: 1.06em;
+      color: #e0c185;
+      margin-bottom: 18px;
+      text-align: center;
+      min-height: 24px;
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+    /* titre de la section dans le bandeau */
+    .section-titre {
+      font-size: 1.28em;
+      color: #e0c185;
+      margin-bottom: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.5px;
+      text-align: center;
+      font-weight: 600;
+    }
+    /* bouton principal plus visible */
+    .main-btn#valider-choix,
+    .main-btn#annuler-choix {
+      max-width: 300px;
+      margin: 0 auto;
+      font-size: 1.14em;
+      box-shadow: 0 0 8px #e0c18511;
+      background: #1b1b1b;
+      border: 2.5px solid #e0c185;
+      color: #e0c185;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
+    }
+    .main-btn#valider-choix:hover:not([disabled]),
+    .main-btn#valider-choix:focus:not([disabled]),
+    .main-btn#annuler-choix:hover,
+    .main-btn#annuler-choix:focus {
+      background: #e0c185;
+      color: #2c1b1b;
+      border: 2.5px solid #d4af37;
+      box-shadow: 0 0 18px #d4af37bb;
+    }
+    .main-btn[disabled] {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    @media (max-width: 730px) {
+      .galerie-personnages {
+        gap: 12px;
+      }
+      .carte-personnage {
+        min-width: 160px;
+        max-width: 98vw;
+        padding: 13px 4vw 9px 4vw;
+      }
+      .carte-personnage-avatar {
+        width: 56px;
+        height: 56px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -14,6 +162,8 @@
 
   <div class="center-wrapper">
     <main class="main-accueil">
+      <div class="section-titre">Faites votre choix parmi les personnages proposés</div>
+      <div class="etat-message" id="etatMessage"></div>
       <section class="galerie-personnages" id="galeriePersonnages">
         <!-- Les personnages seront ajoutés dynamiquement ici -->
       </section>
@@ -78,28 +228,32 @@
       personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
 
       galeriePersonnages.innerHTML = personnages.map((perso, i) => `
-        <div class="carte-personnage" data-id="${i}">
-          <div class="carte-personnage-avatarzone">
-            <img class="carte-personnage-avatar" src="${perso.image}" alt="${perso.nom}">
-          </div>
-          <div class="carte-personnage-infos">
-            <p class="carte-personnage-nom">${perso.nom}</p>
-            ${perso.role ? `<span class="carte-personnage-role">${perso.role}</span>` : ''}
-            ${perso.description ? `<div class="carte-personnage-desc">${perso.description}</div>` : ''}
-          </div>
+        <div class="carte-personnage" data-id="${i}" tabindex="0">
+          <img class="carte-personnage-avatar" src="${perso.image}" alt="${perso.nom}">
+          <div class="carte-personnage-nom">${perso.nom}</div>
+          ${perso.role ? `<span class="carte-personnage-role">${perso.role}</span>` : ''}
+          ${perso.description ? `<div class="carte-personnage-desc">${perso.description}</div>` : ''}
         </div>
       `).join("");
 
       // Sélection d'un personnage
       const cartes = document.querySelectorAll(".carte-personnage");
       cartes.forEach(carte => {
-        carte.addEventListener("click", () => {
-          cartes.forEach(card => card.style.border = "2px solid #e0c185");
-          carte.style.border = "2px solid #4CAF50";
-          localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
-          document.getElementById("valider-choix").disabled = false;
+        carte.addEventListener("click", () => selectCard(carte, cartes));
+        carte.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            selectCard(carte, cartes);
+            e.preventDefault();
+          }
         });
       });
+    }
+
+    function selectCard(carte, cartes) {
+      cartes.forEach(card => card.classList.remove("selected"));
+      carte.classList.add("selected");
+      localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
+      document.getElementById("valider-choix").disabled = false;
     }
 
     // 5. Synchro temps réel (Firebase)
@@ -116,16 +270,21 @@
             div.classList.remove('indisponible');
           }
         });
-        // Compteur validés/total
+        // Compteur validés/total et message d'état
         const nbValid = Object.keys(valids).length;
         const btnValider = document.getElementById('valider-choix');
-        btnValider.textContent =
-          (valids[playerId] ? 'En attente des autres joueurs (' : '') +
-          nbValid + '/' + nombreJoueurs +
-          (valids[playerId] ? ')' : ' Valider mon personnage');
+        const etatMessage = document.getElementById('etatMessage');
+        if (valids[playerId]) {
+          btnValider.textContent = 'En attente des autres joueurs';
+          etatMessage.textContent = `Vous avez choisi votre personnage. Joueurs ayant validé : ${nbValid}/${nombreJoueurs}`;
+        } else {
+          btnValider.textContent = 'Valider mon personnage';
+          etatMessage.textContent = nbValid > 0 ? `${nbValid}/${nombreJoueurs} joueur(s) ont validé leur choix` : '';
+        }
         // Redirige si tout le monde a validé
         if(nbValid === nombreJoueurs) {
-          window.location.href = "gameplay.html";
+          etatMessage.textContent = "Tous les joueurs ont choisi, chargement de la partie…";
+          setTimeout(() => window.location.href = "gameplay.html", 900);
         }
         // Affiche le bouton annuler si validé
         if (valids[playerId] && !document.getElementById('annuler-choix')) {
