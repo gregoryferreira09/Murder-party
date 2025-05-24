@@ -47,16 +47,20 @@
       width: 130px;
       margin-bottom: 0;
     }
-    .boutons-actions {
+    /* Adaptation dynamique de la hauteur */
+    .salon-colonne {
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      margin-top: 14px;
-      margin-bottom: 14px;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: 140px;
+      transition: min-height 0.2s;
     }
-    .main-btn {
-      min-width: 120px;
+    .salon-colonne .boutons-actions {
+      margin-top: auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     #listeJoueurs {
       margin: 18px auto 0 auto;
@@ -129,13 +133,14 @@
         <p class="texte-x2">Partagez ce code avec les autres joueurs :</p>
         <div class="code code-x2" id="codeSalon">------</div>
         <div class="status" id="etatSalon">En attente de joueurs...</div>
-        <div class="salon-colonne">
-  <ul id="listeJoueurs"></ul>
-  <div class="boutons-actions">
-    <button class="main-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
-    <button class="main-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
-  </div>
-</div>
+        <!-- Bloc colonne pour adaptation dynamique -->
+        <div class="salon-colonne" id="salonColonne">
+          <ul id="listeJoueurs"></ul>
+          <div class="boutons-actions">
+            <button class="main-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
+            <button class="main-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
+          </div>
+        </div>
         <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px; text-align:center; font-weight:bold;">
           Salon supprimé par le créateur.
         </div>
@@ -172,6 +177,7 @@
       const confirmModalBtn = document.getElementById("confirmModalBtn");
       const cancelModalBtn = document.getElementById("cancelModalBtn");
       const alertSalonSupprime = document.getElementById("alertSalonSupprime");
+      const salonColonne = document.getElementById("salonColonne");
 
       // Firebase config
       const firebaseConfig = {
@@ -282,7 +288,6 @@
           return;
         }
         if (!snapshot.exists()) {
-          // Si la partie n’était PAS en cours, on affiche le message d’erreur
           if (localStorage.getItem("enCours") !== "1") {
             alertSalonSupprime.style.display = "block";
             setTimeout(() => {
@@ -293,7 +298,6 @@
               window.location.href = "rejoindre-partie.html";
             }, 2000);
           } else {
-            // Si la partie était en cours, redirection silencieuse
             localStorage.setItem("pseudo", pseudoOrigine);
             localStorage.removeItem("pseudoOrigine");
             localStorage.removeItem("salonCode");
@@ -309,7 +313,6 @@
         if(joueursSnap && joueursSnap.forEach) {
           joueursSnap.forEach(joueurSnap => {
             let pseudoJ = joueurSnap.val().pseudo;
-            // Génère un pseudo unique à l'affichage seulement (ne touche pas au localStorage)
             let affichagePseudo = pseudoJ;
             if (pseudosUtilises[pseudoJ]) {
               pseudosUtilises[pseudoJ]++;
@@ -317,7 +320,6 @@
             } else {
               pseudosUtilises[pseudoJ] = 1;
             }
-            // Ajoute le check vert pour tous
             const li = document.createElement("li");
             li.innerHTML = affichagePseudo + ' <span class="check-vert">✔️</span>';
             joueursDiv.appendChild(li);
@@ -325,6 +327,16 @@
           });
         }
         etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
+
+        // === Dynamique: adapte la hauteur min selon le nombre de joueurs ===
+        // Hauteur estimée d'un joueur (px), ajuste si besoin
+        const hauteurJoueur = 44;
+        const hauteurBase = 80; // Espace pour le bouton et un peu de marge
+        const minJoueurs = 2;
+        const totalPourHauteur = Math.max(nbJoueurs, minJoueurs);
+        const nouvelleHauteur = (totalPourHauteur * hauteurJoueur) + hauteurBase;
+        salonColonne.style.minHeight = nouvelleHauteur + "px";
+        // === Fin adaptation dynamique ===
 
         // Décompte si complet (lancement automatique, propre)
         if (nbJoueurs >= totalJoueurs && !lancementAutomatiqueDemarre) {
@@ -339,7 +351,6 @@
             } else {
               clearInterval(countdownInterval);
               etatSalon.textContent = "La partie commence !";
-              // Mets juste /etat, NE SUPPRIME PAS
               db.ref('parties/' + salonCode + '/etat').set('en_cours');
             }
           }, 1000);
@@ -354,7 +365,6 @@
         if (jeSuisCreateur) {
           db.ref('parties/' + salonCode).remove();
         }
-        // Fin de partie : restauration pseudo
         localStorage.setItem("pseudo", pseudoOrigine);
         localStorage.removeItem("pseudoOrigine");
         localStorage.removeItem("salonCode");
