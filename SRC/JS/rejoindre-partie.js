@@ -147,3 +147,10 @@ document.getElementById("joinForm").addEventListener("submit", function(e) {
   e.preventDefault();
   rejoindreSalon();
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("joinForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        rejoindreSalon();
+    });
+});
