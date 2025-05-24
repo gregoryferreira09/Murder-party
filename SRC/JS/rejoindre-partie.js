@@ -142,15 +142,15 @@ async function rejoindreSalon() {
   }
 }
 
-// N'écoute que la soumission du formulaire (clic sur Rejoindre ou touche Entrée)
-document.getElementById("joinForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  rejoindreSalon();
-});
-
+// N'écoute la soumission du formulaire que lorsque le DOM est prêt
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById("joinForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        rejoindreSalon();
-    });
+    const form = document.getElementById("joinForm");
+    if(form) {
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            rejoindreSalon();
+        });
+    } else {
+        console.error('Formulaire "joinForm" non trouvé dans la page.');
+    }
 });
