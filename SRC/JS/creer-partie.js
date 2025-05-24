@@ -93,8 +93,23 @@ window.creerPartie = async function(formData) {
 };
 
 // Fonction utilitaire pour tirer N éléments aléatoires d'un tableau, sans doublons
+// Fonction utilitaire pour tirer N éléments aléatoires d'un tableau, sans doublons
 function getRandomElements(arr, n) {
   if (!Array.isArray(arr)) return [];
   const shuffled = arr.slice().sort(() => 0.5 - Math.random());
   return shuffled.slice(0, n);
 }
+
+// ...dans ta fonction window.creerPartie = async function(formData) { ... }
+let listePersos;
+if (periode === "autre" && periodeAutre) {
+  listePersos = getRandomElements(window.personnagesParEpoque["contemporain"], nombreJoueurs);
+} else {
+  listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
+}
+// Stockage SOUS FORME D'OBJET (clé=perso0, perso1, ...)
+let persosObj = {};
+listePersos.forEach((p, i) => {
+  persosObj['perso' + i] = p;
+});
+await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
