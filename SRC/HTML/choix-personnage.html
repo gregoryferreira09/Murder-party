@@ -4,74 +4,31 @@
   <meta charset="UTF-8">
   <title>Choix du personnage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Ajout du style global pour le bandeau doré -->
+  <!-- Style global -->
   <link rel="stylesheet" href="../../Public/styles/style.css">
-  <style>
-    h1 {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 2.8em;
-      margin-bottom: 30px;
-      color: #e9c78c;
-    }
-    .galerie-personnages {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
-    .carte-personnage {
-      background-color: #2c1b1b;
-      border: 2px solid #e9c78c;
-      border-radius: 12px;
-      width: 200px;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    .carte-personnage img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .carte-personnage:hover {
-      transform: scale(1.05);
-    }
-    #valider-choix {
-      background-color: #000000;
-      color: #ffffff;
-      border: 2px solid #e9c78c;
-      border-radius: 8px;
-      padding: 12px 24px;
-      font-size: 1.1em;
-      cursor: pointer;
-      margin-top: 20px;
-      font-family: 'Cinzel Decorative', serif;
-      transition: all 0.3s ease;
-    }
-    #valider-choix:hover {
-      background-color: #e9c78c;
-      color: #000000;
-    }
-    /* Pour que le bandeau ne soit pas collé au footer sur petits écrans */
-    main { min-height: 60vh; }
-  </style>
 </head>
 <body>
-
   <header>
-    <h1>Choisissez votre personnage</h1>
+    <h1 class="site-title">Choisissez votre personnage</h1>
   </header>
 
-  <main>
-    <div class="bandeau-dore">
+  <div class="center-wrapper">
+    <main class="main-accueil">
       <section class="galerie-personnages" id="galeriePersonnages">
         <!-- Les personnages seront ajoutés dynamiquement ici -->
       </section>
-      <button id="valider-choix" disabled>Valider mon personnage</button>
-    </div>
-  </main>
+      <div class="boutons-actions">
+        <button id="valider-choix" class="main-btn" disabled>Valider mon personnage</button>
+      </div>
+    </main>
+  </div>
 
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
+
+  <!-- Scripts inchangés -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script src="../JS/personnages.js"></script>
@@ -122,8 +79,14 @@
 
       galeriePersonnages.innerHTML = personnages.map((perso, i) => `
         <div class="carte-personnage" data-id="${i}">
-          <img src="${perso.image}" alt="${perso.nom}">
-          <p>${perso.nom}</p>
+          <div class="carte-personnage-avatarzone">
+            <img class="carte-personnage-avatar" src="${perso.image}" alt="${perso.nom}">
+          </div>
+          <div class="carte-personnage-infos">
+            <p class="carte-personnage-nom">${perso.nom}</p>
+            ${perso.role ? `<span class="carte-personnage-role">${perso.role}</span>` : ''}
+            ${perso.description ? `<div class="carte-personnage-desc">${perso.description}</div>` : ''}
+          </div>
         </div>
       `).join("");
 
@@ -131,7 +94,7 @@
       const cartes = document.querySelectorAll(".carte-personnage");
       cartes.forEach(carte => {
         carte.addEventListener("click", () => {
-          cartes.forEach(card => card.style.border = "2px solid #e9c78c");
+          cartes.forEach(card => card.style.border = "2px solid #e0c185");
           carte.style.border = "2px solid #4CAF50";
           localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
           document.getElementById("valider-choix").disabled = false;
@@ -148,11 +111,9 @@
           const id = div.getAttribute('data-id');
           const dejaPris = Object.values(valids).some(v => v.personnageId == id);
           if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
-            div.style.opacity = 0.5;
-            div.style.pointerEvents = 'none';
+            div.classList.add('indisponible');
           } else {
-            div.style.opacity = 1;
-            div.style.pointerEvents = '';
+            div.classList.remove('indisponible');
           }
         });
         // Compteur validés/total
@@ -192,10 +153,11 @@
       const btn = document.createElement('button');
       btn.id = 'annuler-choix';
       btn.textContent = "Annuler";
+      btn.className = "main-btn";
       btn.onclick = function() {
         db.ref(partieID + '/validations/' + playerId).remove();
       };
-      document.getElementById('valider-choix').parentNode.appendChild(btn);
+      document.querySelector('.boutons-actions').appendChild(btn);
     }
 
     // 7. Lancement au chargement
@@ -204,11 +166,5 @@
       startRealtimeSync();
     }
   </script>
-
-  <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
-
 </body>
 </html>
