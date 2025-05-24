@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <script>
    // Ne reset le code salon que si on arrive sur cette page sans transition depuis salon.html
-if (!document.referrer.includes("salon.html")) {
-  localStorage.removeItem("salonCode");
-}
+   if (!document.referrer.includes("salon.html")) {
+     localStorage.removeItem("salonCode");
+   }
   </script>
 </head>
 <body>
@@ -44,12 +44,7 @@ if (!document.referrer.includes("salon.html")) {
         <option value="contemporain">Contemporain</option>
         <option value="futuriste">Futuriste</option>
         <option value="historique">Historique</option>
-        <option value="autre">Autre (à préciser)</option>
       </select>
-      <div id="autrePeriode" style="display: none;">
-        <label for="periode_autre">Précisez la période :</label>
-        <input type="text" id="periode_autre" name="periode_autre" maxlength="32" placeholder="Ex. : 18ème siècle">
-      </div>
 
       <label for="nombreJoueurs">Nombre de joueurs :</label>
       <select id="nombreJoueurs" name="nombreJoueurs" required>
@@ -107,35 +102,12 @@ if (!document.referrer.includes("salon.html")) {
 <script src="../JS/personnages.js"></script>
 <script src="../JS/creer-partie.js"></script>
 <script>
-  // Gestion du champ "autre période"
-  const periodeSelect = document.getElementById('periode');
-  const autrePeriodeDiv = document.getElementById('autrePeriode');
-  periodeSelect.addEventListener('change', function() {
-    if (this.value === "autre") {
-      autrePeriodeDiv.style.display = "block";
-      document.getElementById('periode_autre').focus();
-    } else {
-      autrePeriodeDiv.style.display = "none";
-      document.getElementById('periode_autre').value = "";
-    }
-  });
-
   // Gestion du submit sécurisé
   const form = document.getElementById('creerPartieForm');
   const message = document.getElementById('message');
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     message.textContent = "";
-    // Vérification champ autre période si sélectionné
-    if (periodeSelect.value === "autre") {
-      const autre = document.getElementById('periode_autre').value.trim();
-      if (autre.length < 3) {
-        message.textContent = "Merci de préciser la période.";
-        document.getElementById('periode_autre').focus();
-        return;
-      }
-    }
-    // Appel de la logique JS de création (gérée dans creer-partie.js)
     if (typeof creerPartie === "function") {
       creerPartie(new FormData(form))
         .then(() => {
