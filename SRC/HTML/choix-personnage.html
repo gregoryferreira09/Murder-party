@@ -1,329 +1,147 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Choix du personnage</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../../Public/styles/style.css">
-  <style>
-    /* Améliorations spécifiques à la galerie */
-    .galerie-personnages {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 32px;
-      margin-top: 18px;
-      margin-bottom: 18px;
-    }
-    .carte-personnage {
-      background: linear-gradient(145deg, #291e15 80%, #e0c18522 100%);
-      border: 2.5px solid #e0c185;
-      border-radius: 15px;
-      box-shadow: 0 4px 18px #0004, 0 0 0 3px #e0c18522;
-      transition: 
-        box-shadow 0.2s, 
-        border 0.2s, 
-        background 0.2s,
-        transform 0.18s;
-      min-width: 230px;
-      max-width: 270px;
-      width: 100%;
-      min-height: 154px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 22px 16px 14px 16px;
-      position: relative;
-      opacity: 1;
-    }
-    .carte-personnage.selected {
-      border: 2.8px solid #d4af37;
-      background: linear-gradient(135deg, #3d2b1f 75%, #e0c18555 100%);
-      box-shadow: 0 0 18px #d4af37cc, 0 0 0 4px #e0c18544;
-      transform: scale(1.04);
-      z-index: 2;
-    }
-    .carte-personnage.indisponible {
-      filter: grayscale(0.88) blur(1.2px);
-      opacity: 0.61;
-      pointer-events: none;
-    }
-    .carte-personnage-avatar {
-      width: 82px;
-      height: 82px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid #e0c185;
-      background: #fff2;
-      box-shadow: 0 2px 10px #0004;
-      margin-bottom: 10px;
-    }
-    .carte-personnage-nom {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 1.25em;
-      color: #ffd88f;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-      text-align: center;
-    }
-    .carte-personnage-role {
-      color: #e0c185;
-      font-style: italic;
-      font-size: 1em;
-      margin-bottom: 5px;
-      text-align: center;
-      display: block;
-    }
-    .carte-personnage-desc {
-      color: #f4e4c1;
-      font-size: 1em;
-      margin-top: 7px;
-      text-align: center;
-      min-height: 34px;
-    }
-    /* Effet de survol */
-    .carte-personnage:not(.indisponible):hover,
-    .carte-personnage:not(.indisponible):focus {
-      border: 2.5px solid #d4af37;
-      background: linear-gradient(140deg, #3d2b1f 80%, #e0c18566 100%);
-      box-shadow: 0 0 20px #d4af3777, 0 0 0 4px #e0c18533;
-      transform: scale(1.03);
-      z-index: 1;
-    }
-    /* message d'état (validation, attente) */
-    .etat-message {
-      font-size: 1.06em;
-      color: #e0c185;
-      margin-bottom: 18px;
-      text-align: center;
-      min-height: 24px;
-      font-style: italic;
-      letter-spacing: 0.5px;
-    }
-    /* titre de la section dans le bandeau */
-    .section-titre {
-      font-size: 1.28em;
-      color: #e0c185;
-      margin-bottom: 6px;
-      font-family: 'Cormorant Garamond', serif;
-      letter-spacing: 0.5px;
-      text-align: center;
-      font-weight: 600;
-    }
-    /* bouton principal plus visible */
-    .main-btn#valider-choix,
-    .main-btn#annuler-choix {
-      max-width: 300px;
-      margin: 0 auto;
-      font-size: 1.14em;
-      box-shadow: 0 0 8px #e0c18511;
-      background: #1b1b1b;
-      border: 2.5px solid #e0c185;
-      color: #e0c185;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
-    }
-    .main-btn#valider-choix:hover:not([disabled]),
-    .main-btn#valider-choix:focus:not([disabled]),
-    .main-btn#annuler-choix:hover,
-    .main-btn#annuler-choix:focus {
-      background: #e0c185;
-      color: #2c1b1b;
-      border: 2.5px solid #d4af37;
-      box-shadow: 0 0 18px #d4af37bb;
-    }
-    .main-btn[disabled] {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    @media (max-width: 730px) {
-      .galerie-personnages {
-        gap: 12px;
-      }
-      .carte-personnage {
-        min-width: 160px;
-        max-width: 98vw;
-        padding: 13px 4vw 9px 4vw;
-      }
-      .carte-personnage-avatar {
-        width: 56px;
-        height: 56px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1 class="site-title">Choisissez votre personnage</h1>
-  </header>
-
-  <div class="center-wrapper">
-    <main class="main-accueil">
-      <div class="section-titre">Faites votre choix parmi les personnages proposés</div>
-      <div class="etat-message" id="etatMessage"></div>
-      <section class="galerie-personnages" id="galeriePersonnages">
-        <!-- Les personnages seront ajoutés dynamiquement ici -->
-      </section>
-      <div class="boutons-actions">
-        <button id="valider-choix" class="main-btn" disabled>Valider mon personnage</button>
-      </div>
-    </main>
-  </div>
-
-  <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
-
-  <!-- Scripts inchangés -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="../JS/personnages.js"></script>
-  <script>
-    // 1. CONFIG FIREBASE
-    const firebaseConfig = {
-      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-      authDomain: "murder-party-ba8d1.firebaseapp.com",
-      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "murder-party-ba8d1",
-      storageBucket: "murder-party-ba8d1.firebasestorage.app",
-      messagingSenderId: "20295055805",
-      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-      measurementId: "G-KSBMBB7KMJ"
-    };
+<!-- ... le reste du HTML ... -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+  // --- Firebase config ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+    authDomain: "murder-party-ba8d1.firebaseapp.com",
+    databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "murder-party-ba8d1",
+    storageBucket: "murder-party-ba8d1.appspot.com",
+    messagingSenderId: "20295055805",
+    appId: "1:20295055805:web:0963719c3f23ab7752fad4"
+  };
+  if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const partieID = "partie1";
+  }
+  const db = firebase.database();
 
-    // 2. Utilisation du pseudo profil ou "Anonyme"
-    const playerId = localStorage.getItem("pseudo") || "Anonyme";
+  // --- Récupération infos joueur ---
+  const salonCode = localStorage.getItem("salonCode");
+  let uuid = localStorage.getItem("uuid");
+  if (!uuid) {
+    uuid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+    localStorage.setItem("uuid", uuid);
+  }
+  let pseudo = localStorage.getItem("pseudo") || "Anonyme";
 
-    // 3. Variables globales
-    let nombreJoueurs = 0;
-    let personnages = [];
+  // --- Affichage liste perso (avec avatar harmonisé) ---
+  let personnages = [];
+  let personnageSelectionne = null;
+  let valids = {};
 
-    // 4. Génère la galerie de personnages
-    function getRandomElements(array, n) {
-      const copy = [...array];
-      const result = [];
-      for (let i = 0; i < n && copy.length > 0; i++) {
-        const idx = Math.floor(Math.random() * copy.length);
-        result.push(copy.splice(idx, 1)[0]);
-      }
-      return result;
-    }
+  function afficherPersonnages() {
+    const listDiv = document.getElementById("personnages-list");
+    listDiv.innerHTML = "";
+    personnages.forEach(perso => {
+      const div = document.createElement("div");
+      div.className = "carte-personnage";
+      div.setAttribute("role", "listitem");
+      div.setAttribute("tabindex", "0");
+      div.setAttribute("aria-label", `${perso.nom} - ${perso.description || ""}`);
+      div.setAttribute("data-id", perso.id);
 
-    function afficherPersonnages() {
-      const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-      if (!scenarioData) {
-        alert("Aucune donnée de scénario trouvée.");
-        return;
-      }
-      nombreJoueurs = scenarioData.nombreJoueurs;
-      const periode = scenarioData.periode;
-      const galeriePersonnages = document.getElementById("galeriePersonnages");
-      personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
-
-      galeriePersonnages.innerHTML = personnages.map((perso, i) => `
-        <div class="carte-personnage" data-id="${i}" tabindex="0">
-          <img class="carte-personnage-avatar" src="${perso.image}" alt="${perso.nom}">
-          <div class="carte-personnage-nom">${perso.nom}</div>
-          ${perso.role ? `<span class="carte-personnage-role">${perso.role}</span>` : ''}
-          ${perso.description ? `<div class="carte-personnage-desc">${perso.description}</div>` : ''}
+      // Avatar affiché à gauche, texte à droite
+      div.innerHTML = `
+        <div class="carte-personnage-avatarzone">
+          <img class="carte-personnage-avatar" src="${perso.image || 'Public/images/personnage1.png'}" alt="Avatar de ${perso.nom}">
         </div>
-      `).join("");
-
-      // Sélection d'un personnage
-      const cartes = document.querySelectorAll(".carte-personnage");
-      cartes.forEach(carte => {
-        carte.addEventListener("click", () => selectCard(carte, cartes));
-        carte.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            selectCard(carte, cartes);
-            e.preventDefault();
-          }
-        });
+        <div class="carte-personnage-infos">
+          <strong>${perso.nom}</strong>
+          <span class="pris-label" style="display:none">Pris</span>
+          <div class="carte-personnage-role">${perso.role || ""}</div>
+          <div class="carte-personnage-desc">${perso.description || ""}</div>
+        </div>
+      `;
+      // Sélection par clavier ou clic
+      div.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") div.click();
       });
-    }
+      div.addEventListener("click", () => {
+        if (div.classList.contains("indisponible")) return;
+        document.querySelectorAll('.carte-personnage').forEach(card => card.style.border = "2px solid #e0c185");
+        div.style.border = "2px solid #4CAF50";
+        personnageSelectionne = perso.id;
+        localStorage.setItem("personnageSelectionne", personnageSelectionne);
+        document.getElementById("valider-choix").disabled = false;
+      });
+      listDiv.appendChild(div);
+    });
+    majDisponibilite();
+  }
 
-    function selectCard(carte, cartes) {
-      cartes.forEach(card => card.classList.remove("selected"));
-      carte.classList.add("selected");
-      localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
-      document.getElementById("valider-choix").disabled = false;
-    }
-
-    // 5. Synchro temps réel (Firebase)
-    function startRealtimeSync() {
-      db.ref(partieID + '/validations').on('value', snap => {
-        const valids = snap.val() || {};
-        // Grise les personnages déjà pris
-        document.querySelectorAll('.carte-personnage').forEach(div => {
-          const id = div.getAttribute('data-id');
-          const dejaPris = Object.values(valids).some(v => v.personnageId == id);
-          if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
-            div.classList.add('indisponible');
-          } else {
-            div.classList.remove('indisponible');
-          }
-        });
-        // Compteur validés/total et message d'état
-        const nbValid = Object.keys(valids).length;
-        const btnValider = document.getElementById('valider-choix');
-        const etatMessage = document.getElementById('etatMessage');
-        if (valids[playerId]) {
-          btnValider.textContent = 'En attente des autres joueurs';
-          etatMessage.textContent = `Vous avez choisi votre personnage. Joueurs ayant validé : ${nbValid}/${nombreJoueurs}`;
-        } else {
-          btnValider.textContent = 'Valider mon personnage';
-          etatMessage.textContent = nbValid > 0 ? `${nbValid}/${nombreJoueurs} joueur(s) ont validé leur choix` : '';
+  function majDisponibilite() {
+    Object.keys(valids).forEach(joueurUUID => {
+      const pid = valids[joueurUUID].personnageId;
+      document.querySelectorAll('.carte-personnage').forEach(div => {
+        if (div.getAttribute('data-id') == pid && joueurUUID !== uuid) {
+          div.classList.add("indisponible");
+          div.querySelector('.pris-label').style.display = "inline-block";
         }
-        // Redirige si tout le monde a validé
-        if(nbValid === nombreJoueurs) {
-          etatMessage.textContent = "Tous les joueurs ont choisi, chargement de la partie…";
-          setTimeout(() => window.location.href = "gameplay.html", 900);
-        }
-        // Affiche le bouton annuler si validé
-        if (valids[playerId] && !document.getElementById('annuler-choix')) {
-          ajouterBoutonAnnuler();
-          btnValider.disabled = true;
-        }
-        if (!valids[playerId] && document.getElementById('annuler-choix')) {
-          document.getElementById('annuler-choix').remove();
-          btnValider.disabled = false;
+        if (div.getAttribute('data-id') == pid && joueurUUID === uuid) {
+          div.classList.remove("indisponible");
+          div.querySelector('.pris-label').style.display = "none";
         }
       });
+    });
+  }
 
-      // Quand tu valides
-      document.getElementById("valider-choix").onclick = function() {
-        const personnageId = localStorage.getItem("personnageSelectionne");
-        if (personnageId && !this.disabled) {
-          db.ref(partieID + '/validations/' + playerId).set({ personnageId });
-          this.disabled = true;
-        }
-      };
-    }
+  // --- Sync temps réel validation ---
+  function startRealtimeSync() {
+    db.ref('parties/' + salonCode + '/validations').on('value', snap => {
+      valids = snap.val() || {};
+      majDisponibilite();
+      const nbValid = Object.keys(valids).length;
+      const btn = document.getElementById('valider-choix');
+      btn.textContent = (valids[uuid] ? 'En attente des autres joueurs (' : '') +
+                        nbValid + '/' + personnages.length +
+                        (valids[uuid] ? ')' : ' Valider mon personnage');
+      // Si tu veux garder la redirection pour tous les joueurs quand tout le monde a validé :
+      // if(nbValid === personnages.length) {
+      //   window.location.href = "gameplay.html";
+      // }
+    });
+  }
 
-    // 6. Bouton annuler
-    function ajouterBoutonAnnuler() {
-      const btn = document.createElement('button');
-      btn.id = 'annuler-choix';
-      btn.textContent = "Annuler";
-      btn.className = "main-btn";
-      btn.onclick = function() {
-        db.ref(partieID + '/validations/' + playerId).remove();
-      };
-      document.querySelector('.boutons-actions').appendChild(btn);
+  // --- VALIDER CHOIX ET REDIRECTION ---
+  document.getElementById("valider-choix").onclick = async function() {
+    if (!personnageSelectionne || this.disabled) return;
+    if (Object.values(valids).some(v => v.personnageId === personnageSelectionne && v.uuid !== uuid)) {
+      document.getElementById("message").textContent = "Ce personnage vient d'être pris !";
+      return;
     }
+    await db.ref('parties/' + salonCode + '/validations/' + uuid).set({
+      uuid,
+      pseudo,
+      personnageId: personnageSelectionne
+    });
+    document.getElementById("valider-choix").disabled = true;
+    document.getElementById("message").textContent = "Choix validé, redirection...";
 
-    // 7. Lancement au chargement
-    window.onload = function() {
-      afficherPersonnages();
-      startRealtimeSync();
+    // REDIRECTION AUTOMATIQUE VERS LA PAGE SUIVANTE
+    window.location.href = "gameplay.html";
+  };
+
+  // --- Récupère la liste des personnages depuis la base ---
+  async function chargerPersonnages() {
+    const persosSnap = await db.ref('parties/' + salonCode + '/personnages').get();
+    personnages = [];
+    persosSnap.forEach(snap => {
+      personnages.push({ ...snap.val(), id: snap.key });
+    });
+    afficherPersonnages();
+    startRealtimeSync();
+  }
+
+  // --- Init page ---
+  document.addEventListener("DOMContentLoaded", async function() {
+    if (!salonCode) {
+      document.getElementById("message").textContent = "Aucun salon trouvé.";
+      return;
     }
-  </script>
-</body>
-</html>
+    await chargerPersonnages();
+  });
+</script>
