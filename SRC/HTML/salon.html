@@ -206,7 +206,6 @@
           jeSuisCreateur = true;
           cloturerSalonBtn.style.display = "inline-block";
           quitterSalonBtn.style.display = "none";
-          // Plus de bouton "Lancer la partie" ici : tout est automatisé !
         } else {
           jeSuisCreateur = false;
           cloturerSalonBtn.style.display = "none";
@@ -269,7 +268,7 @@
       });
 
       db.ref('parties/' + salonCode).on('value', snapshot => {
-        // --- Gestion du lancement automatique via /etat ---
+        // CASE 1 : lancement auto (redirection propre SANS message d'erreur)
         const etatPartie = snapshot.child('etat').val();
         if (etatPartie === 'en_cours') {
           localStorage.setItem("pseudo", pseudoOrigine);
@@ -278,10 +277,10 @@
           window.location.href = "lancement-partie.html";
           return;
         }
+        // CASE 2 : suppression par le créateur (affichage message)
         if (!snapshot.exists()) {
           alertSalonSupprime.style.display = "block";
           setTimeout(() => {
-            // Fin de partie : restauration pseudo
             localStorage.setItem("pseudo", pseudoOrigine);
             localStorage.removeItem("pseudoOrigine");
             localStorage.removeItem("salonCode");
@@ -313,7 +312,7 @@
         }
         etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
 
-        // Décompte si complet
+        // Décompte si complet (lancement automatique, propre)
         if (nbJoueurs >= totalJoueurs && !lancementAutomatiqueDemarre) {
           lancementAutomatiqueDemarre = true;
           let countdown = 5;
@@ -326,7 +325,7 @@
             } else {
               clearInterval(countdownInterval);
               etatSalon.textContent = "La partie commence !";
-              // NE SUPPRIME PAS LE SALON ! Mets juste /etat
+              // Mets juste /etat, NE SUPPRIME PAS
               db.ref('parties/' + salonCode + '/etat').set('en_cours');
             }
           }, 1000);
