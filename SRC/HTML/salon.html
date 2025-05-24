@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    /* Modal & salon-specific styles, ne touche pas au header/footer ici */
     #confirmationModal {
       display: none;
       position: fixed;
@@ -17,7 +16,9 @@
       justify-content: center;
       align-items: center;
     }
-    #confirmationModal.active { display: flex; }
+    #confirmationModal.active {
+      display: flex;
+    }
     #confirmationModal .main-accueil {
       max-width: 340px;
       margin: auto;
@@ -42,7 +43,10 @@
       justify-content: center;
       margin: 0;
     }
-    #confirmationModal .main-btn { width: 130px; margin-bottom: 0; }
+    #confirmationModal .main-btn {
+      width: 130px;
+      margin-bottom: 0;
+    }
     .boutons-actions {
       display: flex;
       flex-wrap: wrap;
@@ -51,7 +55,9 @@
       margin-top: 14px;
       margin-bottom: 14px;
     }
-    .main-btn { min-width: 120px; }
+    .main-btn {
+      min-width: 120px;
+    }
     #listeJoueurs {
       margin: 18px auto 0 auto;
       padding: 0;
@@ -72,8 +78,18 @@
       align-items: center;
       justify-content: space-between;
     }
-    #listeJoueurs .check-vert { color: #4caf50; font-size: 1.1em; margin-left: 6px; }
-    #etatSalon { margin-top: 16px; font-size: 1.1em; color: #e0c185; font-weight: bold; text-align: center; }
+    #listeJoueurs .check-vert {
+      color: #4caf50;
+      font-size: 1.1em;
+      margin-left: 6px;
+    }
+    #etatSalon {
+      margin-top: 16px;
+      font-size: 1.1em;
+      color: #e0c185;
+      font-weight: bold;
+      text-align: center;
+    }
     #codeSalon {
       letter-spacing: 0.18em;
       font-size: 1.5em;
@@ -96,12 +112,16 @@
     }
   </style>
 </head>
-<body>
-  <header>
-    <h1>Salon de la partie</h1>
-  </header>
+<body class="accueil">
+  <script>
+    const salonCode = localStorage.getItem("salonCode");
+    if (!salonCode) {
+      window.location.replace("creer-partie.html");
+    }
+  </script>
   <div class="center-wrapper">
     <main class="main-accueil" role="main">
+      <h1>Salon de la partie</h1>
       <div class="bienvenue-message">
         Bonjour <span id="pseudoAffiche"></span>
       </div>
@@ -110,12 +130,12 @@
         <div class="code code-x2" id="codeSalon">------</div>
         <div class="status" id="etatSalon">En attente de joueurs...</div>
         <div class="salon-colonne">
-          <ul id="listeJoueurs"></ul>
-          <div class="boutons-actions">
-            <button class="main-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
-            <button class="main-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
-          </div>
-        </div>
+  <ul id="listeJoueurs"></ul>
+  <div class="boutons-actions">
+    <button class="main-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
+    <button class="main-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
+  </div>
+</div>
         <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px; text-align:center; font-weight:bold;">
           Salon supprimé par le créateur.
         </div>
@@ -139,7 +159,208 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
-    // ... (ton JS inchangé)
+    document.addEventListener('DOMContentLoaded', function() {
+      const salonCode = localStorage.getItem("salonCode");
+      document.getElementById("codeSalon").textContent = salonCode || "------";
+      const pseudoAffiche = document.getElementById("pseudoAffiche");
+      const etatSalon = document.getElementById("etatSalon");
+      const joueursDiv = document.getElementById("listeJoueurs");
+      const cloturerSalonBtn = document.getElementById("cloturerSalonBtn");
+      const quitterSalonBtn = document.getElementById("quitterSalonBtn");
+      const confirmationModal = document.getElementById("confirmationModal");
+      const modalQuestion = document.getElementById("modalQuestion");
+      const confirmModalBtn = document.getElementById("confirmModalBtn");
+      const cancelModalBtn = document.getElementById("cancelModalBtn");
+      const alertSalonSupprime = document.getElementById("alertSalonSupprime");
+
+      // Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+        authDomain: "murder-party-ba8d1.firebaseapp.com",
+        databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "murder-party-ba8d1",
+        storageBucket: "murder-party-ba8d1.appspot.com",
+        messagingSenderId: "20295055805",
+        appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+        measurementId: "G-KSBMBB7KMJ"
+      };
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      const db = firebase.database();
+
+      // Gestion des pseudos d'origine pour affichage temporaire
+      let monPseudo = localStorage.getItem("pseudo") || "invité";
+      let pseudoOrigine = monPseudo;
+      if (!localStorage.getItem("pseudoOrigine")) {
+        localStorage.setItem("pseudoOrigine", pseudoOrigine);
+      } else {
+        pseudoOrigine = localStorage.getItem("pseudoOrigine");
+      }
+      pseudoAffiche.textContent = pseudoOrigine;
+      let jeSuisCreateur = false;
+      let countdownInterval = null;
+      let lancementAutomatiqueDemarre = false;
+
+      // Gestion boutons selon créateur
+      db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
+        if (snap.exists() && snap.val().pseudo === pseudoOrigine) {
+          jeSuisCreateur = true;
+          cloturerSalonBtn.style.display = "inline-block";
+          quitterSalonBtn.style.display = "none";
+        } else {
+          jeSuisCreateur = false;
+          cloturerSalonBtn.style.display = "none";
+          quitterSalonBtn.style.display = "inline-block";
+        }
+      });
+
+      // Modale confirmation
+      let currentAction = null;
+      cloturerSalonBtn.addEventListener("click", function() {
+        modalQuestion.textContent = "Es-tu sûr de vouloir clôturer le salon ?";
+        confirmationModal.classList.add('active');
+        currentAction = "cloture";
+      });
+      quitterSalonBtn.addEventListener("click", function() {
+        modalQuestion.textContent = "Es-tu sûr de vouloir quitter le salon ?";
+        confirmationModal.classList.add('active');
+        currentAction = "quitter";
+      });
+      confirmModalBtn.addEventListener("click", function() {
+        if(currentAction === "cloture") {
+          db.ref('parties/' + salonCode).remove().then(() => {
+            // Fin de partie : restauration pseudo
+            localStorage.setItem("pseudo", pseudoOrigine);
+            localStorage.removeItem("pseudoOrigine");
+            localStorage.removeItem("salonCode");
+            localStorage.removeItem("enCours");
+            window.location.href = "creer-partie.html";
+          });
+        } else if(currentAction === "quitter") {
+          db.ref('parties/' + salonCode + '/joueurs').once('value', snap => {
+            snap.forEach(child => {
+              if(child.val().pseudo === monPseudo || child.val().pseudo === pseudoOrigine) {
+                db.ref('parties/' + salonCode + '/joueurs/' + child.key).remove();
+              }
+            });
+          });
+          setTimeout(() => {
+            // Restaure pseudo à la sortie du salon
+            localStorage.setItem("pseudo", pseudoOrigine);
+            localStorage.removeItem("pseudoOrigine");
+            localStorage.removeItem("salonCode");
+            localStorage.removeItem("enCours");
+            window.location.href = "rejoindre-partie.html";
+          }, 300);
+        }
+        confirmationModal.classList.remove('active');
+        currentAction = null;
+      });
+      cancelModalBtn.addEventListener("click", function() {
+        confirmationModal.classList.remove('active');
+        currentAction = null;
+      });
+
+      // Affichage joueurs, état, et décompte
+      let totalJoueurs = 1;
+      db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
+        if (snap.exists()) {
+          const parametres = snap.val();
+          totalJoueurs = parseInt(parametres.nombreJoueurs) || 1;
+        }
+      });
+
+      db.ref('parties/' + salonCode).on('value', snapshot => {
+        const etatPartie = snapshot.child('etat').val();
+        if (etatPartie === 'en_cours') {
+          localStorage.setItem("enCours", "1");
+          localStorage.setItem("pseudo", pseudoOrigine);
+          localStorage.removeItem("pseudoOrigine");
+          localStorage.removeItem("salonCode");
+          window.location.href = "lancement-partie.html";
+          return;
+        }
+        if (!snapshot.exists()) {
+          // Si la partie n’était PAS en cours, on affiche le message d’erreur
+          if (localStorage.getItem("enCours") !== "1") {
+            alertSalonSupprime.style.display = "block";
+            setTimeout(() => {
+              localStorage.setItem("pseudo", pseudoOrigine);
+              localStorage.removeItem("pseudoOrigine");
+              localStorage.removeItem("salonCode");
+              localStorage.removeItem("enCours");
+              window.location.href = "rejoindre-partie.html";
+            }, 2000);
+          } else {
+            // Si la partie était en cours, redirection silencieuse
+            localStorage.setItem("pseudo", pseudoOrigine);
+            localStorage.removeItem("pseudoOrigine");
+            localStorage.removeItem("salonCode");
+            localStorage.removeItem("enCours");
+            window.location.href = "rejoindre-partie.html";
+          }
+          return;
+        }
+        joueursDiv.innerHTML = "";
+        let nbJoueurs = 0;
+        const joueursSnap = snapshot.child('joueurs');
+        let pseudosUtilises = {};
+        if(joueursSnap && joueursSnap.forEach) {
+          joueursSnap.forEach(joueurSnap => {
+            let pseudoJ = joueurSnap.val().pseudo;
+            // Génère un pseudo unique à l'affichage seulement (ne touche pas au localStorage)
+            let affichagePseudo = pseudoJ;
+            if (pseudosUtilises[pseudoJ]) {
+              pseudosUtilises[pseudoJ]++;
+              affichagePseudo = pseudoJ + pseudosUtilises[pseudoJ];
+            } else {
+              pseudosUtilises[pseudoJ] = 1;
+            }
+            // Ajoute le check vert pour tous
+            const li = document.createElement("li");
+            li.innerHTML = affichagePseudo + ' <span class="check-vert">✔️</span>';
+            joueursDiv.appendChild(li);
+            nbJoueurs++;
+          });
+        }
+        etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
+
+        // Décompte si complet (lancement automatique, propre)
+        if (nbJoueurs >= totalJoueurs && !lancementAutomatiqueDemarre) {
+          lancementAutomatiqueDemarre = true;
+          let countdown = 5;
+          etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
+          if (countdownInterval) clearInterval(countdownInterval);
+          countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+              etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
+            } else {
+              clearInterval(countdownInterval);
+              etatSalon.textContent = "La partie commence !";
+              // Mets juste /etat, NE SUPPRIME PAS
+              db.ref('parties/' + salonCode + '/etat').set('en_cours');
+            }
+          }, 1000);
+        } else if (nbJoueurs < totalJoueurs) {
+          lancementAutomatiqueDemarre = false;
+          if (countdownInterval) clearInterval(countdownInterval);
+        }
+      });
+
+      // Suppression automatique si le créateur ferme l'onglet
+      window.addEventListener("beforeunload", function () {
+        if (jeSuisCreateur) {
+          db.ref('parties/' + salonCode).remove();
+        }
+        // Fin de partie : restauration pseudo
+        localStorage.setItem("pseudo", pseudoOrigine);
+        localStorage.removeItem("pseudoOrigine");
+        localStorage.removeItem("salonCode");
+        localStorage.removeItem("enCours");
+      });
+    });
   </script>
 </body>
 </html>
