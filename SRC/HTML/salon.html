@@ -47,7 +47,6 @@
       width: 130px;
       margin-bottom: 0;
     }
-    /* Harmonisation boutons */
     .boutons-actions {
       display: flex;
       flex-wrap: wrap;
@@ -75,6 +74,14 @@
       font-family: 'Cormorant Garamond', serif;
       letter-spacing: 1px;
       font-size: 1.16em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #listeJoueurs .check-vert {
+      color: #4caf50;
+      font-size: 1.1em;
+      margin-left: 6px;
     }
     #etatSalon {
       margin-top: 16px;
@@ -151,12 +158,9 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
-    // Affiche le code salon dès que le DOM est prêt
     document.addEventListener('DOMContentLoaded', function() {
       const salonCode = localStorage.getItem("salonCode");
       document.getElementById("codeSalon").textContent = salonCode || "------";
-
-      // Variables DOM
       const pseudoAffiche = document.getElementById("pseudoAffiche");
       const etatSalon = document.getElementById("etatSalon");
       const joueursDiv = document.getElementById("listeJoueurs");
@@ -184,15 +188,21 @@
       }
       const db = firebase.database();
 
-      // Utilisateur
-      const monPseudo = localStorage.getItem("pseudo") || "invité";
+      // Gestion des pseudos d'origine pour affichage temporaire
+      let monPseudo = localStorage.getItem("pseudo") || "invité";
+      let pseudoOrigine = monPseudo;
+      if (!localStorage.getItem("pseudoOrigine")) {
+        localStorage.setItem("pseudoOrigine", pseudoOrigine);
+      } else {
+        pseudoOrigine = localStorage.getItem("pseudoOrigine");
+      }
+      pseudoAffiche.textContent = pseudoOrigine;
       let jeSuisCreateur = false;
       let countdownInterval = null;
-      pseudoAffiche.textContent = monPseudo;
 
       // Gestion boutons selon créateur
       db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
-        if (snap.exists() && snap.val().pseudo === monPseudo) {
+        if (snap.exists() && snap.val().pseudo === pseudoOrigine) {
           jeSuisCreateur = true;
           cloturerSalonBtn.style.display = "inline-block";
           quitterSalonBtn.style.display = "none";
@@ -206,6 +216,9 @@
             lancerBtn.style.marginRight = "15px";
             cloturerSalonBtn.parentNode.insertBefore(lancerBtn, cloturerSalonBtn);
             lancerBtn.onclick = function() {
+              // Fin de partie : restauration pseudo d'origine pour ce joueur
+              localStorage.setItem("pseudo", pseudoOrigine);
+              localStorage.removeItem("pseudoOrigine");
               localStorage.removeItem("salonCode");
               window.location.href = "lancement-partie.html";
             };
@@ -236,18 +249,24 @@
       confirmModalBtn.addEventListener("click", function() {
         if(currentAction === "cloture") {
           db.ref('parties/' + salonCode).remove().then(() => {
+            // Fin de partie : restauration pseudo
+            localStorage.setItem("pseudo", pseudoOrigine);
+            localStorage.removeItem("pseudoOrigine");
             localStorage.removeItem("salonCode");
             window.location.href = "creer-partie.html";
           });
         } else if(currentAction === "quitter") {
           db.ref('parties/' + salonCode + '/joueurs').once('value', snap => {
             snap.forEach(child => {
-              if(child.val().pseudo === monPseudo) {
+              if(child.val().pseudo === monPseudo || child.val().pseudo === pseudoOrigine) {
                 db.ref('parties/' + salonCode + '/joueurs/' + child.key).remove();
               }
             });
           });
           setTimeout(() => {
+            // Restaure pseudo à la sortie du salon
+            localStorage.setItem("pseudo", pseudoOrigine);
+            localStorage.removeItem("pseudoOrigine");
             localStorage.removeItem("salonCode");
             window.location.href = "rejoindre-partie.html";
           }, 300);
@@ -273,6 +292,9 @@
         if (!snapshot.exists()) {
           alertSalonSupprime.style.display = "block";
           setTimeout(() => {
+            // Fin de partie : restauration pseudo
+            localStorage.setItem("pseudo", pseudoOrigine);
+            localStorage.removeItem("pseudoOrigine");
             localStorage.removeItem("salonCode");
             window.location.href = "rejoindre-partie.html";
           }, 2000);
@@ -281,11 +303,21 @@
         joueursDiv.innerHTML = "";
         let nbJoueurs = 0;
         const joueursSnap = snapshot.child('joueurs');
+        let pseudosUtilises = {};
         if(joueursSnap && joueursSnap.forEach) {
           joueursSnap.forEach(joueurSnap => {
-            const pseudoJ = joueurSnap.val().pseudo;
+            let pseudoJ = joueurSnap.val().pseudo;
+            // Génère un pseudo unique à l'affichage seulement (ne touche pas au localStorage)
+            let affichagePseudo = pseudoJ;
+            if (pseudosUtilises[pseudoJ]) {
+              pseudosUtilises[pseudoJ]++;
+              affichagePseudo = pseudoJ + pseudosUtilises[pseudoJ];
+            } else {
+              pseudosUtilises[pseudoJ] = 1;
+            }
+            // Ajoute le check vert pour tous
             const li = document.createElement("li");
-            li.textContent = pseudoJ;
+            li.innerHTML = affichagePseudo + ' <span class="check-vert">✔️</span>';
             joueursDiv.appendChild(li);
             nbJoueurs++;
           });
@@ -304,6 +336,9 @@
             } else {
               clearInterval(countdownInterval);
               etatSalon.textContent = "La partie commence !";
+              // Fin de partie : restauration pseudo
+              localStorage.setItem("pseudo", pseudoOrigine);
+              localStorage.removeItem("pseudoOrigine");
               localStorage.removeItem("salonCode");
               window.location.href = "lancement-partie.html";
             }
@@ -318,6 +353,9 @@
         if (jeSuisCreateur) {
           db.ref('parties/' + salonCode).remove();
         }
+        // Fin de partie : restauration pseudo
+        localStorage.setItem("pseudo", pseudoOrigine);
+        localStorage.removeItem("pseudoOrigine");
         localStorage.removeItem("salonCode");
       });
     });
