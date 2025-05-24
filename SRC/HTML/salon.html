@@ -232,6 +232,7 @@
             localStorage.setItem("pseudo", pseudoOrigine);
             localStorage.removeItem("pseudoOrigine");
             localStorage.removeItem("salonCode");
+            localStorage.removeItem("enCours");
             window.location.href = "creer-partie.html";
           });
         } else if(currentAction === "quitter") {
@@ -247,6 +248,7 @@
             localStorage.setItem("pseudo", pseudoOrigine);
             localStorage.removeItem("pseudoOrigine");
             localStorage.removeItem("salonCode");
+            localStorage.removeItem("enCours");
             window.location.href = "rejoindre-partie.html";
           }, 300);
         }
@@ -268,24 +270,34 @@
       });
 
       db.ref('parties/' + salonCode).on('value', snapshot => {
-        // CASE 1 : lancement auto (redirection propre SANS message d'erreur)
         const etatPartie = snapshot.child('etat').val();
         if (etatPartie === 'en_cours') {
+          localStorage.setItem("enCours", "1");
           localStorage.setItem("pseudo", pseudoOrigine);
           localStorage.removeItem("pseudoOrigine");
           localStorage.removeItem("salonCode");
           window.location.href = "lancement-partie.html";
           return;
         }
-        // CASE 2 : suppression par le créateur (affichage message)
         if (!snapshot.exists()) {
-          alertSalonSupprime.style.display = "block";
-          setTimeout(() => {
+          // Si la partie n’était PAS en cours, on affiche le message d’erreur
+          if (localStorage.getItem("enCours") !== "1") {
+            alertSalonSupprime.style.display = "block";
+            setTimeout(() => {
+              localStorage.setItem("pseudo", pseudoOrigine);
+              localStorage.removeItem("pseudoOrigine");
+              localStorage.removeItem("salonCode");
+              localStorage.removeItem("enCours");
+              window.location.href = "rejoindre-partie.html";
+            }, 2000);
+          } else {
+            // Si la partie était en cours, redirection silencieuse
             localStorage.setItem("pseudo", pseudoOrigine);
             localStorage.removeItem("pseudoOrigine");
             localStorage.removeItem("salonCode");
+            localStorage.removeItem("enCours");
             window.location.href = "rejoindre-partie.html";
-          }, 2000);
+          }
           return;
         }
         joueursDiv.innerHTML = "";
@@ -344,6 +356,7 @@
         localStorage.setItem("pseudo", pseudoOrigine);
         localStorage.removeItem("pseudoOrigine");
         localStorage.removeItem("salonCode");
+        localStorage.removeItem("enCours");
       });
     });
   </script>
