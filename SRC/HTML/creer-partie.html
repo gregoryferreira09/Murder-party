@@ -2,282 +2,157 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Salon de la Partie – Murder Party</title>
+  <title>Créer une Partie - Murder Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Polices Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
-  <style>
-    /* Harmonisation modale pour garder le style général */
-    #confirmationModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(44,27,27,0.75);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    #confirmationModal.active {
-      display: flex;
-    }
-    #confirmationModal .main-accueil {
-      max-width: 340px;
-      margin: auto;
-      text-align: center;
-      border: 2px solid #e0c185;
-      background: #2c1b1b;
-      border-radius: 18px;
-      box-shadow: 0 4px 20px #0008;
-      padding: 32px 28px;
-    }
-    #confirmationModal .modal-question {
-      font-weight: bold;
-      margin-bottom: 22px;
-      color: #e0c185;
-      font-family: 'Cinzel Decorative',serif;
-      font-size: 1.1em;
-    }
-    #confirmationModal .boutons-actions {
-      display: flex;
-      flex-direction: row;
-      gap: 24px;
-      justify-content: center;
-      margin: 0;
-    }
-    #confirmationModal .main-btn {
-      width: 130px;
-      margin-bottom: 0;
-    }
-  </style>
-</head>
-<body class="accueil">
-  <div class="center-wrapper">
-    <main class="main-accueil" role="main">
-      <h1>Salon de la partie</h1>
-      <div class="bienvenue-message">
-        Bonjour <span id="pseudoAffiche"></span>
-      </div>
-      <div>
-        <p class="texte-x2">Partagez ce code avec les autres joueurs :</p>
-        <div class="code code-x2" id="codeSalon">------</div>
-        <div class="status" id="etatSalon">En attente de joueurs...</div>
-        <ul id="listeJoueurs"></ul>
-        <div class="boutons-actions">
-          <button class="main-btn" id="cloturerSalonBtn" style="display:none;">Clôturer le salon</button>
-          <button class="main-btn" id="quitterSalonBtn" style="display:none;">Quitter le salon</button>
-        </div>
-        <div id="alertSalonSupprime" style="display:none; color:#ff6b6b; margin-top:10px; text-align:center; font-weight:bold;">
-          Salon supprimé par le créateur.
-        </div>
-      </div>
-      <!-- Modale confirmation harmonisée -->
-      <div id="confirmationModal">
-        <div class="main-accueil">
-          <div class="modal-question" id="modalQuestion"></div>
-          <div class="boutons-actions">
-            <button id="confirmModalBtn" class="main-btn">Oui</button>
-            <button id="cancelModalBtn" class="main-btn">Non</button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-  <footer class="footer">
-    <p>© 2025 Murder Party. Tous droits réservés.</p>
-    <a href="mentions-legales.html">Mentions légales</a>
-  </footer>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
-    // Sécurisation du texte
-    function escapeHTML(s) {
-      if (!s) return '';
-      return s.replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[c]));
+    // Nettoyage du salonCode pour forcer une nouvelle création de salon à chaque fois
+    localStorage.removeItem("salonCode");
+  </script>
+</head>
+<body>
+<header>
+  <h1 class="site-title">Murder Party</h1>
+</header>
+
+<div class="center-wrapper">
+  <main class="main-accueil" role="main">
+    <h2 id="creer-partie-heading" style="text-align:center; margin-bottom: 1.3em;">Créer une Partie</h2>
+    <form id="creerPartieForm" class="form-container" autocomplete="off" spellcheck="false">
+      <label for="mode">Choisissez le mode de jeu :</label>
+      <select id="mode" name="mode" required>
+        <option value="classique">Classique</option>
+        <option value="poison">Poison</option>
+      </select>
+
+      <label for="duree">Durée de la partie :</label>
+      <select id="duree" name="duree" required>
+        <option value="30">30 minutes</option>
+        <option value="60">60 minutes</option>
+      </select>
+
+      <label for="periode">Choisissez la période du scénario :</label>
+      <select id="periode" name="periode" required>
+        <option value="medieval">Moyen-Âge</option>
+        <option value="renaissance">Renaissance</option>
+        <option value="victorien">Victorien</option>
+        <option value="western">Western</option>
+        <option value="contemporain">Contemporain</option>
+        <option value="futuriste">Futuriste</option>
+        <option value="historique">Historique</option>
+        <option value="autre">Autre (à préciser)</option>
+      </select>
+      <div id="autrePeriode" style="display: none;">
+        <label for="periode_autre">Précisez la période :</label>
+        <input type="text" id="periode_autre" name="periode_autre" maxlength="32" placeholder="Ex. : 18ème siècle">
+      </div>
+
+      <label for="nombreJoueurs">Nombre de joueurs :</label>
+      <select id="nombreJoueurs" name="nombreJoueurs" required>
+        <option value="1">1 joueur</option>
+        <option value="2">2 joueurs</option>
+        <option value="3">3 joueurs</option>
+        <option value="4">4 joueurs</option>
+        <option value="5">5 joueurs</option>
+        <option value="6">6 joueurs</option>
+        <option value="7">7 joueurs</option>
+        <option value="8">8 joueurs</option>
+        <option value="9">9 joueurs</option>
+        <option value="10">10 joueurs</option>
+        <option value="11">11 joueurs</option>
+        <option value="12">12 joueurs</option>
+      </select>
+
+      <label for="criminels">Nombre de criminels :</label>
+      <select id="criminels" name="criminels" required>
+        <option value="1">1 criminel</option>
+        <option value="2">2 criminels</option>
+        <option value="3">3 criminels</option>
+      </select>
+
+      <label>
+        <input type="checkbox" id="criminel_fantome" name="criminel_fantome">
+        Mode criminels fantômes (les criminels doivent se reconnaître pendant la partie)
+      </label>
+      <label>
+        <input type="checkbox" id="avatars_legendaires" name="avatars_legendaires">
+        Activer les avatars légendaires
+      </label>
+      <label>
+        <input type="checkbox" id="inactifs" name="inactifs">
+        Activer l'observation des inactifs (notifications après 5 min d'inactivité)
+      </label>
+
+      <div class="boutons-actions">
+        <button class="main-btn" type="submit" id="genererBtn">Créer la partie</button>
+        <a class="main-btn" href="./accueil.html">Retour</a>
+      </div>
+      <div class="message" id="message" role="alert" aria-live="polite"></div>
+    </form>
+  </main>
+</div>
+
+<footer class="footer">
+  <p>© 2025 Murder Party. Tous droits réservés.</p>
+  <a href="mentions-legales.html">Mentions légales</a>
+</footer>
+
+<!-- Charger Firebase AVANT tout JS qui l'utilise -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="../JS/personnages.js"></script>
+<script src="../JS/creer-partie.js"></script>
+<script>
+  // Gestion du champ "autre période"
+  const periodeSelect = document.getElementById('periode');
+  const autrePeriodeDiv = document.getElementById('autrePeriode');
+  periodeSelect.addEventListener('change', function() {
+    if (this.value === "autre") {
+      autrePeriodeDiv.style.display = "block";
+      document.getElementById('periode_autre').focus();
+    } else {
+      autrePeriodeDiv.style.display = "none";
+      document.getElementById('periode_autre').value = "";
     }
+  });
 
-    // Initialisation Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-      authDomain: "murder-party-ba8d1.firebaseapp.com",
-      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "murder-party-ba8d1",
-      storageBucket: "murder-party-ba8d1.firebasestorage.app",
-      messagingSenderId: "20295055805",
-      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-      measurementId: "G-KSBMBB7KMJ"
-    };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
-
-    // Variables utiles
-    const salonCode = localStorage.getItem("salonCode");
-    const monPseudo = localStorage.getItem("pseudo") || "invité";
-    document.getElementById("pseudoAffiche").textContent = escapeHTML(monPseudo);
-
-    if (!salonCode) {
-      window.location.href = "accueil.html";
-    }
-    document.getElementById("codeSalon").textContent = escapeHTML(salonCode);
-
-    // Alias de pseudo pour la partie
-    let pseudoPartie = monPseudo;
-
-    // Alias unique si déjà présent
-    function getUniqueAlias(joueurs, base = "Joueur") {
-      let i = 1, alias;
-      const pseudos = joueurs.map(j => j.pseudo);
-      do {
-        alias = `${base} ${i}`;
-        i++;
-      } while (pseudos.includes(alias));
-      return alias;
-    }
-
-    // Gestion du pseudo lors de l'entrée dans la partie
-    const joueursRef = db.ref('parties/' + salonCode + '/joueurs');
-    joueursRef.once('value', snap => {
-      const joueurs = [];
-      snap.forEach(child => joueurs.push(child.val()));
-      // Si pseudo déjà existant, alias local pour cette partie
-      if (joueurs.some(j => j.pseudo === monPseudo)) {
-        pseudoPartie = getUniqueAlias(joueurs);
-      }
-      // Ajoute le joueur avec son alias uniquement s'il n'est pas déjà dans la partie
-      if (!joueurs.some(j => j.pseudo === pseudoPartie)) {
-        joueursRef.push({pseudo: pseudoPartie});
-      }
-    });
-
-    // Affichage conditionnel des boutons
-    const cloturerSalonBtn = document.getElementById("cloturerSalonBtn");
-    const quitterSalonBtn = document.getElementById("quitterSalonBtn");
-    const confirmationModal = document.getElementById("confirmationModal");
-    const confirmModalBtn = document.getElementById("confirmModalBtn");
-    const cancelModalBtn = document.getElementById("cancelModalBtn");
-    const modalQuestion = document.getElementById("modalQuestion");
-    const alertSalonSupprime = document.getElementById("alertSalonSupprime");
-    alertSalonSupprime.style.display = "none";
-
-    let currentAction = null; // "cloture" ou "quitter"
-    let jeSuisCreateur = false;
-
-    db.ref('parties/' + salonCode + '/parametres/createur').once('value', snap => {
-      if (snap.exists() && snap.val() === monPseudo) {
-        jeSuisCreateur = true;
-        cloturerSalonBtn.style.display = "inline-block";
-        quitterSalonBtn.style.display = "none";
-      } else {
-        jeSuisCreateur = false;
-        cloturerSalonBtn.style.display = "none";
-        quitterSalonBtn.style.display = "inline-block";
-      }
-    });
-
-    // Actions boutons
-    cloturerSalonBtn.addEventListener("click", function() {
-      modalQuestion.textContent = "Es-tu sûr de vouloir clôturer le salon ?";
-      confirmationModal.classList.add('active');
-      currentAction = "cloture";
-    });
-
-    quitterSalonBtn.addEventListener("click", function() {
-      modalQuestion.textContent = "Es-tu sûr de vouloir quitter le salon ?";
-      confirmationModal.classList.add('active');
-      currentAction = "quitter";
-    });
-
-    confirmModalBtn.addEventListener("click", function() {
-      if(currentAction === "cloture") {
-        db.ref('parties/' + salonCode).remove().then(() => {
-          localStorage.removeItem("salonCode");
-          window.location.href = "creer-partie.html";
-        });
-      } else if(currentAction === "quitter") {
-        joueursRef.once('value', snap => {
-          snap.forEach(child => {
-            if(child.val().pseudo === pseudoPartie) {
-              joueursRef.child(child.key).remove();
-            }
-          });
-        });
-        setTimeout(() => {
-          localStorage.removeItem("salonCode");
-          window.location.href = "rejoindre-partie.html";
-        }, 300);
-      }
-      confirmationModal.classList.remove('active');
-      currentAction = null;
-    });
-
-    cancelModalBtn.addEventListener("click", function() {
-      confirmationModal.classList.remove('active');
-      currentAction = null;
-    });
-
-    // Affichage joueurs et état du salon
-    const joueursDiv = document.getElementById("listeJoueurs");
-    const etatSalon = document.getElementById("etatSalon");
-    let totalJoueurs = 1;
-
-    db.ref('parties/' + salonCode + '/parametres').once('value', snap => {
-      if (snap.exists()) {
-        const parametres = snap.val();
-        totalJoueurs = parseInt(parametres.nombreJoueurs) || 1;
-      }
-    });
-
-    db.ref('parties/' + salonCode).on('value', snapshot => {
-      if (!snapshot.exists()) {
-        alertSalonSupprime.style.display = "block";
-        setTimeout(() => {
-          localStorage.removeItem("salonCode");
-          window.location.href = "rejoindre-partie.html";
-        }, 2000);
+  // Gestion du submit sécurisé
+  const form = document.getElementById('creerPartieForm');
+  const message = document.getElementById('message');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    message.textContent = "";
+    // Vérification champ autre période si sélectionné
+    if (periodeSelect.value === "autre") {
+      const autre = document.getElementById('periode_autre').value.trim();
+      if (autre.length < 3) {
+        message.textContent = "Merci de préciser la période.";
+        document.getElementById('periode_autre').focus();
         return;
       }
-
-      joueursDiv.innerHTML = "";
-      let nbJoueurs = 0;
-      const joueursSnap = snapshot.child('joueurs');
-      if(joueursSnap && joueursSnap.forEach) {
-        joueursSnap.forEach(joueurSnap => {
-          const pseudoJ = joueurSnap.val().pseudo;
-          const li = document.createElement("li");
-          li.textContent = pseudoJ;
-          joueursDiv.appendChild(li);
-          nbJoueurs++;
+    }
+    // Appel de la logique JS de création (gérée dans creer-partie.js)
+    if (typeof creerPartie === "function") {
+      creerPartie(new FormData(form))
+        .then(() => {
+          message.textContent = "Partie créée avec succès !";
+          message.className = "message succes";
+        })
+        .catch(err => {
+          message.textContent = err && err.message ? err.message : "Erreur lors de la création.";
+          message.className = "message";
         });
-      }
-      etatSalon.textContent = `${nbJoueurs} / ${totalJoueurs} joueurs connectés`;
-
-      if (nbJoueurs >= totalJoueurs) {
-        let countdown = 5;
-        etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
-        const interval = setInterval(() => {
-          countdown--;
-          if (countdown > 0) {
-            etatSalon.textContent = `Tous les joueurs sont connectés ! La partie va commencer dans ${countdown}...`;
-          } else {
-            clearInterval(interval);
-            etatSalon.textContent = "La partie commence !";
-            localStorage.removeItem("salonCode");
-            window.location.href = "lancement-partie.html";
-          }
-        }, 1000);
-      }
-    });
-
-    // Suppression automatique si le créateur ferme l'onglet
-    window.addEventListener("beforeunload", function () {
-      if (jeSuisCreateur) {
-        db.ref('parties/' + salonCode).remove();
-      }
-      localStorage.removeItem("salonCode");
-    });
-  </script>
+    } else {
+      message.textContent = "Fonction de création absente.";
+    }
+  });
+</script>
+<noscript>
+  <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
+    ⚠️ JavaScript est désactivé. Vous ne pourrez pas créer de partie.
+  </div>
+</noscript>
 </body>
 </html>
