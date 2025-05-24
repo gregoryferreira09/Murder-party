@@ -4,30 +4,21 @@
   <meta charset="UTF-8">
   <title>Choix du personnage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Ajout du style global pour le bandeau doré -->
+  <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1b1b1b;
-      color: #e0e0e0;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-
     h1 {
       font-family: 'Cinzel Decorative', serif;
       font-size: 2.8em;
       margin-bottom: 30px;
       color: #e9c78c;
     }
-
     .galerie-personnages {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
     }
-
     .carte-personnage {
       background-color: #2c1b1b;
       border: 2px solid #e9c78c;
@@ -38,23 +29,14 @@
       cursor: pointer;
       transition: transform 0.3s ease;
     }
-
-    <footer class="footer">
-  <p>© 2025 Murder Party. Tous droits réservés.</p>
-  <a href="mentions-legales.html">Mentions légales</a>
-</footer>
-
-
     .carte-personnage img {
       width: 100%;
       height: auto;
       border-radius: 8px;
     }
-
     .carte-personnage:hover {
       transform: scale(1.05);
     }
-
     #valider-choix {
       background-color: #000000;
       color: #ffffff;
@@ -67,11 +49,12 @@
       font-family: 'Cinzel Decorative', serif;
       transition: all 0.3s ease;
     }
-
     #valider-choix:hover {
       background-color: #e9c78c;
       color: #000000;
     }
+    /* Pour que le bandeau ne soit pas collé au footer sur petits écrans */
+    main { min-height: 60vh; }
   </style>
 </head>
 <body>
@@ -81,152 +64,152 @@
   </header>
 
   <main>
-    <section class="galerie-personnages" id="galeriePersonnages">
-      <!-- Les personnages seront ajoutés dynamiquement ici -->
-    </section>
-
-    <button id="valider-choix" disabled>Valider mon personnage</button>
+    <div class="bandeau-dore">
+      <section class="galerie-personnages" id="galeriePersonnages">
+        <!-- Les personnages seront ajoutés dynamiquement ici -->
+      </section>
+      <button id="valider-choix" disabled>Valider mon personnage</button>
+    </div>
   </main>
 
- <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-<script src="../JS/personnages.js"></script>
-<script>
-  // 1. CONFIG FIREBASE (à personnaliser)
-const firebaseConfig = {
-  apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-  authDomain: "murder-party-ba8d1.firebaseapp.com",
-  databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "murder-party-ba8d1",
-  storageBucket: "murder-party-ba8d1.firebasestorage.app",
-  messagingSenderId: "20295055805",
-  appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-  measurementId: "G-KSBMBB7KMJ"
-};
-  firebase.initializeApp(firebaseConfig);
-  const partieID = "partie1";
-  const db = firebase.database();
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="../JS/personnages.js"></script>
+  <script>
+    // 1. CONFIG FIREBASE
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+      authDomain: "murder-party-ba8d1.firebaseapp.com",
+      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "murder-party-ba8d1",
+      storageBucket: "murder-party-ba8d1.firebasestorage.app",
+      messagingSenderId: "20295055805",
+      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+      measurementId: "G-KSBMBB7KMJ"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const partieID = "partie1";
 
-  // 2. Variables globales
-  let nombreJoueurs = 0;
-  let personnages = [];
-  let playerId = "";
+    // 2. Utilisation du pseudo profil ou "Anonyme"
+    const playerId = localStorage.getItem("pseudo") || "Anonyme";
 
-  // 3. Génère la galerie de personnages
-  function getRandomElements(array, n) {
-    const copy = [...array];
-    const result = [];
-    for (let i = 0; i < n && copy.length > 0; i++) {
-      const idx = Math.floor(Math.random() * copy.length);
-      result.push(copy.splice(idx, 1)[0]);
+    // 3. Variables globales
+    let nombreJoueurs = 0;
+    let personnages = [];
+
+    // 4. Génère la galerie de personnages
+    function getRandomElements(array, n) {
+      const copy = [...array];
+      const result = [];
+      for (let i = 0; i < n && copy.length > 0; i++) {
+        const idx = Math.floor(Math.random() * copy.length);
+        result.push(copy.splice(idx, 1)[0]);
+      }
+      return result;
     }
-    return result;
-  }
 
-  function afficherPersonnages() {
-    const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-    if (!scenarioData) {
-      alert("Aucune donnée de scénario trouvée.");
-      return;
-    }
-    nombreJoueurs = scenarioData.nombreJoueurs;
-    const periode = scenarioData.periode;
-    const galeriePersonnages = document.getElementById("galeriePersonnages");
-    // Liste des personnages
-    personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
+    function afficherPersonnages() {
+      const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+      if (!scenarioData) {
+        alert("Aucune donnée de scénario trouvée.");
+        return;
+      }
+      nombreJoueurs = scenarioData.nombreJoueurs;
+      const periode = scenarioData.periode;
+      const galeriePersonnages = document.getElementById("galeriePersonnages");
+      personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
 
-    galeriePersonnages.innerHTML = personnages.map((perso, i) => `
-      <div class="carte-personnage" data-id="${i}">
-        <img src="${perso.image}" alt="${perso.nom}">
-        <p>${perso.nom}</p>
-      </div>
-    `).join("");
+      galeriePersonnages.innerHTML = personnages.map((perso, i) => `
+        <div class="carte-personnage" data-id="${i}">
+          <img src="${perso.image}" alt="${perso.nom}">
+          <p>${perso.nom}</p>
+        </div>
+      `).join("");
 
-    // Sélection d'un personnage
-    const cartes = document.querySelectorAll(".carte-personnage");
-    cartes.forEach(carte => {
-      carte.addEventListener("click", () => {
-        cartes.forEach(card => card.style.border = "2px solid #e9c78c");
-        carte.style.border = "2px solid #4CAF50";
-        localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
-        document.getElementById("valider-choix").disabled = false;
+      // Sélection d'un personnage
+      const cartes = document.querySelectorAll(".carte-personnage");
+      cartes.forEach(carte => {
+        carte.addEventListener("click", () => {
+          cartes.forEach(card => card.style.border = "2px solid #e9c78c");
+          carte.style.border = "2px solid #4CAF50";
+          localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
+          document.getElementById("valider-choix").disabled = false;
+        });
       });
-    });
-  }
+    }
 
-  // 4. Saisie du pseudo
-  window.onload = function() {
-    playerId = prompt("Ton prénom ou pseudo ?");
-    afficherPersonnages();
-    startRealtimeSync();
-  }
-
-  // 5. Synchro temps réel (Firebase)
-  function startRealtimeSync() {
-    db.ref(partieID + '/validations').on('value', snap => {
-      const valids = snap.val() || {};
-      // Grise les personnages déjà pris
-      document.querySelectorAll('.carte-personnage').forEach(div => {
-        const id = div.getAttribute('data-id');
-        const dejaPris = Object.values(valids).some(v => v.personnageId == id);
-        if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
-          div.style.opacity = 0.5;
-          div.style.pointerEvents = 'none';
-        } else {
-          div.style.opacity = 1;
-          div.style.pointerEvents = '';
+    // 5. Synchro temps réel (Firebase)
+    function startRealtimeSync() {
+      db.ref(partieID + '/validations').on('value', snap => {
+        const valids = snap.val() || {};
+        // Grise les personnages déjà pris
+        document.querySelectorAll('.carte-personnage').forEach(div => {
+          const id = div.getAttribute('data-id');
+          const dejaPris = Object.values(valids).some(v => v.personnageId == id);
+          if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
+            div.style.opacity = 0.5;
+            div.style.pointerEvents = 'none';
+          } else {
+            div.style.opacity = 1;
+            div.style.pointerEvents = '';
+          }
+        });
+        // Compteur validés/total
+        const nbValid = Object.keys(valids).length;
+        const btnValider = document.getElementById('valider-choix');
+        btnValider.textContent =
+          (valids[playerId] ? 'En attente des autres joueurs (' : '') +
+          nbValid + '/' + nombreJoueurs +
+          (valids[playerId] ? ')' : ' Valider mon personnage');
+        // Redirige si tout le monde a validé
+        if(nbValid === nombreJoueurs) {
+          window.location.href = "gameplay.html";
+        }
+        // Affiche le bouton annuler si validé
+        if (valids[playerId] && !document.getElementById('annuler-choix')) {
+          ajouterBoutonAnnuler();
+          btnValider.disabled = true;
+        }
+        if (!valids[playerId] && document.getElementById('annuler-choix')) {
+          document.getElementById('annuler-choix').remove();
+          btnValider.disabled = false;
         }
       });
-      // Compteur validés/total
-      const nbValid = Object.keys(valids).length;
-      const btnValider = document.getElementById('valider-choix');
-      btnValider.textContent =
-        (valids[playerId] ? 'En attente des autres joueurs (' : '') +
-        nbValid + '/' + nombreJoueurs +
-        (valids[playerId] ? ')' : ' Valider mon personnage');
-      // Redirige si tout le monde a validé
-      if(nbValid === nombreJoueurs) {
-        window.location.href = "gameplay.html";
-      }
-      // Affiche le bouton annuler si validé
-      if (valids[playerId] && !document.getElementById('annuler-choix')) {
-        ajouterBoutonAnnuler();
-        btnValider.disabled = true;
-      }
-      if (!valids[playerId] && document.getElementById('annuler-choix')) {
-        document.getElementById('annuler-choix').remove();
-        btnValider.disabled = false;
-      }
-    });
 
-    // Quand tu valides
-    document.getElementById("valider-choix").onclick = function() {
-      const personnageId = localStorage.getItem("personnageSelectionne");
-      if (personnageId && !this.disabled) {
-        db.ref(partieID + '/validations/' + playerId).set({ personnageId });
-        this.disabled = true;
-      }
-    };
+      // Quand tu valides
+ document.getElementById("valider-choix").onclick = function() {
+  const personnageId = localStorage.getItem("personnageSelectionne");
+  console.log("Tentative de validation:", personnageId); // <-- AJOUTÉ
+  if (personnageId && !this.disabled) {
+    db.ref(partieID + '/validations/' + playerId).set({ personnageId });
+    this.disabled = true;
+    console.log("Validation envoyée à Firebase"); // <-- AJOUTÉ
   }
+};
 
-  // 6. Bouton annuler
-  function ajouterBoutonAnnuler() {
-    const btn = document.createElement('button');
-    btn.id = 'annuler-choix';
-    btn.textContent = "Annuler";
-    btn.onclick = function() {
-      db.ref(partieID + '/validations/' + playerId).remove();
-    };
-    document.getElementById('valider-choix').parentNode.appendChild(btn);
-  }
-</script>
+    // 6. Bouton annuler
+    function ajouterBoutonAnnuler() {
+      const btn = document.createElement('button');
+      btn.id = 'annuler-choix';
+      btn.textContent = "Annuler";
+      btn.onclick = function() {
+        db.ref(partieID + '/validations/' + playerId).remove();
+      };
+      document.getElementById('valider-choix').parentNode.appendChild(btn);
+    }
 
-  
-window.onload = afficherPersonnages;
-</script>
-  
-</body>
-</html>
+    // 7. Lancement au chargement
+    window.onload = function() {
+      afficherPersonnages();
+      startRealtimeSync();
+    }
+  </script>
+
+  <footer class="footer">
+    <p>© 2025 Murder Party. Tous droits réservés.</p>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </footer>
 
 </body>
 </html>
