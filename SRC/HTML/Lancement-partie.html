@@ -248,29 +248,70 @@
         }
       };
       // Timer bouton démarrer
-      const launchBtn = document.getElementById("demarrerBtn");
-      let timeLeft = 30;
-      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-      launchBtn.style.pointerEvents = "none";
-      launchBtn.style.opacity = "0.6";
-      const interval = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-          launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-        } else {
-          clearInterval(interval);
-          launchBtn.textContent = "Démarrer la partie";
-          launchBtn.style.pointerEvents = "auto";
-          launchBtn.style.opacity = "1";
+      document.addEventListener("DOMContentLoaded", function() {
+  const salonCode = localStorage.getItem("salonCode");
+  const pseudoOrigine = localStorage.getItem("pseudoOrigine");
+  const db = firebase.database();
+
+  // Vérifie si je suis le créateur
+  db.ref('parties/' + salonCode + '/parametres/createur/pseudo').once('value').then(snap => {
+    if (snap.exists() && snap.val() === pseudoOrigine) {
+      // Créateur : vérifie si scenario déjà existant
+      db.ref('parties/' + salonCode + '/scenario').once('value').then(snapScenario => {
+        if (!snapScenario.exists()) {
+          // Génère et pousse le scénario
+          if (typeof genererScenario === "function") {
+            genererScenario();
+          }
         }
-      }, 1000);
-      setTimeout(() => {
-        const pageLancement = document.querySelector(".page-lancement");
-        if (pageLancement) pageLancement.focus();
-      }, 600);
-      window.addEventListener('offline', () => {
-        document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
+        // Pour tout le monde (créateur OU pas), lance l'affichage
+        chargerScenario();
       });
+    } else {
+      // Pour les autres joueurs : attend juste que le scenario arrive
+      chargerScenario();
+    }
+  });
+
+  // ---- Tu gardes bien tout le reste CI-DESSOUS ----
+  // Bouton régénération
+  const regenBtn = document.getElementById("regenScenarioBtn");
+  regenBtn.onclick = function() {
+    alert("Seul le créateur de la partie peut régénérer le scénario.");
+  };
+  regenBtn.onkeydown = function(e) {
+    if (e.key === "Enter" || e.key === " ") {
+      regenBtn.click();
+    }
+  };
+  // Timer bouton démarrer
+  const launchBtn = document.getElementById("demarrerBtn");
+  let timeLeft = 30;
+  launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+  launchBtn.style.pointerEvents = "none";
+  launchBtn.style.opacity = "0.6";
+  const interval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+    } else {
+      clearInterval(interval);
+      launchBtn.textContent = "Démarrer la partie";
+      launchBtn.style.pointerEvents = "auto";
+      launchBtn.style.opacity = "1";
+    }
+  }, 1000);
+  setTimeout(() => {
+    const pageLancement = document.querySelector(".page-lancement");
+    if (pageLancement) pageLancement.focus();
+  }, 600);
+  window.addEventListener('offline', () => {
+    document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
+  });
+  window.addEventListener('online', () => {
+    window.location.reload();
+  });
+});
       window.addEventListener('online', () => {
         window.location.reload();
       });
