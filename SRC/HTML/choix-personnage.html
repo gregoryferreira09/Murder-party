@@ -94,6 +94,13 @@
     let personnages = [];
     let personnageSelectionne = null;
 
+    // Grise la carte sélectionnée immédiatement
+document.querySelectorAll('.carte-personnage').forEach(div => {
+  if (div.getAttribute('data-key') === personnageSelectionne) {
+    div.classList.add('indisponible');
+  }
+});
+
     function afficherPersonnagesEtSync() {
       db.ref('parties/' + salonCode + '/personnages').on('value', snap => {
         personnages = [];
@@ -163,8 +170,8 @@
         nbValid + '/' + totalJoueurs +
         (valids[playerId] ? ')' : ' Valider mon personnage');
       if (nbValid === totalJoueurs) {
-        window.location.href = "gameplay.html";
-      }
+  lancerDecompteAvantRedirection();
+}
       if (valids[playerId] && !document.getElementById('annuler-choix')) {
         ajouterBoutonAnnuler();
         btnValider.disabled = true;
@@ -190,14 +197,51 @@
       btn.textContent = "Annuler";
       btn.className = "main-btn";
       btn.onclick = function() {
-        db.ref('parties/' + salonCode + '/validations/' + playerId).remove();
-      };
+  // Dégrise le personnage pour le joueur localement
+  document.querySelectorAll('.carte-personnage').forEach(div => {
+    if (div.classList.contains('selectionnee')) {
+      div.classList.remove('indisponible', 'selectionnee');
+    }
+  });
+  personnageSelectionne = null;
+  document.getElementById('valider-choix').disabled = true;
+  db.ref('parties/' + salonCode + '/validations/' + playerId).remove();
+};
       document.querySelector('.boutons-actions').appendChild(btn);
     }
 
     window.onload = function() {
       afficherPersonnagesEtSync();
     };
+
+    function lancerDecompteAvantRedirection() {
+  // Empêche de lancer deux fois
+  if (document.getElementById('decompte-redirect')) return;
+
+  const conteneur = document.createElement('div');
+  conteneur.id = 'decompte-redirect';
+  conteneur.style.fontSize = '2.2em';
+  conteneur.style.color = '#e0c185';
+  conteneur.style.margin = '24px auto';
+  conteneur.style.textAlign = 'center';
+  conteneur.textContent = 'La partie commence dans 5…';
+  document.querySelector('.main-accueil').appendChild(conteneur);
+
+  let count = 5;
+  const tick = () => {
+    count--;
+    if (count > 0) {
+      conteneur.textContent = `La partie commence dans ${count}…`;
+      setTimeout(tick, 1000);
+    } else {
+      conteneur.textContent = "C'est parti !";
+      setTimeout(() => {
+        window.location.href = "gameplay.html";
+      }, 600);
+    }
+  };
+  setTimeout(tick, 1000);
+}
   </script>
 </body>
 </html>
