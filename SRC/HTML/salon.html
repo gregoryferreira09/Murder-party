@@ -370,17 +370,22 @@
       });
 
       // Suppression automatique si le créateur ferme l'onglet
-      window.addEventListener("beforeunload", function () {
-        if (jeSuisCreateur) {
-          db.ref('parties/' + salonCode).remove();
-        }
-        // Fin de partie : restauration pseudo
-        localStorage.setItem("pseudo", pseudoOrigine);
-        localStorage.removeItem("pseudoOrigine");
-        localStorage.removeItem("salonCode");
-        localStorage.removeItem("enCours");
-      });
-    });
+      window.addEventListener("beforeunload", function (e) {
+  // Vérifie SI l'utilisateur quitte vraiment tout (fermeture onglet ou navigation hors du jeu)
+  // et PAS en allant sur une page du jeu (comme choix-personnage)
+  const liensJeu = ["choix-personnage.html", "Lancement-partie.html", "gameplay.html"];
+  const nextPage = document.activeElement && document.activeElement.href;
+  const vaDansJeu = nextPage && liensJeu.some(p => nextPage.includes(p));
+  if (!vaDansJeu) {
+    if (jeSuisCreateur) {
+      db.ref('parties/' + salonCode).remove();
+    }
+    localStorage.setItem("pseudo", pseudoOrigine);
+    localStorage.removeItem("pseudoOrigine");
+    localStorage.removeItem("salonCode");
+    localStorage.removeItem("enCours");
+  }
+});
   </script>
 </body>
 </html>
