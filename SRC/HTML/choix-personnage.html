@@ -164,7 +164,7 @@ document.querySelectorAll('.carte-personnage').forEach(div => {
       const btnValider = document.getElementById('valider-choix');
       const nbValid = Object.keys(valids).length;
       const scenarioData = JSON.parse(localStorage.getItem("parametresPartie")) || {};
-      const totalJoueurs = scenarioData.nombreJoueurs || Object.keys(valids).length;
+      const totalJoueurs = scenarioData.nombreJoueurs;
       btnValider.textContent =
         (valids[playerId] ? 'En attente des autres joueurs (' : '') +
         nbValid + '/' + totalJoueurs +
