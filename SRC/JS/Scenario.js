@@ -9,6 +9,8 @@ const firebaseConfig = {
   appId: "1:20295055805:web:0963719c3f23ab7752fad4",
   measurementId: "G-KSBMBB7KMJ"
 };
+
+localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
 if (typeof firebase !== "undefined" && !firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
