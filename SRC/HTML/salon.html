@@ -166,6 +166,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      const salonCode = localStorage.getItem("salonCode");
       document.getElementById("codeSalon").textContent = salonCode || "------";
       const pseudoAffiche = document.getElementById("pseudoAffiche");
       const etatSalon = document.getElementById("etatSalon");
@@ -193,24 +194,6 @@
         firebase.initializeApp(firebaseConfig);
       }
       const db = firebase.database();
-
-      // À placer après initialisation Firebase
-const salonCode = localStorage.getItem("salonCode");
-if (!salonCode) {
-  window.location.href = "join.html"; // Sécurité
-}
-
-// Quand le créateur clique sur "Démarrer"
-function demarrerPartie() {
-  db.ref('parties/' + salonCode + '/etat').set('lancement');
-}
-
-// Tous les joueurs écoutent l'état
-db.ref('parties/' + salonCode + '/etat').on('value', snap => {
-  if (snap.val() === 'lancement') {
-    window.location.href = "Lancement-partie.html";
-  }
-});
 
       // Gestion des pseudos d'origine pour affichage temporaire
       let monPseudo = localStorage.getItem("pseudo") || "invité";
