@@ -189,8 +189,25 @@
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
+
+  <!-- 1. Firebase libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <!-- 2. INITIALISATION Firebase AVANT tout JS métier -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+      authDomain: "murder-party-ba8d1.firebaseapp.com",
+      databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "murder-party-ba8d1",
+      storageBucket: "murder-party-ba8d1.appspot.com",
+      messagingSenderId: "20295055805",
+      appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+      measurementId: "G-KSBMBB7KMJ"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <!-- 3. Ensuite SEULEMENT tes scripts métiers -->
   <script src="../JS/personnages.js"></script>
   <script src="../JS/Scenario.js"></script>
   <script>
@@ -230,7 +247,13 @@ function chargerScenario() {
       } else {
         document.getElementById("scenario-loading").textContent = "Scénario indisponible (le créateur doit lancer la partie)";
       }
+    }).catch(err => {
+      document.getElementById("scenario-loading").textContent = "Erreur chargement des paramètres.";
+      console.error(err);
     });
+  }).catch(err => {
+    document.getElementById("scenario-loading").textContent = "Erreur chargement du scénario.";
+    console.error(err);
   });
 }
 
