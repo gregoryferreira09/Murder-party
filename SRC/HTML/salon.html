@@ -201,10 +201,10 @@
 
       // Tous les joueurs écoutent l'état
       db.ref('parties/' + salonCode + '/etat').on('value', snap => {
-  if (snap.val() === 'lancement' || snap.val() === 'en_cours') {
-    window.location.href = "Lancement-partie.html";
-  }
-});
+        if (snap.val() === 'lancement' || snap.val() === 'en_cours') {
+          window.location.href = "Lancement-partie.html";
+        }
+      });
 
       // Gestion des pseudos d'origine pour affichage temporaire
       let monPseudo = localStorage.getItem("pseudo") || "invité";
@@ -294,7 +294,7 @@
           localStorage.setItem("enCours", "1");
           localStorage.setItem("pseudo", pseudoOrigine);
           localStorage.removeItem("pseudoOrigine");
-          localStorage.removeItem("salonCode");
+          // localStorage.removeItem("salonCode"); // <-- SUPPRIMÉ pour garder salonCode !
           window.location.href = "lancement-partie.html";
           return;
         }
@@ -356,7 +356,7 @@
             } else {
               clearInterval(countdownInterval);
               etatSalon.textContent = "La partie commence !";
-              // Mets juste /etat, NE SUPPRIME PAS
+              // Mets juste /etat, NE SUPPRIME PAS salonCode
               db.ref('parties/' + salonCode + '/etat').set('en_cours');
             }
           }, 1000);
