@@ -290,14 +290,14 @@
 
       db.ref('parties/' + salonCode).on('value', snapshot => {
         const etatPartie = snapshot.child('etat').val();
-        if (etatPartie === 'en_cours') {
-          localStorage.setItem("enCours", "1");
-          localStorage.setItem("pseudo", pseudoOrigine);
-          localStorage.removeItem("pseudoOrigine");
-          // localStorage.removeItem("salonCode"); // <-- SUPPRIMÉ pour garder salonCode !
-          window.location.href = "lancement-partie.html";
-          return;
-        }
+       if (etatPartie === 'en_cours') {
+  localStorage.setItem("enCours", "1");
+  localStorage.setItem("pseudo", pseudoOrigine);
+  localStorage.removeItem("pseudoOrigine");
+  // localStorage.removeItem("salonCode"); // <-- SUPPRIMER CETTE LIGNE !!!
+  window.location.href = "lancement-partie.html";
+  return;
+}
         if (!snapshot.exists()) {
           // Si la partie n’était PAS en cours, on affiche le message d’erreur
           if (localStorage.getItem("enCours") !== "1") {
