@@ -89,29 +89,83 @@ function tirageTemplateUnique(array, history, fieldName) {
 
 // === UNIVERS COHÉRENTS & ÉLARGIS ===
 const univers = {
-  victorien: { /* ... inchangé ... */ },
-  médieval: { /* ... inchangé ... */ },
-  futuriste: { /* ... inchangé ... */ },
-
-  renaissance: {
+  medieval: {
     lieux: [
-      { nom: "palais", genre: "m" }, { nom: "atelier", genre: "m" }, { nom: "salle de bal", genre: "f" }, { nom: "jardin à l'italienne", genre: "m" }
+      { nom: "château fort", genre: "m" },
+      { nom: "forêt maudite", genre: "f" },
+      { nom: "taverne du village", genre: "f" }
     ],
     victimes: [
-      { nom: "le duc Lorenzo", genre: "m" }, { nom: "la marquise Bianca", genre: "f" }, { nom: "le peintre Filippo", genre: "m" }
+      { nom: "le seigneur Gauvain", genre: "m" },
+      { nom: "la dame Aliénor", genre: "f" }
     ],
     suspects: [
-      "le banquier Cosimo", "la marquise Bianca", "le peintre Filippo", "le serviteur Paolo"
+      "le chevalier Tristan", "la guérisseuse Ysabeau", "le moine Basile", "le forgeron Arnulf", "le ménestrel Hugo",
+      "le braconnier Colin", "la servante Maud", "le prévôt Thibault", "le marchand Simon", "le bouffon Piers",
+      "la cuisinière Margot", "le capitaine de la garde Roland", "le chasseur Alard", "la sorcière Edwige", "le fils bâtard Lancelin"
     ],
     temoins: [
-      { nom: "le jardinier Pietro", genre: "m" }, { nom: "la dame de compagnie Isabella", genre: "f" }
+      { nom: "le palefrenier Jehan", genre: "m" },
+      { nom: "la lavandière Blanche", genre: "f" }
     ],
     indices: [
-      "une esquisse inachevée tachée de sang", "un bijou familial sous le tapis", "une lettre codée posée sur un lutrin"
+      "une dague rouillée couverte de sang", "un morceau de cape arraché", "une fiole contenant du poison",
+      "une bourse pleine d'or", "une lettre anonyme scellée"
     ],
-    traitsVictimes: [
-      "inspiré", "prétentieux", "jaloux"
+    traitsVictimes: ["cruel", "généreux", "superstitieux"],
+    motifs: [
+      "une querelle d'héritage", "une vengeance amoureuse", "une accusation de sorcellerie"
     ],
+    armes: [
+      "une épée longue", "du poison", "un arc court"
+    ],
+    ambiances: [
+      "la pluie tambourine sur les remparts", "un banquet agité bat son plein", "le vent hurle dans la forêt"
+    ],
+    intro: [
+      "{ambiance} dans {la_lieu}. Les tensions montent entre les convives.",
+      "Une altercation éclate entre {suspect1} et {suspect2} devant la cour.",
+      "[TEMOIN] {temoin} affirme avoir vu {suspect1} rôder près de la {lieu}."
+    ],
+    crimes: {
+      classique: [
+        "Un cri retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés.",
+        "{victime} a été assassiné·e {dans_la_lieu}. {temoin} accuse {suspect1}.",
+        "La découverte est brutale : {victime} gît {dans_la_lieu}. Tous se tournent vers {suspect1}."
+      ],
+      poison: [
+        "La coupe de {victime} était empoisonnée. Il/elle s'effondre {dans_la_lieu}.",
+        "{victime} n’a pas survécu à une gorgée fatale {dans_la_lieu}. {temoin} accuse {suspect1}."
+      ],
+      disparition: [
+        "On ne retrouve plus {victime} {dans_la_lieu}. {temoin} l’a vu fuir dans la nuit."
+      ]
+    }
+  },
+  renaissance: {
+    lieux: [
+      { nom: "palais ducal", genre: "m" },
+      { nom: "atelier d’artiste", genre: "m" },
+      { nom: "salle des festins", genre: "f" }
+    ],
+    victimes: [
+      { nom: "le duc Lorenzo", genre: "m" },
+      { nom: "la marquise Bianca", genre: "f" }
+    ],
+    suspects: [
+      "Leonardo l’Inventeur", "Giulietta la Dame de compagnie", "Donatello le Sculpteur", "Isabella la Duchesse", "Francesco le Banquier",
+      "Raffaella la Courtisane", "Bartolomeo le Condottiere", "Lucrezia la Peintre", "Giovanni le Cardinal", "Fiorenzo le Musicien",
+      "Caterina la Médium", "Lorenzo le Marchand", "Camilla la Tisseuse", "Vittorio le Médecin", "Beatrice la Gouvernante"
+    ],
+    temoins: [
+      { nom: "Pietro le Jardinier", genre: "m" },
+      { nom: "Maddalena la Jardinière", genre: "f" }
+    ],
+    indices: [
+      "un gant brodé retrouvé dans l’atelier", "un parfum rare flotte dans l’air", "un bijou de cour manquant",
+      "une lettre codée brûlée", "une fiole vide d’un poison rare"
+    ],
+    traitsVictimes: ["inspiré", "prétentieux", "jaloux"],
     motifs: [
       "une rivalité artistique", "un héritage contesté", "une liaison secrète"
     ],
@@ -124,7 +178,6 @@ const univers = {
     intro: [
       "{ambiance} dans {la_lieu}. Les intrigues se nouent sous les fresques.",
       "Un bal masqué débute, la jalousie couve entre {suspect1} et {suspect2}.",
-      "Dans {la_lieu}, les artistes chuchotent à propos de {motif}.",
       "[TEMOIN] {temoin} a surpris {suspect1} dans l’ombre."
     ],
     crimes: {
@@ -139,32 +192,85 @@ const univers = {
       ],
       disparition: [
         "On ne retrouve plus {victime} {dans_la_lieu}. {temoin} l’a vu quitter la pièce précipitamment."
-      ],
-      vol: [
-        "Un bijou a disparu, et {victime} donne l’alerte. {temoin} dit avoir vu {suspect1} près du lieu du crime."
       ]
     }
   },
-
-  western: {
+  victorien: {
     lieux: [
-      { nom: "saloon", genre: "m" }, { nom: "ranch", genre: "m" }, { nom: "gare", genre: "f" }, { nom: "ruelle", genre: "f" }
+      { nom: "manoir Redford", genre: "m" },
+      { nom: "bibliothèque obscure", genre: "f" },
+      { nom: "salon de musique", genre: "m" }
     ],
     victimes: [
-      { nom: "le shérif Bill", genre: "m" }, { nom: "la tenancière Molly", genre: "f" }
+      { nom: "le colonel Ashcroft", genre: "m" },
+      { nom: "la lady Violet", genre: "f" }
     ],
     suspects: [
-      "le hors-la-loi Jack", "la joueuse de poker Sally", "le barman Joe", "le maire Sam"
+      "le majordome Ellis", "la gouvernante Mrs. Hudson", "le médecin Dr. Carmichael", "le détective Holmes", "la dame de compagnie Lucy",
+      "le banquier Edward", "la couturière Mary", "le jardinier Samuel", "le fils prodigue Henry", "la nièce Charlotte",
+      "le chef cuisinier Auguste", "le révérend Black", "la poétesse Ada", "la pianiste Grace", "le valet Arthur"
     ],
     temoins: [
-      { nom: "le barman Joe", genre: "m" }, { nom: "le gamin Tom", genre: "m" }
+      { nom: "le portier Charles", genre: "m" },
+      { nom: "la domestique Emily", genre: "f" }
     ],
     indices: [
-      "un colt encore fumant", "des traces de bottes boueuses", "une pièce d’or oubliée"
+      "une montre à gousset brisée", "une lettre anonyme parfumée", "un flacon d'opium vide",
+      "une trace de boue sur le tapis", "un gant de femme retrouvé dans le jardin"
     ],
-    traitsVictimes: [
-      "courageux", "calculateur"
+    traitsVictimes: ["orgueilleux", "secret", "avare"],
+    motifs: [
+      "un héritage disputé", "un adultère révélé", "un chantage humiliant"
     ],
+    armes: [
+      "une canne-épée", "un revolver", "du poison"
+    ],
+    ambiances: [
+      "la brume recouvre le jardin", "un orage éclate sur le manoir", "le thé fume dans le salon"
+    ],
+    intro: [
+      "{ambiance} dans {la_lieu}. L'atmosphère est lourde de non-dits.",
+      "Une dispute éclate entre {suspect1} et {suspect2} devant les invités.",
+      "[TEMOIN] {temoin} déclare avoir vu {suspect1} sortir précipitamment de la {lieu}."
+    ],
+    crimes: {
+      classique: [
+        "{victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés.",
+        "Un cri retentit : {victime} gît {dans_la_lieu}. {temoin} accuse {suspect1}."
+      ],
+      poison: [
+        "Le thé de {victime} était empoisonné. Il/elle s'effondre {dans_la_lieu}.",
+        "{victime} n’a pas survécu à une boisson fatale {dans_la_lieu}. {temoin} accuse {suspect1}."
+      ],
+      disparition: [
+        "On ne retrouve plus {victime} {dans_la_lieu}."
+      ]
+    }
+  },
+  western: {
+    lieux: [
+      { nom: "saloon", genre: "m" },
+      { nom: "ranch", genre: "m" },
+      { nom: "banque", genre: "f" }
+    ],
+    victimes: [
+      { nom: "le shérif Bill", genre: "m" },
+      { nom: "la tenancière Molly", genre: "f" }
+    ],
+    suspects: [
+      "Billy Boy la gachette facile", "Sally la Danseuse", "Sheriff Carter", "Doc Brown", "Miss Daisy",
+      "Tommy le Joueur", "Juanita la Cuisinière", "Red le Bandit", "Sam le Forgeron", "Mary la Fermière",
+      "Hank le Barman", "Martha la Couturière", "Jesse le Cowboy", "Clyde le Fossoyeur", "Little Joe"
+    ],
+    temoins: [
+      { nom: "Hank le Barman", genre: "m" },
+      { nom: "Little Joe", genre: "m" }
+    ],
+    indices: [
+      "un colt encore chaud", "des traces de bottes boueuses", "une pièce d’or oubliée",
+      "un foulard ensanglanté", "un as de pique glissé sous la porte"
+    ],
+    traitsVictimes: ["courageux", "calculateur"],
     motifs: [
       "une vieille rancune", "un vol de bétail", "un amour contrarié"
     ],
@@ -190,32 +296,33 @@ const univers = {
       ],
       disparition: [
         "On ne retrouve plus {victime} {dans_la_lieu}."
-      ],
-      vol: [
-        "Le coffre de la banque a été vidé. {temoin} dit avoir vu {suspect1} près du lieu du crime."
       ]
     }
   },
-
   contemporain: {
     lieux: [
-      { nom: "villa", genre: "f" }, { nom: "bureau", genre: "m" }, { nom: "club privé", genre: "m" }, { nom: "hôtel", genre: "m" }
+      { nom: "salle de réunion", genre: "f" },
+      { nom: "bureau open space", genre: "m" },
+      { nom: "parking souterrain", genre: "m" }
     ],
     victimes: [
-      { nom: "le PDG Martin", genre: "m" }, { nom: "la directrice Sophie", genre: "f" }
+      { nom: "le PDG Martin", genre: "m" },
+      { nom: "la directrice Sophie", genre: "f" }
     ],
     suspects: [
-      "le comptable Alain", "la secrétaire Julie", "le chauffeur Karim", "la consultante Emma"
+      "Lucas le Hacker", "Emma la Journaliste", "Sophie la Cheffe", "Antoine le Policier", "Inès la Médecin",
+      "Karim le Chauffeur", "Mélanie la Prof", "Jules l’Artiste", "Clara la Startupeuse", "Marc l’Avocat",
+      "Amandine la Fleuriste", "Nina la Coach sportive", "Victor le Banquier", "Élodie la Babysitter", "Pierre le Concierge"
     ],
     temoins: [
-      { nom: "le portier Paul", genre: "m" }, { nom: "la réceptionniste Léa", genre: "f" }
+      { nom: "Romain le Barman", genre: "m" },
+      { nom: "Léa la Blogueuse", genre: "f" }
     ],
     indices: [
-      "une carte d’accès oubliée", "une trace de rouge à lèvres sur un verre", "un badge d’entreprise retrouvé"
+      "un téléphone portable oublié", "un badge d’accès", "une clé USB contenant des fichiers suspects",
+      "une trace de rouge à lèvres sur un verre", "une carte bancaire oubliée"
     ],
-    traitsVictimes: [
-      "ambitieux", "discret"
-    ],
+    traitsVictimes: ["ambitieux", "discret"],
     motifs: [
       "une promotion refusée", "un marché truqué", "une liaison secrète"
     ],
@@ -233,7 +340,7 @@ const univers = {
     crimes: {
       classique: [
         "{victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés.",
-        "Un cri retentit dans l’hôtel : {victime} gît {dans_la_lieu}. {temoin} accuse {suspect1}."
+        "Un cri retentit dans la salle de réunion : {victime} gît {dans_la_lieu}. {temoin} accuse {suspect1}."
       ],
       poison: [
         "Le cocktail de {victime} était empoisonné.",
@@ -241,32 +348,85 @@ const univers = {
       ],
       disparition: [
         "On ne retrouve plus {victime} {dans_la_lieu}."
-      ],
-      vol: [
-        "Le coffre-fort a été ouvert. {temoin} dit avoir vu {suspect1} près du lieu du crime."
       ]
     }
   },
-
-  historique: {
+  futuriste: {
     lieux: [
-      { nom: "abbaye", genre: "f" }, { nom: "champ de bataille", genre: "m" }, { nom: "port", genre: "m" }, { nom: "théâtre", genre: "m" }
+      { nom: "station orbitale Atlas", genre: "f" },
+      { nom: "laboratoire central", genre: "m" },
+      { nom: "module de cryogénie", genre: "m" }
     ],
     victimes: [
-      { nom: "le général Dupont", genre: "m" }, { nom: "la duchesse Marie", genre: "f" }
+      { nom: "le commandant Vega", genre: "m" },
+      { nom: "la docteure Lin", genre: "f" }
     ],
     suspects: [
-      "le capitaine Morel", "la cantinière Elise", "le moine Pierre", "le marchand Jacques"
+      "Vega la Pilote", "JAX l’Androïde", "Dr Novak", "Zora la Roboticienne", "Directeur Kwan",
+      "Mia la Technicienne", "Ikar le Biologiste", "Chef Rolf", "Tao l’Ingénieur", "S-19 le Robot",
+      "EVA l’IA", "Boris le Technicien", "Lin la Biologiste", "Yuto le Stagiaire", "Astra la Navigatrice"
     ],
     temoins: [
-      { nom: "le soldat Louis", genre: "m" }, { nom: "la servante Anne", genre: "f" }
+      { nom: "Unit-5 le robot d'entretien", genre: "m" },
+      { nom: "Mira la navigatrice", genre: "f" }
     ],
     indices: [
-      "une médaille abandonnée", "une lettre anonyme", "un mouchoir brodé"
+      "un implant désactivé", "une carte d'accès biométrique", "un rapport IA effacé",
+      "un résidu de nano-robots", "une fiole de sérum brisé"
     ],
-    traitsVictimes: [
-      "stratégique", "mystérieux"
+    traitsVictimes: ["visionnaire", "autoritaire", "paranoïaque"],
+    motifs: [
+      "un vol de technologie", "une rivalité scientifique", "une trahison interplanétaire"
     ],
+    armes: [
+      "un pistolet à impulsion", "une seringue de protoxyde", "un câble à haute tension"
+    ],
+    ambiances: [
+      "une panne d'alimentation plonge la station dans le noir", "l'alarme d'urgence retentit dans le laboratoire", "un hologramme s'affole dans le couloir principal"
+    ],
+    intro: [
+      "{ambiance} dans {la_lieu}. Les membres d'équipage échangent des regards inquiets.",
+      "Une dispute éclate entre {suspect1} et {suspect2} dans la salle de réunion.",
+      "[TEMOIN] {temoin} affirme avoir vu {suspect1} manipuler un terminal dans la {lieu}."
+    ],
+    crimes: {
+      classique: [
+        "{victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés.",
+        "Un cri résonne : {victime} gît {dans_la_lieu}. {temoin} accuse {suspect1}."
+      ],
+      poison: [
+        "Le sérum de {victime} était contaminé. Il/elle s'effondre {dans_la_lieu}.",
+        "{victime} n’a pas survécu à une injection fatale {dans_la_lieu}. {temoin} accuse {suspect1}."
+      ],
+      disparition: [
+        "On ne retrouve plus {victime} {dans_la_lieu}. {temoin} l’a vu s’enfuir dans un module annexe."
+      ]
+    }
+  },
+  historique: {
+    lieux: [
+      { nom: "palais royal", genre: "m" },
+      { nom: "bibliothèque d'Alexandrie", genre: "f" },
+      { nom: "catacombes", genre: "f" }
+    ],
+    victimes: [
+      { nom: "le général Dupont", genre: "m" },
+      { nom: "la duchesse Marie", genre: "f" }
+    ],
+    suspects: [
+      "Cléopâtre", "Jules César", "Napoléon Bonaparte", "Marie Curie", "Alexandre le Grand",
+      "Jeanne d’Arc", "Louis XIV", "Mozart", "Victor Hugo", "Marie-Antoinette",
+      "Gutenberg", "Richelieu", "George Sand", "Mata Hari", "Vercingétorix"
+    ],
+    temoins: [
+      { nom: "Louis Pasteur", genre: "m" },
+      { nom: "Sarah Bernhardt", genre: "f" }
+    ],
+    indices: [
+      "un parchemin ancien trouvé sur les lieux", "un médaillon portant des armoiries inconnues", "un sceau brisé sur une lettre officielle",
+      "un gant de velours taché de sang", "une plume d’écriture brisée"
+    ],
+    traitsVictimes: ["stratégique", "mystérieux"],
     motifs: [
       "une trahison", "la jalousie", "une dette d’honneur"
     ],
@@ -292,9 +452,6 @@ const univers = {
       ],
       disparition: [
         "On ne retrouve plus {victime} {dans_la_lieu}."
-      ],
-      vol: [
-        "Le trésor du théâtre a disparu. {temoin} dit avoir vu {suspect1} près du lieu du crime."
       ]
     }
   }
@@ -302,6 +459,42 @@ const univers = {
 
 const scenarioLibrary = {
   objectifs: {
+    medieval: [
+      "Démasquez le traître avant qu’il ne frappe à nouveau dans la seigneurie.",
+      "Retrouvez l’assassin qui hante le château avant que la rumeur ne se répande au village.",
+      "Résolvez cette énigme avant que le sang ne souille davantage l’honneur du fief."
+    ],
+    renaissance: [
+      "Dévoilez le secret qui ensanglante la cour et sauvez votre réputation.",
+      "Trouvez l’artiste meurtrier avant que la jalousie ne détruise tout.",
+      "Élucidez ce crime au cœur du palais avant que la vérité ne soit ensevelie sous les masques."
+    ],
+    victorien: [
+      "Débusquez le coupable au sein de la haute société avant qu’un nouveau scandale n’éclate.",
+      "Trouvez l’assassin avant que la brume de Londres n’efface toute trace.",
+      "Menez l’enquête dans le manoir pour sauver l’honneur de la famille."
+    ],
+    western: [
+      "Démasquez le hors-la-loi avant qu’il ne prenne la poudre d’escampette.",
+      "Retrouvez le coupable du règlement de compte avant que la ville ne sombre dans le chaos.",
+      "Résolvez le mystère du saloon pour ramener la paix à Dusty Town."
+    ],
+    contemporain: [
+      "Trouvez le responsable avant que l’affaire n’éclate dans les médias.",
+      "Démasquez le coupable dans l’entreprise avant qu’il ne disparaisse avec ses secrets.",
+      "Menez l’enquête express avant que la vérité ne soit effacée des serveurs."
+    ],
+    futuriste: [
+      "Identifiez le saboteur avant que la station orbitale ne soit perdue.",
+      "Démasquez l’androïde meurtrier avant qu’il ne pirate l’IA centrale.",
+      "Résolvez le crime cybernétique pour empêcher une crise interplanétaire."
+    ],
+    historique: [
+      "Décelez le complot avant que l’Histoire ne soit réécrite dans le sang.",
+      "Trouvez le coupable au cœur des intrigues royales pour préserver la dynastie.",
+      "Élucidez le crime avant que la postérité n’accuse un innocent."
+    ],
+    // Par nombre de criminels pour compatibilité
     1: [
       "Dénichez le meurtrier avant qu’il ne frappe à nouveau.",
       "Trouvez l'assassin avant que la vérité ne soit effacée à jamais.",
@@ -319,6 +512,42 @@ const scenarioLibrary = {
     ]
   },
   durees: {
+    medieval: [
+      "La cloche du village sonnera bientôt… Saurez-vous résoudre le crime à temps ?",
+      "Agissez avant que la rumeur ne se répande dans tout le royaume.",
+      "La nuit tombe sur le château : chaque minute compte pour sauver l’honneur du seigneur."
+    ],
+    renaissance: [
+      "Le bal touche à sa fin, le temps presse pour démasquer le coupable.",
+      "Les masques tomberont bientôt : élucidez l’énigme avant l’aube.",
+      "Le banquet va s’achever, l’honneur de la cour est entre vos mains."
+    ],
+    victorien: [
+      "Le brouillard envahit le manoir : ne laissez pas l’assassin s’échapper.",
+      "La police arrive dans l’heure, menez l’enquête sans faux pas.",
+      "Le thé refroidit dans le salon, mais la tension monte d’un cran."
+    ],
+    western: [
+      "Le prochain train part bientôt, démasquez le coupable avant son départ.",
+      "Le soleil va se coucher sur la ville… Résolvez l’affaire avant la nuit.",
+      "Les colts sont chargés : chaque minute de retard risque d’être fatale."
+    ],
+    contemporain: [
+      "La police est en route : levez le mystère avant qu’elle ne débarque.",
+      "Le buzz monte sur les réseaux : il faut résoudre le crime avant le bad buzz.",
+      "Le temps presse, les preuves s’effacent vite dans la modernité."
+    ],
+    futuriste: [
+      "L’oxygène de la station s’épuise : trouvez le coupable avant la panne.",
+      "Le compte à rebours de l’IA centrale est lancé : résolvez vite l’affaire.",
+      "Un message crypté circule… chaque minute rapproche le système du chaos."
+    ],
+    historique: [
+      "Les cloches de la ville vont sonner le glas du secret.",
+      "L’Histoire retiendra votre échec ou votre succès : agissez vite.",
+      "Le conseil royal se réunit bientôt… la vérité doit éclater avant."
+    ],
+    // Pour compatibilité par durée générique
     court: [
       "Le temps presse, chaque minute compte dans cette course contre la montre.",
       "Une enquête rapide mais intense vous attend. Vos instincts devront primer sur vos doutes.",
