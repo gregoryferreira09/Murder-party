@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    /* ... styles inchangés ... */
     #confirmationModal {
       display: none;
       position: fixed;
@@ -118,12 +117,11 @@
   <header>
     <h1 class="site-title">Murder Party</h1>
   </header>
-
   <script>
-    // Centralise la récupération du code salon au tout début
+    // Récupération centrale du code salon
     const salonCode = localStorage.getItem("salonCode");
     if (!salonCode) {
-      window.location.replace("creer-partie.html"); // ou "rejoindre-partie.html" selon ton flux
+      window.location.replace("creer-partie.html");
     }
   </script>
   <div class="center-wrapper">
@@ -168,7 +166,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // !! salonCode est déjà défini en haut, NE PAS redeclarer !!
       document.getElementById("codeSalon").textContent = salonCode || "------";
       const pseudoAffiche = document.getElementById("pseudoAffiche");
       const etatSalon = document.getElementById("etatSalon");
@@ -370,22 +367,17 @@
       });
 
       // Suppression automatique si le créateur ferme l'onglet
-      window.addEventListener("beforeunload", function (e) {
-  // Vérifie SI l'utilisateur quitte vraiment tout (fermeture onglet ou navigation hors du jeu)
-  // et PAS en allant sur une page du jeu (comme choix-personnage)
-  const liensJeu = ["choix-personnage.html", "Lancement-partie.html", "gameplay.html"];
-  const nextPage = document.activeElement && document.activeElement.href;
-  const vaDansJeu = nextPage && liensJeu.some(p => nextPage.includes(p));
-  if (!vaDansJeu) {
-    if (jeSuisCreateur) {
-      db.ref('parties/' + salonCode).remove();
-    }
-    localStorage.setItem("pseudo", pseudoOrigine);
-    localStorage.removeItem("pseudoOrigine");
-    localStorage.removeItem("salonCode");
-    localStorage.removeItem("enCours");
-  }
-});
+      // *** ON NE SUPPRIME PLUS salonCode ICI ***
+      // window.addEventListener("beforeunload", function () {
+      //   if (jeSuisCreateur) {
+      //     db.ref('parties/' + salonCode).remove();
+      //   }
+      //   localStorage.setItem("pseudo", pseudoOrigine);
+      //   localStorage.removeItem("pseudoOrigine");
+      //   localStorage.removeItem("salonCode");
+      //   localStorage.removeItem("enCours");
+      // });
+    });
   </script>
 </body>
 </html>
