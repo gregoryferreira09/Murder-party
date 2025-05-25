@@ -94,5 +94,3 @@ window.creerPartie = async function(formData) {
 
   window.location.href = "salon.html";
 };
-  window.location.href = "salon.html";
-};
