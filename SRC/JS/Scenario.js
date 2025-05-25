@@ -1,3 +1,5 @@
+const db = firebase.database();
+
 // --- CONSTANTES ---
 const ANTI_REPEAT_HISTORY_SIZE = 5;
 
