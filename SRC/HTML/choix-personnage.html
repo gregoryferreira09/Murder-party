@@ -81,20 +81,20 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 2. Infos salon et joueur
+    // Vérifie le code salon
     const salonCode = localStorage.getItem("salonCode");
+    if (!salonCode) {
+      alert("Code salon manquant. Merci de rejoindre une partie depuis l'accueil.");
+      window.location.href = "join.html";
+    }
+
     const playerId = localStorage.getItem("uuid") || "anonymous";
     const pseudo = localStorage.getItem("pseudo") || "Anonyme";
 
     let personnages = [];
     let personnageSelectionne = null;
 
-    // 3. Affichage de la liste des personnages depuis la BDD (la vraie, commune à tous)
     function afficherPersonnagesEtSync() {
-      if (!salonCode) {
-        alert("Code salon manquant.");
-        return;
-      }
       db.ref('parties/' + salonCode + '/personnages').on('value', snap => {
         personnages = [];
         snap.forEach(p => {
@@ -105,7 +105,6 @@
         afficherGalerie();
       });
 
-      // Sync des validations en temps réel
       db.ref('parties/' + salonCode + '/validations').on('value', snap => {
         const valids = snap.val() || {};
         updateGalerieIndisponibles(valids);
@@ -122,10 +121,8 @@
         </div>
       `).join("");
 
-      // Ajoute la sélection locale (pas la validation !)
       document.querySelectorAll('.carte-personnage').forEach(div => {
         div.addEventListener('click', function() {
-          // Ne rien faire si déjà indisponible
           if (div.classList.contains('indisponible')) return;
           document.querySelectorAll('.carte-personnage').forEach(d => d.classList.remove('selectionnee'));
           div.classList.add('selectionnee');
@@ -136,7 +133,6 @@
     }
 
     function updateGalerieIndisponibles(valids) {
-      // Marque les cartes déjà prises par d'autres
       const dejaPrisKeys = Object.values(valids).map(v => v.personnageKey);
       document.querySelectorAll('.carte-personnage').forEach(div => {
         const key = div.getAttribute('data-key');
@@ -146,7 +142,6 @@
           div.classList.remove('indisponible');
         }
       });
-      // Si le joueur a validé, verrouille sa sélection
       if (valids[playerId]) {
         const myKey = valids[playerId].personnageKey;
         document.querySelectorAll('.carte-personnage').forEach(div => {
@@ -167,11 +162,9 @@
         (valids[playerId] ? 'En attente des autres joueurs (' : '') +
         nbValid + '/' + totalJoueurs +
         (valids[playerId] ? ')' : ' Valider mon personnage');
-      // Redirige si tout le monde a validé
       if (nbValid === totalJoueurs) {
         window.location.href = "gameplay.html";
       }
-      // Affiche le bouton annuler si validé
       if (valids[playerId] && !document.getElementById('annuler-choix')) {
         ajouterBoutonAnnuler();
         btnValider.disabled = true;
@@ -202,7 +195,6 @@
       document.querySelector('.boutons-actions').appendChild(btn);
     }
 
-    // Init
     window.onload = function() {
       afficherPersonnagesEtSync();
     };
