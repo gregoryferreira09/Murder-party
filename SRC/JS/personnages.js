@@ -7,7 +7,7 @@ function imageAleatoire() {
 // SRC/JS/personnages.js
 
 const personnagesParEpoque = {
-médieval: [
+medieval: [
   { nom: "Ysabeau la Servante", image: "Public/images/personnage1.png", role: "Servante fidèle", description: "Toujours à l’écoute des ragots.", categories: ["suspect","victime","temoin"] },
   { nom: "Gaspard le Chevalier", image: "Public/images/personnage1.png", role: "Chevalier loyal", description: "Redouté sur le champ de bataille.", categories: ["suspect","victime","temoin"] },
   { nom: "Aliénor la Dame", image: "Public/images/personnage1.png", role: "Dame mystérieuse", description: "Son regard cache de nombreux secrets.", categories: ["suspect","victime","temoin"] },
