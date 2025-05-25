@@ -409,3 +409,29 @@ body {
     height: 56px;
   }
 }
+
+.galerie-personnages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+.carte-personnage {
+  /* conserve ce style ou adapte-le si tu veux garder cette apparence pour les cartes */
+  background-color: #2c1b1b;
+  border: 2px solid #e9c78c;
+  border-radius: 12px;
+  width: 200px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.carte-personnage img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.carte-personnage:hover {
+  transform: scale(1.05);
+}
