@@ -201,10 +201,10 @@
 
       // Tous les joueurs écoutent l'état
       db.ref('parties/' + salonCode + '/etat').on('value', snap => {
-        if (snap.val() === 'lancement') {
-          window.location.href = "Lancement-partie.html";
-        }
-      });
+  if (snap.val() === 'lancement' || snap.val() === 'en_cours') {
+    window.location.href = "Lancement-partie.html";
+  }
+});
 
       // Gestion des pseudos d'origine pour affichage temporaire
       let monPseudo = localStorage.getItem("pseudo") || "invité";
