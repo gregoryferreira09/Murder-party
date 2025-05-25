@@ -195,7 +195,6 @@
   <script src="../JS/Scenario.js"></script>
   <script>
     function afficherScenario(scenarioObj, scenarioData) {
-      // Sécurité : s'assurer que les éléments existent
       const loadingDiv = document.getElementById("scenario-loading");
       const contentDiv = document.getElementById("scenario-content");
       if (loadingDiv && contentDiv) {
@@ -214,36 +213,34 @@
       document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
       document.getElementById("messageInfo").textContent = "";
     }
+
     function chargerScenario() {
-      try {
-        let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-        if (!scenarioData) throw new Error("Aucune donnée de scénario.");
-        if (typeof genererScenario === "function") {
-          genererScenario();
-          setTimeout(() => {
-            let scenarioObj = JSON.parse(localStorage.getItem("scenarioCourant") || "null");
-            if (scenarioObj) {
-              afficherScenario(scenarioObj, scenarioData);
-            }
-          }, 200);
-        }
-      } catch (e) {
-        const loadingDiv = document.getElementById("scenario-loading");
-        const contentDiv = document.getElementById("scenario-content");
-        if (loadingDiv) loadingDiv.style.display = "none";
-        if (contentDiv) contentDiv.style.display = "none";
-        document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
+      const salonCode = localStorage.getItem("salonCode");
+      if (!salonCode) {
+        document.getElementById("scenario-loading").textContent = "Problème de session, code salon manquant.";
+        return;
       }
+      const db = firebase.database();
+      // Lis le scénario et les paramètres depuis Firebase
+      db.ref('parties/' + salonCode + '/scenario').once('value').then(snap => {
+        const scenarioObj = snap.val();
+        db.ref('parties/' + salonCode + '/parametres').once('value').then(paramSnap => {
+          const scenarioData = paramSnap.val() || {};
+          if (scenarioObj) {
+            afficherScenario(scenarioObj, scenarioData);
+          } else {
+            document.getElementById("scenario-loading").textContent = "Scénario indisponible (le créateur doit lancer la partie)";
+          }
+        });
+      });
     }
+
     document.addEventListener("DOMContentLoaded", function() {
       chargerScenario();
       // Bouton régénération
       const regenBtn = document.getElementById("regenScenarioBtn");
       regenBtn.onclick = function() {
-        if (typeof genererScenario === "function") {
-          genererScenario();
-          setTimeout(chargerScenario, 200);
-        }
+        alert("Seul le créateur de la partie peut régénérer le scénario.");
       };
       regenBtn.onkeydown = function(e) {
         if (e.key === "Enter" || e.key === " ") {
@@ -268,7 +265,8 @@
         }
       }, 1000);
       setTimeout(() => {
-        document.querySelector(".page-lancement").focus();
+        const pageLancement = document.querySelector(".page-lancement");
+        if (pageLancement) pageLancement.focus();
       }, 600);
       window.addEventListener('offline', () => {
         document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
