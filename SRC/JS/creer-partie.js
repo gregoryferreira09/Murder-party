@@ -86,8 +86,7 @@ window.creerPartie = async function(formData) {
     pseudo
   });
 
-  // Stocker les paramètres pour la page Lancement-partie.html
-  localStorage.setItem("parametresPartie", JSON.stringify(parametresPartie));
+  // Stocke uniquement le code salon dans le localStorage (plus de parametresPartie)
   localStorage.setItem("salonCode", salonCode);
 
   window.location.href = "salon.html";
