@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    /* Spécifique galerie personnages seulement */
     .galerie-personnages {
       display: flex;
       flex-wrap: wrap;
@@ -30,6 +29,14 @@
     }
     .carte-personnage:hover {
       transform: scale(1.05);
+    }
+    .carte-personnage.indisponible {
+      filter: grayscale(0.8) blur(1px);
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    .carte-personnage.selectionnee {
+      border: 2px solid #4CAF50 !important;
     }
   </style>
 </head>
@@ -60,7 +67,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script src="../JS/personnages.js"></script>
   <script>
-    // 1. CONFIG FIREBASE
+    // 1. Config Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
       authDomain: "murder-party-ba8d1.firebaseapp.com",
@@ -71,123 +78,134 @@
       appId: "1:20295055805:web:0963719c3f23ab7752fad4",
       measurementId: "G-KSBMBB7KMJ"
     };
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const partieID = "partie1";
 
-    // 2. Utilisation du pseudo profil ou "Anonyme"
-    const playerId = localStorage.getItem("pseudo") || "Anonyme";
+    // 2. Infos salon et joueur
+    const salonCode = localStorage.getItem("salonCode");
+    const playerId = localStorage.getItem("uuid") || "anonymous";
+    const pseudo = localStorage.getItem("pseudo") || "Anonyme";
 
-    // 3. Variables globales
-    let nombreJoueurs = 0;
     let personnages = [];
+    let personnageSelectionne = null;
 
-    // 4. Génère la galerie de personnages
-    function getRandomElements(array, n) {
-      const copy = [...array];
-      const result = [];
-      for (let i = 0; i < n && copy.length > 0; i++) {
-        const idx = Math.floor(Math.random() * copy.length);
-        result.push(copy.splice(idx, 1)[0]);
-      }
-      return result;
-    }
-
-    function afficherPersonnages() {
-      const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-      if (!scenarioData) {
-        alert("Aucune donnée de scénario trouvée.");
+    // 3. Affichage de la liste des personnages depuis la BDD (la vraie, commune à tous)
+    function afficherPersonnagesEtSync() {
+      if (!salonCode) {
+        alert("Code salon manquant.");
         return;
       }
-      nombreJoueurs = scenarioData.nombreJoueurs;
-      const periode = scenarioData.periode;
-      const galeriePersonnages = document.getElementById("galeriePersonnages");
-      personnages = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
+      db.ref('parties/' + salonCode + '/personnages').on('value', snap => {
+        personnages = [];
+        snap.forEach(p => {
+          const perso = p.val();
+          perso.key = p.key;
+          personnages.push(perso);
+        });
+        afficherGalerie();
+      });
 
-      galeriePersonnages.innerHTML = personnages.map((perso, i) => `
-        <div class="carte-personnage" data-id="${i}">
+      // Sync des validations en temps réel
+      db.ref('parties/' + salonCode + '/validations').on('value', snap => {
+        const valids = snap.val() || {};
+        updateGalerieIndisponibles(valids);
+        majEtatBouton(valids);
+      });
+    }
+
+    function afficherGalerie() {
+      const galerie = document.getElementById("galeriePersonnages");
+      galerie.innerHTML = personnages.map((perso, i) => `
+        <div class="carte-personnage" data-key="${perso.key}" data-index="${i}">
           <img src="${perso.image}" alt="${perso.nom}">
           <p>${perso.nom}</p>
         </div>
       `).join("");
 
-      // Sélection d'un personnage
-      const cartes = document.querySelectorAll(".carte-personnage");
-      cartes.forEach(carte => {
-        carte.addEventListener("click", () => {
-          cartes.forEach(card => card.style.border = "2px solid #e9c78c");
-          carte.style.border = "2px solid #4CAF50";
-          localStorage.setItem("personnageSelectionne", carte.getAttribute("data-id"));
-          document.getElementById("valider-choix").disabled = false;
+      // Ajoute la sélection locale (pas la validation !)
+      document.querySelectorAll('.carte-personnage').forEach(div => {
+        div.addEventListener('click', function() {
+          // Ne rien faire si déjà indisponible
+          if (div.classList.contains('indisponible')) return;
+          document.querySelectorAll('.carte-personnage').forEach(d => d.classList.remove('selectionnee'));
+          div.classList.add('selectionnee');
+          personnageSelectionne = div.getAttribute('data-key');
+          document.getElementById('valider-choix').disabled = false;
         });
       });
     }
 
-    // 5. Synchro temps réel (Firebase)
-    function startRealtimeSync() {
-      db.ref(partieID + '/validations').on('value', snap => {
-        const valids = snap.val() || {};
-        // Grise les personnages déjà pris
+    function updateGalerieIndisponibles(valids) {
+      // Marque les cartes déjà prises par d'autres
+      const dejaPrisKeys = Object.values(valids).map(v => v.personnageKey);
+      document.querySelectorAll('.carte-personnage').forEach(div => {
+        const key = div.getAttribute('data-key');
+        if (dejaPrisKeys.includes(key) && (!valids[playerId] || valids[playerId].personnageKey !== key)) {
+          div.classList.add('indisponible');
+        } else {
+          div.classList.remove('indisponible');
+        }
+      });
+      // Si le joueur a validé, verrouille sa sélection
+      if (valids[playerId]) {
+        const myKey = valids[playerId].personnageKey;
         document.querySelectorAll('.carte-personnage').forEach(div => {
-          const id = div.getAttribute('data-id');
-          const dejaPris = Object.values(valids).some(v => v.personnageId == id);
-          if (dejaPris && (!valids[playerId] || valids[playerId].personnageId != id)) {
-            div.style.opacity = 0.5;
-            div.style.pointerEvents = 'none';
-          } else {
-            div.style.opacity = 1;
-            div.style.pointerEvents = '';
-          }
+          if (div.getAttribute('data-key') === myKey) div.classList.add('selectionnee');
+          else div.classList.remove('selectionnee');
         });
-        // Compteur validés/total
-        const nbValid = Object.keys(valids).length;
-        const btnValider = document.getElementById('valider-choix');
-        btnValider.textContent =
-          (valids[playerId] ? 'En attente des autres joueurs (' : '') +
-          nbValid + '/' + nombreJoueurs +
-          (valids[playerId] ? ')' : ' Valider mon personnage');
-        // Redirige si tout le monde a validé
-        if(nbValid === nombreJoueurs) {
-          window.location.href = "gameplay.html";
-        }
-        // Affiche le bouton annuler si validé
-        if (valids[playerId] && !document.getElementById('annuler-choix')) {
-          ajouterBoutonAnnuler();
-          btnValider.disabled = true;
-        }
-        if (!valids[playerId] && document.getElementById('annuler-choix')) {
-          document.getElementById('annuler-choix').remove();
-          btnValider.disabled = false;
-        }
-      });
-
-      // Quand tu valides
-      document.getElementById("valider-choix").onclick = function() {
-        const personnageId = localStorage.getItem("personnageSelectionne");
-        if (personnageId && !this.disabled) {
-          db.ref(partieID + '/validations/' + playerId).set({ personnageId });
-          this.disabled = true;
-        }
-      };
+        personnageSelectionne = myKey;
+        document.getElementById('valider-choix').disabled = true;
+      }
     }
 
-    // 6. Bouton annuler
+    function majEtatBouton(valids) {
+      const btnValider = document.getElementById('valider-choix');
+      const nbValid = Object.keys(valids).length;
+      const scenarioData = JSON.parse(localStorage.getItem("parametresPartie")) || {};
+      const totalJoueurs = scenarioData.nombreJoueurs || Object.keys(valids).length;
+      btnValider.textContent =
+        (valids[playerId] ? 'En attente des autres joueurs (' : '') +
+        nbValid + '/' + totalJoueurs +
+        (valids[playerId] ? ')' : ' Valider mon personnage');
+      // Redirige si tout le monde a validé
+      if (nbValid === totalJoueurs) {
+        window.location.href = "gameplay.html";
+      }
+      // Affiche le bouton annuler si validé
+      if (valids[playerId] && !document.getElementById('annuler-choix')) {
+        ajouterBoutonAnnuler();
+        btnValider.disabled = true;
+      }
+      if (!valids[playerId] && document.getElementById('annuler-choix')) {
+        document.getElementById('annuler-choix').remove();
+        btnValider.disabled = false;
+      }
+    }
+
+    document.getElementById("valider-choix").onclick = function() {
+      if (!personnageSelectionne || this.disabled) return;
+      db.ref('parties/' + salonCode + '/validations/' + playerId).set({
+        personnageKey: personnageSelectionne,
+        pseudo: pseudo
+      });
+      this.disabled = true;
+    };
+
     function ajouterBoutonAnnuler() {
       const btn = document.createElement('button');
       btn.id = 'annuler-choix';
       btn.textContent = "Annuler";
       btn.className = "main-btn";
       btn.onclick = function() {
-        db.ref(partieID + '/validations/' + playerId).remove();
+        db.ref('parties/' + salonCode + '/validations/' + playerId).remove();
       };
       document.querySelector('.boutons-actions').appendChild(btn);
     }
 
-    // 7. Lancement au chargement
+    // Init
     window.onload = function() {
-      afficherPersonnages();
-      startRealtimeSync();
-    }
+      afficherPersonnagesEtSync();
+    };
   </script>
 </body>
 </html>
