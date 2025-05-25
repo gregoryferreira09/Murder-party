@@ -94,13 +94,6 @@
     let personnages = [];
     let personnageSelectionne = null;
 
-    // Grise la carte sélectionnée immédiatement
-document.querySelectorAll('.carte-personnage').forEach(div => {
-  if (div.getAttribute('data-key') === personnageSelectionne) {
-    div.classList.add('indisponible');
-  }
-});
-
     function afficherPersonnagesEtSync() {
       db.ref('parties/' + salonCode + '/personnages').on('value', snap => {
         personnages = [];
@@ -164,14 +157,16 @@ document.querySelectorAll('.carte-personnage').forEach(div => {
       const btnValider = document.getElementById('valider-choix');
       const nbValid = Object.keys(valids).length;
       const scenarioData = JSON.parse(localStorage.getItem("parametresPartie")) || {};
-      const totalJoueurs = scenarioData.nombreJoueurs;
+      let totalJoueurs = scenarioData && Number.isFinite(Number(scenarioData.nombreJoueurs)) && Number(scenarioData.nombreJoueurs) > 0
+        ? Number(scenarioData.nombreJoueurs)
+        : Math.max(nbValid, 1); // Fallback sur le nombre de validations (jamais 0)
       btnValider.textContent =
         (valids[playerId] ? 'En attente des autres joueurs (' : '') +
         nbValid + '/' + totalJoueurs +
         (valids[playerId] ? ')' : ' Valider mon personnage');
       if (nbValid === totalJoueurs) {
-  lancerDecompteAvantRedirection();
-}
+        lancerDecompteAvantRedirection();
+      }
       if (valids[playerId] && !document.getElementById('annuler-choix')) {
         ajouterBoutonAnnuler();
         btnValider.disabled = true;
@@ -182,22 +177,22 @@ document.querySelectorAll('.carte-personnage').forEach(div => {
       }
     }
 
-   document.getElementById("valider-choix").onclick = function() {
-  if (!personnageSelectionne || this.disabled) return;
+    document.getElementById("valider-choix").onclick = function() {
+      if (!personnageSelectionne || this.disabled) return;
 
-  // Grise la carte sélectionnée immédiatement (localement)
-  document.querySelectorAll('.carte-personnage').forEach(div => {
-    if (div.getAttribute('data-key') === personnageSelectionne) {
-      div.classList.add('indisponible');
-    }
-  });
+      // Grise la carte sélectionnée immédiatement (localement)
+      document.querySelectorAll('.carte-personnage').forEach(div => {
+        if (div.getAttribute('data-key') === personnageSelectionne) {
+          div.classList.add('indisponible');
+        }
+      });
 
-  db.ref('parties/' + salonCode + '/validations/' + playerId).set({
-    personnageKey: personnageSelectionne,
-    pseudo: pseudo
-  });
-  this.disabled = true;
-};
+      db.ref('parties/' + salonCode + '/validations/' + playerId).set({
+        personnageKey: personnageSelectionne,
+        pseudo: pseudo
+      });
+      this.disabled = true;
+    };
 
     function ajouterBoutonAnnuler() {
       const btn = document.createElement('button');
@@ -205,16 +200,16 @@ document.querySelectorAll('.carte-personnage').forEach(div => {
       btn.textContent = "Annuler";
       btn.className = "main-btn";
       btn.onclick = function() {
-  // Dégrise le personnage pour le joueur localement
-  document.querySelectorAll('.carte-personnage').forEach(div => {
-    if (div.classList.contains('selectionnee')) {
-      div.classList.remove('indisponible', 'selectionnee');
-    }
-  });
-  personnageSelectionne = null;
-  document.getElementById('valider-choix').disabled = true;
-  db.ref('parties/' + salonCode + '/validations/' + playerId).remove();
-};
+        // Dégrise le personnage pour le joueur localement
+        document.querySelectorAll('.carte-personnage').forEach(div => {
+          if (div.classList.contains('selectionnee')) {
+            div.classList.remove('indisponible', 'selectionnee');
+          }
+        });
+        personnageSelectionne = null;
+        document.getElementById('valider-choix').disabled = true;
+        db.ref('parties/' + salonCode + '/validations/' + playerId).remove();
+      };
       document.querySelector('.boutons-actions').appendChild(btn);
     }
 
@@ -223,33 +218,33 @@ document.querySelectorAll('.carte-personnage').forEach(div => {
     };
 
     function lancerDecompteAvantRedirection() {
-  // Empêche de lancer deux fois
-  if (document.getElementById('decompte-redirect')) return;
+      // Empêche de lancer deux fois
+      if (document.getElementById('decompte-redirect')) return;
 
-  const conteneur = document.createElement('div');
-  conteneur.id = 'decompte-redirect';
-  conteneur.style.fontSize = '2.2em';
-  conteneur.style.color = '#e0c185';
-  conteneur.style.margin = '24px auto';
-  conteneur.style.textAlign = 'center';
-  conteneur.textContent = 'La partie commence dans 5…';
-  document.querySelector('.main-accueil').appendChild(conteneur);
+      const conteneur = document.createElement('div');
+      conteneur.id = 'decompte-redirect';
+      conteneur.style.fontSize = '2.2em';
+      conteneur.style.color = '#e0c185';
+      conteneur.style.margin = '24px auto';
+      conteneur.style.textAlign = 'center';
+      conteneur.textContent = 'La partie commence dans 5…';
+      document.querySelector('.main-accueil').appendChild(conteneur);
 
-  let count = 5;
-  const tick = () => {
-    count--;
-    if (count > 0) {
-      conteneur.textContent = `La partie commence dans ${count}…`;
+      let count = 5;
+      const tick = () => {
+        count--;
+        if (count > 0) {
+          conteneur.textContent = `La partie commence dans ${count}…`;
+          setTimeout(tick, 1000);
+        } else {
+          conteneur.textContent = "C'est parti !";
+          setTimeout(() => {
+            window.location.href = "gameplay.html";
+          }, 600);
+        }
+      };
       setTimeout(tick, 1000);
-    } else {
-      conteneur.textContent = "C'est parti !";
-      setTimeout(() => {
-        window.location.href = "gameplay.html";
-      }, 600);
     }
-  };
-  setTimeout(tick, 1000);
-}
   </script>
 </body>
 </html>
