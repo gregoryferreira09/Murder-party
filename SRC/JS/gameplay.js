@@ -148,7 +148,7 @@ function setupActionTab(type) {
   joueurs.forEach(j => {
     if (type === "vote" && j.uuid === uuid) return;
     const div = document.createElement('div');
-    div.className = 'joueur-avatar';
+    div.className = 'joueur-avatar gold-btn main-btn'; // Harmonisation bouton/avatar
     div.tabIndex = 0;
     div.setAttribute("role", "button");
     div.setAttribute("aria-label", `${j.pseudo}`);
@@ -216,7 +216,7 @@ function afficherIndice(texte, fiabilite) {
   const fiabiliteTexte = estFiable ? "Haute" : "Douteuse";
   const fiabiliteClasse = estFiable ? "fiable" : "suspect";
   const indiceDiv = document.createElement('div');
-  indiceDiv.className = 'indice';
+  indiceDiv.className = 'indice carte-personnage'; // Harmonisation carte-indice
   indiceDiv.innerHTML = `<p>🔍 "${texte}"</p><p><span class="fiabilite ${fiabiliteClasse}">Fiabilité : ${fiabiliteTexte}</span></p>`;
   document.getElementById('listeIndices').appendChild(indiceDiv);
 }
