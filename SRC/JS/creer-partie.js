@@ -86,8 +86,13 @@ window.creerPartie = async function(formData) {
     pseudo
   });
 
-  // Stocke uniquement le code salon dans le localStorage (plus de parametresPartie)
+  // Stocke les paramètres de la partie dans le localStorage pour les autres pages (AJOUT IMPORTANT)
+  localStorage.setItem("parametresPartie", JSON.stringify(parametresPartie));
+
+  // Stocke uniquement le code salon dans le localStorage (conservé pour compatibilité)
   localStorage.setItem("salonCode", salonCode);
 
+  window.location.href = "salon.html";
+};
   window.location.href = "salon.html";
 };
