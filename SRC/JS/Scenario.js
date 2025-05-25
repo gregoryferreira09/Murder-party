@@ -554,16 +554,20 @@ const scenarioLibrary = {
 
 // --- GÉNÉRATION DU SCÉNARIO ---
 function genererScenario() {
-  let scenarioData;
-  try {
-    scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-  } catch {
-    scenarioData = null;
-  }
+  const salonCode = localStorage.getItem("salonCode");
+  if (!salonCode) return;
 
-  if (scenarioData) {
+  // On récupère les paramètres de la partie directement depuis Firebase
+  firebase.database().ref('parties/' + salonCode + '/parametres').once('value').then(function(snap) {
+    if (!snap.exists()) {
+      if (document.getElementById("scenario-loading")) {
+        document.getElementById("scenario-loading").textContent = "Paramètres de partie introuvables.";
+      }
+      return;
+    }
+    const scenarioData = snap.val();
+
     let periodeCle = scenarioData.periode;
-    // Si la période n'existe pas, ne génère rien (plus de fallback "autre")
     if (!univers[periodeCle]) return;
     const periodeData = univers[periodeCle];
     const nbJoueurs = parseInt(scenarioData.nombreJoueurs, 10);
@@ -680,13 +684,11 @@ function genererScenario() {
 
     addScenarioToHistory(scenarioObj);
 
-    // Sauvegarde le scénario pour l’affichage moderne
+    // Sauvegarde le scénario pour l’affichage moderne (optionnel)
     localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
 
     // Sauvegarde le scénario dans Firebase pour tous les joueurs
-if (typeof db !== "undefined" && localStorage.getItem("salonCode")) {
-  db.ref('parties/' + localStorage.getItem("salonCode") + '/scenario').set(scenarioObj);
-}
+    db.ref('parties/' + salonCode + '/scenario').set(scenarioObj);
 
     // Affiche dans les bons éléments si ils existent
     function fillScenarioDisplay() {
@@ -705,17 +707,5 @@ if (typeof db !== "undefined" && localStorage.getItem("salonCode")) {
       if (document.getElementById("scenario-content")) document.getElementById("scenario-content").style.display = "block";
     }
     fillScenarioDisplay();
-    } else {
-    container.innerHTML = "<p>Aucune donnée de scénario trouvée.</p>";
-  }
-} 
-
-// Fonction utilitaire pour échapper le HTML (sécurité)
-function escapeHtml(string) {
-  return String(string)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  });
 }
