@@ -182,14 +182,22 @@ document.querySelectorAll('.carte-personnage').forEach(div => {
       }
     }
 
-    document.getElementById("valider-choix").onclick = function() {
-      if (!personnageSelectionne || this.disabled) return;
-      db.ref('parties/' + salonCode + '/validations/' + playerId).set({
-        personnageKey: personnageSelectionne,
-        pseudo: pseudo
-      });
-      this.disabled = true;
-    };
+   document.getElementById("valider-choix").onclick = function() {
+  if (!personnageSelectionne || this.disabled) return;
+
+  // Grise la carte sélectionnée immédiatement (localement)
+  document.querySelectorAll('.carte-personnage').forEach(div => {
+    if (div.getAttribute('data-key') === personnageSelectionne) {
+      div.classList.add('indisponible');
+    }
+  });
+
+  db.ref('parties/' + salonCode + '/validations/' + playerId).set({
+    personnageKey: personnageSelectionne,
+    pseudo: pseudo
+  });
+  this.disabled = true;
+};
 
     function ajouterBoutonAnnuler() {
       const btn = document.createElement('button');
