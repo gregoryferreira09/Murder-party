@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
+    /* Les ajustements inline restent pour focus/état onglets et modale */
     .tab-button:focus {
       outline: 3px solid #ffd700;
       outline-offset: 2px;
@@ -82,38 +83,42 @@
     <h1>Partie en cours</h1>
     <div id="chrono"><span id="tempsRestant"></span></div>
   </header>
-  <main>
+  <main class="main-accueil">
     <nav style="margin-bottom: 24px;">
-      <button class="gold-btn tab-button active" onclick="switchTab('fiche')" aria-controls="fiche" tabindex="0">
+      <button class="gold-btn main-btn tab-button active" onclick="switchTab('fiche')" aria-controls="fiche" tabindex="0">
         🎭 Personnage
       </button>
-      <button class="gold-btn tab-button" onclick="switchTab('indices')" aria-controls="indices" tabindex="0">
+      <button class="gold-btn main-btn tab-button" onclick="switchTab('indices')" aria-controls="indices" tabindex="0">
         🧩 Indices
       </button>
-      <button class="gold-btn tab-button" onclick="switchTab('vote')" aria-controls="action" tabindex="0">
+      <button class="gold-btn main-btn tab-button" onclick="switchTab('vote')" aria-controls="action" tabindex="0">
         ⚖️ Vote
       </button>
-      <button class="gold-btn tab-button" onclick="switchTab('connexion')" aria-controls="action" tabindex="0">
+      <button class="gold-btn main-btn tab-button" onclick="switchTab('connexion')" aria-controls="action" tabindex="0">
         🤝 Connexion
       </button>
     </nav>
 
-    <section id="fiche" class="tab-content active" aria-label="Fiche personnage">
+    <section id="fiche" class="tab-content active carte-personnage" aria-label="Fiche personnage">
       <h2>Nom : <span id="nomPersonnage">...</span></h2>
       <img id="avatarPersonnage" src="" alt="Avatar" class="avatar">
       <p id="histoirePerso"><strong>Histoire :</strong> ...</p>
       <p id="pouvoirPerso"><strong>Pouvoir :</strong> ...</p>
+      <p id="secretPerso"></p>
+      <p id="missionPerso"></p>
+      <p id="lienPerso"></p>
+      <p id="anecdotePerso"></p>
     </section>
 
     <section id="indices" class="tab-content" style="display:none;" aria-label="Indices">
       <h3>Vos indices :</h3>
-      <div id="listeIndices"></div>
+      <div id="listeIndices" class="galerie-personnages"></div>
     </section>
 
     <section id="action" class="tab-content" style="display:none;" aria-label="Action">
       <h3 id="action-titre"></h3>
       <div id="action-joueurs" style="display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 24px;"></div>
-      <button id="action-btn" class="gold-btn" disabled>Valider</button>
+      <button id="action-btn" class="gold-btn main-btn" disabled>Valider</button>
       <div id="actionResult" style="margin-top: 18px;"></div>
       <div id="connexionRestantes" style="margin-top: 8px; color: #e0c185;"></div>
     </section>
@@ -121,11 +126,11 @@
 
   <!-- Modale Connexion -->
   <div class="modal" id="modal-connexion" role="dialog" aria-modal="true" aria-labelledby="modal-connexion-text" tabindex="-1">
-    <div class="modal-content">
+    <div class="modal-content main-accueil">
       <span id="modal-connexion-text"></span>
       <div style="margin-top: 28px;">
-        <button class="gold-btn" onclick="accepterConnexion()">Accepter</button>
-        <button class="gold-btn" onclick="refuserConnexion()">Refuser</button>
+        <button class="gold-btn main-btn" onclick="accepterConnexion()">Accepter</button>
+        <button class="gold-btn main-btn" onclick="refuserConnexion()">Refuser</button>
       </div>
     </div>
   </div>
