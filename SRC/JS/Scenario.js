@@ -10,7 +10,6 @@ const firebaseConfig = {
   measurementId: "G-KSBMBB7KMJ"
 };
 
-localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
 if (typeof firebase !== "undefined" && !firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -698,6 +697,11 @@ function genererScenario() {
 
     // Sauvegarde le scénario pour l’affichage moderne
     localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
+
+    // Sauvegarde le scénario dans Firebase pour tous les joueurs
+if (typeof db !== "undefined" && localStorage.getItem("salonCode")) {
+  db.ref('parties/' + localStorage.getItem("salonCode") + '/scenario').set(scenarioObj);
+}
 
     // Affiche dans les bons éléments si ils existent
     function fillScenarioDisplay() {
