@@ -554,6 +554,11 @@ const scenarioLibrary = {
 
 // --- GÉNÉRATION DU SCÉNARIO ---
 function genererScenario() {
+  console.log("genererScenario() appelée");
+  const salonCode = localStorage.getItem("salonCode");
+  if (!salonCode) return;
+  // ...
+}
   const salonCode = localStorage.getItem("salonCode");
   if (!salonCode) return;
 
