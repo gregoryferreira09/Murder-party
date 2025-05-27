@@ -1,3 +1,15 @@
+// Remplace les valeurs par celles de ton projet Firebase
+const firebaseConfig = {
+  apiKey: "TA_CLE_API",
+  authDomain: "TON_DOMAINE.firebaseapp.com",
+  databaseURL: "https://TON_DOMAINE.firebaseio.com",
+  projectId: "TON_PROJECT_ID",
+  storageBucket: "TON_DOMAINE.appspot.com",
+  messagingSenderId: "TON_SENDER_ID",
+  appId: "TON_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 // --- CONSTANTES ---
