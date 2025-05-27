@@ -191,122 +191,93 @@
   </footer>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
-    authDomain: "murder-party-ba8d1.firebaseapp.com",
-    databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "murder-party-ba8d1",
-    storageBucket: "murder-party-ba8d1.appspot.com",
-    messagingSenderId: "20295055805",
-    appId: "1:20295055805:web:0963719c3f23ab7752fad4",
-    measurementId: "G-KSBMBB7KMJ"
-  };
-  firebase.initializeApp(firebaseConfig);
-</script>
   <script src="../JS/personnages.js"></script>
   <script src="../JS/Scenario.js"></script>
   <script>
-function afficherScenario(scenarioObj, scenarioData) {
-  const loadingDiv = document.getElementById("scenario-loading");
-  const contentDiv = document.getElementById("scenario-content");
-  if (loadingDiv && contentDiv) {
-    loadingDiv.style.display = "none";
-    contentDiv.style.display = "block";
-  }
-  document.getElementById("introduction").innerHTML = scenarioObj.introduction || "";
-  document.getElementById("crime").innerHTML = scenarioObj.crime || "";
-  document.getElementById("objectif").innerHTML = scenarioObj.objectif || "";
-  document.getElementById("mode").textContent = scenarioData.mode || "-";
-  document.getElementById("duree").textContent = (scenarioData.duree ? scenarioData.duree + " min" : "-") + (scenarioObj.detailsDuree ? " — " + scenarioObj.detailsDuree : "");
-  document.getElementById("periode").textContent = scenarioData.periode || "-";
-  document.getElementById("joueurs").textContent = scenarioData.nombreJoueurs || "-";
-  document.getElementById("criminels").textContent = scenarioData.criminels || "-";
-  document.getElementById("fantome").textContent = scenarioData.criminelFantome ? "Oui" : "Non";
-  document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
-  document.getElementById("messageInfo").textContent = "";
-}
-
-function chargerScenario() {
-  const salonCode = localStorage.getItem("salonCode");
-  if (!salonCode) {
-    document.getElementById("scenario-loading").textContent = "Problème de session, code salon manquant.";
-    return;
-  }
-  const db = firebase.database();
-  db.ref('parties/' + salonCode + '/scenario').once('value').then(snap => {
-    const scenarioObj = snap.val();
-    db.ref('parties/' + salonCode + '/parametres').once('value').then(paramSnap => {
-      const scenarioData = paramSnap.val() || {};
-      if (scenarioObj) {
-        afficherScenario(scenarioObj, scenarioData);
-      } else {
-        document.getElementById("scenario-loading").textContent = "Scénario indisponible (le créateur doit lancer la partie)";
+    function afficherScenario(scenarioObj, scenarioData) {
+      // Sécurité : s'assurer que les éléments existent
+      const loadingDiv = document.getElementById("scenario-loading");
+      const contentDiv = document.getElementById("scenario-content");
+      if (loadingDiv && contentDiv) {
+        loadingDiv.style.display = "none";
+        contentDiv.style.display = "block";
       }
-    });
-  });
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-  const salonCode = localStorage.getItem("salonCode");
-  const pseudoOrigine = localStorage.getItem("pseudoOrigine");
-  const db = firebase.database();
-
-  // Vérifie si je suis le créateur et génère le scénario si besoin
-  db.ref('parties/' + salonCode + '/parametres/createur/pseudo').once('value').then(snap => {
-    if (snap.exists() && snap.val() === pseudoOrigine) {
-      db.ref('parties/' + salonCode + '/scenario').once('value').then(snapScenario => {
-        if (!snapScenario.exists() && typeof genererScenario === "function") {
+      document.getElementById("introduction").innerHTML = scenarioObj.introduction || "";
+      document.getElementById("crime").innerHTML = scenarioObj.crime || "";
+      document.getElementById("objectif").innerHTML = scenarioObj.objectif || "";
+      document.getElementById("mode").textContent = scenarioData.mode || "-";
+      document.getElementById("duree").textContent = (scenarioData.duree ? scenarioData.duree + " min" : "-") + (scenarioObj.detailsDuree ? " — " + scenarioObj.detailsDuree : "");
+      document.getElementById("periode").textContent = scenarioData.periode || "-";
+      document.getElementById("joueurs").textContent = scenarioData.nombreJoueurs || "-";
+      document.getElementById("criminels").textContent = scenarioData.criminels || "-";
+      document.getElementById("fantome").textContent = scenarioData.criminelFantome ? "Oui" : "Non";
+      document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
+      document.getElementById("messageInfo").textContent = "";
+    }
+    function chargerScenario() {
+      try {
+        let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+        if (!scenarioData) throw new Error("Aucune donnée de scénario.");
+        if (typeof genererScenario === "function") {
           genererScenario();
-          setTimeout(chargerScenario, 500); // Petite pause pour laisser Firebase écrire
-        } else {
-          chargerScenario();
+          setTimeout(() => {
+            let scenarioObj = JSON.parse(localStorage.getItem("scenarioCourant") || "null");
+            if (scenarioObj) {
+              afficherScenario(scenarioObj, scenarioData);
+            }
+          }, 200);
         }
-      });
-    } else {
+      } catch (e) {
+        const loadingDiv = document.getElementById("scenario-loading");
+        const contentDiv = document.getElementById("scenario-content");
+        if (loadingDiv) loadingDiv.style.display = "none";
+        if (contentDiv) contentDiv.style.display = "none";
+        document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
+      }
+    }
+    document.addEventListener("DOMContentLoaded", function() {
       chargerScenario();
-    }
-  });
-
-  // Bouton régénération
-  const regenBtn = document.getElementById("regenScenarioBtn");
-  regenBtn.onclick = function() {
-    alert("Seul le créateur de la partie peut régénérer le scénario.");
-  };
-  regenBtn.onkeydown = function(e) {
-    if (e.key === "Enter" || e.key === " ") {
-      regenBtn.click();
-    }
-  };
-  // Timer bouton démarrer
-  const launchBtn = document.getElementById("demarrerBtn");
-  let timeLeft = 30;
-  launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-  launchBtn.style.pointerEvents = "none";
-  launchBtn.style.opacity = "0.6";
-  const interval = setInterval(() => {
-    timeLeft--;
-    if (timeLeft > 0) {
+      // Bouton régénération
+      const regenBtn = document.getElementById("regenScenarioBtn");
+      regenBtn.onclick = function() {
+        if (typeof genererScenario === "function") {
+          genererScenario();
+          setTimeout(chargerScenario, 200);
+        }
+      };
+      regenBtn.onkeydown = function(e) {
+        if (e.key === "Enter" || e.key === " ") {
+          regenBtn.click();
+        }
+      };
+      // Timer bouton démarrer
+      const launchBtn = document.getElementById("demarrerBtn");
+      let timeLeft = 30;
       launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-    } else {
-      clearInterval(interval);
-      launchBtn.textContent = "Démarrer la partie";
-      launchBtn.style.pointerEvents = "auto";
-      launchBtn.style.opacity = "1";
-    }
-  }, 1000);
-  setTimeout(() => {
-    const pageLancement = document.querySelector(".page-lancement");
-    if (pageLancement) pageLancement.focus();
-  }, 600);
-  window.addEventListener('offline', () => {
-    document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
-  });
-  window.addEventListener('online', () => {
-    window.location.reload();
-  });
-});
-</script>
+      launchBtn.style.pointerEvents = "none";
+      launchBtn.style.opacity = "0.6";
+      const interval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+        } else {
+          clearInterval(interval);
+          launchBtn.textContent = "Démarrer la partie";
+          launchBtn.style.pointerEvents = "auto";
+          launchBtn.style.opacity = "1";
+        }
+      }, 1000);
+      setTimeout(() => {
+        document.querySelector(".page-lancement").focus();
+      }, 600);
+      window.addEventListener('offline', () => {
+        document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
+      });
+      window.addEventListener('online', () => {
+        window.location.reload();
+      });
+    });
+  </script>
   <noscript>
     <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
       ⚠️ JavaScript est désactivé. Le scénario ne pourra pas être affiché.
