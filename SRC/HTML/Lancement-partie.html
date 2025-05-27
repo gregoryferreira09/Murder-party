@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    /* === Style d'origine, rien ne bouge === */
+    /* ... ton style d'origine ... */
     body {
       background: #181212;
       color: #f4e4c1;
@@ -195,13 +195,19 @@
   <script src="../JS/personnages.js"></script>
   <script src="../JS/Scenario.js"></script>
   <script>
-    // Paramètres d'identité
+    // Initialisation
     const salonCode = localStorage.getItem("salonCode");
-    let monUUID = localStorage.getItem("uuid");
+    const monUUID = localStorage.getItem("uuid");
     let estCreateur = false;
 
-    // --- Affichage du scénario ---
+    // Affichage du scénario
     function afficherScenario(scenarioObj, scenarioData) {
+      const loadingDiv = document.getElementById("scenario-loading");
+      const contentDiv = document.getElementById("scenario-content");
+      if (loadingDiv && contentDiv) {
+        loadingDiv.style.display = "none";
+        contentDiv.style.display = "block";
+      }
       document.getElementById("introduction").innerHTML = scenarioObj.introduction || "";
       document.getElementById("crime").innerHTML = scenarioObj.crime || "";
       document.getElementById("objectif").innerHTML = scenarioObj.objectif || "";
@@ -215,8 +221,8 @@
       document.getElementById("messageInfo").textContent = "";
     }
 
+    // Synchronisation du scénario en temps réel
     function updateScenarioFromFirebase() {
-      // On écoute Firebase pour le scénario courant
       if (salonCode) {
         const db = firebase.database();
         db.ref('parties/' + salonCode + '/scenario').on('value', snap => {
@@ -229,27 +235,29 @@
       }
     }
 
+    // Charge le scénario au début
     function chargerScenario() {
       try {
         let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
         if (!scenarioData) throw new Error("Aucune donnée de scénario.");
         if (typeof genererScenario === "function") {
-          // Si créateur, génère un premier scénario unique
+          // Seul le créateur génère au premier chargement
           if (estCreateur) genererScenario();
-          // Sinon attend juste le scénario Firebase (updateScenarioFromFirebase)
           setTimeout(() => {
             let scenarioObj = JSON.parse(localStorage.getItem("scenarioCourant") || "null");
             if (scenarioObj) afficherScenario(scenarioObj, scenarioData);
           }, 200);
         }
       } catch (e) {
-        document.getElementById("scenario-loading").style.display = "none";
-        document.getElementById("scenario-content").style.display = "none";
+        const loadingDiv = document.getElementById("scenario-loading");
+        const contentDiv = document.getElementById("scenario-content");
+        if (loadingDiv) loadingDiv.style.display = "none";
+        if (contentDiv) contentDiv.style.display = "none";
         document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
       }
     }
 
-    // --- Affichage correct du bouton "Nouveau scénario" ---
+    // Affiche ou non le bouton régénérer scénario
     function afficherBoutonRegenSiCreateur() {
       if (!salonCode || !monUUID) {
         document.getElementById("regenScenarioBtnZone").style.display = "none";
@@ -262,12 +270,10 @@
       });
     }
 
-    // --- DOM Ready ---
     document.addEventListener("DOMContentLoaded", function() {
-      // Initialisation bouton régénération
       afficherBoutonRegenSiCreateur();
 
-      // Le créateur a le droit de régénérer le scénario
+      // Régénération du scénario UNIQUEMENT pour le créateur, synchrone pour tous
       const regenBtn = document.getElementById("regenScenarioBtn");
       regenBtn.onclick = function() {
         if (estCreateur && typeof genererScenario === "function") {
@@ -280,11 +286,12 @@
         }
       };
 
-      // Charge le scénario (première fois)
+      // Charge le scénario au chargement de la page
       chargerScenario();
+      // Synchronise le scénario en temps réel
       updateScenarioFromFirebase();
 
-      // Timer bouton démarrer : activé pour tous en même temps après 30s
+      // Timer bouton démarrer (inchangé)
       const launchBtn = document.getElementById("demarrerBtn");
       let timeLeft = 30;
       launchBtn.textContent = `Disponible dans ${timeLeft}s`;
