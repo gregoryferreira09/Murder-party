@@ -293,29 +293,6 @@
         window.location.reload();
       });
     });
-
-    document.addEventListener("DOMContentLoaded", function() {
-  const salonCode = localStorage.getItem("salonCode");
-  const pseudoOrigine = localStorage.getItem("pseudoOrigine");
-  const db = firebase.database();
-
-  db.ref('parties/' + salonCode + '/parametres/createur/pseudo').once('value').then(snap => {
-    if (snap.exists() && snap.val() === pseudoOrigine) {
-      // Créateur : génère le scénario si besoin
-      db.ref('parties/' + salonCode + '/scenario').once('value').then(snapScenario => {
-        if (!snapScenario.exists() && typeof genererScenario === "function") {
-          genererScenario();
-          setTimeout(chargerScenario, 500); // Donne le temps à Firebase
-        } else {
-          chargerScenario();
-        }
-      });
-    } else {
-      // Joueurs : attend le scénario
-      chargerScenario();
-    }
-  });
-});
   </script>
   <noscript>
     <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
