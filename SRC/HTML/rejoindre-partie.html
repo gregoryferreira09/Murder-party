@@ -1,75 +1,55 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Rejoindre une partie – Murder Party</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../../Public/styles/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Cormorant+Garamond&display=swap" rel="stylesheet">
-  <style>
-    .main-join { opacity: 0; transition: opacity 0.5s; }
-    .main-join.visible { opacity: 1; }
-    .error-message {
-      min-height: 20px;
-      color: #c00;
-      font-weight: bold;
-      margin-top: 6px;
-      font-size: 1em;
-      animation: fadeInMessage 0.5s ease forwards;
-    }
-    @media (max-width: 650px) {
-      .main-join { max-width: 98vw; margin: 10px auto; padding: 12px 2vw; border-radius: 12px; }
-    }
-  </style>
-  <!-- AJOUT : Charger Firebase AVANT ton script local -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <!-- Ton script local (chemin correct si tu es en serveur local) -->
-  <script src="../JS/rejoindre-partie.js"></script>
+  <meta charset="UTF-8" />
+  <title>Rejoindre une partie - Murder Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Lien vers ton fichier CSS global -->
+  <link rel="stylesheet" href="../../Public/styles/style.css" />
+
+  <!-- Police -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet" />
+  
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body>
+
   <header>
-    <h1 class="site-title">Murder Party</h1>
+    <h1>Rejoindre une partie</h1>
   </header>
-  <div class="center-wrapper">
-    <main class="main-accueil main-join" role="main" aria-labelledby="titre-main">
-      <h2 id="titre-main" style="margin-top:0;">Rejoindre une partie</h2>
-      <div>
-        <form class="form-container" id="joinForm" autocomplete="off" novalidate>
-          <label for="codeInput">Code de la partie</label>
-          <input
-            id="codeInput"
-            name="code"
-            type="text"
-            maxlength="8"
-            minlength="4"
-            placeholder="Code à 4 ou 8 lettres/chiffres"
-            required
-            autofocus
-            aria-label="Code de la partie"
-            autocomplete="off"
-          />
-          <div class="error-message" id="errorMessage" aria-live="polite"></div>
-          <div id="loader" style="display:none;"></div>
-          <div id="message"></div>
-          <button class="main-btn" id="validerBtn" type="submit">Rejoindre</button>
-        </form>
+
+  <main class="bandeau-dore">
+    <h1>🔑 Connexion</h1>
+    <div class="form-container">
+      <label for="codeInput">Entrez le code de salon reçu :</label>
+      <input type="text" id="codeInput" maxlength="6" placeholder="Ex: ABC123" aria-label="Code de salon" autofocus />
+
+      <div class="boutons-actions">
+        <button class="gold-btn" id="validerBtn" onclick="rejoindreSalon()" aria-label="Valider">Valider</button>
+        <button class="gold-btn" onclick="retourAccueil()" aria-label="Retour">Retour</button>
       </div>
-      <div class="info" style="margin-top:24px;">
-        <p>Demande le code à l'organisateur.<br>
-        <a href="creer-partie.html" class="main-link">Créer une nouvelle partie</a></p>
-        <button class="main-btn" type="button" onclick="location.href='accueil.html'" style="margin-top:10px;">Retour à l'accueil</button>
-      </div>
-    </main>
-  </div>
+
+      <div class="message" id="message" role="alert"></div>
+      <div class="loader" id="loader" style="display:none;">Connexion...</div>
+    </div>
+  </main>
+
+  <script src="../JS/rejoindre-partie.js"></script>
+  <script>
+    // Focus automatique sur le champ dès chargement
+    window.onload = () => {
+      document.getElementById("codeInput").focus();
+    };
+    // Optionnel: fonction retour accueil
+    function retourAccueil() {
+      window.location.href = "accueil.html";
+    }
+  </script>
   <footer class="footer">
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      document.querySelector('.main-join').classList.add('visible');
-    });
-  </script>
 </body>
 </html>
