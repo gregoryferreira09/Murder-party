@@ -1,12 +1,13 @@
 // Remplace les valeurs par celles de ton projet Firebase
 const firebaseConfig = {
-  apiKey: "TA_CLE_API",
-  authDomain: "TON_DOMAINE.firebaseapp.com",
-  databaseURL: "https://TON_DOMAINE.firebaseio.com",
-  projectId: "TON_PROJECT_ID",
-  storageBucket: "TON_DOMAINE.appspot.com",
-  messagingSenderId: "TON_SENDER_ID",
-  appId: "TON_APP_ID"
+  apiKey: "AIzaSyD-BxBu-4ElCqbHrZPM-4-6yf1-yWnL1bI",
+  authDomain: "murder-party-ba8d1.firebaseapp.com",
+  databaseURL: "https://murder-party-ba8d1-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "murder-party-ba8d1",
+  storageBucket: "murder-party-ba8d1.firebasestorage.app",
+  messagingSenderId: "20295055805",
+  appId: "1:20295055805:web:0963719c3f23ab7752fad4",
+  measurementId: "G-KSBMBB7KMJ"
 };
 
 firebase.initializeApp(firebaseConfig);
