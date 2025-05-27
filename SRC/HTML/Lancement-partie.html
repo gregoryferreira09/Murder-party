@@ -7,8 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../Public/styles/style.css">
   <style>
-    /* ... styles existants inchangés ... */
-    /* Ajout pour la liste des joueurs */
+    /* ... tes styles existants ... */
     .joueurs-liste {
       margin: 14px 0 22px 0;
       padding: 0;
@@ -30,6 +29,9 @@
     .joueurs-liste .pret { color: #6be985; font-weight:bold;}
     .joueurs-liste .moi { border: 2px solid #e0c185; }
     .info-pseudo { color: #c9b49a; font-size: .98em; text-align:center; }
+    /* Affichage dynamique du bouton régénération */
+    .regen-scenario-btn { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; margin-top: -10px; }
+    .regen-scenario-btn[hidden] { display:none !important; }
   </style>
 </head>
 <body>
@@ -42,7 +44,7 @@
       <section class="page-lancement" role="main" aria-live="polite">
         <div id="scenario-loading" class="info">Chargement du scénario...</div>
         <div id="scenario-content" style="display:none;">
-          <div class="regen-scenario-btn">
+          <div class="regen-scenario-btn" id="regenScenarioBtnZone" hidden>
             <button id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario" tabindex="0">📜</button>
           </div>
           <div class="scenario-block">
@@ -91,21 +93,19 @@
   <script src="../JS/personnages.js"></script>
   <script src="../JS/Scenario.js"></script>
   <script>
-    // --- CONFIG ---
+    // CONFIG
     const salonCode = localStorage.getItem("salonCode");
     let monUUID = localStorage.getItem("uuid");
-    let monPseudo = localStorage.getItem("pseudo") || "Moi";
     let estCreateur = false;
-    let timerStart = false;
+    let scenarioAffiche = false;
 
-    // --- Affichage du scénario (inchangé) ---
+    // --- Affichage du scénario ---
     function afficherScenario(scenarioObj, scenarioData) {
+      // Affiche le contenu sans jamais masquer s'il est déjà affiché
       const loadingDiv = document.getElementById("scenario-loading");
       const contentDiv = document.getElementById("scenario-content");
-      if (loadingDiv && contentDiv) {
-        loadingDiv.style.display = "none";
-        contentDiv.style.display = "block";
-      }
+      if (contentDiv) contentDiv.style.display = "block";
+      if (loadingDiv) loadingDiv.style.display = "none";
       document.getElementById("introduction").innerHTML = scenarioObj.introduction || "";
       document.getElementById("crime").innerHTML = scenarioObj.crime || "";
       document.getElementById("objectif").innerHTML = scenarioObj.objectif || "";
@@ -117,12 +117,13 @@
       document.getElementById("fantome").textContent = scenarioData.criminelFantome ? "Oui" : "Non";
       document.getElementById("avatars").textContent = scenarioData.avatarsLegendaires ? "Oui" : "Non";
       document.getElementById("messageInfo").textContent = "";
+      scenarioAffiche = true;
     }
-    // --- Chargement du scénario (inchangé) ---
-    function chargerScenario() {
+
+    function chargerScenario(forceAffichage) {
       try {
         let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-        if (!scenarioData) throw new Error("Aucune donnée de scénario.");
+        if (!scenarioData) return;
         if (typeof genererScenario === "function") {
           genererScenario();
           setTimeout(() => {
@@ -133,15 +134,44 @@
           }, 200);
         }
       } catch (e) {
-        const loadingDiv = document.getElementById("scenario-loading");
-        const contentDiv = document.getElementById("scenario-content");
-        if (loadingDiv) loadingDiv.style.display = "none";
-        if (contentDiv) contentDiv.style.display = "none";
-        document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
+        // NE MASQUE PAS le contenu si déjà affiché
+        if (!scenarioAffiche) {
+          const loadingDiv = document.getElementById("scenario-loading");
+          const contentDiv = document.getElementById("scenario-content");
+          if (loadingDiv) loadingDiv.style.display = "none";
+          if (contentDiv) contentDiv.style.display = "none";
+          document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
+        }
       }
     }
 
-    // --- Affichage/synchronisation de la liste des joueurs ---
+    // --- Synchronisation du scénario en temps réel ---
+    function syncScenarioRealtime() {
+      if (!salonCode) return;
+      const db = firebase.database();
+      db.ref('parties/' + salonCode + '/scenario').on('value', snap => {
+        const scenarioObj = snap.val();
+        if (!scenarioObj) return;
+        let scenarioData = JSON.parse(localStorage.getItem("parametresPartie") || "{}");
+        localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
+        afficherScenario(scenarioObj, scenarioData);
+      });
+    }
+
+    // --- Affichage du bouton régénération pour le créateur seulement ---
+    function afficherBoutonRegenSiCreateur() {
+      if (!salonCode || !monUUID) {
+        document.getElementById("regenScenarioBtnZone").hidden = true;
+        return;
+      }
+      const db = firebase.database();
+      db.ref('parties/' + salonCode + '/parametres/createur').once('value').then(snap => {
+        estCreateur = snap.exists() && snap.val().uuid === monUUID;
+        document.getElementById("regenScenarioBtnZone").hidden = !estCreateur;
+      });
+    }
+
+    // --- Affichage/synchronisation de la liste des joueurs (inchangé) ---
     function afficherJoueurs(joueurs, pretMap) {
       const ul = document.getElementById("listeJoueurs");
       ul.innerHTML = "";
@@ -158,7 +188,7 @@
       });
     }
 
-    // --- Gestion du bouton prêt/lancement synchronisé ---
+    // --- Gestion du bouton prêt/lancement synchronisé (inchangé) ---
     async function initialiserSynchroMulti() {
       if (!salonCode) {
         document.getElementById("zone-joueurs").style.display = "none";
@@ -181,7 +211,7 @@
       });
 
       // Affiche le pseudo courant
-      infoPseudo.textContent = "Connecté en tant que : " + monPseudo;
+      infoPseudo.textContent = "Connecté en tant que : " + (monPseudo || "Moi");
 
       // Ecoute la liste des joueurs + état prêt
       db.ref('parties/' + salonCode + '/joueurs').on('value', snap => {
@@ -237,8 +267,8 @@
           nbJ++;
           if (child.val().pret) nbP++;
         });
-        if (nbJ > 1 && nbJ === nbP && estCreateur && !timerStart) {
-          timerStart = true;
+        if (nbJ > 1 && nbJ === nbP && estCreateur && !window._timerStart) {
+          window._timerStart = true;
           let t = 3;
           document.getElementById("messageInfo").textContent = "Tous les joueurs sont prêts ! Début dans " + t + "…";
           const countdown = setInterval(() => {
@@ -271,25 +301,23 @@
       }, 1000);
     }
 
-    // --- DOM Ready ---
     document.addEventListener("DOMContentLoaded", function() {
-      chargerScenario();
-
-      // Bouton régénération du scénario
+      afficherBoutonRegenSiCreateur();
+      // Régénération du scénario UNIQUEMENT pour le créateur
       const regenBtn = document.getElementById("regenScenarioBtn");
       regenBtn.onclick = function() {
-        if (typeof genererScenario === "function") {
+        if (estCreateur && typeof genererScenario === "function") {
           genererScenario();
-          setTimeout(chargerScenario, 200);
         }
       };
       regenBtn.onkeydown = function(e) {
-        if (e.key === "Enter" || e.key === " ") {
+        if ((e.key === "Enter" || e.key === " ") && estCreateur) {
           regenBtn.click();
         }
       };
 
-      // Synchronisation multi-joueur ou solo
+      chargerScenario();
+      syncScenarioRealtime();
       initialiserSynchroMulti();
 
       setTimeout(() => {
