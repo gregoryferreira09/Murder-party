@@ -557,10 +557,8 @@ function genererScenario() {
   console.log("genererScenario() appelée");
   const salonCode = localStorage.getItem("salonCode");
   if (!salonCode) return;
-  // ...
-}
 
-// On récupère les paramètres de la partie directement depuis Firebase
+  // On récupère les paramètres de la partie directement depuis Firebase
   firebase.database().ref('parties/' + salonCode + '/parametres').once('value').then(function(snap) {
     if (!snap.exists()) {
       if (document.getElementById("scenario-loading")) {
