@@ -218,8 +218,6 @@
 </script>  
   
   <script>
-
-    
     function afficherScenario(scenarioObj, scenarioData) {
       // Sécurité : s'assurer que les éléments existent
       const loadingDiv = document.getElementById("scenario-loading");
@@ -263,29 +261,51 @@
     }
     document.addEventListener("DOMContentLoaded", function() {
       chargerScenario();
-      
-      // Bouton régénération
+
+      // Vérifier si l'utilisateur est le créateur, sinon masquer le bouton régénération
+      const salonCode = localStorage.getItem("salonCode");
+      const monUid = localStorage.getItem("monUid");
       const regenBtn = document.getElementById("regenScenarioBtn");
-regenBtn.onclick = function() {
-  const salonCode = localStorage.getItem("salonCode");
-  if (!salonCode) return;
-  // 1. Supprimer le scénario existant dans Firebase
-  firebase.database().ref('parties/' + salonCode + '/scenario').remove().then(function() {
-    // 2. Supprimer aussi du localStorage pour être sûr
-    localStorage.removeItem("scenarioCourant");
-    // 3. Générer un nouveau scénario
-    if (typeof genererScenario === "function") {
-      genererScenario();
-      setTimeout(chargerScenario, 200);
-    }
-  });
-};
-      
-      regenBtn.onkeydown = function(e) {
-        if (e.key === "Enter" || e.key === " ") {
-          regenBtn.click();
-        }
-      };
+      if (salonCode && monUid && regenBtn) {
+        firebase.database().ref('parties/' + salonCode + '/createurUid').once('value').then(function(snap) {
+          const createurUid = snap.val();
+          if (createurUid !== monUid) {
+            regenBtn.style.display = "none";
+          } else {
+            regenBtn.style.display = "flex";
+          }
+        });
+      }
+
+      // Bouton régénération, version sécurisée : seul le créateur peut agir
+      if (regenBtn) {
+        regenBtn.onclick = function() {
+          const salonCode = localStorage.getItem("salonCode");
+          const monUid = localStorage.getItem("monUid");
+          if (!salonCode || !monUid) return;
+          firebase.database().ref('parties/' + salonCode + '/createurUid').once('value').then(function(snap) {
+            const createurUid = snap.val();
+            if (createurUid !== monUid) {
+              alert("Seul le créateur de la partie peut générer un nouveau scénario.");
+              return;
+            }
+            // Si c'est le créateur, on peut régénérer :
+            firebase.database().ref('parties/' + salonCode + '/scenario').remove().then(function() {
+              localStorage.removeItem("scenarioCourant");
+              if (typeof genererScenario === "function") {
+                genererScenario();
+                setTimeout(chargerScenario, 200);
+              }
+            });
+          });
+        };
+        regenBtn.onkeydown = function(e) {
+          if (e.key === "Enter" || e.key === " ") {
+            regenBtn.click();
+          }
+        };
+      }
+
       // Timer bouton démarrer
       const launchBtn = document.getElementById("demarrerBtn");
       let timeLeft = 30;
@@ -321,8 +341,8 @@ regenBtn.onclick = function() {
   </noscript>
 
   <script src="../JS/security-enhance.js"></script>
-<script src="../JS/ux-enhance.js"></script>
-<script src="../JS/scalability.js"></script>
+  <script src="../JS/ux-enhance.js"></script>
+  <script src="../JS/scalability.js"></script>
   
 </body>
 </html>
