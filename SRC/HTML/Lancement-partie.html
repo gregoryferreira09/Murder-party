@@ -271,17 +271,26 @@
       localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
       // Recharge l’affichage avec le scénario
       let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-if (!scenarioData) {
-  // Récupère les parametres depuis Firebase si absents du localStorage
-  firebase.database().ref('parties/' + salonCode + '/parametres').once('value').then(function(snap) {
-    if (snap.exists()) {
-      scenarioData = snap.val();
-      localStorage.setItem("parametresPartie", JSON.stringify(scenarioData));
-      if (typeof afficherScenario === "function") {
-        afficherScenario(scenarioObj, scenarioData);
+      if (!scenarioData) {
+        // Récupère les paramètres depuis Firebase si absents du localStorage
+        firebase.database().ref('parties/' + salonCode + '/parametres').once('value').then(function(snap) {
+          if (snap.exists()) {
+            scenarioData = snap.val();
+            localStorage.setItem("parametresPartie", JSON.stringify(scenarioData));
+            if (typeof afficherScenario === "function") {
+              afficherScenario(scenarioObj, scenarioData);
+            }
+          }
+        });
+      } else {
+        if (typeof afficherScenario === "function") {
+          afficherScenario(scenarioObj, scenarioData);
+        }
       }
     }
-  }); // <-- FIN DU .then ici !
+  });
+} // <--- Cette accolade ferme bien la fonction listenScenario !
+    
 } else {
   if (typeof afficherScenario === "function") {
     afficherScenario(scenarioObj, scenarioData);
