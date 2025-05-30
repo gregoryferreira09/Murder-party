@@ -19,7 +19,7 @@ const db = firebase.database();
 const salonCode = localStorage.getItem("salonCode");
 const uuid = localStorage.getItem("uuid");
 let pseudo = localStorage.getItem("pseudo") || "Anonyme";
-let personnageSelectionne = localStorage.getItem("personnageSelectionne");
+let personnageSelectionne = null; // ATTENTION: on va le charger dynamiquement
 
 // --- Variables d'état ---
 let joueurs = [];
@@ -49,46 +49,55 @@ async function chargerJoueurs() {
   });
 }
 
-// --- Récupère fiche personnage + ajoute le secret, mission, lien, anecdote dynamiques ---
+// --- Récupère la clé du personnage choisi dans /validations et charge la fiche complète ---
 async function chargerPersoActif() {
-  if (!personnageSelectionne) return;
-  const persosSnap = await db.ref('parties/' + salonCode + '/personnages').get();
-  persosSnap.forEach(snap => {
-    if (snap.key === personnageSelectionne) {
-      persoActif = { ...snap.val(), id: snap.key };
-    }
-  });
+  if (!salonCode || !uuid) return;
+
+  // 1. Aller chercher la validation pour le joueur courant
+  let validationSnap = await db.ref('parties/' + salonCode + '/validations/' + uuid).get();
+  let validation = validationSnap.val();
+  if (!validation || !validation.personnageKey) {
+    toast("Aucun personnage sélectionné.", "error");
+    return;
+  }
+  personnageSelectionne = validation.personnageKey;
+  localStorage.setItem("personnageSelectionne", personnageSelectionne);
+
+  // 2. Charger la fiche du personnage choisi
+  const persoSnap = await db.ref('parties/' + salonCode + '/personnages/' + personnageSelectionne).get();
+  if (!persoSnap.exists()) {
+    toast("Personnage introuvable.", "error");
+    return;
+  }
+  persoActif = { ...persoSnap.val(), id: persoSnap.key };
 
   // Ajout dynamique des infos immersives SI absentes
-  if (persoActif) {
-    // Récupère la période depuis le scénario courant (en localStorage par exemple)
-    const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-    const scenarioCourant = JSON.parse(localStorage.getItem("scenarioCourant")) || {};
-    const periode = scenarioData && scenarioData.periode;
+  // (conserve ton code original ici)
+  const scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+  const scenarioCourant = JSON.parse(localStorage.getItem("scenarioCourant")) || {};
+  const periode = scenarioData && scenarioData.periode;
 
-    if (periode && typeof referentielIdentites !== "undefined") {
-      // Pour chaque champ, s'il est manquant, on le génère
-      if (!persoActif.secret) {
-        const secrets = referentielIdentites.secrets[periode] || [];
-        persoActif.secret = secrets.length ? secrets[Math.floor(Math.random() * secrets.length)] : "";
-      }
-      if (!persoActif.mission) {
-        const missions = referentielIdentites.missions[periode] || [];
-        persoActif.mission = missions.length ? missions[Math.floor(Math.random() * missions.length)] : "";
-      }
-      if (!persoActif.lien) {
-        const liens = referentielIdentites.liensVictime[periode] || [];
-        const nomVictime = scenarioCourant.victime || "la victime";
-        let lien = liens.length ? liens[Math.floor(Math.random() * liens.length)] : "";
-        persoActif.lien = lien.replace("{victime}", nomVictime);
-      }
-      if (!persoActif.anecdote) {
-        const anecdotes = referentielIdentites.anecdotes[periode] || [];
-        persoActif.anecdote = anecdotes.length ? anecdotes[Math.floor(Math.random() * anecdotes.length)] : "";
-      }
+  if (periode && typeof referentielIdentites !== "undefined") {
+    // Pour chaque champ, s'il est manquant, on le génère
+    if (!persoActif.secret) {
+      const secrets = referentielIdentites.secrets[periode] || [];
+      persoActif.secret = secrets.length ? secrets[Math.floor(Math.random() * secrets.length)] : "";
+    }
+    if (!persoActif.mission) {
+      const missions = referentielIdentites.missions[periode] || [];
+      persoActif.mission = missions.length ? missions[Math.floor(Math.random() * missions.length)] : "";
+    }
+    if (!persoActif.lien) {
+      const liens = referentielIdentites.liensVictime[periode] || [];
+      const nomVictime = scenarioCourant.victime || "la victime";
+      let lien = liens.length ? liens[Math.floor(Math.random() * liens.length)] : "";
+      persoActif.lien = lien.replace("{victime}", nomVictime);
+    }
+    if (!persoActif.anecdote) {
+      const anecdotes = referentielIdentites.anecdotes[periode] || [];
+      persoActif.anecdote = anecdotes.length ? anecdotes[Math.floor(Math.random() * anecdotes.length)] : "";
     }
   }
-
   majFichePerso();
 }
 
@@ -96,6 +105,7 @@ function majFichePerso() {
   if (!persoActif) return;
   document.getElementById("nomPersonnage").textContent = persoActif.nom;
   document.getElementById("avatarPersonnage").src = "../../Public/images/" + (persoActif.image || "avatar-1.png");
+  document.getElementById("avatarPersonnage").alt = persoActif.nom || "Avatar";
   document.getElementById("histoirePerso").innerHTML = "<strong>Histoire :</strong> " + (persoActif.histoire || "");
   document.getElementById("pouvoirPerso").innerHTML = "<strong>Pouvoir :</strong> " + (persoActif.pouvoir || "");
 
