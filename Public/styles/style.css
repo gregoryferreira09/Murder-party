@@ -435,3 +435,11 @@ body {
 .carte-personnage:hover {
   transform: scale(1.05);
 }
+
+.fadeUp {
+  animation: fadeUp 1.2s cubic-bezier(.6,.1,.3,1) both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
