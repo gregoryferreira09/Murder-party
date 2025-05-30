@@ -109,7 +109,7 @@
 </head>
 <body class="accueil">
   <div class="center-wrapper">
-    <main class="main-accueil" role="main">
+    <main class="main-accueil fadeIn" role="main">
       <h1>Murder Party</h1>
       <h2>Enquête collaborative en ligne</h2>
       <div class="bienvenue-message">
@@ -131,6 +131,13 @@
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
+  <script>
+    // Effet d'ouverture fadeIn
+    document.addEventListener("DOMContentLoaded", function() {
+      var main = document.querySelector('.fadeIn');
+      if (main) main.classList.add('visible');
+    });
+  </script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script>
     // Initialisation Firebase (lecture seule)
@@ -163,8 +170,8 @@
   </script>
 
   <script src="../JS/security-enhance.js"></script>
-<script src="../JS/ux-enhance.js"></script>
-<script src="../JS/scalability.js"></script>
+  <script src="../JS/ux-enhance.js"></script>
+  <script src="../JS/scalability.js"></script>
   
 </body>
 </html>
