@@ -241,6 +241,8 @@
       document.getElementById("messageInfo").textContent = "";
     }
     function chargerScenario() {
+      function chargerScenario() {
+  console.log("chargerScenario APPELÉ !");
       try {
         let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
         if (!scenarioData) throw new Error("Aucune donnée de scénario.");
