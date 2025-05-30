@@ -97,13 +97,6 @@
     }
   </style>
 </head>
-
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var main = document.querySelector('.fadeIn');
-    if (main) main.classList.add('visible');
-  });
-</script>
 <body>
 
   <header>
@@ -111,9 +104,7 @@
   </header>
 
   <div class="center-wrapper">
-<main class="main-accueil fadeIn" role="main">
-  ...
-</main>
+    <main class="main-accueil fadeIn" role="main">
       <h2 style="font-size:2em; color:#e0c185; margin-bottom:1.3em;">Choisissez votre personnage</h2>
       <section class="galerie-personnages" id="galeriePersonnages">
         <!-- Les personnages seront ajoutés dynamiquement ici -->
@@ -129,6 +120,13 @@
     <p>© 2025 Murder Party. Tous droits réservés.</p>
     <a href="mentions-legales.html">Mentions légales</a>
   </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var main = document.querySelector('.fadeIn');
+      if (main) main.classList.add('visible');
+    });
+  </script>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
