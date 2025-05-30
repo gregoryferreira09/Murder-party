@@ -62,7 +62,7 @@ window.creerPartie = async function(formData) {
     criminelFantome: criminel_fantome,
     avatarsLegendaires: avatars_legendaires,
     inactifs,
-    createur: { uuid, pseudo }
+   createur: uuid
   };
 
   // Génère un code salon unique
