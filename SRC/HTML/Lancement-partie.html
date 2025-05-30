@@ -193,33 +193,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script src="../JS/personnages.js"></script>
   <script src="../JS/Scenario.js"></script>
- <script>
-// PATCH minimal anti-multi-génération :
-// On vérifie s'il existe déjà un scénario dans Firebase avant d'en générer un nouveau.
-(function() {
-  // On sauvegarde la fonction originale, si ce n'est pas déjà fait
-  if (!window._genererScenarioOriginal && typeof window.genererScenario === "function") {
-    window._genererScenarioOriginal = window.genererScenario;
-    window.genererScenario = function() {
-      const salonCode = localStorage.getItem("salonCode");
-      if (!salonCode) return;
-      firebase.database().ref('parties/' + salonCode + '/scenario').once('value').then(function(snapScenario) {
-        if (snapScenario.exists()) {
-          // Si le scénario existe déjà, on le place dans le localStorage (comme généré)
-          localStorage.setItem("scenarioCourant", JSON.stringify(snapScenario.val()));
-        } else {
-          // Sinon, on génère normalement
-          window._genererScenarioOriginal();
-        }
-      });
-    };
-  }
-})();
-</script>  
-  
   <script>
-
-    
     function afficherScenario(scenarioObj, scenarioData) {
       // Sécurité : s'assurer que les éléments existent
       const loadingDiv = document.getElementById("scenario-loading");
