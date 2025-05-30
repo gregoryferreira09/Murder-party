@@ -97,6 +97,13 @@
     }
   </style>
 </head>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var main = document.querySelector('.fadeIn');
+    if (main) main.classList.add('visible');
+  });
+</script>
 <body>
 
   <header>
@@ -104,8 +111,9 @@
   </header>
 
   <div class="center-wrapper">
-    <!-- AJOUT DE fadeUp ICI -->
-    <main class="main-accueil fadeUp" role="main">
+<main class="main-accueil fadeIn" role="main">
+  ...
+</main>
       <h2 style="font-size:2em; color:#e0c185; margin-bottom:1.3em;">Choisissez votre personnage</h2>
       <section class="galerie-personnages" id="galeriePersonnages">
         <!-- Les personnages seront ajoutés dynamiquement ici -->
