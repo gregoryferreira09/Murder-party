@@ -261,6 +261,22 @@
         document.getElementById("messageInfo").textContent = "Erreur lors du chargement du scénario.";
       }
     }
+
+    function listenScenario() {
+  const salonCode = localStorage.getItem("salonCode");
+  if (!salonCode) return;
+  firebase.database().ref('parties/' + salonCode + '/scenario').on('value', function(snapScenario) {
+    if (snapScenario.exists()) {
+      const scenarioObj = snapScenario.val();
+      localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
+      // Recharge l’affichage avec le scénario
+      let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+      if (scenarioData && typeof afficherScenario === "function") {
+        afficherScenario(scenarioObj, scenarioData);
+      }
+    }
+  });
+}
     document.addEventListener("DOMContentLoaded", function() {
       chargerScenario();
       
