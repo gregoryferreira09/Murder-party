@@ -241,8 +241,6 @@
       document.getElementById("messageInfo").textContent = "";
     }
     function chargerScenario() {
-      function chargerScenario() {
-  console.log("chargerScenario APPELÉ !");
       try {
         let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
         if (!scenarioData) throw new Error("Aucune donnée de scénario.");
@@ -267,11 +265,11 @@
     function listenScenario() {
   const salonCode = localStorage.getItem("salonCode");
   if (!salonCode) return;
-  const db = firebase.database();
-  db.ref('parties/' + salonCode + '/scenario').on('value', function(snapScenario) {
+  firebase.database().ref('parties/' + salonCode + '/scenario').on('value', function(snapScenario) {
     if (snapScenario.exists()) {
       const scenarioObj = snapScenario.val();
       localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
+      // Recharge l’affichage avec le scénario
       let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
       if (scenarioData && typeof afficherScenario === "function") {
         afficherScenario(scenarioObj, scenarioData);
@@ -279,13 +277,10 @@
     }
   });
 }
-    
-  document.addEventListener("DOMContentLoaded", function() {
-  listenScenario();
-  if (localStorage.getItem("isCreateur") === "true") {
-    chargerScenario();
-  }
-    
+    document.addEventListener("DOMContentLoaded", function() {
+  listenScenario(); // <-- AJOUT ICI
+  chargerScenario();
+      
       // Bouton régénération
       const regenBtn = document.getElementById("regenScenarioBtn");
 regenBtn.onclick = function() {
