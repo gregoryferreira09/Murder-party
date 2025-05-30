@@ -83,7 +83,7 @@
     <h1>Partie en cours</h1>
     <div id="chrono"><span id="tempsRestant"></span></div>
   </header>
-  <main class="main-accueil">
+  <main class="main-accueil fadeIn">
     <nav style="margin-bottom: 24px;">
       <button class="gold-btn main-btn tab-button active" onclick="switchTab('fiche')" aria-controls="fiche" tabindex="0">
         🎭 Personnage
@@ -138,13 +138,19 @@
   <!-- Toast Notification -->
   <div id="toast" class="toast" aria-live="polite"></div>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var main = document.querySelector('.fadeIn');
+      if (main) main.classList.add('visible');
+    });
+  </script>
+
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script src="../JS/gameplay.js"></script>
 
   <script src="../JS/security-enhance.js"></script>
-<script src="../JS/ux-enhance.js"></script>
-<script src="../JS/scalability.js"></script>
-  
+  <script src="../JS/ux-enhance.js"></script>
+  <script src="../JS/scalability.js"></script>
 </body>
 </html>
