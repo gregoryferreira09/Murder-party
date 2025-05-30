@@ -42,6 +42,7 @@
       align-items: center;
       margin-bottom: 10px;
       margin-top: -10px;
+      gap: 10px;
     }
     .regen-scenario-btn button {
       background: none;
@@ -152,6 +153,7 @@
         <div id="scenario-loading" class="info">Chargement du scénario...</div>
         <div id="scenario-content" style="display:none;">
           <div class="regen-scenario-btn">
+            <!-- Flèche retour et bouton régénérer seront gérés/ajoutés dynamiquement -->
             <button id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario" tabindex="0">📜</button>
           </div>
           <div class="scenario-block">
@@ -218,8 +220,6 @@
 </script>  
   
   <script>
-
-    
     function afficherScenario(scenarioObj, scenarioData) {
       // Sécurité : s'assurer que les éléments existent
       const loadingDiv = document.getElementById("scenario-loading");
@@ -263,79 +263,171 @@
     }
 
     function listenScenario() {
-  const salonCode = localStorage.getItem("salonCode");
-  if (!salonCode) return;
-  firebase.database().ref('parties/' + salonCode + '/scenario').on('value', function(snapScenario) {
-    if (snapScenario.exists()) {
-      const scenarioObj = snapScenario.val();
-      localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
-      // Recharge l’affichage avec le scénario
-      let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
-      if (!scenarioData) {
-        // Récupère les paramètres depuis Firebase si absents du localStorage
-        firebase.database().ref('parties/' + salonCode + '/parametres')
-          .once('value')
-          .then(function(snap) {
-            if (snap.exists()) {
-              scenarioData = snap.val();
-              localStorage.setItem("parametresPartie", JSON.stringify(scenarioData));
-              if (typeof afficherScenario === "function") {
-                afficherScenario(scenarioObj, scenarioData);
-              }
+      const salonCode = localStorage.getItem("salonCode");
+      if (!salonCode) return;
+      firebase.database().ref('parties/' + salonCode + '/scenario').on('value', function(snapScenario) {
+        if (snapScenario.exists()) {
+          const scenarioObj = snapScenario.val();
+          localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
+          // Recharge l’affichage avec le scénario
+          let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
+          if (!scenarioData) {
+            // Récupère les paramètres depuis Firebase si absents du localStorage
+            firebase.database().ref('parties/' + salonCode + '/parametres')
+              .once('value')
+              .then(function(snap) {
+                if (snap.exists()) {
+                  scenarioData = snap.val();
+                  localStorage.setItem("parametresPartie", JSON.stringify(scenarioData));
+                  if (typeof afficherScenario === "function") {
+                    afficherScenario(scenarioObj, scenarioData);
+                  }
+                }
+              });
+          } else {
+            if (typeof afficherScenario === "function") {
+              afficherScenario(scenarioObj, scenarioData);
             }
-          });
-      } else {
-        if (typeof afficherScenario === "function") {
-          afficherScenario(scenarioObj, scenarioData);
+          }
         }
-      }
+      });
     }
-  });
-}
     
     document.addEventListener("DOMContentLoaded", function() {
-  // 1. Masquer le bouton par défaut
-  const regenBtnDiv = document.querySelector('.regen-scenario-btn');
-  regenBtnDiv.style.display = "none";
+      // 1. Masquer le bouton par défaut
+      const regenBtnDiv = document.querySelector('.regen-scenario-btn');
+      regenBtnDiv.style.display = "none";
 
-  // 2. Afficher le bouton UNIQUEMENT si je suis le créateur
-  const salonCode = localStorage.getItem("salonCode");
-  const monUUID = localStorage.getItem("uuid");
-  firebase.database().ref('parties/' + salonCode + '/parametres/createur')
-    .once('value')
-    .then(function(snapshot) {
-      const createurId = snapshot.val();
-      if (createurId && monUUID && createurId === monUUID) {
-        regenBtnDiv.style.display = "flex";
-      }
-    });
+      // 2. Afficher le bouton UNIQUEMENT si je suis le créateur
+      const salonCode = localStorage.getItem("salonCode");
+      const monUUID = localStorage.getItem("uuid");
+      firebase.database().ref('parties/' + salonCode + '/parametres/createur')
+        .once('value')
+        .then(function(snapshot) {
+          const createurId = snapshot.val();
+          if (createurId && monUUID && createurId === monUUID) {
+            regenBtnDiv.style.display = "flex";
+          }
+        });
 
-  listenScenario();
-  chargerScenario();
+      listenScenario();
+      chargerScenario();
 
-      
-      // Bouton régénération
+      // === AJOUT : BOUTON RETOUR & CONFIRMATION REGÉNÉRATION ===
       const regenBtn = document.getElementById("regenScenarioBtn");
-regenBtn.onclick = function() {
-  const salonCode = localStorage.getItem("salonCode");
-  if (!salonCode) return;
-  // 1. Supprimer le scénario existant dans Firebase
-  firebase.database().ref('parties/' + salonCode + '/scenario').remove().then(function() {
-    // 2. Supprimer aussi du localStorage pour être sûr
-    localStorage.removeItem("scenarioCourant");
-    // 3. Générer un nouveau scénario
-    if (typeof genererScenario === "function") {
-      genererScenario();
-      setTimeout(chargerScenario, 200);
-    }
-  });
-};
-      
-      regenBtn.onkeydown = function(e) {
-        if (e.key === "Enter" || e.key === " ") {
-          regenBtn.click();
-        }
+      // Création bouton retour (flèche)
+      const retourBtn = document.createElement("button");
+      retourBtn.id = "retourScenarioBtn";
+      retourBtn.title = "Revenir à l'ancien scénario";
+      retourBtn.innerHTML = "&#8592;"; // Flèche gauche
+      retourBtn.style.fontSize = "2.1em";
+      retourBtn.style.marginRight = "16px";
+      retourBtn.style.background = "none";
+      retourBtn.style.border = "none";
+      retourBtn.style.color = "#e0c185";
+      retourBtn.style.cursor = "pointer";
+      retourBtn.style.outline = "none";
+      // Ajoute la flèche à gauche du bouton régénérer
+      regenBtnDiv.insertBefore(retourBtn, regenBtn);
+
+      // Message flottant de confirmation
+      const floatConfirm = document.createElement("div");
+      floatConfirm.id = "floatConfirm";
+      floatConfirm.style.position = "fixed";
+      floatConfirm.style.left = "50%";
+      floatConfirm.style.top = "16%";
+      floatConfirm.style.transform = "translate(-50%, 0)";
+      floatConfirm.style.background = "#2c1b1bad";
+      floatConfirm.style.color = "#ffeecb";
+      floatConfirm.style.padding = "22px 30px";
+      floatConfirm.style.borderRadius = "14px";
+      floatConfirm.style.boxShadow = "0 2px 18px #0005";
+      floatConfirm.style.fontSize = "1.17em";
+      floatConfirm.style.zIndex = "9999";
+      floatConfirm.style.display = "none";
+      floatConfirm.innerHTML = `
+        <div>⚠️ Générer un nouveau scénario va écraser l’actuel.<br><br>Continuer ?</div>
+        <div style="margin-top:18px; text-align:center;">
+          <button id="confirmerRegen" style="background:#e0c185; color:#181212; border:none; border-radius:6px; margin-right:18px; font-size:1em; padding:8px 24px; cursor:pointer;">Confirmer</button>
+          <button id="annulerRegen" style="background:#3d2b1f; color:#ffeecb; border:none; border-radius:6px; font-size:1em; padding:8px 24px; cursor:pointer;">Annuler</button>
+        </div>
+      `;
+      document.body.appendChild(floatConfirm);
+
+      // Pour stocker le dernier scénario avant regénération
+      let lastScenarioBackup = null;
+
+      // Quand on clique sur régénérer : on affiche d'abord la confirmation, pas de suppression direct !
+      regenBtn.onclick = function() {
+        floatConfirm.style.display = "block";
       };
+
+      // Gère les boutons du message flottant
+      document.body.addEventListener("click", function(e) {
+        if (e.target.id === "confirmerRegen") {
+          floatConfirm.style.display = "none";
+          const salonCode = localStorage.getItem("salonCode");
+          if (!salonCode) return;
+          // Sauvegarde le scénario courant (pour retour arrière)
+          lastScenarioBackup = localStorage.getItem("scenarioCourant");
+          // 1. Supprimer le scénario existant dans Firebase
+          firebase.database().ref('parties/' + salonCode + '/scenario').remove().then(function() {
+            // 2. Supprimer aussi du localStorage pour être sûr
+            localStorage.removeItem("scenarioCourant");
+            // 3. Générer un nouveau scénario
+            if (typeof genererScenario === "function") {
+              genererScenario();
+              setTimeout(chargerScenario, 200);
+            }
+          });
+        }
+        if (e.target.id === "annulerRegen") {
+          floatConfirm.style.display = "none";
+        }
+      });
+
+      // Bouton retour : remet l'ancien scénario sauvegardé (si dispo)
+      retourBtn.onclick = function() {
+        if (!lastScenarioBackup) {
+          // Message d'erreur flottant
+          floatConfirm.innerHTML = `<div>❌ Aucun scénario précédent à restaurer.</div>
+          <div style="margin-top:18px; text-align:center;">
+            <button id="fermerMsg" style="background:#e0c185; color:#181212; border:none; border-radius:6px; font-size:1em; padding:8px 24px; cursor:pointer;">Fermer</button>
+          </div>`;
+          floatConfirm.style.display = "block";
+          return;
+        }
+        const salonCode = localStorage.getItem("salonCode");
+        if (!salonCode) return;
+        // Remet l'ancien scénario dans Firebase et localStorage
+        const oldScenario = JSON.parse(lastScenarioBackup);
+        firebase.database().ref('parties/' + salonCode + '/scenario').set(oldScenario).then(function() {
+          localStorage.setItem("scenarioCourant", lastScenarioBackup);
+          chargerScenario();
+          // Message ok
+          floatConfirm.innerHTML = `<div>✅ Scénario précédent restauré !</div>
+          <div style="margin-top:18px; text-align:center;">
+            <button id="fermerMsg" style="background:#e0c185; color:#181212; border:none; border-radius:6px; font-size:1em; padding:8px 24px; cursor:pointer;">Fermer</button>
+          </div>`;
+          floatConfirm.style.display = "block";
+        });
+      };
+
+      // Gestion du bouton "Fermer" des messages
+      document.body.addEventListener("click", function(e) {
+        if (e.target && e.target.id === "fermerMsg") {
+          floatConfirm.style.display = "none";
+          // On remet le message de confirmation par défaut pour la prochaine fois
+          floatConfirm.innerHTML = `
+            <div>⚠️ Générer un nouveau scénario va écraser l’actuel.<br><br>Continuer ?</div>
+            <div style="margin-top:18px; text-align:center;">
+              <button id="confirmerRegen" style="background:#e0c185; color:#181212; border:none; border-radius:6px; margin-right:18px; font-size:1em; padding:8px 24px; cursor:pointer;">Confirmer</button>
+              <button id="annulerRegen" style="background:#3d2b1f; color:#ffeecb; border:none; border-radius:6px; font-size:1em; padding:8px 24px; cursor:pointer;">Annuler</button>
+            </div>
+          `;
+        }
+      });
+
       // Timer bouton démarrer
       const launchBtn = document.getElementById("demarrerBtn");
       let timeLeft = 30;
@@ -371,8 +463,7 @@ regenBtn.onclick = function() {
   </noscript>
 
   <script src="../JS/security-enhance.js"></script>
-<script src="../JS/ux-enhance.js"></script>
-<script src="../JS/scalability.js"></script>
-  
+  <script src="../JS/ux-enhance.js"></script>
+  <script src="../JS/scalability.js"></script>
 </body>
 </html>
