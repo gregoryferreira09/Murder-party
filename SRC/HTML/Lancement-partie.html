@@ -133,12 +133,70 @@
       margin-top: 18px;
       margin-bottom: 4px;
     }
+
+    /* ===== Fenêtre flottante custom confirm ===== */
+    #floatConfirm {
+      position: fixed;
+      left: 50%;
+      top: 16%;
+      transform: translate(-50%, 0);
+      background: #2c1b1bad;
+      color: #ffeecb;
+      padding: 22px 30px;
+      border-radius: 18px;
+      border: 3.5px solid #e0c185;
+      box-shadow: 0 2px 18px #0007;
+      font-size: 1.17em;
+      z-index: 9999;
+      display: none;
+      min-width: 340px;
+      max-width: 92vw;
+      box-sizing: border-box;
+    }
+    #floatConfirm .float-btns {
+      margin-top: 18px;
+      text-align: center;
+    }
+    #floatConfirm button {
+      font-family: inherit;
+      font-size: 1em;
+      padding: 8px 24px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin: 0 10px 0 0;
+      outline: none;
+      transition: background .18s, color .13s, border .13s;
+    }
+    #confirmerRegen, #fermerMsg {
+      background: #e0c185;
+      color: #181212;
+      border: 2px solid #e0c185;
+      font-weight: 600;
+    }
+    #confirmerRegen:hover, #fermerMsg:hover {
+      background: #ffeecb;
+      color: #181212;
+      border: 2px solid #ffeecb;
+    }
+    #annulerRegen {
+      background: transparent;
+      color: #ffeecb;
+      border: 2px solid #e0c185;
+      font-weight: 600;
+    }
+    #annulerRegen:hover {
+      background: #e0c185;
+      color: #181212;
+      border: 2px solid #e0c185;
+    }
     @media (max-width: 700px) {
       .page-lancement { max-width: 97vw; padding: 12px 2vw; border-radius: 12px; font-size: 1em; }
       .scenario-block { padding: 10px 6px; }
       .main-btn { width: 100%; min-width: 0; max-width: 99vw; font-size: 1em; }
       .scenario-actions { flex-direction: column; gap: 10px; }
       .regen-scenario-btn button { font-size: 1.7em; min-width: 60px; }
+      #floatConfirm { min-width: 0; max-width: 98vw;}
     }
   </style>
 </head>
@@ -153,7 +211,6 @@
         <div id="scenario-loading" class="info">Chargement du scénario...</div>
         <div id="scenario-content" style="display:none;">
           <div class="regen-scenario-btn">
-            <!-- Flèche retour et bouton régénérer seront gérés/ajoutés dynamiquement -->
             <button id="regenScenarioBtn" title="Nouveau scénario" aria-label="Nouveau scénario" tabindex="0">📜</button>
           </div>
           <div class="scenario-block">
@@ -196,10 +253,7 @@
   <script src="../JS/personnages.js"></script>
   <script src="../JS/Scenario.js"></script>
  <script>
-// PATCH minimal anti-multi-génération :
-// On vérifie s'il existe déjà un scénario dans Firebase avant d'en générer un nouveau.
 (function() {
-  // On sauvegarde la fonction originale, si ce n'est pas déjà fait
   if (!window._genererScenarioOriginal && typeof window.genererScenario === "function") {
     window._genererScenarioOriginal = window.genererScenario;
     window.genererScenario = function() {
@@ -207,10 +261,8 @@
       if (!salonCode) return;
       firebase.database().ref('parties/' + salonCode + '/scenario').once('value').then(function(snapScenario) {
         if (snapScenario.exists()) {
-          // Si le scénario existe déjà, on le place dans le localStorage (comme généré)
           localStorage.setItem("scenarioCourant", JSON.stringify(snapScenario.val()));
         } else {
-          // Sinon, on génère normalement
           window._genererScenarioOriginal();
         }
       });
@@ -221,7 +273,6 @@
   
   <script>
     function afficherScenario(scenarioObj, scenarioData) {
-      // Sécurité : s'assurer que les éléments existent
       const loadingDiv = document.getElementById("scenario-loading");
       const contentDiv = document.getElementById("scenario-content");
       if (loadingDiv && contentDiv) {
@@ -269,10 +320,8 @@
         if (snapScenario.exists()) {
           const scenarioObj = snapScenario.val();
           localStorage.setItem("scenarioCourant", JSON.stringify(scenarioObj));
-          // Recharge l’affichage avec le scénario
           let scenarioData = JSON.parse(localStorage.getItem("parametresPartie"));
           if (!scenarioData) {
-            // Récupère les paramètres depuis Firebase si absents du localStorage
             firebase.database().ref('parties/' + salonCode + '/parametres')
               .once('value')
               .then(function(snap) {
@@ -333,23 +382,11 @@
       // Message flottant de confirmation
       const floatConfirm = document.createElement("div");
       floatConfirm.id = "floatConfirm";
-      floatConfirm.style.position = "fixed";
-      floatConfirm.style.left = "50%";
-      floatConfirm.style.top = "16%";
-      floatConfirm.style.transform = "translate(-50%, 0)";
-      floatConfirm.style.background = "#2c1b1bad";
-      floatConfirm.style.color = "#ffeecb";
-      floatConfirm.style.padding = "22px 30px";
-      floatConfirm.style.borderRadius = "14px";
-      floatConfirm.style.boxShadow = "0 2px 18px #0005";
-      floatConfirm.style.fontSize = "1.17em";
-      floatConfirm.style.zIndex = "9999";
-      floatConfirm.style.display = "none";
       floatConfirm.innerHTML = `
         <div>⚠️ Générer un nouveau scénario va écraser l’actuel.<br><br>Continuer ?</div>
-        <div style="margin-top:18px; text-align:center;">
-          <button id="confirmerRegen" style="background:#e0c185; color:#181212; border:none; border-radius:6px; margin-right:18px; font-size:1em; padding:8px 24px; cursor:pointer;">Confirmer</button>
-          <button id="annulerRegen" style="background:#3d2b1f; color:#ffeecb; border:none; border-radius:6px; font-size:1em; padding:8px 24px; cursor:pointer;">Annuler</button>
+        <div class="float-btns">
+          <button id="confirmerRegen">Confirmer</button>
+          <button id="annulerRegen">Annuler</button>
         </div>
       `;
       document.body.appendChild(floatConfirm);
@@ -368,13 +405,9 @@
           floatConfirm.style.display = "none";
           const salonCode = localStorage.getItem("salonCode");
           if (!salonCode) return;
-          // Sauvegarde le scénario courant (pour retour arrière)
           lastScenarioBackup = localStorage.getItem("scenarioCourant");
-          // 1. Supprimer le scénario existant dans Firebase
           firebase.database().ref('parties/' + salonCode + '/scenario').remove().then(function() {
-            // 2. Supprimer aussi du localStorage pour être sûr
             localStorage.removeItem("scenarioCourant");
-            // 3. Générer un nouveau scénario
             if (typeof genererScenario === "function") {
               genererScenario();
               setTimeout(chargerScenario, 200);
@@ -389,25 +422,22 @@
       // Bouton retour : remet l'ancien scénario sauvegardé (si dispo)
       retourBtn.onclick = function() {
         if (!lastScenarioBackup) {
-          // Message d'erreur flottant
           floatConfirm.innerHTML = `<div>❌ Aucun scénario précédent à restaurer.</div>
-          <div style="margin-top:18px; text-align:center;">
-            <button id="fermerMsg" style="background:#e0c185; color:#181212; border:none; border-radius:6px; font-size:1em; padding:8px 24px; cursor:pointer;">Fermer</button>
+          <div class="float-btns">
+            <button id="fermerMsg">Fermer</button>
           </div>`;
           floatConfirm.style.display = "block";
           return;
         }
         const salonCode = localStorage.getItem("salonCode");
         if (!salonCode) return;
-        // Remet l'ancien scénario dans Firebase et localStorage
         const oldScenario = JSON.parse(lastScenarioBackup);
         firebase.database().ref('parties/' + salonCode + '/scenario').set(oldScenario).then(function() {
           localStorage.setItem("scenarioCourant", lastScenarioBackup);
           chargerScenario();
-          // Message ok
           floatConfirm.innerHTML = `<div>✅ Scénario précédent restauré !</div>
-          <div style="margin-top:18px; text-align:center;">
-            <button id="fermerMsg" style="background:#e0c185; color:#181212; border:none; border-radius:6px; font-size:1em; padding:8px 24px; cursor:pointer;">Fermer</button>
+          <div class="float-btns">
+            <button id="fermerMsg">Fermer</button>
           </div>`;
           floatConfirm.style.display = "block";
         });
@@ -417,12 +447,11 @@
       document.body.addEventListener("click", function(e) {
         if (e.target && e.target.id === "fermerMsg") {
           floatConfirm.style.display = "none";
-          // On remet le message de confirmation par défaut pour la prochaine fois
           floatConfirm.innerHTML = `
             <div>⚠️ Générer un nouveau scénario va écraser l’actuel.<br><br>Continuer ?</div>
-            <div style="margin-top:18px; text-align:center;">
-              <button id="confirmerRegen" style="background:#e0c185; color:#181212; border:none; border-radius:6px; margin-right:18px; font-size:1em; padding:8px 24px; cursor:pointer;">Confirmer</button>
-              <button id="annulerRegen" style="background:#3d2b1f; color:#ffeecb; border:none; border-radius:6px; font-size:1em; padding:8px 24px; cursor:pointer;">Annuler</button>
+            <div class="float-btns">
+              <button id="confirmerRegen">Confirmer</button>
+              <button id="annulerRegen">Annuler</button>
             </div>
           `;
         }
