@@ -292,9 +292,27 @@
     }
   });
 }
+    
     document.addEventListener("DOMContentLoaded", function() {
-  listenScenario(); // <-- AJOUT ICI
+  // 1. Masquer le bouton par défaut
+  const regenBtnDiv = document.querySelector('.regen-scenario-btn');
+  regenBtnDiv.style.display = "none";
+
+  // 2. Afficher le bouton UNIQUEMENT si je suis le créateur
+  const salonCode = localStorage.getItem("salonCode");
+  const monUUID = localStorage.getItem("uuid");
+  firebase.database().ref('parties/' + salonCode + '/parametres/createur')
+    .once('value')
+    .then(function(snapshot) {
+      const createurId = snapshot.val();
+      if (createurId && monUUID && createurId === monUUID) {
+        regenBtnDiv.style.display = "flex";
+      }
+    });
+
+  listenScenario();
   chargerScenario();
+
       
       // Bouton régénération
       const regenBtn = document.getElementById("regenScenarioBtn");
