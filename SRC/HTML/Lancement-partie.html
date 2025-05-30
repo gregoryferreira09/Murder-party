@@ -281,12 +281,11 @@ if (!scenarioData) {
         afficherScenario(scenarioObj, scenarioData);
       }
     }
+  }); // <-- FIN DU .then ici !
 } else {
   if (typeof afficherScenario === "function") {
     afficherScenario(scenarioObj, scenarioData);
   }
-}
-  });
 }
     document.addEventListener("DOMContentLoaded", function() {
   listenScenario(); // <-- AJOUT ICI
