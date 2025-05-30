@@ -139,6 +139,9 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // Décompte timeout global
+    let decompteTimeoutID = null;
+
     // Vérifie le code salon
     const salonCode = localStorage.getItem("salonCode");
     if (!salonCode) {
@@ -258,6 +261,13 @@
       btn.textContent = "Annuler";
       btn.className = "main-btn";
       btn.onclick = function() {
+        // STOPPER LE DECOMPTE SI LANCÉ
+        if (decompteTimeoutID) {
+          clearTimeout(decompteTimeoutID);
+          decompteTimeoutID = null;
+          const conteneur = document.getElementById('decompte-redirect');
+          if (conteneur) conteneur.remove();
+        }
         // Dégrise le personnage pour le joueur localement
         document.querySelectorAll('.carte-personnage').forEach(div => {
           if (div.classList.contains('selectionnee')) {
@@ -289,19 +299,19 @@
       document.querySelector('.main-accueil').appendChild(conteneur);
 
       let count = 5;
-      const tick = () => {
+      function tick() {
         count--;
         if (count > 0) {
           conteneur.textContent = `La partie commence dans ${count}…`;
-          setTimeout(tick, 1000);
+          decompteTimeoutID = setTimeout(tick, 1000);
         } else {
           conteneur.textContent = "C'est parti !";
-          setTimeout(() => {
+          decompteTimeoutID = setTimeout(() => {
             window.location.href = "gameplay.html";
           }, 600);
         }
-      };
-      setTimeout(tick, 1000);
+      }
+      decompteTimeoutID = setTimeout(tick, 1000);
     }
 
     // === Confirmation retour accueil ===
