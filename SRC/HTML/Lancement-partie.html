@@ -263,14 +263,24 @@
     }
     document.addEventListener("DOMContentLoaded", function() {
       chargerScenario();
+      
       // Bouton régénération
       const regenBtn = document.getElementById("regenScenarioBtn");
-      regenBtn.onclick = function() {
-        if (typeof genererScenario === "function") {
-          genererScenario();
-          setTimeout(chargerScenario, 200);
-        }
-      };
+regenBtn.onclick = function() {
+  const salonCode = localStorage.getItem("salonCode");
+  if (!salonCode) return;
+  // 1. Supprimer le scénario existant dans Firebase
+  firebase.database().ref('parties/' + salonCode + '/scenario').remove().then(function() {
+    // 2. Supprimer aussi du localStorage pour être sûr
+    localStorage.removeItem("scenarioCourant");
+    // 3. Générer un nouveau scénario
+    if (typeof genererScenario === "function") {
+      genererScenario();
+      setTimeout(chargerScenario, 200);
+    }
+  });
+};
+      
       regenBtn.onkeydown = function(e) {
         if (e.key === "Enter" || e.key === " ") {
           regenBtn.click();
