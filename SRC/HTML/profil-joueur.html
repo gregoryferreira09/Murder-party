@@ -101,7 +101,7 @@
   </header>
 
   <div class="center-wrapper">
-    <main class="main-accueil" role="main">
+    <main class="main-accueil fadeIn" role="main">
       <h1>Mon profil</h1>
       <!-- Avatar -->
       <section class="avatar-section" aria-labelledby="avatar-heading">
@@ -170,6 +170,11 @@
   </footer>
 
   <script>
+    // Effet d'ouverture fadeIn sur le main
+    document.addEventListener("DOMContentLoaded", function() {
+      var main = document.querySelector('.fadeIn');
+      if (main) main.classList.add('visible');
+    });
     // --- CONSTANTES ET DONNÉES LOCALES ---
     const IMAGE_PATH = "../../../Public/images/";
     const avatars = ["avatar-1.png", "avatar-2.png", "avatar-3.png", "avatar-4.png"];
@@ -318,8 +323,8 @@
   </noscript>
 
   <script src="../JS/security-enhance.js"></script>
-<script src="../JS/ux-enhance.js"></script>
-<script src="../JS/scalability.js"></script>
+  <script src="../JS/ux-enhance.js"></script>
+  <script src="../JS/scalability.js"></script>
   
 </body>
 </html>
