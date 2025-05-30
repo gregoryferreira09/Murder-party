@@ -261,65 +261,65 @@
     }
     
     document.addEventListener("DOMContentLoaded", function() {
-  chargerScenario();
+      chargerScenario();
 
-  // Vérifier si l'utilisateur est le créateur, sinon masquer le bouton régénération
-  const salonCode = localStorage.getItem("salonCode");
-  const monUid = localStorage.getItem("monUid");
-  const regenBtn = document.getElementById("regenScenarioBtn");
-  if (salonCode && monUid && regenBtn) {
-    firebase.database().ref('parties/' + salonCode + '/createurUid').once('value').then(function(snap) {
-      const createurUid = snap.val();
-      if (createurUid !== monUid) {
-        regenBtn.style.display = "none";
-      } else {
-        regenBtn.style.display = "flex";
-        // Activation du handler uniquement pour le créateur
-        regenBtn.onclick = function() {
-          firebase.database().ref('parties/' + salonCode + '/scenario').remove().then(function() {
-            localStorage.removeItem("scenarioCourant");
-            if (typeof genererScenario === "function") {
-              genererScenario();
-              setTimeout(chargerScenario, 200);
-            }
-          });
-        };
-        regenBtn.onkeydown = function(e) {
-          if (e.key === "Enter" || e.key === " ") {
-            regenBtn.click();
+      // Vérifier si l'utilisateur est le créateur, sinon masquer le bouton régénération
+      const salonCode = localStorage.getItem("salonCode");
+      const monUid = localStorage.getItem("monUid");
+      const regenBtn = document.getElementById("regenScenarioBtn");
+      if (salonCode && monUid && regenBtn) {
+        firebase.database().ref('parties/' + salonCode + '/createurUid').once('value').then(function(snap) {
+          const createurUid = snap.val();
+          if (createurUid !== monUid) {
+            regenBtn.style.display = "none";
+          } else {
+            regenBtn.style.display = "flex";
+            // Activation du handler uniquement pour le créateur
+            regenBtn.onclick = function() {
+              firebase.database().ref('parties/' + salonCode + '/scenario').remove().then(function() {
+                localStorage.removeItem("scenarioCourant");
+                if (typeof genererScenario === "function") {
+                  genererScenario();
+                  setTimeout(chargerScenario, 200);
+                }
+              });
+            };
+            regenBtn.onkeydown = function(e) {
+              if (e.key === "Enter" || e.key === " ") {
+                regenBtn.click();
+              }
+            };
           }
-        };
+        });
       }
-    });
-  }
 
-  // Timer bouton démarrer
-  const launchBtn = document.getElementById("demarrerBtn");
-  let timeLeft = 30;
-  launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-  launchBtn.style.pointerEvents = "none";
-  launchBtn.style.opacity = "0.6";
-  const interval = setInterval(() => {
-    timeLeft--;
-    if (timeLeft > 0) {
+      // Timer bouton démarrer
+      const launchBtn = document.getElementById("demarrerBtn");
+      let timeLeft = 30;
       launchBtn.textContent = `Disponible dans ${timeLeft}s`;
-    } else {
-      clearInterval(interval);
-      launchBtn.textContent = "Démarrer la partie";
-      launchBtn.style.pointerEvents = "auto";
-      launchBtn.style.opacity = "1";
-    }
-  }, 1000);
-  setTimeout(() => {
-    document.querySelector(".page-lancement").focus();
-  }, 600);
-  window.addEventListener('offline', () => {
-    document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
-  });
-  window.addEventListener('online', () => {
-    window.location.reload();
-  });
-});
+      launchBtn.style.pointerEvents = "none";
+      launchBtn.style.opacity = "0.6";
+      const interval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          launchBtn.textContent = `Disponible dans ${timeLeft}s`;
+        } else {
+          clearInterval(interval);
+          launchBtn.textContent = "Démarrer la partie";
+          launchBtn.style.pointerEvents = "auto";
+          launchBtn.style.opacity = "1";
+        }
+      }, 1000);
+      setTimeout(() => {
+        document.querySelector(".page-lancement").focus();
+      }, 600);
+      window.addEventListener('offline', () => {
+        document.getElementById("messageInfo").textContent = "Vous êtes hors ligne.";
+      });
+      window.addEventListener('online', () => {
+        window.location.reload();
+      });
+    });
   </script>
   <noscript>
     <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
