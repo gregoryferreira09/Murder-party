@@ -278,7 +278,8 @@
   });
 }
     document.addEventListener("DOMContentLoaded", function() {
-      chargerScenario();
+  listenScenario(); // <-- AJOUT ICI
+  chargerScenario();
       
       // Bouton régénération
       const regenBtn = document.getElementById("regenScenarioBtn");
