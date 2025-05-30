@@ -279,9 +279,12 @@
 }
     
     document.addEventListener("DOMContentLoaded", function() {
-  listenScenario(); // <-- AJOUT ICI
-  chargerScenario();
-      
+  document.addEventListener("DOMContentLoaded", function() {
+  listenScenario();
+  if (localStorage.getItem("isCreateur") === "true") {
+    chargerScenario();
+  }
+    
       // Bouton régénération
       const regenBtn = document.getElementById("regenScenarioBtn");
 regenBtn.onclick = function() {
