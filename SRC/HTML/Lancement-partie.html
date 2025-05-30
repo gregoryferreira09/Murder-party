@@ -237,7 +237,7 @@
           </div>
           <div class="scenario-actions">
             <a class="main-btn" id="demarrerBtn" href="choix-personnage.html" style="pointer-events:none; opacity:0.6;">Disponible dans 30s</a>
-            <a class="main-btn" href="accueil.html">Retour</a>
+            <button class="main-btn" id="btnRetourAccueil">Retour</button>
           </div>
           <div class="info" id="messageInfo"></div>
         </div>
@@ -484,6 +484,26 @@
         window.location.reload();
       });
     });
+
+    const btnRetourAccueil = document.getElementById("btnRetourAccueil");
+const confirmationRetourAccueil = document.getElementById("confirmationRetourAccueil");
+const confirmerRetourAccueilBtn = document.getElementById("confirmerRetourAccueilBtn");
+const annulerRetourAccueilBtn = document.getElementById("annulerRetourAccueilBtn");
+
+btnRetourAccueil?.addEventListener("click", function(e) {
+  e.preventDefault();
+  confirmationRetourAccueil.style.display = "flex";
+});
+
+confirmerRetourAccueilBtn?.addEventListener("click", function() {
+  confirmationRetourAccueil.style.display = "none";
+  window.location.href = "accueil.html";
+});
+
+annulerRetourAccueilBtn?.addEventListener("click", function() {
+  confirmationRetourAccueil.style.display = "none";
+});
+    
   </script>
   <noscript>
     <div style="color: #e0c185; text-align: center; margin-top: 20px;" role="alert">
@@ -494,5 +514,17 @@
   <script src="../JS/security-enhance.js"></script>
   <script src="../JS/ux-enhance.js"></script>
   <script src="../JS/scalability.js"></script>
+
+  <div id="confirmationRetourAccueil" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(44,27,27,0.72); z-index:99999; justify-content:center; align-items:center;">
+  <div style="max-width:340px; margin:auto; text-align:center; border:2.5px solid #e0c185; background:#2c1b1b; border-radius:18px; box-shadow:0 4px 20px #0009; padding:32px 28px;">
+    <div style="font-weight:bold; margin-bottom:22px; color:#e0c185; font-family:'Cinzel Decorative',serif; font-size:1.1em;">
+      Voulez-vous vraiment quitter la partie et revenir à l’accueil ?
+    </div>
+    <div style="display:flex; flex-direction:row; gap:24px; justify-content:center; margin:0;">
+      <button id="confirmerRetourAccueilBtn" class="main-btn" style="background:#e0c185; color:#181212; border:2px solid #e0c185;">Oui</button>
+      <button id="annulerRetourAccueilBtn" class="main-btn" style="background:transparent; color:#ffeecb; border:2px solid #e0c185;">Non</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
