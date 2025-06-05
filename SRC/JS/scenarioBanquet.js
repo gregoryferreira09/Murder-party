@@ -51,9 +51,12 @@ function genererScenarioBanquet(banquet) {
   const crimeTpl = randomItem(data.crimes.classique);
 
   // 5. Trame centrale
-  const trame = data.trames[0]
-    .replace("{victime}", victim.nom)
-    .replace("{dans_la_lieu}", articleDans(lieuNom, lieuGenre) + " " + lieuNom);
+  const trameTemplate = (data.trames && data.trames.length > 0) ? data.trames[0] : null;
+const trame = trameTemplate
+  ? trameTemplate
+      .replace("{victime}", victim.nom)
+      .replace("{dans_la_lieu}", articleDans(lieuNom, lieuGenre) + " " + lieuNom)
+  : "";
 
   // 6. Introduction du crime
   const crime = crimeTpl
