@@ -13,12 +13,14 @@ const univers = {
 ],
 
       trameFixe: [
-  "Au cœur du festin, {victime} tombe raide mort·e {dans_la_lieu}. Le mystère s'installe…"
+  "Au cœur du festin, {victime} s’effondre soudainement {dans_la_lieu}. L’effroi saisit les convives, le banquet vire au cauchemar, les regards suspicieux se croisent et le mystère s'installe…"
       ],
       
       ambiances: [
-        "Le grand banquet bat son plein sous les voûtes, rires et tensions se mêlent à la lumière des chandelles."
-      ],
+        ambiances: [
+  ambiances: [
+  "Autour de la grande table du souverain, chacun fait bonne figure : la musique résonne, les coupes s’entrechoquent, mais tous s’efforcent de faire semblant. Derrière les sourires, la méfiance rôde et chacun surveille ses paroles, redoutant de trahir ses vrais sentiments."
+]
       
       personnages: [
         {
