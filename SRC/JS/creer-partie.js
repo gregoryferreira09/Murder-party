@@ -83,7 +83,7 @@ if (periode === "medieval") {
 
     // Stocke la trame et les éléments centraux dans Firebase
   await db.ref('parties/' + salonCode + '/scenario').set({
-    trame: scenario.trame,
+    introduction: scenario.introduction,
     crime: scenario.crime,
     ambiance: scenario.ambiance,
     lieu: scenario.lieu,
