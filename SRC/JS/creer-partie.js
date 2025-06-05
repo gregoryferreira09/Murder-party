@@ -71,14 +71,24 @@ window.creerPartie = async function(formData) {
   // Enregistre les paramètres dans Firebase
   await db.ref('parties/' + salonCode + '/parametres').set(parametresPartie);
 
-  // Tirage unique des personnages pour la partie
-  let listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
+// Tirage unique des personnages pour la partie
+let persosObj = {};
 
-  let persosObj = {};
+if (periode === "medieval") {
+  // Génère le scénario et les fiches depuis le générateur spécial
+  const scenario = window.genererScenarioBanquet(window.univers.medieval.banquet);
+  scenario.joueurs.slice(0, nombreJoueurs).forEach((p, i) => {
+    persosObj['perso' + i] = p;
+  });
+  // (Optionnel) Tu peux aussi stocker scenario.trame, scenario.crime, etc.
+} else {
+  // Logique actuelle pour les autres époques
+  let listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
   listePersos.forEach((p, i) => {
     persosObj['perso' + i] = p;
   });
-  await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
+}
+await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
 
   // Enregistre le créateur comme premier joueur
   await db.ref('parties/' + salonCode + '/joueurs').push({
