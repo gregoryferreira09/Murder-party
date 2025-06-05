@@ -275,7 +275,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     return;
   }
   await chargerJoueurs();
+  await chargerScenarioGeneral();
   await chargerPersoActif();
   switchTab('fiche');
   updateChrono();
 });
+
+async function chargerScenarioGeneral() {
+  const salonCode = localStorage.getItem("salonCode");
+  const snap = await db.ref('parties/' + salonCode + '/scenario').get();
+  if (!snap.exists()) return;
+  const scenario = snap.val();
+  document.getElementById("scenarioTrame").textContent = scenario.trame || "";
+  document.getElementById("scenarioCrime").textContent = scenario.crime || "";
+  document.getElementById("scenarioAmbiance").textContent = scenario.ambiance || "";
+  document.getElementById("scenarioLieu").textContent = scenario.lieu || "";
+  document.getElementById("scenarioArme").textContent = scenario.arme || "";
+  // Ajoute d’autres champs si besoin
+}
