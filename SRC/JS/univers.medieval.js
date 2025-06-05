@@ -954,7 +954,7 @@ const univers = {
       "Colin s’est moqué de lui."
     ]
   }
-}
+},
 
         anecdotes: [
   "Vous avez renversé du vin sur la robe du roi lors d’un ancien banquet.",
@@ -984,7 +984,10 @@ const univers = {
   "Vous avez donné une fleur à un autre invité.",
   "Vous avez défié quelqu’un à un jeu de
 
-
+  ]
+  }
+},
+  
   secrets: [
   "Vous avez surpris la victime dans une posture compromettante la veille du crime.",
   "Un autre joueur connaît votre secret le plus honteux.",
@@ -1016,8 +1019,10 @@ const univers = {
   "Vous avez menacé la victime dans le passé.",
   "Vous avez été témoin d’un autre crime.",
   "Vous dissimulez un détail crucial sur la soirée."
-]
-
+  
+  ]
+  }
+},
 
 missions: [
   "Découvrir le secret d’un autre joueur.",
@@ -1120,7 +1125,8 @@ missions: [
   "Défendre un personnage impopulaire.",
   "Faire croire que vous êtes en danger.",
   "Convaincre un autre joueur de changer d’avis sur vous."
-]
+  ]
+  }
+},
 
-export default univers;
 window.univers = univers;
