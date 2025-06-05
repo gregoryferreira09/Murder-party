@@ -88,59 +88,9 @@ function tirageTemplateUnique(array, history, fieldName) {
 
 // === UNIVERS COHÉRENTS & ÉLARGIS ===
 const univers = {
-  medieval: {
-    lieux: [
-      { nom: "château fort", genre: "m" },
-      { nom: "forêt maudite", genre: "f" },
-      { nom: "taverne du village", genre: "f" }
-    ],
-    victimes: [
-      { nom: "le seigneur Gauvain", genre: "m" },
-      { nom: "la dame Aliénor", genre: "f" }
-    ],
-    suspects: [
-      "le chevalier Tristan", "la guérisseuse Ysabeau", "le moine Basile", "le forgeron Arnulf", "le ménestrel Hugo",
-      "le braconnier Colin", "la servante Maud", "le prévôt Thibault", "le marchand Simon", "le bouffon Piers",
-      "la cuisinière Margot", "le capitaine de la garde Roland", "le chasseur Alard", "la sorcière Edwige", "le fils bâtard Lancelin"
-    ],
-    temoins: [
-      { nom: "le palefrenier Jehan", genre: "m" },
-      { nom: "la lavandière Blanche", genre: "f" }
-    ],
-    indices: [
-      "une dague rouillée couverte de sang", "un morceau de cape arraché", "une fiole contenant du poison",
-      "une bourse pleine d'or", "une lettre anonyme scellée"
-    ],
-    traitsVictimes: ["cruel", "généreux", "superstitieux"],
-    motifs: [
-      "une querelle d'héritage", "une vengeance amoureuse", "une accusation de sorcellerie"
-    ],
-    armes: [
-      "une épée longue", "du poison", "un arc court"
-    ],
-    ambiances: [
-      "la pluie tambourine sur les remparts", "un banquet agité bat son plein", "le vent hurle dans la forêt"
-    ],
-    intro: [
-      "{ambiance} dans {la_lieu}. Les tensions montent entre les convives.",
-      "Une altercation éclate entre {suspect1} et {suspect2} devant la cour.",
-      "[TEMOIN] {temoin} affirme avoir vu {suspect1} rôder près de la {lieu}."
-    ],
-    crimes: {
-      classique: [
-        "Un cri retentit : {victime} est retrouvé·e sans vie {dans_la_lieu}, {arme} à ses côtés.",
-        "{victime} a été assassiné·e {dans_la_lieu}. {temoin} accuse {suspect1}.",
-        "La découverte est brutale : {victime} gît {dans_la_lieu}. Tous se tournent vers {suspect1}."
-      ],
-      poison: [
-        "La coupe de {victime} était empoisonnée. Il/elle s'effondre {dans_la_lieu}.",
-        "{victime} n’a pas survécu à une gorgée fatale {dans_la_lieu}. {temoin} accuse {suspect1}."
-      ],
-      disparition: [
-        "On ne retrouve plus {victime} {dans_la_lieu}. {temoin} l’a vu fuir dans la nuit."
-      ]
-    }
-  },
+  
+ medieval: universMedieval, // (ou window.universMedieval si tu ne fais pas d'import/export)
+  
   renaissance: {
     lieux: [
       { nom: "palais ducal", genre: "m" },
