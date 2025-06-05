@@ -984,9 +984,7 @@ const univers = {
   "Vous avez donné une fleur à un autre invité.",
   "Vous avez défié quelqu’un à un jeu de
 
-  ]
-  }
-},
+  ],
   
   secrets: [
   "Vous avez surpris la victime dans une posture compromettante la veille du crime.",
