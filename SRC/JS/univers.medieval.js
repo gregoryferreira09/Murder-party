@@ -134,8 +134,7 @@ const univers = {
         ]
       },
 
-      // Mobiles : chaque suspect (clé) a pour chaque victime (clé) un tableau de mobiles plausibles
-      const mobiles = {
+  
   "Roi Arthus": {
     "Reine Isabeau": [
       "La reine complotait pour placer leur fils sur le trône.",
