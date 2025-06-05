@@ -18,8 +18,6 @@ const univers = {
       ],
       
       ambiances: [
-        ambiances: [
-  ambiances: [
   "Autour de la grande table du souverain, chacun fait bonne figure : la musique résonne, les coupes s’entrechoquent, mais tous s’efforcent de faire semblant. Derrière les sourires, la méfiance rôde et chacun surveille ses paroles, redoutant de trahir ses vrais sentiments."
 ]
       
