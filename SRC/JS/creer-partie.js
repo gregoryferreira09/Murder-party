@@ -104,22 +104,3 @@ await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
 
   window.location.href = "salon.html";
 };
-
-if (periode === "medieval") {
-  // Génère le scénario et les fiches depuis le générateur spécial
-  const scenario = window.genererScenarioBanquet(window.univers.medieval.banquet);
-  let persosObj = {};
-  scenario.joueurs.forEach((p, i) => {
-    persosObj['perso' + i] = p;
-  });
-  await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
-  // Tu peux aussi stocker scenario.trame, scenario.crime, etc.
-} else {
-  // Logique actuelle pour les autres époques
-  let listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
-  let persosObj = {};
-  listePersos.forEach((p, i) => {
-    persosObj['perso' + i] = p;
-  });
-  await db.ref('parties/' + salonCode + '/personnages').set(persosObj);
-}
