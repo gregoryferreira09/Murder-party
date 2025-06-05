@@ -21,7 +21,6 @@ const univers = {
 ]
       
       personnages: [
-        {
           nom: "Roi Arthus",
           role: "roi",
           genre: "m",
