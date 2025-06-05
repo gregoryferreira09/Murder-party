@@ -12,7 +12,7 @@ const univers = {
   }
 ],
 
-      Trame: [
+      trame: [
   "Au cœur du festin, {victime} s’effondre soudainement {dans_la_lieu}. L’effroi saisit les convives, le banquet vire aussitôt au cauchemar. les regards suspicieux commencent à se croiser et le mystère s'installe…"
       ],
       
