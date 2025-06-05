@@ -24,8 +24,8 @@ function articleDans(word, genre) {
 }
 
 // Générateur central
-function genererScenarioBanquet(univers) {
-  const data = univers.medieval.banquet;
+function genererScenarioBanquet(banquet) {
+  const data = banquet;
 
   // 1. Tirage des rôles principaux
   const persos = data.personnages.slice();
