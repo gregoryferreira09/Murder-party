@@ -3,11 +3,14 @@
 const univers = {
   medieval: {
     banquet: {
-      lieux: {
-        nom: "Grande salle du château",
-        genre: "f",
-        ambiance: "Le grand banquet bat son plein sous les voûtes, rires et tensions se mêlent à la lumière des chandelles."
-      },
+      
+      lieux: [
+  {
+    nom: "Grande salle du château",
+    genre: "f",
+    ambiance: "Le grand banquet bat son plein sous les voûtes, rires et tensions se mêlent à la lumière des chandelles."
+  }
+],
 
       trameFixe: [
   "Au cœur du festin, {victime} tombe raide mort·e {dans_la_lieu}. Le mystère s'installe…"
