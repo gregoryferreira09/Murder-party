@@ -1122,8 +1122,9 @@ const univers = {
   "Défendre un personnage impopulaire.",
   "Faire croire que vous êtes en danger.",
   "Convaincre un autre joueur de changer d’avis sur vous."
-  ]
-  }
-};
+      ]
+    } 
+  }   
+}; 
 
 window.univers = univers;
