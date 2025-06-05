@@ -3,11 +3,16 @@
 const univers = {
   medieval: {
     banquet: {
-      lieu: {
+      lieux: {
         nom: "Grande salle du château",
         genre: "f",
         ambiance: "Le grand banquet bat son plein sous les voûtes, rires et tensions se mêlent à la lumière des chandelles."
       },
+     
+      ambiances: [
+        "Le grand banquet bat son plein sous les voûtes, rires et tensions se mêlent à la lumière des chandelles."
+      ],
+      
       personnages: [
         {
           nom: "Roi Arthus",
