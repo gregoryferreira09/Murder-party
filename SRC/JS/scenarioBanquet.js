@@ -1,4 +1,9 @@
 // scenarioBanquet.js
+// univers doit être accessible (import ou window.univers)
+
+// Pour créer un scénario banquet médiéval :
+const scenario = genererScenarioBanquet(univers.medieval.banquet);
+// ...envoie ensuite ce scénario vers Firebase, etc.
 
 function randomItem(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
