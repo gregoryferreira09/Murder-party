@@ -85,7 +85,7 @@ function genererScenarioBanquet(banquet) {
 
   // 8. Retour de l'objet scénario
   return {
-    trame: trame,
+    introduction: trame,
     ambiance: ambiance,
     lieu: lieuNom,
     arme: arme,
