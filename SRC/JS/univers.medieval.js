@@ -1020,11 +1020,10 @@ const univers = {
   "Vous avez été témoin d’un autre crime.",
   "Vous dissimulez un détail crucial sur la soirée."
   
-  ]
-  }
-},
+    ],
+  
 
-missions: [
+  missions: [
   "Découvrir le secret d’un autre joueur.",
   "Protéger un autre personnage de toute accusation.",
   "Faire accuser un joueur précis (choisi au hasard).",
@@ -1127,6 +1126,6 @@ missions: [
   "Convaincre un autre joueur de changer d’avis sur vous."
   ]
   }
-},
+};
 
 window.univers = univers;
