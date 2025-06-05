@@ -286,7 +286,7 @@ async function chargerScenarioGeneral() {
   const snap = await db.ref('parties/' + salonCode + '/scenario').get();
   if (!snap.exists()) return;
   const scenario = snap.val();
-  document.getElementById("scenarioTrame").textContent = scenario.trame || "";
+  document.getElementById("scenarioTrame").textContent = scenario.introduction || "";
   document.getElementById("scenarioCrime").textContent = scenario.crime || "";
   document.getElementById("scenarioAmbiance").textContent = scenario.ambiance || "";
   document.getElementById("scenarioLieu").textContent = scenario.lieu || "";
