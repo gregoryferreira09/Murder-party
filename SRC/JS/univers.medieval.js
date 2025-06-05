@@ -134,7 +134,8 @@ const univers = {
         ]
       },
 
-  
+ mobiles: { 
+    
   "Roi Arthus": {
     "Reine Isabeau": [
       "La reine complotait pour placer leur fils sur le trône.",
@@ -1122,3 +1123,4 @@ missions: [
 ]
 
 export default univers;
+window.univers = univers;
