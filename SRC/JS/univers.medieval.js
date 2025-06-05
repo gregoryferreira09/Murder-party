@@ -982,7 +982,6 @@ const univers = {
   "Vous avez surpris une conversation intrigante.",
   "Vous avez reçu des compliments de la victime.",
   "Vous avez donné une fleur à un autre invité.",
-  "Vous avez défié quelqu’un à un jeu de
 
   ],
   
