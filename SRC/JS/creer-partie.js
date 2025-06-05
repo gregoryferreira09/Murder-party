@@ -80,7 +80,17 @@ if (periode === "medieval") {
   scenario.joueurs.slice(0, nombreJoueurs).forEach((p, i) => {
     persosObj['perso' + i] = p;
   });
-  // (Optionnel) Tu peux aussi stocker scenario.trame, scenario.crime, etc.
+
+    // Stocke la trame et les éléments centraux dans Firebase
+  await db.ref('parties/' + salonCode + '/scenario').set({
+    trame: scenario.trame,
+    crime: scenario.crime,
+    ambiance: scenario.ambiance,
+    lieu: scenario.lieu,
+    arme: scenario.arme
+    // Ajoute d'autres champs si tu veux (ex : scenario.victime, etc.)
+  });
+  
 } else {
   // Logique actuelle pour les autres époques
   let listePersos = getRandomElements(window.personnagesParEpoque[periode], nombreJoueurs);
